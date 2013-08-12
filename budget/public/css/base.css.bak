@@ -1,0 +1,380 @@
+html{
+	font-family: Verdana, Arial,sans-serif;
+	font-size:14px;
+}
+body{
+	margin:0;
+    padding:0;
+	background:#ffffff;
+}
+
+h1 {
+	margin:0;
+	color:#004007;
+	text-shadow:0 1px 1px #FFFFFF;
+}
+
+p {
+	margin:5px 0 5px 0;
+}
+
+.add {
+	color:green;
+}
+
+.subtract, .error, .red {
+	color:#FF3333;
+}
+
+.left {
+	float:left;
+}
+
+.half {
+	width:50%;
+}
+
+.margin_bottom_10 {
+	margin-bottom:10px;
+}
+
+#header{
+	width:984px;
+	height:100px;
+	margin:0 auto;
+	background:#fff url(../images/fallingdollars.png) repeat;
+	border:1px solid #004007;
+	border-bottom-width:0;
+	position:relative;
+}
+
+#header h1 {
+	margin:0;
+}
+
+#console {
+	background-color:#fff;
+	position:absolute;
+	bottom:0;
+	width:100%;
+}
+
+#date {
+	color:#000;
+}
+
+#cookie-crumb {
+	position:absolute;
+	right:15px;
+	bottom:0;
+}
+
+#ajax-load {
+	display:none;
+}
+
+a, a:visited {
+	color:#0000ff;
+}
+
+img {
+	border:none;
+}
+
+.clear {
+	clear:both;
+	font-size: 0;
+	height: 0;
+	line-height: 0;
+	padding: 0;
+	margin: 0;
+}
+
+.bold {
+	font-weight:bold;
+}
+
+.green {
+	color:#004007;
+}
+
+.italics {
+	font-style:italic;
+}
+
+.fat {
+	margin:10px 0 10px 0;
+}
+
+.label {
+	clear:left;
+	float:left;
+}
+
+.ta-right {
+	min-width:200px;
+	text-align:right;
+}
+
+.account-name {
+	text-align:right;
+	margin:0 65px 0 0;
+}
+
+.account-container {
+	padding:10px 5px 0 5px;
+}
+
+.radio-group {
+	margin:10px 0;
+	padding:10px 0 10px 15px;
+	border:1px dashed #004007;
+	position:relative;
+	min-width:300px;
+}
+
+.form-element {
+	margin:5px 0;
+}
+
+#submit {
+	width:500px;
+	text-align:right;
+}
+
+#container{
+	border:1px solid #004007;
+	width:984px; /*954*/
+	margin:0 auto;
+	/*padding:0 15px 15px 15px;*/
+	position:relative;
+	background:#ffffff;
+}
+
+#edit{
+	margin:0 0 10px 0;
+}
+
+#nav{
+	/*margin:0 10px 10px 10px;*/
+	padding:0 10px 10px 10px;
+	border-bottom:1px solid #004007;
+}
+
+#nav ul{
+	list-style-type:none;
+	margin:5px 0;
+	padding:0;
+}
+
+#nav li {
+	display:block;
+	margin:5px 10px;
+	float:left;
+}
+
+#sidebar {
+	border-right:1px solid #004007;
+	padding:0 0 0 5px;
+	float:left;
+	width:14%;
+	height:300px;
+}
+
+#sidebar ul {
+	list-style-type: none;
+	padding:0;
+}
+
+#sidebar li {
+	margin:5px 0 5px 0;
+}
+
+#nav li a, #nav li a:visited, #sidebar li a, #sidebar li a:visited{
+	color:#025B01;
+	font-weight:bold;
+}
+
+#nav li a:hover, #sidebar li a:hover{
+	text-decoration:none;
+	color:#6A685A;
+}
+
+#content {
+	float:left;
+	width:76%;
+	padding:15px;
+}
+
+.result {
+	color:#ff3333;
+}
+
+.book-wrap {
+	margin:10px 0;
+}
+
+.border-top {
+	border-top:1px solid #000;
+}
+
+.border-right {
+	border-right:1px solid #000;
+}
+
+.border-bottom {
+	border-bottom:1px solid #000;
+}
+
+.border-left {
+	border-left:1px solid #000;
+}
+
+.border-top, .border-right, .border-bottom, .border-left {
+	border-color:#004007;
+}
+
+.dashed-bottom {
+	border-bottom:1px dashed #004007;
+}
+
+#book-summary{
+	padding: 0 10px 10px 10px;
+}
+
+.border {
+	border:1px solid #004007;
+}
+
+#book-summary table {
+}
+
+#book-summary form {
+	margin:10px 0;
+}
+
+.book, .bucket {
+	border:2px solid #000;
+	border-bottom-width:1px;
+	border-top-width:1px;
+}
+
+.bucket {
+	margin:10px 0;
+}
+
+#account-general-info {
+
+}
+
+#account-general-info.bucket-amount, #account-general-info.due-day {
+	width:50%;
+}
+
+.zebra {
+	background-color:#CCFFFF;
+}
+
+#transactions{
+	float:left;
+	width:100%;
+}
+
+#transactions table {
+	border:1px solid #004007;
+	width:100%;
+}
+
+#transactions tr {
+	border-bottom:1px solid #000;
+}
+
+tr.cleared{
+	background-color:yellow;
+}
+
+tr.red {
+	color: #ff3333;
+	border-bottom:1px solid #c9c9c9;
+}
+tr.green {
+	color: #025B01;
+	border-bottom:1px solid #c9c9c9;
+}
+
+table.book-table {
+	border:1px solid #000;
+	margin:1px;
+	background:#97e898;/*8BADE2;*/
+}
+
+#deposit-table {
+	border:1px solid #000000;
+	margin:1px;
+	background:#97e898;
+}
+
+#deposit-table tr {
+	border-bottom:1px solid #ffffff;
+}
+
+#deposit-table tr.table-head{
+	background:#ffffff;
+	color:#025B01;
+	font-weight:bold;
+}
+
+#deposit-table td {
+	padding:0 12px;
+}
+
+.align-right, #newBookForm td.right {
+	text-align:right;
+}
+
+#tooltip {
+	position: absolute;
+	z-index: 3000;
+	border: 1px solid #004007;
+	background-color: #eee;
+	padding: 5px;
+	opacity: 0.85;
+	font-size: 85%;
+}
+
+#tooltip h3, #tooltip div {
+	margin: 0;
+}
+
+#post-it-notes {
+	margin:110px 0 0 0;
+	width:20%;
+	float:left;
+}
+
+#post-it-notes .post-it {
+	background-color:#F2F5A9;
+	min-height:155px;
+	padding:5px;
+	margin:5px 0 5px 0;
+}
+
+#footer {
+	background: #fff url(../images/fallingdollars.png) repeat;
+	border:1px solid #004007;
+	border-width:0 1px 1px 1px;
+	height:50px;
+	margin:0 auto;
+	width:984px;
+	text-align:center;
+	padding:10px 0 0 0;
+}
+
+#copy {
+	color:#000;
+	width:75%;
+	height:30px;
+	margin:0 auto;
+	background:#fff;
+	padding:8px 0 0 0;
+}

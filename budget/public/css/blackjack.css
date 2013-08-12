@@ -1,0 +1,129 @@
+h1 {
+	margin:15px 0 15px 0;
+}
+
+h1 span {
+	font-size:50%;
+}
+
+h3 {
+	float:left;
+	margin-bottom:0;
+}
+
+.error {
+	color:#ff3333;
+}
+
+#container {
+	 margin:0 auto;
+	 border:1px solid #c9c9c9;
+	 width:800px;
+	 padding:0 10px 5px 10px;
+	 height:500px;
+}
+
+#rules {
+	margin:0 0 15px 0;
+	float:left;
+	font-weight:bold;
+}
+
+#rules ul {
+	list-style:none;
+}
+
+#rules li {
+	float:left;
+	padding:0 10px 0 10px;
+}
+
+#money {
+	text-align:right;
+	margin:20px;
+}
+
+#purse {
+	width:40%;
+	float:right;
+}
+
+#bet {
+	 float:right;
+}
+
+#playerAlert, #message, #playerTrash, #dealerTrash {
+	color:#3333ff;
+}
+
+#message {
+	float:left;
+	width:50%;
+}
+
+#hands-dealt, #average-winnings {
+	float:left;
+	margin:0 50px 0 0;
+}
+
+#dealerTrash {
+	color:#ff3333;
+}
+
+#playerAlert, #dealBlackJack {
+	margin:20px 20px 0 20px;
+	float:left;
+}
+
+.clear {
+	clear:both;
+	line-height:0;
+	height:0;
+	font-size:0;
+}
+
+.accordian {
+	width:auto;
+	float:left;
+}
+#dealer_hand {
+	width:50%;
+	float:left;
+	clear:left;
+}
+
+.buttons {
+}
+
+#dealer {
+/*	display:none;*/
+}
+
+#dealerCards, #playerCards {
+	float:left;
+}
+
+#dealerCards span, #playerCards span {
+	float:left;
+	margin:10px 0 0 10px;
+	border:1px solid #c9c9c9;
+	width:50px;
+	height:45px;
+	text-align:center;
+	padding:20px 0 0 0;
+}
+
+#dealerScore, #playerScore {
+	clear:left;
+	font-size:130%;
+	margin:30px 0 0 0;
+	text-align:center;
+	float:left;
+	width:100%;
+}
+
+#cards {
+	width:48%;
+	padding:0 0 0 5px;
+	float:left;
+}
