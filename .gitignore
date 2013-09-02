@@ -1,0 +1,10 @@
+webalizer/
+*.bak
+*.old
+*.orig
+*.sandd
+*.tmp
+metadata/
+*.metadata
+source/CI_2.1.0/application/logs/
+nbproject/*
