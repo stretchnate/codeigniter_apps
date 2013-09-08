@@ -20,7 +20,7 @@
 	<div class="clear">&nbsp;</div>
 </div><!-- end div container -->
 	<div id="footer" class="border">
-		<div id="copy"><a href="/blackjack/blackjack/">Play Blackjack</a>&nbsp;&nbsp;<span class="version">v 3.0</span>&nbsp;&copy; <?php $year = date('Y'); echo $year;?> Me.</div>
+		<div id="copy"><a href="/blackjack/blackjack/" target="_blank">Play Blackjack</a>&nbsp;&nbsp;<span class="version">v 3.0</span>&nbsp;&copy; <?php $year = date('Y'); echo $year;?> Me.</div>
 	</div>
 </body>
 </html>
