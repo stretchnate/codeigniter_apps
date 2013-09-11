@@ -23,5 +23,4 @@ define('CMD', 1);
 unset($argv[0]); /* ...but not the first one */
 $_SERVER['QUERY_STRING'] =  $_SERVER['PATH_INFO'] = $_SERVER['REQUEST_URI'] = '/' . implode('/', $argv) . '/';
 //echo $_SERVER['QUERY_STRING']."\n";
-
 require_once("index.php");

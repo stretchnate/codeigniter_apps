@@ -4,7 +4,7 @@ class CliCTL {
 	private $utils_path;
 	
 	function __construct() {
-		echo "calling CliCTL\n";
+		echo "\n[" . date("Y-m-d h:i:s") . "]: calling CliCTL\n";
 		$this->utils_path = APPPATH."/libraries/utils/";
 //		parent::__construct();
 	}
