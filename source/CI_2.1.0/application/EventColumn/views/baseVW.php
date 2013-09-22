@@ -5,12 +5,11 @@ abstract class BaseVW {
 	protected $title;
 	protected $scripts;
 	protected $errors;
-	protected $CI;
 
 	abstract public function generateView();
 
 	public function __construct(&$CI) {
-		$this->CI = $CI;
+
 	}
 
 	/**
@@ -32,21 +31,65 @@ abstract class BaseVW {
 		<html>
 			<head>
 				<title>Woot!</title>
+				<link rel="stylesheet" href="/css/base.css" type="text/css" />
+				<!-- need to make the js below dynamically load only on the maps page(s) -->
+				<script src="http://maps.googleapis.com/maps/api/js?sensor=true"></script>
+				<script>
+					function initialize() {
+						var map_canvas = document.getElementById('map_canvas');
+						var map_options = {
+							center: new google.maps.LatLng(44.5403, -78.5463),
+							zoom: 8,
+							mapTypeId: google.maps.MapTypeId.ROADMAP
+						};
+
+						var map = new google.maps.Map(map_canvas, map_options);
+
+					}
+
+					google.maps.event.addDomListener(window, 'load', initialize);
+				</script>
+				<!-- end dynamically loaded js -->
+
+
 			</head>
 			<body>
-				<h1>This is event view</h1>
-				<?php
-			}
+				<div id="wrapper">
+					<div id="header">
+						<h1><img src="/images/header_tx.png" alt="Event Column, create and find events" /><span>Welcome <?= "need a variable here"; ?></span></h1>
+					</div>
+					<div id="main-nav">
+						<ul>
+							<li>Map</li>
+							<li class="selected">Create</li>
+							<li style="margin-right:0px;">Calendar</li>
+							<li class="last">&nbsp;</li>
+						</ul>
+						<div class="clear">&nbsp;</div>
+					</div>
+					<div id="content">
+						<?php
+					}
 
-			/**
-			 * generates the view footer
-			 *
-			 * @return void
-			 * @access protected
-			 * @since 1.0
-			 */
-			protected function generateFooter() {
-				?>
+					/**
+					 * generates the view footer
+					 *
+					 * @return void
+					 * @access protected
+					 * @since 1.0
+					 */
+					protected function generateFooter() {
+						?>
+					</div><!-- end div id content-->
+					<div id="footer">
+						<ul>
+							<li>About Us | </li>
+							<li>Contact Us | </li>
+							<li>Policies | </li>
+							<li>Add these to the db</li>
+						</ul>
+					</div>
+				</div><!-- end div id wrapper -->
 			</body>
 		</html>
 		<?php
@@ -75,10 +118,6 @@ abstract class BaseVW {
 
 	public function setErrors($errors) {
 		$this->errors = $errors;
-	}
-
-	public function setCI($ci) {
-		$this->CI = $ci;
 	}
 
 }

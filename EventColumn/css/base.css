@@ -1,0 +1,124 @@
+/*
+    Document   : styles
+    Created on : Sep 22, 2013, 9:51:29 AM
+    Author     : stretch
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+html {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	background-color: #000000;
+	color: #ffffff;
+}
+
+h1 {
+	font-size:200%;
+}
+
+ul {
+	list-style-type: none;
+}
+
+li {
+	display: inline;
+}
+
+.clear {
+	clear:both;
+	line-height: 0px;
+	height:0px;
+	font-size:0px;
+	margin:0px;
+	padding: 0px;
+}
+
+#wrapper {
+
+}
+
+#header {
+	background: url('../images/header.png') repeat-x;
+}
+
+#header h1 {
+	margin-bottom:0px;
+}
+
+#header h1 span {
+	font-size: 50%;
+	float:right;
+}
+
+#main-nav {
+	background-color: #ffffff;
+	color: #000000;
+}
+
+#main-nav ul {
+	float:left;
+	margin:0;
+	padding-left:0;
+}
+
+#main-nav li {
+	background: url('/images/tab.png') repeat-x;
+	color: #ffffff;
+	display: block;
+	float:left;
+	height: 30px;
+	min-width: 90px;
+	text-align: center;
+	padding: 13px 0 0 0;
+	margin: 0 2px 0 0;
+	font-size: 15px;
+}
+
+#main-nav li.selected {
+	background-color: #000000;
+}
+
+#main-nav li.last {
+	background: url('/images/tab_1.png') #ffffff no-repeat;
+}
+
+#content {
+	background-color:#ffffff;
+	color:#000000;
+	float:left;
+	width:100%;
+}
+
+#side-nav {
+	background: url('/images/tab.png') repeat;
+	margin-top: 60px;
+	width: 170px;
+	color: #ffffff;
+	float: left;
+}
+
+#side-nav ul {
+	padding-top: 10px;
+	padding-bottom: 10px;
+
+}
+
+#side-nav li {
+	display:block;
+	font-size: 120%;
+
+}
+
+#event-map {
+	background-color: #c9c9c9;
+	width: 950px;
+	height: 560px;
+	float: left;
+	margin: 40px 0 40px 30px;
+	position: relative;
+}
+
+#footer ul {
+	float:right;
+}
