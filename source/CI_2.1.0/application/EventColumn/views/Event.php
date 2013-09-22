@@ -1,4 +1,5 @@
 <?php
+require_once('baseVW.php');
 
 class EventVW extends BaseVW {
 

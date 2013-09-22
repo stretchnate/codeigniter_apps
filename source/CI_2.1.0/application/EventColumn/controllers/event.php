@@ -3,10 +3,10 @@
 /**
  * this class is the controller class for adding and updating events as well as event locations and event details
  */
-class Event extends Controller {
+class Event extends CI_Controller {
 
 	public function __construct() {
-
+		parent::__construct();
 	}
 
 	/**
@@ -17,7 +17,7 @@ class Event extends Controller {
 	 * @since 1.0
 	 */
 	public function index() {
-		$this->load->view('event');
+		$this->load->view('Event');
 
 		$view = new EventVW(get_instance());
 
