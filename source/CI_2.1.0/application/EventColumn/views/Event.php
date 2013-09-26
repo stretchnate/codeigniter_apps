@@ -3,8 +3,8 @@ require_once('baseVW.php');
 
 class EventVW extends BaseVW {
 
-	public function __construct(&$CI) {
-		parent::__construct($CI);
+	public function __construct() {
+		parent::__construct();
 	}
 
 	public function generateView() {

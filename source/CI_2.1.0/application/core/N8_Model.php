@@ -1,13 +1,22 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+
+if (!defined('BASEPATH'))
+	exit('No direct script access allowed');
 
 class N8_Model extends CI_Model {
 
+	protected $CI;
+
+	public function __construct() {
+		$this->CI = & get_instance();
+	}
+
 	function transactionStart() {
-		$this->db->trans_start();
+		$this->CI->db->trans_start();
 	}
 
 	function transactionEnd() {
-		$this->db->trans_complete();
+		$this->CI->db->trans_complete();
 	}
 
 	/**
@@ -19,4 +28,6 @@ class N8_Model extends CI_Model {
 	function dbNumberFormat($value) {
 		return number_format($value, 2, '.', '');
 	}
+
 }
+

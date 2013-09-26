@@ -8,7 +8,7 @@ abstract class BaseVW {
 
 	abstract public function generateView();
 
-	public function __construct(&$CI) {
+	public function __construct() {
 
 	}
 

@@ -19,7 +19,7 @@ class Event extends CI_Controller {
 	public function index() {
 		$this->load->view('Event');
 
-		$view = new EventVW(get_instance());
+		$view = new EventVW();
 
 		$view->renderView();
 	}
