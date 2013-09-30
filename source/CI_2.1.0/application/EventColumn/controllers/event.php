@@ -24,6 +24,18 @@ class Event extends CI_Controller {
 		$view->renderView();
 	}
 
+	//@TODO remove this once I'm certain transactions are working.
+	public function transactionTest() {
+		$CI = & get_instance();
+		$model = new EventModel($CI);
+		$model->transactionTest();
+//		$model = new TransactionTestDM();
+//		$model->transactionStart();
+//		$model->insert1();
+//		$model->insert2();
+//		$model->transactionEnd();
+	}
+
 	/**
 	 * add a new event
 	 *

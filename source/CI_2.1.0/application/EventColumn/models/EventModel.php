@@ -1,11 +1,15 @@
 <?php
 
-class EventColumn_EventModel extends N8_Model {
+//require_once("/var/www/source/CI_2.1.0/application/core/N8_Model.php");
+
+class EventModel extends N8_Model {
 
 	protected $event;
+	protected $CI;
 
-	public function __construct() {
-		parent::__construct();
+	public function __construct(&$CI) {
+		parent::__construct($CI);
+		$this->CI = $CI;
 	}
 
 	/**
@@ -160,6 +164,16 @@ class EventColumn_EventModel extends N8_Model {
 	public function loadEvent($event_id) {
 		$this->event = new EventColumn_EventModel_EventDM();
 		$this->event->load($event_id);
+	}
+
+	//@TODO remove this one I'm certain transactions are working.
+	public function transactionTest() {
+		$data_model = new TransactionTestDM($this->CI);
+		$this->transactionStart();
+		$data_model->insert1();
+		$data_model->insert2();
+
+		$this->transactionEnd();
 	}
 
 }

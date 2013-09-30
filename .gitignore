@@ -9,3 +9,4 @@ metadata/
 source/CI_2.1.0/application/logs/
 nbproject/*
 EventColumn/test.php
+source/CI_2.1.0/application/EventColumn/models/TransactionTestDM.php

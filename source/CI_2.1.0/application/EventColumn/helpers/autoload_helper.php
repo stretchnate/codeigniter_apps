@@ -1,22 +1,30 @@
 <?
 
 function __autoload($classname) {
-	$dirs = array(
-	    "/var/www/source/CI_2.1.0/application/EventColumn/models/",
-	    "/var/www/source/CI_2.1.0/application/EventColumn/libraries/",
-	);
+	if (!class_exists($classname)) {
+		if ($classname == 'CI_Model') {
+			require_once("/var/www/source/CI_2.1.0/system/core/Model.php");
+		} else if ($classname == 'N8_Model') {
+			require_once("/var/www/source/CI_2.1.0/application/core/N8_Model.php");
+		} else {
+			$dirs = array(
+			    "/var/www/source/CI_2.1.0/application/EventColumn/models/",
+			    "/var/www/source/CI_2.1.0/application/EventColumn/libraries/",
+			);
 
-	$result = false;
+			$result = false;
 
-	if (strpos($classname, "_") !== false) {
-		$result = underscoreLoadMethod($classname, $dirs);
-	}
+			if (strpos($classname, "_") !== false) {
+				$result = underscoreLoadMethod($classname, $dirs);
+			}
 
-	if ($result === false) {
-		$files = array($classname, lcfirst($classname));
+			if ($result === false) {
+				$files = array($classname, lcfirst($classname));
 
-		foreach ($dirs as $directory) {
-			iterate($directory, $files);
+				foreach ($dirs as $directory) {
+					iterate($directory, $files);
+				}
+			}
 		}
 	}
 }

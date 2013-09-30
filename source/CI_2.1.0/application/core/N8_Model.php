@@ -7,8 +7,8 @@ class N8_Model extends CI_Model {
 
 	protected $CI;
 
-	public function __construct() {
-		$this->CI = & get_instance();
+	public function __construct(&$CI) {
+		$this->CI = $CI;
 	}
 
 	function transactionStart() {
