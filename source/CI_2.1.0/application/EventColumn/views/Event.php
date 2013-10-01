@@ -3,6 +3,8 @@ require_once('baseVW.php');
 
 class EventVW extends BaseVW {
 
+	protected $map;
+
 	public function __construct() {
 		parent::__construct();
 	}
@@ -33,10 +35,12 @@ class EventVW extends BaseVW {
 			</ul>
 		</div>
 		<div id="event-map">
-			<div id='event-form'></div>
-			<div id='map_canvas'>
+			<div id='event-form'>
+				<form action="" method="post">
 
+				</form>
 			</div>
+
 		</div>
 		<?php
 	}

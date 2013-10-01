@@ -5,18 +5,18 @@ if (!defined('BASEPATH'))
 
 class N8_Model extends CI_Model {
 
-	protected $CI;
+	protected $content_db;
 
-	public function __construct(&$CI) {
-		$this->CI = $CI;
+	public function __construct() {
+		$this->content_db = $this->load->database('content', true, true);
 	}
 
 	function transactionStart() {
-		$this->CI->db->trans_start();
+		$this->db->trans_start();
 	}
 
 	function transactionEnd() {
-		$this->CI->db->trans_complete();
+		$this->db->trans_complete();
 	}
 
 	/**
