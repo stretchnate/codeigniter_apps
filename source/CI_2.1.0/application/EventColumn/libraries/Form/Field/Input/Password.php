@@ -1,11 +1,11 @@
 <?php
 
 /**
- * generates a single field for the Form object using the CI form_helper functions
+ * generates a single text field for the Form object using the CI form_helper functions
  *
  * @author stretch
  */
-class FormField_Hidden extends FormField {
+class Field_Input_Password extends Field_Input {
 
 	public function __construct() {
 		parent::__construct();
@@ -19,7 +19,7 @@ class FormField_Hidden extends FormField {
 	 * @since 1.0
 	 */
 	public function generateField() {
-		return form_hidden($this->name, $this->value);
+		$this->renderField(form_password($this->filterAttributes(), '', $this->element_javascript));
 	}
 
 }
