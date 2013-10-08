@@ -1,11 +1,11 @@
 <?php
 
 /**
- * generates a single text field for the Form object using the CI form_helper functions
+ * generates a single <input type="password"> field for the Form object using the CI form_helper functions
  *
  * @author stretch
  */
-class Field_Input_Password extends Field_Input {
+class Form_Field_Input_Password extends Form_Field_Input {
 
 	public function __construct() {
 		parent::__construct();

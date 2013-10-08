@@ -1,11 +1,11 @@
 <?php
 
 /**
- * generates a single text field for the Form object using the CI form_helper functions
+ * generates a single <select> field for the Form object using the CI form_helper functions
  *
  * @author stretch
  */
-class Field_Select extends Field {
+class Form_Field_Select extends Form_Field {
 
 	protected $options = array();
 	protected $selected_option;
@@ -26,11 +26,11 @@ class Field_Select extends Field {
 
 		$attributes = $this->stringifyAttributes();
 
-		$this->renderField(form_select($name, $this->options, $this->selected_option, $attributes));
+		$this->renderField(form_dropdown($name, $this->options, $this->selected_option, $attributes));
 	}
 
-	public function addOption($option) {
-		$this->options[] = $option;
+	public function addOption($value, $content) {
+		$this->options[$value] = $content;
 		return $this;
 	}
 

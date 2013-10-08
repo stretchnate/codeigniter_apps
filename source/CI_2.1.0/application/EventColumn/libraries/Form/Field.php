@@ -5,7 +5,7 @@
  *
  * @author stretch
  */
-abstract class Field {
+abstract class Form_Field {
 
 	const FIELD_TYPE_HIDDEN = 'hidden';
 	const FIELD_TYPE_INPUT = 'input';
@@ -17,7 +17,8 @@ abstract class Field {
 	const FIELD_TYPE_DROPDOWN = 'dropdown';
 	const FIELD_TYPE_SELECT = 'select';
 	const FIELD_TYPE_MULTISELECT = 'multiselect';
-	const FIELD_TYPE_FIELDSET = 'fieldset';
+	const FIELD_TYPE_FIELDSET_OPEN = 'fieldset_open';
+	const FIELD_TYPE_FIELDSET_CLOSE = 'fieldset_close';
 	const FIELD_TYPE_CHECKBOX = 'checkbox';
 	const FIELD_TYPE_RADIO = 'radio';
 	const FIELD_TYPE_SUBMIT = 'submit';
@@ -25,9 +26,12 @@ abstract class Field {
 	const FIELD_TYPE_RESET = 'reset';
 	const FIELD_TYPE_BUTTON = 'button';
 
-	protected $type;
 	protected $element_javascript = null;
+	protected $container_class;
+	protected $container_id;
 	protected $label;
+	protected $label_id;
+	protected $label_class;
 	protected $label_container_id;
 	protected $label_container_class;
 	protected $field_container_id;
@@ -44,7 +48,8 @@ abstract class Field {
 	);
 
 	public function __construct() {
-		$this->load->helper('form');
+		$ci = & get_instance();
+		$ci->load->helper('form');
 	}
 
 	/**
@@ -57,10 +62,12 @@ abstract class Field {
 	abstract public function generateField();
 
 	protected function renderField($field) {
-		echo $this->generateLabel();
 		?>
-		<div<?= ($this->field_container_id) ? "id='" . $this->field_container_id . "'" : ''; ?><?= ($this->field_container_class) ? "class='" . $this->field_container_class . "'" : ''; ?>>
-			<?= $field; ?>
+		<div<?= isset($this->container_class) ? " class='" . $this->container_class . "'" : ''; ?><?= isset($this->container_id) ? " id='" . $this->container_id . "'" : ""; ?>>
+			<?= $this->generateLabel(); ?>
+			<div<?= ($this->field_container_id) ? " id='" . $this->field_container_id . "'" : ''; ?><?= ($this->field_container_class) ? " class='" . $this->field_container_class . "'" : ''; ?>>
+				<?= $field; ?>
+			</div>
 		</div>
 		<?php
 	}
@@ -90,9 +97,15 @@ abstract class Field {
 	 */
 	protected function generateLabel() {
 		if (isset($this->label)) {
+			$label = new Form_Field_Label();
+			$label->setFor($this->attributes['id']);
+			$label->setForm($this->attributes['form']);
+			$label->setId($this->label_id);
+			$label->setClass($this->label_class);
+			$label->setContent($this->label);
 			?>
 			<div<?= isset($this->label_container_id) ? " id='" . $this->label_container_id . "'" : ''; ?><?= isset($this->label_container_class) ? " class='" . $this->label_container_class . "'" : ''; ?>>
-				<label<?= isset($this->attributes['id']) ? " for='" . $this->attributes['id'] . "'" : ''; ?>><?= $this->label; ?></label>
+				<?= $label->generateField(); ?>
 			</div>
 			<?php
 		}
@@ -133,10 +146,6 @@ abstract class Field {
 		return $this;
 	}
 
-	public function setType($type) {
-		$this->type = trim($type);
-	}
-
 	public function setLabel($label) {
 		$this->label = $label;
 		return $this;
@@ -144,6 +153,26 @@ abstract class Field {
 
 	public function setElementJavascript($js) {
 		$this->element_javascript = $js;
+		return $this;
+	}
+
+	public function setContainerId($container_id) {
+		$this->container_id = $container_id;
+		return $this;
+	}
+
+	public function setContainerClass($container_class) {
+		$this->container_class = $container_class;
+		return $this;
+	}
+
+	public function setLabelId($label_id) {
+		$this->label_id = $label_id;
+		return $this;
+	}
+
+	public function setLabelClass($label_class) {
+		$this->label_class = $label_class;
 		return $this;
 	}
 

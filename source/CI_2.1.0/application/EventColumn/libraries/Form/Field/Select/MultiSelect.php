@@ -1,11 +1,11 @@
 <?php
 
 /**
- * generates a single text field for the Form object using the CI form_helper functions
+ * generates a single <select multiselect="multiselect"> field for the Form object using the CI form_helper functions
  *
  * @author stretch
  */
-class Field_Select_MultiSelect extends Field_Select {
+class Form_Field_Select_MultiSelect extends Form_Field_Select {
 
 	protected $selected_option = array();
 
@@ -50,4 +50,5 @@ class Field_Select_MultiSelect extends Field_Select {
 	}
 
 }
+
 ?>

@@ -1,11 +1,11 @@
 <?php
 
 /**
- * generates a single field for the Form object using the CI form_helper functions
+ * generates a single <input type="text"> field for the Form object using the CI form_helper functions
  *
  * @author stretch
  */
-abstract class Field_Input extends Field {
+class Form_Field_Input extends Form_Field {
 
 	public function __construct() {
 		parent::__construct();

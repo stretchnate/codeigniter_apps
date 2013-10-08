@@ -1,11 +1,11 @@
 <?php
 
 /**
- * generates a single text field for the Form object using the CI form_helper functions
+ * generates a single <input type="radio"> field for the Form object using the CI form_helper functions
  *
  * @author stretch
  */
-class Field_Input_Checkbox_Radio extends Field_Input_Checkbox {
+class Form_Field_Input_Checkbox_Radio extends Form_Field_Input_Checkbox {
 
 	public function __construct() {
 		parent::__construct();

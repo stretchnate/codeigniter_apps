@@ -113,10 +113,14 @@ li {
 #event-map {
 	background-color: #c9c9c9;
 	width: 950px;
-	height: 560px;
+	min-height: 560px;
 	float: left;
 	margin: 40px 0 40px 30px;
 	position: relative;
+}
+
+div.event-form-field {
+	margin:2px 0 2px 0;
 }
 
 #footer ul {

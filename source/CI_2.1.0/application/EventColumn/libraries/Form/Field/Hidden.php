@@ -1,11 +1,11 @@
 <?php
 
 /**
- * generates a single field for the Form object using the CI form_helper functions
+ * generates a single <input type="hidden"> field for the Form object using the CI form_helper functions
  *
  * @author stretch
  */
-class Field_Hidden extends Field {
+class Form_Field_Hidden extends Form_Field {
 
 	private $hidden_elements_array = array();
 

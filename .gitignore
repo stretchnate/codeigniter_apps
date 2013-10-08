@@ -7,6 +7,8 @@ webalizer/
 metadata/
 *.metadata
 source/CI_2.1.0/application/logs/
+source/CI_2.1.0/application/EventColumn/logs/
 nbproject/*
 EventColumn/test.php
 source/CI_2.1.0/application/EventColumn/models/TransactionTestDM.php
+source/CI_2.1.0/application/EventColumn/models/testDM.php

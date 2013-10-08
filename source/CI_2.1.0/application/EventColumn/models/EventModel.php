@@ -1,7 +1,5 @@
 <?php
 
-//require_once("/var/www/source/CI_2.1.0/application/core/N8_Model.php");
-
 class EventModel extends N8_Model {
 
 	protected $event;
@@ -162,6 +160,14 @@ class EventModel extends N8_Model {
 	public function loadEvent($event_id) {
 		$this->event = new EventColumn_EventModel_EventDM();
 		$this->event->load($event_id);
+	}
+
+	public function testTransactions() {
+		$dm = new testDM();
+		$this->transactionStart();
+		$dm->insert1();
+		$dm->insert2();
+		$this->transactionEnd();
 	}
 
 }

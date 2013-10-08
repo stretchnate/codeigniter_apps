@@ -1,17 +1,21 @@
 <?php
 
 /**
- * generates a single text field for the Form object using the CI form_helper functions
+ * generates a single <input type="file"> field for the Form object using the CI form_helper functions
  *
  * @author stretch
  */
-class Field_Input_File extends Field_Input {
+class Form_Field_Input_File extends Form_Field_Input {
+
+	const ACCEPT_TYPE_IMAGE = 'image/*';
+	const ACCEPT_TYPE_VIDEO = 'video/*';
+	const ACCEPT_TYPE_AUDIO = 'audio/*';
 
 	public function __construct() {
 		parent::__construct();
 
 		//add the accepts attribute to the attribtues
-		$this->attributes['accepts'] = null;
+		$this->attributes['accept'] = null;
 	}
 
 	/**
@@ -25,8 +29,8 @@ class Field_Input_File extends Field_Input {
 		$this->renderField(form_upload($this->filterAttributes(), '', $this->element_javascript));
 	}
 
-	public function setAccepts($accepts) {
-		$this->attributes['accepts'] = $accepts;
+	public function setAccept($accepts) {
+		$this->attributes['accept'] = $accepts;
 		return $this;
 	}
 

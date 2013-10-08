@@ -1,11 +1,11 @@
 <?php
 
 /**
- * generates a single text field for the Form object using the CI form_helper functions
+ * generates a single <input type="checkbox"> field for the Form object using the CI form_helper functions
  *
  * @author stretch
  */
-class Field_Input_Checkbox extends Field_Input {
+class Form_Field_Input_Checkbox extends Form_Field_Input {
 
 	protected $checked = false;
 
