@@ -20,9 +20,13 @@ class EventModel extends N8_Model {
 	public function saveEvent(array $event, array $event_details_locations) {
 		$this->transactionStart();
 
-		if (!empty($event['event_id'])) {
-			$this->saveNewEvent($event, $event_details_locations);
-			$this->event->load($event['event_id']);
+		if (empty($event['event_id'])) {
+			$event_id = $this->saveNewEvent($event, $event_details_locations);
+			$this->event->load($event_id);
+
+			if (!$this->event->getEventId()) {
+				$this->setError("There was a problem saving your event", N8_Error::ERROR);
+			}
 		} else {
 			$this->updateEvent($event, $event_details_locations);
 		}
@@ -41,7 +45,7 @@ class EventModel extends N8_Model {
 	 */
 	protected function saveNewEvent(array $event, array $event_details_locations) {
 		//create the event object
-		$this->event = new EventColumn_EventModel_EventDM();
+		$this->event = new EventModel_EventDM();
 		$this->event->setEventOwner($event['event_owner']);
 		$this->event->setEventName($event['event_name']);
 		$this->event->setEventStartDatetime($event['event_start_datetime']);
@@ -55,7 +59,7 @@ class EventModel extends N8_Model {
 
 		//create each details object and each location object.
 		foreach ($event_details_locations as $event_details_location) {
-			$details = new EventColumn_EventModel_EventDetailsDM();
+			$details = new EventModel_EventDetailsDM();
 			$details->setSmoking($event_details_location['smoking']);
 			$details->setFoodAvailable($event_details_location['food_available']);
 			$details->setAgeRange($event_details_location['age_range']);
@@ -63,7 +67,7 @@ class EventModel extends N8_Model {
 			//save the details
 			$details->save();
 
-			$location = new EventColumn_EventModel_EventLocationDM();
+			$location = new EventModel_EventLocationDM();
 			$location->setEventLocation($event_details_location['event_location']);
 			$location->setLocationAddress($event_details_location['location_address']);
 			$location->setLocationCity($event_details_location['location_city']);
@@ -123,7 +127,7 @@ class EventModel extends N8_Model {
 			//get location by id
 			$location = $this->event->getLocationById($event_details_location['location_id']);
 		} else {
-			$location = new EventColumn_EventModel_EventLocationDM();
+			$location = new EventModel_EventLocationDM();
 			$location->load($event_details_location['location_id']);
 		}
 
@@ -158,7 +162,7 @@ class EventModel extends N8_Model {
 	 * @since 1.0
 	 */
 	public function loadEvent($event_id) {
-		$this->event = new EventColumn_EventModel_EventDM();
+		$this->event = new EventModel_EventDM();
 		$this->event->load($event_id);
 	}
 

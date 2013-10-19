@@ -2,7 +2,8 @@
 
 /**
  * The CI unit_test class leaves something ot be desired as far as feedback when a test is failed.
- * so this wrapper class is going to help us get more for our money.
+ * so this wrapper class is going to help us get more for our money. Not to mention make writing tests
+ * feel a bit more like we are writing them in phpUnit.
  *
  * @author stretch
  */
@@ -86,21 +87,56 @@ class N8_Unit_test extends CI_Unit_test {
 		echo self::CR;
 	}
 
-	public function assertEquals($expected, $actual, $test_name = null, $notes = null) {
+	/**
+	 * asserts whether the expected value is equal to the actual value
+	 *
+	 * @param mixed $expected
+	 * @param mixed $actual
+	 * @param string $test_name
+	 * @param string $notes
+	 */
+	public function assertEquals($expected, $actual, $test_name = 'undefined', $notes = '') {
 		$this->run($actual, $expected, $test_name, $notes);
 	}
 
-	public function assertCount($expected, array $array, $test_name = null, $notes = null) {
+	/**
+	 * Asserts the count of an array
+	 *
+	 * @param int $expected
+	 * @param array $array
+	 * @param string $test_name
+	 * @param string $notes
+	 */
+	public function assertCount($expected, array $array, $test_name = 'undefined', $notes = '') {
 		$count = count($array);
 		$this->run($count, $expected, $test_name, $notes);
 	}
 
-	public function assertClassName($expected, $class, $test_name = null, $notes = null) {
+	/**
+	 * asserts whether a classname is as expected
+	 *
+	 * @param string $expected
+	 * @param object $class
+	 * @param string $test_name
+	 * @param string $notes
+	 */
+	public function assertClassName($expected, $class, $test_name = 'undefined', $notes = '') {
 		$class_name = get_class($class);
 		$this->run($class_name, $expected, $test_name, $notes);
 	}
 
-	public function assertException($expected, $object, $method, $args = array(), $test_name = null, $notes = null) {
+	/**
+	 * asserts whether an exception is the same as the exception that is expected. the trick to this one is passing
+	 * arguments ($args) that will force the exception to be thrown.
+	 *
+	 * @param string $expected
+	 * @param object $object
+	 * @param string $method (method to call on $object)
+	 * @param array $args (arguments to inject into $method)
+	 * @param string $test_name
+	 * @param string $notes
+	 */
+	public function assertException($expected, $object, $method, array $args = array(), $test_name = 'undefined', $notes = '') {
 		try {
 			$object->$method(implode(', ', $args));
 			$this->run('No Exception Caught', $expected, $test_name, $notes);

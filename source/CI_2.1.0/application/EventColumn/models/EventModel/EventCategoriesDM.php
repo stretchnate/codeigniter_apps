@@ -1,6 +1,6 @@
 <?php
 
-class EventColumn_EventModel_EventCategoriesDM extends BaseDM {
+class EventModel_EventCategoriesDM extends BaseDM {
 
 	private $category_id;
 	private $category_name;
@@ -97,7 +97,7 @@ class EventColumn_EventModel_EventCategoriesDM extends BaseDM {
 	 * @return boolean
 	 * @since  1.0
 	 */
-	private function update() {
+	protected function update() {
 		$sets = array();
 
 		$sets["category_name"] = $this->category_name;
@@ -117,7 +117,7 @@ class EventColumn_EventModel_EventCategoriesDM extends BaseDM {
 	 * @return unknown
 	 * @since  1.0
 	 */
-	private function insert() {
+	protected function insert() {
 		$values = array();
 
 		$values["category_name"] = $this->category_name;

@@ -1,6 +1,6 @@
 <?php
 
-class EventColumn_EventModel_EventLocationDM extends BaseDM {
+class EventModel_EventLocationDM extends BaseDM {
 
 	private $location_id;
 	private $event_location;
@@ -80,7 +80,7 @@ class EventColumn_EventModel_EventLocationDM extends BaseDM {
 	 * @return boolean
 	 * @since  1.0
 	 */
-	private function update() {
+	protected function update() {
 		try {
 			$sets = array();
 			$sets['event_location'] = $this->event_location;
@@ -109,7 +109,7 @@ class EventColumn_EventModel_EventLocationDM extends BaseDM {
 	 * @return unknown
 	 * @since  1.0
 	 */
-	private function insert() {
+	protected function insert() {
 		$values = array();
 
 		$values['event_location'] = $this->event_location;

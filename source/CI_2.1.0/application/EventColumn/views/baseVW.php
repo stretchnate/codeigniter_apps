@@ -68,6 +68,13 @@ abstract class BaseVW {
 						<div class="clear">&nbsp;</div>
 					</div>
 					<div id="content">
+						<div id="error_messages" class="error">
+							<?php
+							foreach ($this->errors as $error) {
+								echo '<div class="error">' . $error . '</div>';
+							}
+							?>
+						</div>
 						<?php
 					}
 

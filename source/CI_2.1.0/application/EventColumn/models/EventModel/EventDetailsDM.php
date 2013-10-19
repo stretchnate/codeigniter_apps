@@ -1,6 +1,6 @@
 <?php
 
-class EventColumn_EventModel_EventDetailsDM extends BaseDM {
+class EventModel_EventDetailsDM extends BaseDM {
 
 	private $event_details_id;
 	private $smoking;
@@ -103,7 +103,7 @@ class EventColumn_EventModel_EventDetailsDM extends BaseDM {
 	 * @return unknown
 	 * @since  1.0
 	 */
-	private function insert() {
+	protected function insert() {
 		$values = array();
 
 		$values["smoking"] = $this->smoking;
@@ -119,7 +119,7 @@ class EventColumn_EventModel_EventDetailsDM extends BaseDM {
 	 * multiple events or users, therefore we will likely need the entry at some point
 	 * and instead, when an entry needs to change we will simply insert a new one.
 	 */
-	private function update() {
+	protected function update() {
 
 	}
 

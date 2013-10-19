@@ -1,12 +1,19 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+
+if (!defined('BASEPATH'))
+	exit('No direct script access allowed');
 
 class N8_Error {
 
+	const ERROR = 'error';
+	const DEBUG = 'debug';
+	const INFO = 'info';
+
 	private $messages = array(
-							"error" => array(),
-							"debug" => array(),
-							"info"  => array()
-							);
+	    self::ERROR => array(),
+	    self::DEBUG => array(),
+	    self::INFO => array()
+	);
 
 	function __construct() {
 		// log_message('debug', "N8_Error Class Initialized");
@@ -16,7 +23,15 @@ class N8_Error {
 	 * @return array $this->errors
 	 */
 	public function getErrors() {
-		return $this->getMessages("error");
+		return $this->getMessages(self::ERROR);
+	}
+
+	public function setErrors(array $errors) {
+		$this->messages[self::ERROR] = $errors;
+	}
+
+	public function addError($error) {
+		$this->messages[self::ERROR][] = $error;
 	}
 
 	/**
@@ -27,7 +42,7 @@ class N8_Error {
 	 * @param string $message_type  ex. 'error', 'debug', 'info'
 	 * @return void
 	 */
-	protected function setError($message, $message_type = "error") {
+	protected function setError($message, $message_type = self::ERROR) {
 		log_message($message_type, $message);
 		$this->messages[$message_type][] = $message;
 	}
@@ -39,7 +54,7 @@ class N8_Error {
 	 */
 	public function isErrors() {
 		$return = false;
-		if( count($this->messages["error"]) > 0 ) {
+		if (count($this->messages[self::ERROR]) > 0) {
 			$return = true;
 		}
 		return $return;
@@ -48,4 +63,6 @@ class N8_Error {
 	public function getMessages($message_type) {
 		return $this->messages[$message_type];
 	}
+
 }
+
