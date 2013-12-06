@@ -34,6 +34,19 @@ li {
 	padding: 0px;
 }
 
+.error {
+    color:#ff3333;
+    padding:0 0 0 10px;
+}
+
+.error p {
+    display: inline;
+}
+
+.purple {
+    color:#A85FCB;
+}
+
 #wrapper {
 
 }
@@ -44,11 +57,17 @@ li {
 
 #header h1 {
 	margin-bottom:0px;
+        float:left;
 }
 
-#header h1 span {
-	font-size: 50%;
+#header span.welcome {
 	float:right;
+        margin:15px 0 0 0;
+}
+
+#header span.welcome a, #header span.welcome a:visited, #footer li a, #footer li a:visited {
+    color:#FFFFFF;
+    text-decoration: none;
 }
 
 #main-nav {
@@ -110,6 +129,10 @@ li {
 
 }
 
+#login-content {
+    margin:10px;
+}
+
 #event-map {
 	background-color: #c9c9c9;
 	width: 950px;
@@ -117,6 +140,7 @@ li {
 	float: left;
 	margin: 40px 0 40px 30px;
 	position: relative;
+        padding: 10px;
 }
 
 div.event-form-field {

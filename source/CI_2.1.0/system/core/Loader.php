@@ -270,7 +270,6 @@ class CI_Loader {
 		$model = strtolower($model);
 
 		foreach ($this->_ci_model_paths as $mod_path) {
-			dbo("looking for model in " . $mod_path . 'models/' . $path . $model . '.php');
 			if (!file_exists($mod_path . 'models/' . $path . $model . '.php')) {
 				continue;
 			}

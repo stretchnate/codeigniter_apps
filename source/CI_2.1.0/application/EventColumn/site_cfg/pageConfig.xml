@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PageConfig>
+    <Page id="default">
+        <Head>
+            <title>EventColumn.com find events in your area</title>
+            <css>/css/base.css</css>
+            <meta name="keywords">Events, church, concert, parties</meta>
+            <meta name="description">EventColumn.com search for and create events in your area</meta>
+            <meta name="author">eventcolumn.com</meta>
+        </Head>
+    </Page>
+
+    <Page id="login">
+        <Head>
+            <title>EventColumn.com - login to add new Events</title>
+            <js>/js/login.js</js>
+        </Head>
+    </Page>
+
+    <!-- below is an example of a page configuration and an explanation of how they affect the default configuration -->
+    <Page id="example">
+        <Head>
+            <title>This will overwrite the default title</title>
+            <css>this will be added to the list of css files to load (does not overwrite)</css>
+            <js>this will add a new js file(does not overwrite)</js>
+            <meta name="author">this will overwrite the author meta tag</meta>
+            <meta name="copyright">this will add a copyright meta tag or overwrite the copyright meta tag if one exists.</meta>
+        </Head>
+    </Page>
+</PageConfig>

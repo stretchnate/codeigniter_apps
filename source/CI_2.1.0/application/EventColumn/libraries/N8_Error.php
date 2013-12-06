@@ -42,9 +42,13 @@ class N8_Error {
 	 * @param string $message_type  ex. 'error', 'debug', 'info'
 	 * @return void
 	 */
-	protected function setError($message, $message_type = self::ERROR) {
+	protected function setMessage($message, $message_type = self::ERROR) {
 		log_message($message_type, $message);
 		$this->messages[$message_type][] = $message;
+	}
+
+	protected function setError($message) {
+		$this->setMessage($message, self::ERROR);
 	}
 
 	/**
@@ -64,5 +68,22 @@ class N8_Error {
 		return $this->messages[$message_type];
 	}
 
+	/**
+	 * logs a message, does not add it to the messges array thus allowing it to be logged and not displayed to the user
+	 *
+	 * @param string $message
+	 * @param string $severity
+	 */
+	public function logMessage($message, $severity = self::ERROR) {
+		switch($severity) {
+			case self::ERROR:
+			case self::DEBUG:
+			case self::INFO:
+				log_message($severity, $message);
+				break;
+			default:
+				log_message(self::ERROR, 'No severity passed for message '.$message);
+		}
+	}
 }
 

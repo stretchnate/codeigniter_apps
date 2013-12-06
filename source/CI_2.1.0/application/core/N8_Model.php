@@ -7,12 +7,8 @@ class N8_Model extends CI_Model {
 
 	protected $content_db;
 
-	public function __construct($alternate_db = null) {
+	public function __construct() {
 		parent::__construct();
-
-		if ($alternate_db) {
-			$this->content_db = $this->load->database($alternate_db, true, true);
-		}
 	}
 
 	function transactionStart() {

@@ -7,10 +7,9 @@ function __autoload($classname) {
 		} else if ($classname == 'N8_Model') {
 			require_once("/var/www/source/CI_2.1.0/application/core/N8_Model.php");
 		} else {
-			//@todo consider moving libraries to application/libraries
 			$dirs = array(
 			    "/var/www/source/CI_2.1.0/application/EventColumn/models/",
-			    "/var/www/source/CI_2.1.0/application/EventColumn/libraries/",
+			    "/var/www/source/CI_2.1.0/application/EventColumn/libraries/"
 			);
 
 			$result = false;

@@ -156,6 +156,10 @@ class Form {
 				$field = new Form_Field_Input_Button();
 				break;
 
+			case Form_Field::FIELD_TYPE_RECAPTCHA:
+				$field = new Form_Field_Recaptcha();
+				break;
+
 			default:
 				throw new UnexpectedValueException("invalid form field defined");
 		}

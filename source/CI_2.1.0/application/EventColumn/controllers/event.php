@@ -221,8 +221,6 @@ class Event extends N8_Controller {
 			$locations = $post['event_details_locations'];
 			unset($post['event_details_locations']);
 
-//			clearLog();
-//			dbo_arr("post", $post);
 			$event_model = new EventModel();
 			$event_model->saveEvent($post, $locations);
 

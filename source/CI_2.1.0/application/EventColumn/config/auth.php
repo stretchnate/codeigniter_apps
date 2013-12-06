@@ -1,6 +1,7 @@
 <?php
-	$config['index_redirect'] = '/welcome';
-	$config['login_redirect'] = '/admin/login';
+	$config['index_redirect'] = '/home';
+	$config['login_redirect'] = '/login';
+	$config['inactive_site']  = '/inactive/';
 
 /* End of file: auth.php */
 /* Location: application/config/auth.php */

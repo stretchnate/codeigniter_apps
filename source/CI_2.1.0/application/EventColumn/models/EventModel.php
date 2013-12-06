@@ -25,7 +25,7 @@ class EventModel extends N8_Model {
 			$this->event->load($event_id);
 
 			if (!$this->event->getEventId()) {
-				$this->setError("There was a problem saving your event", N8_Error::ERROR);
+				$this->setError("There was a problem saving your event");
 			}
 		} else {
 			$this->updateEvent($event, $event_details_locations);
