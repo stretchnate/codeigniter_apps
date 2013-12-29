@@ -67,7 +67,7 @@ $autoload['libraries'] = array('auth', 'database');
   |	$autoload['helper'] = array('url', 'file');
  */
 
-$autoload['helper'] = array('N8_date_helper', 'html', 'error', 'autoload'); //error is loaded in development only
+$autoload['helper'] = array('N8_date_helper', 'html', 'error', 'autoload', 'url'); //error is loaded in development only
 
 
 /*

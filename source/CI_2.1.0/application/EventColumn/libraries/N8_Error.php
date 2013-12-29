@@ -47,6 +47,11 @@ class N8_Error {
 		$this->messages[$message_type][] = $message;
 	}
 
+	/**
+	 * Sets an error message to be displayed. Does not log the message in the error logs
+	 *
+	 * @param string $message
+	 */
 	protected function setError($message) {
 		$this->setMessage($message, self::ERROR);
 	}

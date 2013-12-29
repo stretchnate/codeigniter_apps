@@ -27,4 +27,151 @@
             <meta name="copyright">this will add a copyright meta tag or overwrite the copyright meta tag if one exists.</meta>
         </Head>
     </Page>
+    <!-- end example config -->
+
+    <Page id="about">
+        <Head>
+            <title>About EventColumn.com</title>
+        </Head>
+        <Body>
+            This is the body content, if we are unable to add links or other HTML we may need to update the xsd to use a complex type for the Body tag.
+        </Body>
+    </Page>
+
+    <Page id="policies">
+        <Head>
+            <title>EventColumn.com Policies</title>
+        </Head>
+        <Body>
+            This is the body content for policies, if we are unable to add links or other HTML we may need to update the xsd to use a complex type for the Body tag.
+        </Body>
+    </Page>
+
+    <Page id="contact">
+        <Head>
+            <title>EventColumn.com Contact us</title>
+        </Head>
+    </Page>
+
+    <Page id="home">
+        <Head>
+            <title>EventColumn.com - What's going on in your world?</title>
+        </Head>
+    </Page>
+
+    <Page id="map">
+        <Head>
+            <title>
+                <![CDATA[
+                    EventColumn.com - search results for %1$s
+                ]]>
+            </title>
+            <js><![CDATA[http://maps.googleapis.com/maps/api/js?sensor=false]]></js>
+            <inline_js>
+                <![CDATA[
+
+                    var map;
+                    var markers = [];
+                    var geocoder = new google.maps.Geocoder();
+                    var lat_long = new Array();
+
+                    function getPoints() {
+console.log("called getPoints()");
+
+
+                        for(var i in address) {
+                            lat_long[i] = geocoder.geocode({'address': address[i]}, function(results, status) {
+                                if (status === google.maps.GeocoderStatus.OK) {
+
+                                    var coordinates = results[0].geometry.location.toString().replace(/(\(|\))/g, '');
+                                    var bits = coordinates.split(", ");
+console.log('here '+ new google.maps.LatLng(bits[0], bits[1]));
+                                    return new google.maps.LatLng(bits[0],bits[1]);
+                                }
+                            });
+                        }
+console.log(lat_long.length);
+                        //return lat_long;
+                    }
+
+                    function initialize() {
+                        var address = new Array();
+                        address[0] = "410 Rock Springs Circle, Groveland, FL 34736";
+                        address[1] = "402 Rock Springs Circle, Groveland, FL 34736";
+
+                        var center = geocoder.geocode({'address': address[0]}, function(results, status) {
+                            if (status === google.maps.GeocoderStatus.OK) {
+
+                                return results[0].geometry.location.toString().replace(/(\(|\))/g, '').split(", ");
+                            }
+                        });
+                        var map_canvas = document.getElementById('map_canvas');
+                        var map_options = {
+                                //center: new google.maps.LatLng(44.5403, -78.5463),
+                                center:  new google.maps.LatLng(center[0], center[1]),
+                                zoom: 11,
+                                mapTypeId: google.maps.MapTypeId.ROADMAP
+                        };
+
+                        map = new google.maps.Map(map_canvas, map_options);
+console.log(lat_long.length);
+console.log('lat_long = '+lat_long);
+                        //
+                        for(var j = 0; j < lat_long.length; j++) {
+console.log('j = '+j);
+console.log(lat_long[j].toString());
+                            addMarker(lat_long[j], "test_"+j);
+                        }
+                        //addMarker(new google.maps.LatLng(44.5403, -78.4536), "test1");
+                        //addMarker(new google.maps.LatLng(44.5609, -78.4536), "test2");
+                        //addMarker(new google.maps.LatLng(44.5529, -78.4736), "test3");
+                        //
+                    }
+
+                    function addMarker(latlng, marker_title) {
+                      markers.push(new google.maps.Marker({
+                        position: latlng,
+                        map: map,
+                        title: marker_title,
+                        //icon:[enter image location here]
+                      }));
+                    }
+
+                    google.maps.event.addDomListener(window, 'load', initialize);
+                ]]>
+            </inline_js>
+            <!--inline_js>
+                <![CDATA[
+                    var map;
+                    var markers = [];
+
+                    function initialize() {
+                      var myOptions = {
+                        zoom: 10,
+                        center: new google.maps.LatLng(100.090, -100.536),
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                      }
+                      map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+                      addMarker(new google.maps.LatLng(100.0747, -100.6274), "Alien");
+                      addMarker(new google.maps.LatLng(100.0758, -100.6254), "Zombie");
+                      addMarker(new google.maps.LatLng(100.0721, -100-6292), "Vampire");
+
+                    }
+
+                    function addMarker(latlng, myTitle) {
+                      markers.push(new google.maps.Marker({
+                        position: latlng,
+                        map: map,
+                        title: myTitle,
+                        icon: "http://maps.google.com/mapfiles/marker" + String.fromCharCode(markers.length + 65) + ".png"
+                      }));
+                    }
+
+                    initialize();
+
+                ]]>
+            </inline_js-->
+        </Head>
+    </Page>
 </PageConfig>

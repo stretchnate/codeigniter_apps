@@ -94,7 +94,7 @@
 			}
 
 			$this->error_label = new Form_Field_Label();
-//		$this->error_label->setForm($this->attributes['form']);
+
 			$this->error_label->setId( 'error_' . $this->attributes['id'] );
 			$this->error_label->setClass( $class );
 			if( $id ) {

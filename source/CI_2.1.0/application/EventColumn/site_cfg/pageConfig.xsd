@@ -11,7 +11,8 @@
     <xs:element name="Page">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="Head" minOccurs="1" maxOccurs="1" />
+                <xs:element ref="Head" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="Body" minOccurs="0" maxOccurs="1" />
             </xs:sequence>
             <xs:attribute name="id" use="required" type="xs:string" />
         </xs:complexType>
@@ -23,6 +24,7 @@
                 <xs:element ref="title" minOccurs="1" maxOccurs="1" />
                 <xs:element ref="css" minOccurs="0" maxOccurs="unbounded" />
                 <xs:element ref="js" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="inline_js" minOccurs="0" maxOccurs="unbounded" />
                 <xs:element ref="meta" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
         </xs:complexType>
@@ -46,6 +48,12 @@
         </xs:simpleType>
     </xs:element>
 
+    <xs:element name="inline_js">
+        <xs:simpleType>
+            <xs:restriction base="xs:string" />
+        </xs:simpleType>
+    </xs:element>
+
     <xs:element name="meta">
         <xs:complexType>
             <xs:simpleContent>
@@ -54,5 +62,11 @@
                 </xs:extension>
             </xs:simpleContent>
         </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Body">
+        <xs:simpleType>
+            <xs:restriction base="xs:string" />
+        </xs:simpleType>
     </xs:element>
 </xs:schema>

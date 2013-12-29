@@ -47,6 +47,10 @@ class Utilities {
 
 		return $result;
 	}
+
+	public static function generateCacheKey($prefix = null) {
+		return uniqid($prefix, true);
+	}
 }
 
 ?>

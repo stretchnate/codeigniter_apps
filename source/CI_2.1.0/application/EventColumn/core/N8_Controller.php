@@ -30,4 +30,20 @@ class N8_Controller extends CI_Controller {
 		return $result;
 	}
 
+	/**
+	* callback function to validate the recaptcha field
+	*
+	* @return boolean
+	*/
+   public function validate_captcha() {
+	   $response = Form_Field_Recaptcha::validate($this->input->server("REMOTE_ADDR"),
+									   $this->input->post("recaptcha_challenge_field"),
+									   $this->input->post("recaptcha_response_field"));
+
+	   if( !$response ) {
+		   $this->form_validation->set_message( 'validate_captcha', 'The captcha wasn\'t entered correctly please try again');
+	   }
+
+	   return $response;
+   }
 }

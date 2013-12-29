@@ -105,7 +105,7 @@
 			array(
 				'field'	 => 'zip',
 				'label'	 => 'Zip',
-				'rules'	 => 'required|exact_length[5]'
+				'rules'	 => 'required|exact_length[5]|numeric'
 			),
 			array(
 				'field'	 => 'agree_to_terms',
@@ -116,6 +116,62 @@
 				'field'	 => 'recaptcha_response_field',
 				'label'	 => 'Captcha',
 				'rules'	 => 'callback_validate_captcha'
+			)
+		),
+		'contact_us' => array (
+			array(
+				'field'	 => 'username',
+				'label'	 => 'Username',
+				'rules'	 => 'required'
+			),
+			array(
+				'field'	 => 'email',
+				'label'	 => 'Email',
+				'rules'	 => 'required|valid_email'
+			),
+			array(
+				'field' => 'subject',
+				'label' => 'Subject',
+				'rules' => 'required'
+			),
+			array(
+				'field' => 'email_text',
+				'label' => 'Email Text',
+				'rules' => 'required|max_length[1000]'
+			),
+			array(
+				'field'	 => 'recaptcha_response_field',
+				'label'	 => 'Captcha',
+				'rules'	 => 'callback_validate_captcha'
+			)
+		),
+		'mini_search' => array(
+			array(
+				'field'	 => 'zip',
+				'label'	 => 'Zip',
+				'rules'	 => 'required|exact_length[5]|numeric'
+			)
+		),
+		'advanced_search' => array(
+			array(
+				'field' => 'title',
+				'label' => 'Event Title',
+				'rules' => ''
+			),
+			array(
+				'field' => 'city',
+				'label' => 'City',
+				'rules' => 'alpha'
+			),
+			array(
+				'field' => 'state',
+				'label' => 'State',
+				'rules' => ''
+			),
+			array(
+				'field' => 'zip',
+				'label' => 'Zip',
+				'rules' => 'numeric|exact_length[5]'
 			)
 		)
 	);

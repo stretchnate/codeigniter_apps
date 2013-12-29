@@ -34,12 +34,23 @@ li {
 	padding: 0px;
 }
 
-.error {
-    color:#ff3333;
+.error, .notification, .successs {
     padding:0 0 0 10px;
 }
 
-.error p {
+.error {
+    color:#FF3333;
+}
+
+.notification {
+    color:#FFC322;
+}
+
+.success {
+    color:#33FF33;
+}
+
+.error p, .notification p, .success p {
     display: inline;
 }
 
@@ -73,6 +84,7 @@ li {
 #main-nav {
 	background-color: #ffffff;
 	color: #000000;
+        clear:both;
 }
 
 #main-nav ul {
@@ -133,6 +145,27 @@ li {
     margin:10px;
 }
 
+#page-content {
+    /*background: url('/images/home_globe.png') no-repeat;*/
+    margin:0 auto 0 auto;
+    min-height: 500px;
+    width:500px;
+    position: relative;
+}
+
+#page-content::after {
+    content:"";
+    background: url('/images/home_globe.png') no-repeat;
+    opacity: 0.25;
+    filter:alpha(opacity=25); /* For IE8 and earlier */
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: 0;
+}
+
 #event-map {
 	background-color: #c9c9c9;
 	width: 950px;
@@ -141,6 +174,11 @@ li {
 	margin: 40px 0 40px 30px;
 	position: relative;
         padding: 10px;
+}
+
+#map_canvas {
+    width: 500px;
+    height: 500px;
 }
 
 div.event-form-field {

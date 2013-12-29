@@ -11,6 +11,8 @@
 		private $event_category;
 		private $event_image;
 		private $event_locations = array( );
+		private $event_category_dm;
+		private $event_owner_dm;
 
 		/**
 		 * class construct method
@@ -50,9 +52,33 @@
 				$this->event_image			 = $events->event_image;
 
 				$this->loadEventLocations();
+				$this->loadEventCategoryModel();
+				$this->loadEventOwnerModel();
 			} else {
 				throw new Exception( "unable to load event [" . $this->event_id . "]" );
 			}
+		}
+
+		/**
+		 * loads the UserProfile for  the event owner/sponsor
+		 *
+		 * @return void
+		 * @since 1.0
+		 */
+		public function loadEventOwnerModel() {
+			$this->event_owner_dm = new UserProfileDM();
+			$this->event_owner_dm->load($this->event_owner);
+		}
+
+		/**
+		 * loads the event category model for the event
+		 *
+		 * @return void
+		 * @since 1.0
+		 */
+		public function loadEventCategoryModel() {
+			$this->event_category_dm = new EventModel_EventCategoriesDM();
+			$this->event_category_dm->load($this->event_category);
 		}
 
 		/**
@@ -174,6 +200,16 @@
 		 */
 		public function getEventId() {
 			return $this->event_id;
+		}
+
+		/**
+		 * sets the event id
+		 * @param int $event_id
+		 * @return object \EventModel_EventDM
+		 */
+		public function setEventId($event_id) {
+			$this->event_id = $event_id;
+			return $this;
 		}
 
 		/**
@@ -364,6 +400,25 @@
 			return $this;
 		}
 
+		/**
+		 * returns the UserProfileDM for the event owner/sponsor
+		 *
+		 * @return object (UserProfileDM)
+		 * @since 1.0
+		 */
+		public function getEventOwnerDM() {
+			return $this->event_owner_dm;
+		}
+
+		/**
+		 * returns the EventCategoryDM for the event
+		 *
+		 * @return object (EventModel_EventCategoriesDM)
+		 * @since 1.0
+		 */
+		public function getEventCategoryDM() {
+			return $this->event_category_dm;
+		}
 	}
 
 ?>

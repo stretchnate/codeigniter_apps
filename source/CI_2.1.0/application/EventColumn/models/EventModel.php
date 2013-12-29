@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Business model for handling events
+ */
 class EventModel extends N8_Model {
 
 	protected $event;
