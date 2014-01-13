@@ -4,7 +4,7 @@
  */
 class EventModel extends N8_Model {
 
-	protected $event;
+	protected $event_dm;
 
 	public function __construct() {
 		parent::__construct();
@@ -23,10 +23,9 @@ class EventModel extends N8_Model {
 		$this->transactionStart();
 
 		if (empty($event['event_id'])) {
-			$event_id = $this->saveNewEvent($event, $event_details_locations);
-			$this->event->load($event_id);
+			$this->saveNewEvent($event, $event_details_locations);
 
-			if (!$this->event->getEventId()) {
+			if (!$this->event_dm->getEventId()) {
 				$this->setError("There was a problem saving your event");
 			}
 		} else {
@@ -47,42 +46,56 @@ class EventModel extends N8_Model {
 	 */
 	protected function saveNewEvent(array $event, array $event_details_locations) {
 		//create the event object
-		$this->event = new EventModel_EventDM();
-		$this->event->setEventOwner($event['event_owner']);
-		$this->event->setEventName($event['event_name']);
-		$this->event->setEventStartDatetime($event['event_start_datetime']);
-		$this->event->setEventEndDatetime($event['event_end_datetime']);
-		$this->event->setEventDescription($event['event_description']);
-		$this->event->setEventCategory($event['event_category']);
-		$this->event->setEventImage($event['event_image']);
+		$this->event_dm = new EventModel_EventDM();
+		$this->event_dm->setEventOwner($event['event_owner']);
+		$this->event_dm->setEventName($event['event_name']);
+		$this->event_dm->setEventStartDatetime($event['event_start_datetime']);
+		$this->event_dm->setEventEndDatetime($event['event_end_datetime']);
+		$this->event_dm->setEventDescription($event['event_description']);
+		$this->event_dm->setEventCategory($event['event_category']);
+
+		if(isset($event['event_image'])) {
+			$this->event_dm->setEventImage($event['event_image']);
+		}
 
 		//save the event to the db
-		$this->event->save();
+		$this->event_dm->save();
 
 		//create each details object and each location object.
 		foreach ($event_details_locations as $event_details_location) {
 			$details = new EventModel_EventDetailsDM();
-			$details->setSmoking($event_details_location['smoking']);
-			$details->setFoodAvailable($event_details_location['food_available']);
-			$details->setAgeRange($event_details_location['age_range']);
+			if(isset($event_details_location['smoking'])) {
+				$details->setSmoking($event_details_location['smoking']);
+			}
+
+			if(isset($event_details_location['food'])) {
+				$details->setFoodAvailable($event_details_location['food']);
+			}
+
+			$details->setAgeRange($event_details_location['age']);
 
 			//save the details
 			$details->save();
 
 			$location = new EventModel_EventLocationDM();
-			$location->setEventLocation($event_details_location['event_location']);
-			$location->setLocationAddress($event_details_location['location_address']);
-			$location->setLocationCity($event_details_location['location_city']);
-			$location->setLocationState($event_details_location['location_state']);
-			$location->setLocationZip($event_details_location['location_zip']);
-			$location->setLocationCountry($event_details_location['location_country']);
-			$location->setEventCost($event_details_location['event_cost']);
-			$location->setEventId($event->getEventId());
+			$location->setEventLocation($event_details_location['event_location_name']);
+			$location->setLatLong($event_details_location['lat_long']);
+			$location->setLocationAddress($event_details_location['event_address']);
+			$location->setLocationCity($event_details_location['event_city']);
+			$location->setLocationState($event_details_location['event_state']);
+			$location->setLocationZip($event_details_location['event_zip']);
+			$location->setLocationCountry($event_details_location['event_country']);
+
+			if($event_details_location['event_cost']) {
+				$location->setEventCost($event_details_location['event_cost']);
+			}
+
+			$location->setEventId($this->event_dm->getEventId());
 			$location->setEventDetailsId($details->getEventDetailsId());
 			$location->setEventDetailsDM($details);
 			$location->save();
 
-			$this->event->addLocation($location);
+			$this->event_dm->addEventLocation($location);
 		}
 	}
 
@@ -99,16 +112,16 @@ class EventModel extends N8_Model {
 		//create the event object
 		$this->loadEvent($event['event_id']);
 
-		$this->event->setEventOwner($event['event_owner']);
-		$this->event->setEventName($event['event_name']);
-		$this->event->setEventStartDatetime($event['event_start_datetime']);
-		$this->event->setEventEndDatetime($event['event_end_datetime']);
-		$this->event->setEventDescription($event['event_description']);
-		$this->event->setEventCategory($event['event_category']);
-		$this->event->setEventImage($event['event_image']);
+		$this->event_dm->setEventOwner($event['event_owner']);
+		$this->event_dm->setEventName($event['event_name']);
+		$this->event_dm->setEventStartDatetime($event['event_start_datetime']);
+		$this->event_dm->setEventEndDatetime($event['event_end_datetime']);
+		$this->event_dm->setEventDescription($event['event_description']);
+		$this->event_dm->setEventCategory($event['event_category']);
+		$this->event_dm->setEventImage($event['event_image']);
 
 		//save the event to the db
-		$this->event->save();
+		$this->event_dm->save();
 
 		//create each details object and each location object.
 		foreach ($event_details_locations as $event_details_location) {
@@ -125,9 +138,9 @@ class EventModel extends N8_Model {
 	 * @since 1.0
 	 */
 	public function updateLocationDetails(array $event_details_location) {
-		if (!empty($this->event)) {
+		if (!empty($this->event_dm)) {
 			//get location by id
-			$location = $this->event->getLocationById($event_details_location['location_id']);
+			$location = $this->event_dm->getLocationById($event_details_location['location_id']);
 		} else {
 			$location = new EventModel_EventLocationDM();
 			$location->load($event_details_location['location_id']);
@@ -143,6 +156,7 @@ class EventModel extends N8_Model {
 		$details->save();
 
 		$location->setEventLocation($event_details_location['event_location']);
+		$location->setEventLocation($event_details_location['lat_long']);
 		$location->setLocationAddress($event_details_location['location_address']);
 		$location->setLocationCity($event_details_location['location_city']);
 		$location->setLocationState($event_details_location['location_state']);
@@ -164,8 +178,8 @@ class EventModel extends N8_Model {
 	 * @since 1.0
 	 */
 	public function loadEvent($event_id) {
-		$this->event = new EventModel_EventDM();
-		$this->event->load($event_id);
+		$this->event_dm = new EventModel_EventDM();
+		$this->event_dm->load($event_id);
 	}
 
 	public function testTransactions() {
@@ -176,6 +190,9 @@ class EventModel extends N8_Model {
 		$this->transactionEnd();
 	}
 
+	public function getEventDM() {
+		return $this->event_dm;
+	}
 }
 
 ?>

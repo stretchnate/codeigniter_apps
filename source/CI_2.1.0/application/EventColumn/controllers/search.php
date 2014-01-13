@@ -19,15 +19,17 @@
 				$cache_array['state']['error'] = null;
 				$cache_array['zip']['value'] = null;
 				$cache_array['zip']['error'] = null;
+				$cache_array['start_date']['value'] = null;
+				$cache_array['start_date']['error'] = null;
+				$cache_array['end_date']['value'] = null;
+				$cache_array['end_date']['error'] = null;
 			}
 
 			try {
 				$this->load->view('Search');
 
 				$form = new Form();
-				$form->setAction('map/search');//@todo set up the validation on map/search to return any errors to this page
-				//after serializing the error array and base64_encoding it.
-				//eventually we'll need to set up a cache module to cache the errors and return to this page.
+				$form->setAction('map/search');
 				$form->addHiddenInput('search_type', 'advanced_search');
 
 				$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
@@ -74,7 +76,35 @@
 				$field->setId( "zip" );
 				$field->setName( "zip" );
 				$field->setValue( $cache_array['zip']['value'] );
+				$field->setMaxLength(5);
+				$field->setSize(5);
 				$field->addErrorLabel( 'error', null, $cache_array['zip']['error'] );
+
+				$form->addField($field);
+
+				$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
+				$field->setContainerClass( "form-field" );
+				$field->setLabel( "Start Date" );
+				$field->setLabelContainerClass( "form-label" );
+				$field->setFieldContainerClass( "field-container" );
+				$field->setId( "start_date" );
+				$field->setName( "start_date" );
+				$field->setSize(10);
+				$field->setValue( $cache_array['start_date']['value'] );
+				$field->addErrorLabel( 'error', null, $cache_array['start_date']['error'] );
+
+				$form->addField($field);
+
+				$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
+				$field->setContainerClass( "form-field" );
+				$field->setLabel( "End Date" );
+				$field->setLabelContainerClass( "form-label" );
+				$field->setFieldContainerClass( "field-container" );
+				$field->setId( "end_date" );
+				$field->setName( "end_date" );
+				$field->setSize(10);
+				$field->setValue( $cache_array['end_date']['value'] );
+				$field->addErrorLabel( 'error', null, $cache_array['end_date']['error'] );
 
 				$form->addField($field);
 
@@ -89,6 +119,7 @@
 				$view = new SearchVW();
 				$view->setErrors( $this->getErrors() );
 				$view->setSearchForm( $form );
+				$view->setPageId('advanced_search');
 
 				$view->renderView();
 			} catch(Exception $e) {

@@ -176,9 +176,15 @@ li {
         padding: 10px;
 }
 
+#event-list {
+    float:left;
+    margin-right:20px;
+    width:154px;
+}
+
 #map_canvas {
-    width: 500px;
-    height: 500px;
+    width: 770px;
+    height: 554px;
 }
 
 div.event-form-field {

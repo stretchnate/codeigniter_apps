@@ -11,58 +11,143 @@
 		private $ci;
 
 		/**
-		 * initializes the iterator
+		 * initialize the iterator
 		 *
-		 * @param array $where_clause
+		 * @param int    $event_id
+		 * @param string $name
+		 * @param string $city
+		 * @param string $state
+		 * @param int    $zip
+		 * @param string $start_date
+		 * @param string $end_date
 		 * @return void
 		 * @since 1.0
 		 * @access public
+		 * @throws Exception
 		 */
-		public function __construct($where_clause) {
+		public function __construct($event_id = null, $name = null, $city = null, $state = null, $zip = null, $start_date = null, $end_date = null) {
 			$this->ci =& get_instance();
+			$this->ci->load->database();
 
-			$this->loadEvents($where_clause);
+			if(($city && !$state) || (!$city && $state)) {
+				throw new Exception(__CLASS__." ERROR: city without state or state without city not allowed");
+			}
+
+			if(!$start_date) {
+				$start_date = date('Y-m-d H:i:s');
+			}
+
+			if(!$end_date) {
+				$end_date = date('Y-m-d H:i:s', strtotime('+1 day'));
+			}
+
+			$where = ' e.event_start_datetime <= "'.$end_date.'"';
+			$where .= ' AND e.event_end_datetime >= "'.$start_date.'"';
+
+			if(($city && $state) || $zip) {
+				$this->loadEventsByLocation($where, $city, $state, $zip);
+			} elseif($name || $event_id) {
+				$this->loadEvents($where, $name, $event_id);
+			}
+
+			if(($city && $state) || $zip) {
+				if(count($this->event_dm_array) > 0) {
+					$this->filterLocations($city, $state, $zip);
+				}
+			}
 
 			$this->rewind();
 		}
 
 		/**
+		 * filters the locations on each event
+		 *
+		 * @param string $city
+		 * @param string $state
+		 * @param int    $zip
+		 */
+		private function filterLocations($city = null, $state = null, $zip = null) {
+			$event_dm_count = count($this->event_dm_array);
+
+			for($i = 0; $i < $event_dm_count; $i++) {
+				$this->event_dm_array[$i]->filterLocations($city, $state, $zip);
+
+				if(count($this->event_dm_array[$i]->getEventLocations()) < 1) {
+					unset($this->event_dm_array[$i]);
+				}
+			}
+		}
+
+		/**
+		 * loads the events by location
+		 *
+		 * @param string $where
+		 * @param string $city
+		 * @param string $state
+		 * @param int    $zip
+		 */
+		private function loadEventsByLocation($where, $city = null, $state = null, $zip = null) {
+			if($city) {
+				$where .= ' AND el.location_city = "'.$city.'"';
+			}
+
+			if($state) {
+				$where .= ' AND el.location_state = "'.$state.'"';
+			}
+
+			if($zip) {
+				$where .= ' AND el.location_zip = "'.$zip.'"';
+			}
+
+			$query = $this->ci->db->select()
+									->from('EVENT_LOCATIONS el')
+									->join('EVENTS e', 'e.event_id = el.event_id')
+									->where($where, null, false)
+									->get();
+
+			if(is_array($query->result())) {
+				foreach($query->result() as $row) {
+					$event_dm = new EventModel_EventDM();
+					$event_dm->load($row->event_id);
+
+					$this->event_dm_array[] = $event_dm;
+				}
+			}
+		}
+
+		/**
 		 * loads the event_dm_array with instances of EventModel_EventDM based on the where_clause argument
 		 *
-		 * @param  array $where_clause
+		 * @param  string $where
 		 * @return void
 		 * @since  1.0
-		 * @throws Exception
 		 * @access private
 		 */
-		private function loadEvents($where_clause) {
-			if(empty($where_clause)) {
-				throw new Exception('Empty where clause not allowed');
-			} else {
-				$this->ci->load->database();
-				$query = $this->ci->db->get_where('EVENTS', $where_clause);
-
-				if(is_array($query->result())) {
-					foreach($query->result() as $event) {
-						$event_dm = new EventModel_EventDM();
-						$event_dm->setEventId($event->event_id);
-						$event_dm->setEventOwner($event->event_owner);
-						$event_dm->setEventCategory($event->event_category);
-						$event_dm->setEventDescription($event->event_description);
-						$event_dm->setEventName($event->event_name);
-						$event_dm->setEventStartDateTime($event->event_start_datetime);
-						$event_dm->setEventEndDatetime($event->event_end_datetime);
-						$event_dm->setEventImage($event->event_image);
-						$event_dm->loadEventLocations();
-						$event_dm->loadEventCategoryModel();
-						$event_dm->loadEventOwnerModel();
-
-						$this->event_dm_array[] = $event_dm;
-					}
-				}
-
-				unset($query);
+		private function loadEvents($where, $name = null, $event_id = null) {
+			if($name) {
+				$where .= ' AND event_name LIKE "%'.$name.'%"';
 			}
+
+			if($event_id) {
+				//search only by id if it is provided
+				$where = ' event_id = '.$event_id;
+			}
+
+			$query = $this->ci->db->select()
+								->from('EVENTS e')
+								->where($where, null, false)
+								->get();
+
+			if(is_array($query->result())) {
+				foreach($query->result() as $event) {
+					$event_dm = new EventModel_EventDM();
+					$event_dm->load($event->event_id);
+
+					$this->event_dm_array[] = $event_dm;
+				}
+			}
+
+			unset($query);
 		}
 
 		/**

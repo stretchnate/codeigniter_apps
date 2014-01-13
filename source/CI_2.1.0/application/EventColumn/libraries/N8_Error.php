@@ -26,10 +26,20 @@ class N8_Error {
 		return $this->getMessages(self::ERROR);
 	}
 
+	/**
+	 * sets the errors array in the messages array, does not log message to the error logs
+	 *
+	 * @param string $error
+	 */
 	public function setErrors(array $errors) {
 		$this->messages[self::ERROR] = $errors;
 	}
 
+	/**
+	 * adds an error to the messages array, does not log message to the error logs
+	 *
+	 * @param string $error
+	 */
 	public function addError($error) {
 		$this->messages[self::ERROR][] = $error;
 	}

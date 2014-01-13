@@ -30,14 +30,12 @@ class EventModel_EventCategoriesDM extends BaseDM {
 	public function load($id) {
 		$query = $this->db->get_where("EVENT_CATEGORIES", array("category_id" => $id));
 
-		$categories = $query->result();
+		if ($query->num_rows > 0) {
+			$category = $query->row();
 
-		if (is_array($categories)) {
-			$categories = $categories[0];
-
-			$this->category_id = $categories['category_id'];
-			$this->category_name = $categories['category_name'];
-			$this->parent_category_id = $categories['parent_category_id'];
+			$this->category_id = $category->category_id;
+			$this->category_name = $category->category_name;
+			$this->parent_category_id = $category->parent_category_id;
 
 			$this->loadChildCategories();
 		} else {
@@ -54,8 +52,8 @@ class EventModel_EventCategoriesDM extends BaseDM {
 	 * @throws Exception
 	 * @since  1.0
 	 */
-	protected function loadChildCategories($id) {
-		$query = $this->db->get_where("EVENT_CATEGORIES", array("parent_category_id" => $id));
+	protected function loadChildCategories() {
+		$query = $this->db->get_where("EVENT_CATEGORIES", array("parent_category_id" => $this->category_id));
 
 		$categories = $query->result();
 
@@ -63,7 +61,7 @@ class EventModel_EventCategoriesDM extends BaseDM {
 			$i = 0;
 			foreach ($categories as $category) {
 				$this->child_categories[$i] = new EventColumn_EventModel_EventCategoriesDM();
-				$this->child_categories[$i]->load($category['category_id']);
+				$this->child_categories[$i]->load($category->category_id);
 				$i++;
 			}
 		} else {

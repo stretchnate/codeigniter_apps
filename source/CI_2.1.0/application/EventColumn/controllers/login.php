@@ -18,6 +18,7 @@
 			try {
 				$login_form = new Form();
 				$login_form->setAction( "login/execute" );
+				$login_form->setId("login_form");
 
 				$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
 				$field->setContainerClass( "login-form-field" );

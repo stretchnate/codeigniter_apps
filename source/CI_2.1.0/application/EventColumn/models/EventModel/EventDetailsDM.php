@@ -30,10 +30,8 @@ class EventModel_EventDetailsDM extends BaseDM {
 	public function load($id) {
 		$query = $this->db->get_where("EVENT_DETAILS", array("event_details_id" => $id));
 
-		$event_details = $query->result();
-
-		if (is_array($event_details)) {
-			$event_details = $event_details[0];
+		if ($query->num_rows > 0) {
+			$event_details = $query->row();
 
 			foreach ($event_details as $column => $value) {
 				if (property_exists($this, $column)) {
@@ -41,7 +39,7 @@ class EventModel_EventDetailsDM extends BaseDM {
 				}
 			}
 		} else {
-			throw new Exception("unable to load details for event_details_id " . $id);
+			throw new Exception("unable to load details for event_details_id '" . $id . "'");
 		}
 	}
 
@@ -64,7 +62,7 @@ class EventModel_EventDetailsDM extends BaseDM {
 			$this->event_details_id = $id;
 		} else {
 			$this->insert();
-			$this->insert_id = $this->db->insert_id();
+
 			$this->event_details_id = $this->eventDetailsExist();
 		}
 
@@ -86,11 +84,10 @@ class EventModel_EventDetailsDM extends BaseDM {
 		$details_array['food_available'] = $this->food_available;
 		$details_array['age_range'] = $this->age_range;
 
-		$details = $this->db->get_where('EVENT_DETAILS', $details_array);
-		$details = $details->result();
+		$query = $this->db->get_where('EVENT_DETAILS', $details_array);
 
-		if ($details) {
-			$result = $details['event_details_id'];
+		if($query->num_rows > 0) {
+			$result = $query->row()->event_details_id;
 		}
 
 		return $result;
@@ -107,7 +104,7 @@ class EventModel_EventDetailsDM extends BaseDM {
 		$values = array();
 
 		$values["smoking"] = $this->smoking;
-		$values["food_available"] = $this->dbNumberFormat($this->food_available);
+		$values["food_available"] = $this->food_available;
 		$values["age_range"] = $this->age_range;
 
 		return $this->db->insert("EVENT_DETAILS", $values);

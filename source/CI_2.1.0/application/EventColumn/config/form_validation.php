@@ -26,6 +26,11 @@
 				'rules'	 => 'required'
 			),
 			array(
+				'field'	 => 'event_details_locations[0][lat_long]',
+				'label'	 => 'Coordinates',
+				'rules'	 => 'required'
+			),
+			array(
 				'field'	 => 'event_details_locations[0][event_address]',
 				'label'	 => 'Address',
 				'rules'	 => 'required'
@@ -172,6 +177,16 @@
 				'field' => 'zip',
 				'label' => 'Zip',
 				'rules' => 'numeric|exact_length[5]'
+			),
+			array(
+				'field' => 'start_date',
+				'label' => 'Start Date',
+				'rules' => ''
+			),
+			array(
+				'field' => 'end_date',
+				'label' => 'End Date',
+				'rules' => ''
 			)
 		)
 	);

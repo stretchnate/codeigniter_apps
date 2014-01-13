@@ -27,6 +27,7 @@ class Form {
 	    'autocomplete' => null,
 	    'method' => 'post',
 	    'name' => null,
+		'id' => null,
 	    'novalidate' => null,
 	    'target' => null
 	);
@@ -213,6 +214,11 @@ class Form {
 
 	public function setName($name) {
 		$this->attributes['name'] = $name;
+		return $this;
+	}
+
+	public function setId($id) {
+		$this->attributes['id'] = $id;
 		return $this;
 	}
 

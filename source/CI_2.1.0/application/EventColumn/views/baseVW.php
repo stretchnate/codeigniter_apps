@@ -186,9 +186,6 @@
 					}
 					break;
 				case 'js':
-dbo('js');
-dbo_arr('js_array', $this->js_array);
-dbo('head_item = '. $head_item);
 					if(!in_array((string)$head_item, $this->js_array)) {
 						$this->js_array[]								 = sprintf((string) $head_item);
 					}

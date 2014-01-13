@@ -37,19 +37,17 @@
 		public function load( $id ) {
 			$query = $this->db->get_where( "EVENTS", array( "event_id" => $id ) );
 
-			$events = $query->result();
+			if( $query->num_rows > 0 ) {
+				$event = $query->row();
 
-			if( is_array( $events ) ) {
-				$events = $events[0];
-
-				$this->event_id				 = $events->event_id;
-				$this->event_owner			 = $events->event_owner;
-				$this->event_name			 = $events->event_name;
-				$this->event_start_datetime	 = $events->event_start_datetime;
-				$this->event_end_datetime	 = $events->event_end_datetime;
-				$this->event_description	 = $events->event_description;
-				$this->event_category		 = $events->event_category;
-				$this->event_image			 = $events->event_image;
+				$this->event_id				 = $event->event_id;
+				$this->event_owner			 = $event->event_owner;
+				$this->event_name			 = $event->event_name;
+				$this->event_start_datetime	 = $event->event_start_datetime;
+				$this->event_end_datetime	 = $event->event_end_datetime;
+				$this->event_description	 = $event->event_description;
+				$this->event_category		 = $event->event_category;
+				$this->event_image			 = $event->event_image;
 
 				$this->loadEventLocations();
 				$this->loadEventCategoryModel();
@@ -91,24 +89,77 @@
 		public function loadEventLocations() {
 			$query = $this->db->get_where( "EVENT_LOCATIONS", array( "event_id" => $this->event_id ) );
 
-			$locations = $query->result();
-
-			foreach( $locations as $location ) {
-				$location = new EventColumn_EventModel_EventLocationDM();
-				$location->setLocationId( $location['location_id'] )
-						->setEventLocation( $location['event_location'] )
-						->setLocationAddress( $location['location_address'] )
-						->setLocationCity( $location['location_city'] )
-						->setLocationState( $location['location_state'] )
-						->setLocationZip( $location['locatoin_zip'] )
-						->setLocationCountry( $location['location_country'] )
-						->setEventCost( $location['event_cost'] )
-						->setEventId( $location['event_id'] )
-						->setEventDetailsId( $location['event_details_id'] );
+			foreach( $query->result() as $row ) {
+				$location = new EventModel_EventLocationDM();
+				$location->setLocationId( $row->location_id )
+						->setEventLocation( $row->event_location )
+						->setLatLong( $row->lat_long )
+						->setLocationAddress( $row->location_address )
+						->setLocationCity( $row->location_city )
+						->setLocationState( $row->location_state )
+						->setLocationZip( $row->location_zip )
+						->setLocationCountry( $row->location_country )
+						->setEventCost( $row->event_cost )
+						->setEventId( $row->event_id )
+						->setEventDetailsId( $row->event_details_id );
 
 				$location->loadEventDetailsDM();
 
-				$this->addLocation( $location );
+				$this->addEventLocation( $location );
+			}
+		}
+
+		/**
+		 * Filters the locations by city and state or zip for this event
+		 *
+		 * @param string $city
+		 * @param string $state
+		 * @param int $zip
+		 * @return void
+		 * @since 1.0
+		 */
+		public function filterLocations($city = null, $state = null, $zip = null) {
+			if($city && $state) {
+				$this->filterLocationsByCityState(strtoupper($city), strtoupper($state));
+			}
+
+			if($zip) {
+				$this->filterLocationsByZip($zip);
+			}
+		}
+
+		/**
+		 * Filters locations by city and state
+		 *
+		 * @param string $city
+		 * @param string $state
+		 * @return void
+		 * @since 1.0
+		 */
+		private function filterLocationsByCityState($city, $state) {
+			if(is_array($this->event_locations)) {
+				foreach($this->event_locations as $location) {
+					if(strcasecmp($location->getLocationCity(), $city) || strcasecmp($location->getLocationState(), $state)) {
+						unset($location);
+					}
+				}
+			}
+		}
+
+		/**
+		 * filters locations by zip
+		 *
+		 * @param int $zip
+		 * @return void
+		 * @since 1.0
+		 */
+		private function filterLocationsByZip($zip) {
+			if(is_array($this->event_locations)) {
+				foreach($this->event_locations as $location) {
+					if($location->getLocationZip() != $zip) {
+						unset($location);
+					}
+				}
 			}
 		}
 
@@ -130,6 +181,7 @@
 			if($result === false) {
 				throw new Exception("There was a problem updating the event [" . $this->event_id . "]");
 			} else {
+				$this->loadEventId();
 				return $result;
 			}
 		}
@@ -177,10 +229,37 @@
 		}
 
 		/**
+		 * loads the event id from the recently saved event
+		 *
+		 * @throws Exception
+		 */
+		protected function loadEventId() {
+			$where = array(
+				'event_owner' => $this->event_owner,
+				'event_name' => $this->event_name,
+				'event_category' => $this->event_category
+//				'event_start_datetime' => $this->event_start_datetime,
+//				'event_end_datetime' => $this->event_end_datetime
+				);
+
+			$query = $this->db->select('event_id')
+								->from('EVENTS')
+								->where($where)
+								->get();
+
+			if($query->num_rows < 1) {
+				throw new Exception("there was an problem saving your event");
+			} else {
+				$this->event_id = $query->row()->event_id;
+			}
+
+		}
+
+		/**
 		 * returns the location based on the id provided
 		 *
 		 * @param type $location_id
-		 * @return Object EventColumn_EventModel_EventLocationDM
+		 * @return Object EventModel_EventLocationDM
 		 * @access public
 		 * @since 1.0
 		 */
@@ -252,7 +331,7 @@
 		 * @since  1.0
 		 */
 		public function setEventName( $event_name ) {
-			$this->event_name = $event_name;
+			$this->event_name = strtoupper($event_name);
 			return $this;
 		}
 
@@ -274,7 +353,7 @@
 		 * @since  1.0
 		 */
 		public function setEventStartDateTime( $event_start_datetime ) {
-			$this->event_start_datetime = $event_start_datetime;
+			$this->event_start_datetime = Utilities::formatDate($event_start_datetime);
 			return $this;
 		}
 
@@ -296,7 +375,7 @@
 		 * @since  1.0
 		 */
 		public function setEventEndDatetime( $event_end_datetime ) {
-			$this->event_end_datetime = $event_end_datetime;
+			$this->event_end_datetime = Utilities::formatDate($event_end_datetime);
 			return $this;
 		}
 
@@ -391,11 +470,11 @@
 		/**
 		 * sets the event_locations
 		 *
-		 * @param  Object EventColumn_EventModel_EventLocationDM
+		 * @param  Object EventModel_EventLocationDM
 		 * @return Object
 		 * @since  1.0
 		 */
-		public function addEventLocation( EventColumn_EventModel_EventLocationDM $event_location ) {
+		public function addEventLocation( EventModel_EventLocationDM $event_location ) {
 			$this->event_locations[] = $event_location;
 			return $this;
 		}

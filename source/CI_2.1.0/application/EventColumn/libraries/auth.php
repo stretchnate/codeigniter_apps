@@ -143,7 +143,7 @@ class Auth {
 			redirect($this->index_redirect);
 		}
 
-		// If the user isn' logged in and he's trying to access a page
+		// If the user isn't logged in and he's trying to access a page
 		// he's not allowed to see when logged out,
 		// redirect him to the login page!
 		if (!$logged_out && !$this->logged_in()) {
@@ -161,7 +161,9 @@ class Auth {
 	 */
 	private function logged_in() {
 		$result = true;
-		if ($this->CI->session->userdata('logged_user') == false) {
+
+		//our user must have a username and a user_id
+		if (!$this->CI->session->userdata('username') || !$this->CI->session->userdata('user_id')) {
 			$result = false;
 		}
 
@@ -182,15 +184,15 @@ class Auth {
 	 */
 	public function isSiteActive() {
 		$result = true;
-
-		$content_db = $this->CI->load->database('content', true, true);
-		$where = array("site_id" => 'EC', "rule_name" => "IS_SITE_ACTIVE");
-		$results = $content_db->get_where("SITE_RULES", $where);
-		$rule = $results->row();
-
-		if ($rule->rule_value == "0") {
-			$result = false;
-		}
+//		for now we are not going to worry about a site active rule
+//		$content_db = $this->CI->load->database('content', true, true);
+//		$where = array("site_id" => 'EC', "rule_name" => "IS_SITE_ACTIVE");
+//		$results = $content_db->get_where("SITE_RULES", $where);
+//		$rule = $results->row();
+//
+//		if ($rule->rule_value == "0") {
+//			$result = false;
+//		}
 
 		return $result;
 	}

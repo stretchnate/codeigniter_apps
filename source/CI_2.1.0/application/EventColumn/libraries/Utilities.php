@@ -51,6 +51,21 @@ class Utilities {
 	public static function generateCacheKey($prefix = null) {
 		return uniqid($prefix, true);
 	}
+
+	/**
+	 * formats a date
+	 *
+	 * @param mixed $date
+	 * @param string $format
+	 * @return string
+	 */
+	public function formatDate($date, $format = 'Y-m-d H:i:s') {
+		if(!is_numeric($date)) {
+			$date = strtotime($date);
+		}
+
+		return date($format, $date);
+	}
 }
 
 ?>

@@ -4,6 +4,7 @@ class EventModel_EventLocationDM extends BaseDM {
 
 	private $location_id;
 	private $event_location;
+	private $lat_long;
 	private $location_address;
 	private $location_city;
 	private $location_state;
@@ -47,7 +48,7 @@ class EventModel_EventLocationDM extends BaseDM {
 	 * @since  1.0
 	 */
 	public function loadEventDetailsDM() {
-		$this->event_details_dm = new EventColumn_EventModel_EventDetailsDM();
+		$this->event_details_dm = new EventModel_EventDetailsDM();
 
 		if (empty($this->event_details_id)) {
 			$this->event_details_dm->load($this->event_details_id);
@@ -84,6 +85,7 @@ class EventModel_EventLocationDM extends BaseDM {
 		try {
 			$sets = array();
 			$sets['event_location'] = $this->event_location;
+			$sets['lat_long'] = $this->lat_long;
 			$sets['location_address'] = $this->location_address;
 			$sets['location_city'] = $this->location_city;
 			$sets['location_state'] = $this->location_state;
@@ -113,6 +115,7 @@ class EventModel_EventLocationDM extends BaseDM {
 		$values = array();
 
 		$values['event_location'] = $this->event_location;
+		$values['lat_long'] = $this->lat_long;
 		$values['location_address'] = $this->location_address;
 		$values['location_city'] = $this->location_city;
 		$values['location_state'] = $this->location_state;
@@ -122,7 +125,7 @@ class EventModel_EventLocationDM extends BaseDM {
 		$values['event_id'] = $this->event_id;
 		$values['event_details_id'] = $this->event_details_id;
 
-		return $this->db->insert("EVENT_DETAILS", $values);
+		return $this->db->insert("EVENT_LOCATIONS", $values);
 	}
 
 	/**
@@ -165,10 +168,29 @@ class EventModel_EventLocationDM extends BaseDM {
 	 * @since  1.0
 	 */
 	public function setEventLocation($event_location) {
-		$this->event_location = $event_location;
+		$this->event_location = strtoupper($event_location);
 		return $this;
 	}
 
+	/**
+	 * gets the lat_long value for the address
+	 *
+	 * @return string
+	 */
+	public function getLatLong() {
+		return $this->lat_long;
+	}
+
+	/**
+	 * sets the lat_long value
+	 *
+	 * @param string $lat_long
+	 * @return \EventModel_EventLocationDM
+	 */
+	public function setLatLong($lat_long) {
+		$this->lat_long = $lat_long;
+		return $this;
+	}
 	/**
 	 * gets the location_address
 	 *
@@ -187,7 +209,7 @@ class EventModel_EventLocationDM extends BaseDM {
 	 * @since  1.0
 	 */
 	public function setLocationAddress($location_address) {
-		$this->location_address = $location_address;
+		$this->location_address = strtoupper($location_address);
 		return $this;
 	}
 
@@ -209,7 +231,7 @@ class EventModel_EventLocationDM extends BaseDM {
 	 * @since  1.0
 	 */
 	public function setLocationCity($location_city) {
-		$this->location_city = $location_city;
+		$this->location_city = strtoupper($location_city);
 		return $this;
 	}
 
@@ -231,7 +253,7 @@ class EventModel_EventLocationDM extends BaseDM {
 	 * @since  1.0
 	 */
 	public function setLocationState($location_state) {
-		$this->location_state = $location_state;
+		$this->location_state = strtoupper($location_state);
 		return $this;
 	}
 
@@ -275,7 +297,7 @@ class EventModel_EventLocationDM extends BaseDM {
 	 * @since  1.0
 	 */
 	public function setLocationCountry($location_country) {
-		$this->location_country = $location_country;
+		$this->location_country = strtoupper($location_country);
 		return $this;
 	}
 
@@ -304,7 +326,7 @@ class EventModel_EventLocationDM extends BaseDM {
 	/**
 	 * gets the event_details_dm
 	 *
-	 * @return Object EventColumn_EventModel_EventDetailsDM
+	 * @return Object EventModel_EventDetailsDM
 	 * @since  1.0
 	 */
 	public function getEventDetailsDM() {
@@ -318,7 +340,7 @@ class EventModel_EventLocationDM extends BaseDM {
 	 * @return Object
 	 * @since  1.0
 	 */
-	public function setEventDetailsDM(EventColumn_EventModel_EventDetailsDM $event_details_dm) {
+	public function setEventDetailsDM(EventModel_EventDetailsDM $event_details_dm) {
 		$this->event_details_dm = $event_details_dm;
 		return $this;
 	}

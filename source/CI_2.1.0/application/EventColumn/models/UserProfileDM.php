@@ -36,20 +36,22 @@
 		public function load( $user_id ) {
 			$query = $this->db->get_where( "USERS", array( "user_id" => $user_id ) );
 
-			$result =& $query->result();
+			if($query->num_rows > 0) {
+				$result = $query->row();
 
-			$this->user_id			 = $result->user_id;
-			$this->email			 = $result->email;
-			$this->username			 = $result->username;
-			$this->password			 = $result->password;
-			$this->account_active	 = $result->account_active;
-			$this->access_level      = $result->access_level;
-			$this->date_added		 = $result->date_added;
-			$this->zip				 = $result->zip;
-			$this->agree_to_terms	 = $result->agree_to_terms;
-			$this->login_attempts	 = $result->login_attempts;
-			$this->locked_out		 = $result->locked_out;
-			$this->locked_out_reason = $result->locked_out_reason;
+				$this->user_id			 = $result->user_id;
+				$this->email			 = $result->email;
+				$this->username			 = $result->username;
+				$this->password			 = $result->password;
+				$this->account_active	 = $result->account_active;
+				$this->access_level      = $result->access_level;
+				$this->date_added		 = $result->date_added;
+				$this->zip				 = $result->zip;
+				$this->agree_to_terms	 = $result->agree_to_terms;
+				$this->login_attempts	 = $result->login_attempts;
+				$this->locked_out		 = $result->locked_out;
+				$this->locked_out_reason = $result->locked_out_reason;
+			}
 
 			return $this;
 		}
