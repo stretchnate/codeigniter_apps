@@ -94,8 +94,8 @@
 
 							<div id="main-nav">
 								<ul>
-									<li>Map</li>
-									<li class="selected">Create</li>
+									<li><a href="/map">Map</a></li>
+									<li class="selected"><a href="/event">Create</a></li>
 									<li style="margin-right:0px;">Calendar</li>
 									<li class="last">&nbsp;</li>
 								</ul>

@@ -21,6 +21,8 @@
 			?>
 				<div>
 					<a href="javascript:void(null);">Forgot Password</a>
+					&nbsp;|&nbsp;
+					<a href="/register">Create an Account</a>
 				</div>
 			</div>
 			<?php
