@@ -21,24 +21,27 @@
 		private function buildForm() {
 			$this->form = new Form();
 			$this->form->setAction('map/search');
+			$this->form->setName('mini_search');
+			$this->form->setId('mini_search');
 			$this->form->addHiddenInput('search_type', 'mini_search');
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
-			$field->setContainerClass( 'form-field' );
-			$field->setFieldContainerClass( 'field-container' );
-			$field->setId( 'zip' );
-			$field->setName( 'zip' );
+			$field->setContainerClass( 'mini_search_field_container' );
+			$field->setFieldContainerClass( 'field_container' );
+			$field->setId( 'mini_search_zip' );
+			$field->setName( 'mini_search_zip' );
 			$field->setMaxLength( '5' );
+			$field->setMinLength( '5' );
 			$field->setValue('search events by zip code');
-			$field->addErrorLabel( 'error', null, form_error( 'zip' ) );
+			$field->addErrorLabel( 'error', null, form_error( 'mini_search_zip' ) );
 
 			$this->form->addField( $field );
 
-			$field = Form::getNewField( Form_Field::FIELD_TYPE_SUBMIT );
-			$field->setContainerClass( 'form-field' );
-			$field->setFieldContainerClass( 'field-container' );
-			$field->setId( 'submit' );
-			$field->setValue( 'Change this to a button and add Javascript' );
+			$field = Form::getNewField( Form_Field::FIELD_TYPE_BUTTON );
+			$field->setContainerClass( 'mini_search_field_container' );
+			$field->setFieldContainerClass( 'field_container' );
+			$field->setId( 'mini_search_submit' );
+			$field->setContent( 'Search' );
 
 			$this->form->addField( $field );
 		}

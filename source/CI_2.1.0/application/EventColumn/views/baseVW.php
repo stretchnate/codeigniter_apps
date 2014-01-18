@@ -22,8 +22,9 @@
 		abstract protected function generateView();
 
 		public function __construct() {
-			if( isset( $this->session ) ) {
-				$username = $this->session->userdata( 'username' );
+			$ci =& get_instance();
+			if( isset( $ci->session ) ) {
+				$username = $ci->session->userdata( 'username' );
 				if( ! empty( $username ) ) {
 					$this->username = $username;
 				}
@@ -72,7 +73,7 @@
 				<body>
 					<div id="wrapper">
 						<div id="header">
-							<h1><img src="/images/header_tx.png" alt="Event Column, create and find events" /></h1>
+							<h1><a href="/home/"><img src="/images/header_tx.png" alt="Event Column, create and find events" /></a></h1>
 							<span class="welcome">
 								Welcome <span class="purple"><?=$this->username; ?></span> |
 								<?php
@@ -99,12 +100,12 @@
 									<li style="margin-right:0px;">Calendar</li>
 									<li class="last">&nbsp;</li>
 								</ul>
+								<?= isset($this->mini_search) ? $this->mini_search->renderForm() : ''; ?>
 								<div class="clear">&nbsp;</div>
 							</div>
 
 							<?php
 						}
-						echo isset($this->mini_search) ? $this->mini_search->renderForm() : '';
 						?>
 						<div id="content">
 							<div id="error_messages" class="error">

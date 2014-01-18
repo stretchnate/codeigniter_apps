@@ -5,6 +5,8 @@
             <title>EventColumn.com find events in your area</title>
             <css>/css/base.css</css>
             <js>/js/jquery.1.10.2.min.js</js>
+            <js>/js/jquery/validation/dist/jquery.validate.1.11.1.min.js</js>
+            <js>/js/eventColumn.js</js>
             <meta name="keywords">Events, church, concert, parties</meta>
             <meta name="description">EventColumn.com search for and create events in your area</meta>
             <meta name="author">eventcolumn.com</meta>
@@ -14,7 +16,6 @@
     <Page id="login">
         <Head>
             <title>EventColumn.com - login to add new Events</title>
-            <js>/js/jquery/validation/dist/jquery.validate.1.11.1.min.js</js>
             <js>/js/login.js</js>
         </Head>
     </Page>

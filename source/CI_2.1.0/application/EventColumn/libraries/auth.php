@@ -171,7 +171,7 @@ class Auth {
 	}
 
 	public function logout() {
-		$this->updateLoginHistory(false, true);
+//		$this->updateLoginHistory(false, true);
 		$this->CI->session->sess_destroy();
 		redirect($this->login_redirect);
 	}

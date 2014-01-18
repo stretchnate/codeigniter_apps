@@ -152,7 +152,7 @@
 		),
 		'mini_search' => array(
 			array(
-				'field'	 => 'zip',
+				'field'	 => 'mini_search_zip',
 				'label'	 => 'Zip',
 				'rules'	 => 'required|exact_length[5]|numeric'
 			)

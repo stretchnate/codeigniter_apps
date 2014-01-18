@@ -114,6 +114,15 @@ li {
 	background: url('/images/tab_1.png') #ffffff no-repeat;
 }
 
+#mini_search_container {
+    float:left;
+    margin-top:20px;
+}
+
+.mini_search_field_container {
+    float:left;
+}
+
 #content {
 	background-color:#ffffff;
 	color:#000000;

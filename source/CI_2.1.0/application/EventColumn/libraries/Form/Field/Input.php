@@ -17,6 +17,7 @@ class Form_Field_Input extends Form_Field {
 		$this->attributes['max'] = null;
 		$this->attributes['maxlength'] = null;
 		$this->attributes['min'] = null;
+		$this->attribtues['minlength'] = null;
 		$this->attributes['multiple'] = null;
 		$this->attributes['pattern'] = null;
 		$this->attributes['placeholder'] = null;
@@ -69,6 +70,11 @@ class Form_Field_Input extends Form_Field {
 
 	public function setMin($min) {
 		$this->attributes['min'] = $min;
+		return $this;
+	}
+
+	public function setMinLength($min_length) {
+		$this->attributes['minlength'] = $min_length;
 		return $this;
 	}
 

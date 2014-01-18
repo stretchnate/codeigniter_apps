@@ -6,13 +6,16 @@
 	 */
 	class map extends N8_Controller {
 
+		public function __construct() {
+			$this->load->view('Map');
+			$this->view = new MapVW();
+			$this->view->setPageId('map');
+			$this->view->setMiniSearch(new Plugins_MiniSearch());
+		}
+
 		public function index() {
 			//load the map view
-			$this->load->view('Map');
-
-			$view = new MapVW();
-			$view->setPageId('map');
-			$view->renderView();
+			$this->view->renderView();
 		}
 
 		public function search() {
@@ -74,9 +77,6 @@
 		 * @since 1.0
 		 */
 		protected function renderView($data) {
-			//load the map view
-			$this->load->view('Map');
-
 			$event_name = null;
 			$event_id = null;
 			$city = null;
@@ -113,18 +113,15 @@
 				$end_date = $data['end_date'];
 			}
 
-			$view = new MapVW('map');
-			$view->setPageId('map');
-
 			try {
 				$iterator = new EventIterator($event_id, $event_name, $city, $state, $zip, $start_date, $end_date);
-				$view->setEventIterator($iterator);
+				$this->view->setEventIterator($iterator);
 			} catch(Exception $e) {
 				$this->setMessage($e->getMessage());
 			}
 
-			$view->setErrors($this->getErrors());
-			$view->renderView();
+			$this->view->setErrors($this->getErrors());
+			$this->view->renderView();
 		}
 
 		public function preview($event_id) {

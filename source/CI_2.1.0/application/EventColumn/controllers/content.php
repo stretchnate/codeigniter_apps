@@ -11,28 +11,28 @@
 		const VIEW_CONFIG_FILE   = '/var/www/source/CI_2.1.0/application/EventColumn/site_cfg/pageConfig.xml';
 		const VIEW_CONFIG_SCHEMA = '/var/www/source/CI_2.1.0/application/EventColumn/site_cfg/pageConfig.xsd';
 
-		protected $content_vw;
 
 		public function __construct() {
 			parent::__construct();
 			$this->load->view('Content');
-			$this->content_vw = new ContentVW();
+			$this->view = new ContentVW();
+			$this->view->setMiniSearch(new Plugins_MiniSearch());
 		}
 
 		public function about() {
 			$content = $this->getViewContent('about');
 
-			$this->content_vw->setContent($content);
-			$this->content_vw->setPageId('about');
-			$this->content_vw->renderView();
+			$this->view->setContent($content);
+			$this->view->setPageId('about');
+			$this->view->renderView();
 		}
 
 		public function policies() {
 			$content = $this->getViewContent('policies');
 
-			$this->content_vw->setContent($content);
-			$this->content_vw->setPageId('policies');
-			$this->content_vw->renderView();
+			$this->view->setContent($content);
+			$this->view->setPageId('policies');
+			$this->view->renderView();
 		}
 
 		public function contactUs() {
@@ -42,7 +42,7 @@
 				$mail_sent = $this->sendEmail($this->input->post());
 			}
 
-			$this->content_vw->setPageId('contact');
+			$this->view->setPageId('contact');
 
 			$form = new Form();
 			$form->setAction('');
@@ -115,13 +115,13 @@
 			$form->addField( $field );
 
 			if(isset($mail_sent) && $mail_sent === true) {
-				$this->content_vw->setSuccessMessages("Thank you for conatacting us.");
+				$this->view->setSuccessMessages("Thank you for conatacting us.");
 			} else {
-				$this->content_vw->setErrors( $this->getErrors() );
+				$this->view->setErrors( $this->getErrors() );
 			}
 
-			$this->content_vw->setContent( $form );
-			$this->content_vw->renderView();
+			$this->view->setContent( $form );
+			$this->view->renderView();
 		}
 
 		/**

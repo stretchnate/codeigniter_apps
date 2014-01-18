@@ -46,6 +46,7 @@ class Form {
 	 */
 	public function renderForm() {
 		try {
+			echo "<div id='".$this->getContainerId()."'>";
 			if ($this->enctype == self::FORM_ENCTYPE_MULTIPART) {
 				echo form_open_multipart($this->action, $this->filterAttributes(), $this->hidden_inputs);
 			} else {
@@ -58,9 +59,29 @@ class Form {
 			}
 
 			echo form_close();
+			echo "</div>";
 		} catch (Exception $e) {
 			throw new Exception("there was an eror rendering the form: " . $e->getMessage());
 		}
+	}
+
+	/**
+	 * fetches the form container id
+	 *
+	 * @return string
+	 */
+	private function getContainerId() {
+		$form_id = "form";
+
+		if(!is_null($this->attributes['id'])) {
+			$form_id = $this->attributes['id'];
+		} else if(!is_null($this->attributes['name'])) {
+			$form_id = $this->attributes['name'];
+		}
+
+		$form_id .= "_container";
+
+		return $form_id;
 	}
 
 	/**
