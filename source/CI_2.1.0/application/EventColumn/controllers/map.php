@@ -1,4 +1,6 @@
 <?php
+	if( ! defined( 'BASEPATH' ) ) exit( 'No direct script access allowed' );
+
 	/**
 	 * Description of search
 	 *
@@ -7,17 +9,30 @@
 	class map extends N8_Controller {
 
 		public function __construct() {
+			parent::__construct();
+
 			$this->load->view('Map');
 			$this->view = new MapVW();
 			$this->view->setPageId('map');
 			$this->view->setMiniSearch(new Plugins_MiniSearch());
 		}
 
+		/**
+		 * the main map view
+		 *
+		 * @todo make this automatically search on the users zip if logged in.
+		 * @return void
+		 */
 		public function index() {
 			//load the map view
 			$this->view->renderView();
 		}
 
+		/**
+		 * method used to search for events
+		 *
+		 * @return void
+		 */
 		public function search() {
 			$search_type = $this->input->post('search_type');
 
@@ -124,6 +139,11 @@
 			$this->view->renderView();
 		}
 
+		/**
+		 * this method shows a preview of an event when it is added to the system
+		 *
+		 * @param int $event_id
+		 */
 		public function preview($event_id) {
 			$data = array('event_id' => $event_id);
 			$this->renderView($data);
