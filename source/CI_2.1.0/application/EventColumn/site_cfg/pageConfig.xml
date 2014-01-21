@@ -20,6 +20,13 @@
         </Head>
     </Page>
 
+    <Page id="register">
+        <Head>
+            <title>EventColumn.com - Create an account</title>
+            <js>/js/register.js</js>
+        </Head>
+    </Page>
+
     <!-- below is an example of a page configuration and an explanation of how they affect the default configuration -->
     <Page id="example">
         <Head>

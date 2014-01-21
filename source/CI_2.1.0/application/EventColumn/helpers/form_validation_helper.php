@@ -8,7 +8,7 @@
  */
 
 function alpha_special($str) {
-	return preg_match("/^([A-Za-z0-9_\-!\$@%\*&\^\?\|])+$/i", $str);
+	return preg_match("/^([\w!\$@%\*&\^\?\|\+=\.-]{8,32})$/i", $str);
 }
 
 ?>

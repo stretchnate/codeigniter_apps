@@ -13,19 +13,23 @@
 		public function __construct() {
 			parent::__construct();
 			$this->load->helper( 'form_validation' );
+			$this->load->view( 'Register' );
+			$this->view = new RegisterVW();
+			$this->view->setPageId('register');
+
 		}
 
 		public function index() {
-			$this->load->view( 'Register' );
 			try {
 				$register_form = new Form();
 				$register_form->setAction( "register/addUser" );
+				$register_form->setId('register_form');
 
 				$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
-				$field->setContainerClass( "register-form-field" );
+				$field->setContainerClass( "form_field" );
 				$field->setLabel( "Username*" );
-				$field->setLabelContainerClass( "register-form-label" );
-				$field->setFieldContainerClass( "field-container" );
+				$field->setLabelContainerClass( "form_label" );
+				$field->setFieldContainerClass( "field_container" );
 				$field->setId( "username" );
 				$field->setName( "username" );
 				$field->setValue( $this->input->post( 'username' ) );
@@ -34,10 +38,10 @@
 				$register_form->addField( $field );
 
 				$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
-				$field->setContainerClass( "register-form-field" );
+				$field->setContainerClass( "form_field" );
 				$field->setLabel( "Email*" );
-				$field->setLabelContainerClass( "register-form-label" );
-				$field->setFieldContainerClass( "field-container" );
+				$field->setLabelContainerClass( "form_label" );
+				$field->setFieldContainerClass( "field_container" );
 				$field->setId( "email" );
 				$field->setName( "email" );
 				$field->setValue( $this->input->post( 'email' ) );
@@ -46,11 +50,11 @@
 				$register_form->addField( $field );
 
 				$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
-				$field->setContainerClass( "register-form-field" );
+				$field->setContainerClass( "form_field" );
 				$field->setLabel( "Confirm Email*" );
-				$field->setLabelContainerClass( "register-form-label" );
-				$field->setFieldContainerClass( "field-container" );
-				$field->setId( "confirm-email" );
+				$field->setLabelContainerClass( "form_label" );
+				$field->setFieldContainerClass( "field_container" );
+				$field->setId( "confirm_email" );
 				$field->setName( "confirm_email" );
 				$field->setValue( $this->input->post( 'confirm_email' ) );
 				$field->addErrorLabel( 'error', null, form_error( 'confirm_email' ) );
@@ -58,10 +62,10 @@
 				$register_form->addField( $field );
 
 				$field = Form::getNewField( Form_Field::FIELD_TYPE_PASSWORD );
-				$field->setContainerClass( "register-form-field" );
+				$field->setContainerClass( "form_field" );
 				$field->setLabel( "Password*" );
-				$field->setLabelContainerClass( "register-form-label" );
-				$field->setFieldContainerClass( "field-container" );
+				$field->setLabelContainerClass( "form_label" );
+				$field->setFieldContainerClass( "field_container" );
 				$field->setId( "password" );
 				$field->setName( "password" );
 				$field->addErrorLabel( 'error', null, form_error( 'password' ) );
@@ -69,21 +73,21 @@
 				$register_form->addField( $field );
 
 				$field = Form::getNewField( Form_Field::FIELD_TYPE_PASSWORD );
-				$field->setContainerClass( "register-form-field" );
+				$field->setContainerClass( "form_field" );
 				$field->setLabel( "Confirm Password*" );
-				$field->setLabelContainerClass( "register-form-label" );
-				$field->setFieldContainerClass( "field-container" );
-				$field->setId( "password-retype" );
+				$field->setLabelContainerClass( "form_label" );
+				$field->setFieldContainerClass( "field_container" );
+				$field->setId( "password_retype" );
 				$field->setName( "password_retype" );
 				$field->addErrorLabel( 'error', null, form_error( 'password_retype' ) );
 
 				$register_form->addField( $field );
 
 				$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
-				$field->setContainerClass( "register-form-field" );
+				$field->setContainerClass( "form_field" );
 				$field->setLabel( "Zip*" );
-				$field->setLabelContainerClass( "register-form-label" );
-				$field->setFieldContainerClass( "field-container" );
+				$field->setLabelContainerClass( "form_label" );
+				$field->setFieldContainerClass( "field_container" );
 				$field->setId( "zip" );
 				$field->setName( "zip" );
 				$field->setMaxLength( "5" );
@@ -93,11 +97,11 @@
 				$register_form->addField( $field );
 
 				$field = Form::getNewField( Form_Field::FIELD_TYPE_CHECKBOX );
-				$field->setContainerClass( "register-form-field" );
+				$field->setContainerClass( "form_field" );
 				$field->setLabel( "Agree to Terms and Policies*" );
-				$field->setLabelContainerClass( "register-form-label" );
-				$field->setFieldContainerClass( "field-container" );
-				$field->setId( "agree-to-terms" );
+				$field->setLabelContainerClass( "form_label" );
+				$field->setFieldContainerClass( "field_container" );
+				$field->setId( "agree_to_terms" );
 				$field->setName( "agree_to_terms" );
 				$field->setValue( "agreed" );
 				if( $this->input->post( 'agree_to_terms' ) == 'agreed' ) {
@@ -108,27 +112,26 @@
 				$register_form->addField( $field );
 
 				$field = Form::getNewField( Form_Field::FIELD_TYPE_RECAPTCHA );
-				$field->setContainerClass( "register-form-field" );
+				$field->setContainerClass( "form_field" );
 				$field->setLabel( "Please proove you're human*" );
-				$field->setLabelContainerClass( "register-form-label" );
-				$field->setFieldContainerClass( "field-container" );
+				$field->setLabelContainerClass( "form_label" );
+				$field->setFieldContainerClass( "field_container" );
 				$field->addErrorLabel('error', 'recaptcha_error', form_error('recaptcha_response_field'));
 
 				$register_form->addField( $field );
 
-				$field = Form::getNewField( Form_Field::FIELD_TYPE_SUBMIT );
-				$field->setContainerClass( "register-form-field" );
-				$field->setFieldContainerClass( "field-container" );
-				$field->setId( "register-submit" );
-				$field->setValue( "Change this to a button and add Javascript" );
+				$field = Form::getNewField( Form_Field::FIELD_TYPE_BUTTON );
+				$field->setContainerClass( "form_field" );
+				$field->setFieldContainerClass( "field_container" );
+				$field->setId( "register_submit" );
+				$field->setContent( "Submit" );
 
 				$register_form->addField( $field );
 
-				$view = new RegisterVW();
-				$view->setErrors( $this->getErrors() );
-				$view->setRegisterForm( $register_form );
+				$this->view->setErrors( $this->getErrors() );
+				$this->view->setRegisterForm( $register_form );
 
-				$view->renderView();
+				$this->view->renderView();
 			} catch( Exception $e ) {
 				$this->logMessage( $e->getMessage(), N8_Error::ERROR );
 				show_error( "there was an error loading this page. Please try again <!-- {$e->getMessage()} -->", 500 );
