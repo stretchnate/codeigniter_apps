@@ -19,10 +19,10 @@
 				$cache_array['state']['error'] = null;
 				$cache_array['zip']['value'] = null;
 				$cache_array['zip']['error'] = null;
-				$cache_array['start_date']['value'] = null;
-				$cache_array['start_date']['error'] = null;
-				$cache_array['end_date']['value'] = null;
-				$cache_array['end_date']['error'] = null;
+				$cache_array['event_start']['value'] = null;
+				$cache_array['event_start']['error'] = null;
+				$cache_array['event_end']['value'] = null;
+				$cache_array['event_end']['error'] = null;
 			}
 
 			try {
@@ -87,11 +87,11 @@
 				$field->setLabel( "Start Date" );
 				$field->setLabelContainerClass( "form-label" );
 				$field->setFieldContainerClass( "field-container" );
-				$field->setId( "start_date" );
-				$field->setName( "start_date" );
+				$field->setId( "event_start" );
+				$field->setName( "event_start" );
 				$field->setSize(10);
-				$field->setValue( $cache_array['start_date']['value'] );
-				$field->addErrorLabel( 'error', null, $cache_array['start_date']['error'] );
+				$field->setValue( $cache_array['event_start']['value'] );
+				$field->addErrorLabel( 'error', null, $cache_array['event_start']['error'] );
 
 				$form->addField($field);
 
@@ -100,11 +100,11 @@
 				$field->setLabel( "End Date" );
 				$field->setLabelContainerClass( "form-label" );
 				$field->setFieldContainerClass( "field-container" );
-				$field->setId( "end_date" );
-				$field->setName( "end_date" );
+				$field->setId( "event_end" );
+				$field->setName( "event_end" );
 				$field->setSize(10);
-				$field->setValue( $cache_array['end_date']['value'] );
-				$field->addErrorLabel( 'error', null, $cache_array['end_date']['error'] );
+				$field->setValue( $cache_array['event_end']['value'] );
+				$field->addErrorLabel( 'error', null, $cache_array['event_end']['error'] );
 
 				$form->addField($field);
 

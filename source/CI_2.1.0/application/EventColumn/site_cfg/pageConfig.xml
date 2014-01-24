@@ -4,7 +4,9 @@
         <Head>
             <title>EventColumn.com find events in your area</title>
             <css>/css/base.css</css>
+            <css>/jquery-ui-1.10.3.custom/css/custom-theme/jquery-ui-1.10.3.custom.css</css>
             <js>/js/jquery.1.10.2.min.js</js>
+            <js>/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js</js>
             <js>/js/jquery/validation/dist/jquery.validate.1.11.1.min.js</js>
             <js>/js/eventColumn.js</js>
             <meta name="keywords">Events, church, concert, parties</meta>
@@ -73,7 +75,6 @@
         <Head>
             <title>EventColumn.com - add a new Event</title>
             <js><![CDATA[http://maps.googleapis.com/maps/api/js?sensor=false]]></js>
-            <js>/js/jquery/validation/dist/jquery.validate.1.11.1.min.js</js>
             <js>/js/event_module.js</js>
         </Head>
     </Page>
@@ -96,14 +97,11 @@
     <Page id="advanced_search">
         <Head>
             <title>EventColumn.com search for events</title>
-            <css>/jquery-ui-1.10.3.custom/css/custom-theme/jquery-ui-1.10.3.custom.css</css>
-            <js>/js/jquery/validation/dist/jquery.validate.1.11.1.min.js</js>
-            <js>/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js</js>
             <inline_js>
                 <![CDATA[
                 $(document).ready(function() {
-                    $("#start_date").datepicker();
-                    $("#end_date").datepicker();
+                    $("#event_start").datetimepicker(timepickerSettings(false));
+                    $("#event_end").datetimepicker(timepickerSettings(true));
                 });
                 ]]>
             </inline_js>

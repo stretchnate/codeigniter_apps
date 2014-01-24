@@ -179,12 +179,12 @@
 				'rules' => 'numeric|exact_length[5]'
 			),
 			array(
-				'field' => 'start_date',
+				'field' => 'event_start',
 				'label' => 'Start Date',
 				'rules' => ''
 			),
 			array(
-				'field' => 'end_date',
+				'field' => 'event_end',
 				'label' => 'End Date',
 				'rules' => ''
 			)

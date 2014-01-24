@@ -27,11 +27,11 @@ class Event extends N8_Controller {
 			$event_form->setId("event_add_form");
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
-			$field->setContainerClass("event-form-field");
+			$field->setContainerClass("form_field");
 			$field->setLabel("Event Name*");
-			$field->setLabelContainerClass("event-form-label");
-			$field->setFieldContainerClass("field-container");
-			$field->setId("event-name");
+			$field->setLabelContainerClass("form_label");
+			$field->setFieldContainerClass("field_container");
+			$field->setId("event_name");
 			$field->setName("event_name");
 			$field->setValue($this->input->post('event_name'));
 			$field->addErrorLabel( 'error', null, form_error( 'event_name' ) );
@@ -39,11 +39,11 @@ class Event extends N8_Controller {
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
-			$field->setContainerClass("event-form-field");
+			$field->setContainerClass("form_field");
 			$field->setLabel("Start Date*");
-			$field->setLabelContainerClass("event-form-label");
-			$field->setFieldContainerClass("field-container");
-			$field->setId("event-start");
+			$field->setLabelContainerClass("form_label");
+			$field->setFieldContainerClass("field_container");
+			$field->setId("event_start");
 			$field->setName("event_start_datetime");
 			$field->setValue($this->input->post('event_start_datetime'));
 			$field->addErrorLabel( 'error', null, form_error( 'event_start_datetime' ) );
@@ -51,11 +51,11 @@ class Event extends N8_Controller {
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
-			$field->setContainerClass("event-form-field");
+			$field->setContainerClass("form_field");
 			$field->setLabel("End Date*");
-			$field->setLabelContainerClass("event-form-label");
-			$field->setFieldContainerClass("field-container");
-			$field->setId("event-end");
+			$field->setLabelContainerClass("form_label");
+			$field->setFieldContainerClass("field_container");
+			$field->setId("event_end");
 			$field->setName("event_end_datetime");
 			$field->setValue($this->input->post('event_end_datetime'));
 			$field->addErrorLabel( 'error', null, form_error( 'event_end_datetime' ) );
@@ -63,11 +63,11 @@ class Event extends N8_Controller {
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
-			$field->setContainerClass("event-form-field");
+			$field->setContainerClass("form_field");
 			$field->setLabel("Location Name*");
-			$field->setLabelContainerClass("event-form-label");
-			$field->setFieldContainerClass("field-container");
-			$field->setId("event-location-name");
+			$field->setLabelContainerClass("form_label");
+			$field->setFieldContainerClass("field_container");
+			$field->setId("event_location_name");
 			$field->setName("event_details_locations[0][event_location_name]");
 			$field->setValue($this->input->post('event_details_locations[0][event_location_name]'));
 			$field->addErrorLabel( 'error', null, form_error( 'event_details_locations[0][event_location_name]' ) );
@@ -87,11 +87,11 @@ class Event extends N8_Controller {
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
-			$field->setContainerClass("event-form-field");
+			$field->setContainerClass("form_field");
 			$field->setLabel("Address*");
-			$field->setLabelContainerClass("event-form-label");
-			$field->setFieldContainerClass("field-container");
-			$field->setId("event-address");
+			$field->setLabelContainerClass("form_label");
+			$field->setFieldContainerClass("field_container");
+			$field->setId("event_address");
 			$field->setName("event_details_locations[0][event_address]");
 			$field->setValue($this->input->post('event_details_locations[0][event_address]'));
 			$field->addErrorLabel( 'error', null, form_error( 'event_details_locations[0][event_address]' ) );
@@ -99,11 +99,11 @@ class Event extends N8_Controller {
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
-			$field->setContainerClass("event-form-field");
+			$field->setContainerClass("form_field");
 			$field->setLabel("City*");
-			$field->setLabelContainerClass("event-form-label");
-			$field->setFieldContainerClass("field-container");
-			$field->setId("event-city");
+			$field->setLabelContainerClass("form_label");
+			$field->setFieldContainerClass("field_container");
+			$field->setId("event_city");
 			$field->setName("event_details_locations[0][event_city]");
 			$field->setValue($this->input->post('event_details_locations[0][event_city]'));
 			$field->addErrorLabel( 'error', null, form_error( 'event_details_locations[0][event_city]' ) );
@@ -111,11 +111,11 @@ class Event extends N8_Controller {
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
-			$field->setContainerClass("event-form-field");
+			$field->setContainerClass("form_field");
 			$field->setLabel("State*");
-			$field->setLabelContainerClass("event-form-label");
-			$field->setFieldContainerClass("field-container");
-			$field->setId("event-state");
+			$field->setLabelContainerClass("form_label");
+			$field->setFieldContainerClass("field_container");
+			$field->setId("event_state");
 			$field->setName("event_details_locations[0][event_state]");
 			$field->setValue($this->input->post('event_details_locations[0][event_state]'));
 			$field->addErrorLabel( 'error', null, form_error( 'event_details_locations[0][event_state]' ) );
@@ -123,11 +123,11 @@ class Event extends N8_Controller {
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
-			$field->setContainerClass("event-form-field");
+			$field->setContainerClass("form_field");
 			$field->setLabel("Zip*");
-			$field->setLabelContainerClass("event-form-label");
-			$field->setFieldContainerClass("field-container");
-			$field->setId("event-zip");
+			$field->setLabelContainerClass("form_label");
+			$field->setFieldContainerClass("field_container");
+			$field->setId("event_zip");
 			$field->setName("event_details_locations[0][event_zip]");
 			$field->setMaxLength("5");
 			$field->setValue($this->input->post('event_details_locations[0][event_zip]'));
@@ -136,11 +136,11 @@ class Event extends N8_Controller {
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
-			$field->setContainerClass("event-form-field");
+			$field->setContainerClass("form_field");
 			$field->setLabel("Country*");
-			$field->setLabelContainerClass("event-form-label");
-			$field->setFieldContainerClass("field-container");
-			$field->setId("event-country");
+			$field->setLabelContainerClass("form_label");
+			$field->setFieldContainerClass("field_container");
+			$field->setId("event_country");
 			$field->setName("event_details_locations[0][event_country]");
 
 			$country = ($this->input->post('event_details_locations[0][event_country]')) ? $this->input->post('event_details_locations[0][event_country]') : "USA";
@@ -150,44 +150,44 @@ class Event extends N8_Controller {
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
-			$field->setContainerClass("event-form-field");
+			$field->setContainerClass("form_field");
 			$field->setLabel("Price (optional)");
-			$field->setLabelContainerClass("event-form-label");
-			$field->setFieldContainerClass("field-container");
-			$field->setId("event-cost");
+			$field->setLabelContainerClass("form_label");
+			$field->setFieldContainerClass("field_container");
+			$field->setId("event_cost");
 			$field->setName("event_details_locations[0][event_cost]");
 			$field->setValue($this->input->post('event_details_locations[0][event_cost]'));
 
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_CHECKBOX);
-			$field->setContainerClass("event-form-field");
+			$field->setContainerClass("form_field");
 			$field->setLabel("Smoking");
-			$field->setLabelContainerClass("event-form-label");
-			$field->setFieldContainerClass("field-container");
-			$field->setId("event-location-smoking");
+			$field->setLabelContainerClass("form_label");
+			$field->setFieldContainerClass("field_container");
+			$field->setId("event_location_smoking");
 			$field->setName("event_details_locations[0][smoking]");
 			$field->setValue($this->input->post('event_details_locations[0][smoking]'));
 
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_CHECKBOX);
-			$field->setContainerClass("event-form-field");
+			$field->setContainerClass("form_field");
 			$field->setLabel("Food Available");
-			$field->setLabelContainerClass("event-form-label");
-			$field->setFieldContainerClass("field-container");
-			$field->setId("event-location-food");
+			$field->setLabelContainerClass("form_label");
+			$field->setFieldContainerClass("field_container");
+			$field->setId("event_location_food");
 			$field->setName("event_details_locations[0][food]");
 			$field->setValue($this->input->post('event_details_locations[0][food]'));
 
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_SELECT);
-			$field->setContainerClass("event-form-field");
+			$field->setContainerClass("form_field");
 			$field->setLabel("Age Range*");
-			$field->setLabelContainerClass("event-form-label");
-			$field->setFieldContainerClass("field-container");
-			$field->setId("event-location-age");
+			$field->setLabelContainerClass("form_label");
+			$field->setFieldContainerClass("field_container");
+			$field->setId("event_location_age");
 			$field->setName("event_details_locations[0][age]");
 			$field->addOption("", "");
 			$field->addOption("18_35", "18-35");
@@ -198,11 +198,11 @@ class Event extends N8_Controller {
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_TEXTAREA);
-			$field->setContainerClass("event-form-field");
+			$field->setContainerClass("form_field");
 			$field->setLabel("Description*");
-			$field->setLabelContainerClass("event-form-label");
-			$field->setFieldContainerClass("field-container");
-			$field->setId("event-description");
+			$field->setLabelContainerClass("form_label");
+			$field->setFieldContainerClass("field_container");
+			$field->setId("event_description");
 			$field->setName("event_description");
 			$field->setRows("3");
 			$field->setCols("31");
@@ -212,11 +212,11 @@ class Event extends N8_Controller {
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_SELECT);
-			$field->setContainerClass("event-form-field");
+			$field->setContainerClass("form_field");
 			$field->setLabel("Category*");
-			$field->setLabelContainerClass("event-form-label");
-			$field->setFieldContainerClass("field-container");
-			$field->setId("event-category");
+			$field->setLabelContainerClass("form_label");
+			$field->setFieldContainerClass("field_container");
+			$field->setId("event_category");
 			$field->setName("event_category");
 			$field->addOption("", "");
 			$field->addOption("1", "Church Events");
@@ -227,11 +227,11 @@ class Event extends N8_Controller {
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_FILE);
-			$field->setContainerClass("event-form-field");
+			$field->setContainerClass("form_field");
 			$field->setLabel("Event Image");
-			$field->setLabelContainerClass("event-form-label");
-			$field->setFieldContainerClass("field-container");
-			$field->setId("event-image");
+			$field->setLabelContainerClass("form_label");
+			$field->setFieldContainerClass("field_container");
+			$field->setId("event_image");
 			$field->setName("event_image");
 			$field->setAccept(Form_Field_Input_File::ACCEPT_TYPE_IMAGE);
 			$field->setValue($this->input->post('event_image'));
@@ -239,9 +239,9 @@ class Event extends N8_Controller {
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_BUTTON);
-			$field->setContainerClass("event-form-field");
-			$field->setFieldContainerClass("field-container");
-			$field->setId("event-submit");
+			$field->setContainerClass("form_field");
+			$field->setFieldContainerClass("field_container");
+			$field->setId("event_submit");
 			$field->setContent("Add Event");
 
 			$event_form->addField($field);

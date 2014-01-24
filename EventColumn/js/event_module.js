@@ -36,11 +36,25 @@
     }
 
     $(document).ready(function() {
-       $("#event-submit").click(function() {
+        jQuery.validator.addMethod("soonerThan", function(value, element, other_element) {
+             var start_date = new Date(value);
+             var end_date = new Date($(other_element).val());
+             var result = true;
+
+             if(start_date.getTime() >= end_date.getTime()) {
+                 result = false;
+             }
+             return result;
+         }, jQuery.validator.format("you cannot end before you begin"));
+
+       $("#event_submit").click(function() {
           $("#event_add_form").validate({
                 rules: {
                     event_name: "required",
-                    event_start_datetime: "required",
+                    event_start_datetime: {
+                        required: true,
+                        soonerThan: "#event_end"
+                    },
                     event_end_datetime: "required",
                     'event_details_locations[0][event_location_name]': "required",
                     'event_details_locations[0][event_address]': "required",
@@ -54,7 +68,10 @@
                 },
                 messages: {
                     event_name: "Event Name is required",
-                    event_start_datetime: "Start Date is required",
+                    event_start_datetime: {
+                        required: "Start Date is required",
+                        soonerThan: "You cannot end before you begin"
+                    },
                     event_end_datetime: "End Date is required",
                     'event_details_locations[0][event_location_name]': "Location Name is required",
                     'event_details_locations[0][event_address]': "Address is required",
@@ -71,4 +88,7 @@
               geocode();
           }
        });
+
+        $("#event_start").datetimepicker(timepickerSettings(false));
+        $("#event_end").datetimepicker(timepickerSettings(true));
     });
