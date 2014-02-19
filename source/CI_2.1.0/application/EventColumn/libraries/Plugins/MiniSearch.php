@@ -26,20 +26,16 @@
 			$this->form->addHiddenInput('search_type', 'mini_search');
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
-			$field->setContainerClass( 'mini_search_field_container' );
-			$field->setFieldContainerClass( 'field_container' );
 			$field->setId( 'mini_search_zip' );
 			$field->setName( 'mini_search_zip' );
 			$field->setMaxLength( '5' );
 			$field->setMinLength( '5' );
 			$field->setValue('search events by zip code');
-			$field->addErrorLabel( 'error', null, form_error( 'mini_search_zip' ) );
+			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
 
 			$this->form->addField( $field );
 
 			$field = Form::getNewField( Form_Field::FIELD_TYPE_BUTTON );
-			$field->setContainerClass( 'mini_search_field_container' );
-			$field->setFieldContainerClass( 'field_container' );
 			$field->setId( 'mini_search_submit' );
 			$field->setContent( 'Search' );
 

@@ -51,11 +51,11 @@
           $("#event_add_form").validate({
                 rules: {
                     event_name: "required",
-                    event_start_datetime: {
+                    start_date: {
                         required: true,
-                        soonerThan: "#event_end"
+                        soonerThan: "#end_date"
                     },
-                    event_end_datetime: "required",
+                    end_date: "required",
                     'event_details_locations[0][event_location_name]': "required",
                     'event_details_locations[0][event_address]': "required",
                     'event_details_locations[0][event_city]': "required",
@@ -63,16 +63,16 @@
                     'event_details_locations[0][event_zip]': "required",
                     'event_details_locations[0][event_country]': "required",
                     'event_details_locations[0][age]': "required",
-                    'event_description': "required",
-                    'event_category': "required"
+                    description: "required",
+                    category: "required"
                 },
                 messages: {
                     event_name: "Event Name is required",
-                    event_start_datetime: {
+                    start_date: {
                         required: "Start Date is required",
                         soonerThan: "You cannot end before you begin"
                     },
-                    event_end_datetime: "End Date is required",
+                    end_date: "End Date is required",
                     'event_details_locations[0][event_location_name]': "Location Name is required",
                     'event_details_locations[0][event_address]': "Address is required",
                     'event_details_locations[0][event_city]': "City is required",
@@ -80,8 +80,8 @@
                     'event_details_locations[0][event_zip]': "Zip is required",
                     'event_details_locations[0][event_country]': "Country is required",
                     'event_details_locations[0][age]': "Age Range is required",
-                    'event_description': "Event Description is required",
-                    'event_category': "Category is required"
+                    description: "Event Description is required",
+                    category: "Category is required"
                 }
             });
           if($("#event_add_form").valid()) {
@@ -89,6 +89,6 @@
           }
        });
 
-        $("#event_start").datetimepicker(timepickerSettings(false));
-        $("#event_end").datetimepicker(timepickerSettings(true));
+        $("#start_date").datetimepicker(timepickerSettings(false));
+        $("#end_date").datetimepicker(timepickerSettings(true));
     });

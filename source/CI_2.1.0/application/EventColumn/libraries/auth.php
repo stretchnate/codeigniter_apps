@@ -65,6 +65,7 @@ class Auth {
 			// Our user exists and is not locked out, set session.
 			$this->CI->session->set_userdata('username', $username);
 			$this->CI->session->set_userdata('user_id', $query->row()->user_id);
+			$this->CI->session->set_userdata('profile_dm_cache_key', CacheUtil::generateCacheKey('profile_dm_'));
 
 			$result = true;
 		}
@@ -78,7 +79,7 @@ class Auth {
 	 * @param type $username
 	 * @return void
 	 */
-	private function updateLoginAttempts(&$username) {
+	public function updateLoginAttempts(&$username) {
 		$data = array();
 		$results = $this->CI->db->select('login_attempts')
 			   ->from('USERS')
@@ -127,6 +128,7 @@ class Auth {
 	 * @access	public
 	 * @param	boolean	wether the page is viewable when logged in
 	 * @return	void
+	 * @todo make this look for locked out.
 	 */
 	public function restrict($logged_out = FALSE) {
 		//make sure the site is active
@@ -134,6 +136,11 @@ class Auth {
 		if (!$active) {
 			$this->logout();
 			redirect($this->inactive_site);
+		}
+
+		// if the users account has been locked redirect him to the login page
+		if($this->lockedAccount() === true) {
+			$this->logout();
 		}
 
 		// If the user is logged in and he's trying to access a page
@@ -150,6 +157,24 @@ class Auth {
 			$this->CI->session->set_userdata('redirected_from', $this->CI->uri->uri_string()); // We'll use this in our redirect method.
 			redirect($this->login_redirect);
 		}
+	}
+
+	/**
+	 * check for a cached user profile dm, if exists check locked out property
+	 *
+	 * @return boolean
+	 * @since 1.0
+	 */
+	private function lockedAccount() {
+		$result = false;
+		$profile_key = $this->CI->session->userdata('profile_dm_cache_key');
+		if(!empty($profile_key)) {
+			$cache_util = new CacheUtil();
+			$user_profile_dm = unserialize($cache_util->fetchCache($this->session->userdata('profile_dm_cache_key')));
+			$result = Utilities::getBoolean($user_profile_dm->getLockedOut());
+		}
+
+		return $result;
 	}
 
 	/**

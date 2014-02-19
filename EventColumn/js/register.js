@@ -17,7 +17,7 @@
                       rangelength: [8,32],
                       validValues: "^[\\w!\\$@%\\*&\\^\\?\\|\\+=\\.-]{8,32}$"
                   },
-                  password_retype: {
+                  confirm_password: {
                       required: true,
                       equalTo: "#password"
                   },
@@ -30,7 +30,7 @@
                       email: true,
                       equalTo: "#email"
                   },
-                  agree_to_terms: "required"
+                  agree_to_terms_and_policies: "required"
               },
               messages: {
                   username: "Username is a required field",
@@ -39,7 +39,7 @@
                       rangelength: "Password must be between 8 and 32 characters long",
                       validValues: "Password characters can be a-z,A-Z,0-9,_!$@%*&^?|+=.-"
                   },
-                  password_retype: {
+                  confirm_password: {
                       required: "Please re-type your password",
                       equalTo: "Confirm Password must equal Password"
                   },
@@ -52,11 +52,11 @@
                       email: "Confirm Email has an invalid email address",
                       equalTo: "Confirm Email must match Email"
                   },
-                  agree_to_terms: "please agree to our terms and policies"
+                  agree_to_terms_and_policies: "please agree to our terms and policies"
               }
            });
            if($("#register_form").valid()) {
-//               $("#register_form").submit();
+               $("#register_form").submit();
            }
         });
      });

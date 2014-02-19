@@ -2,7 +2,6 @@
 	/*
 	 * This is the config file for all form validation on EventColumn
 	 */
-
 	$config = array(
 		'add_event'	 => array(
 			array(
@@ -11,12 +10,12 @@
 				'rules'	 => 'required'
 			),
 			array(
-				'field'	 => 'event_start_datetime',
+				'field'	 => 'start_date',
 				'label'	 => 'Start Date',
 				'rules'	 => 'required'
 			),
 			array(
-				'field'	 => 'event_end_datetime',
+				'field'	 => 'end_date',
 				'label'	 => 'End Date',
 				'rules'	 => 'required'
 			),
@@ -71,12 +70,12 @@
 				'rules'	 => 'required'
 			),
 			array(
-				'field'	 => 'event_description',
+				'field'	 => 'description',
 				'label'	 => 'Details',
 				'rules'	 => 'required'
 			),
 			array(
-				'field'	 => 'event_category',
+				'field'	 => 'category',
 				'label'	 => 'Category',
 				'rules'	 => 'required'
 			)
@@ -103,8 +102,8 @@
 				'rules'	 => 'required|min_length[8]|max_length[32]|callback_validate_password'//using a callback to validate
 			),
 			array(
-				'field'	 => 'password_retype',
-				'label'	 => 'Password Confirmation',
+				'field'	 => 'confirm_password',
+				'label'	 => 'Confirm Password',
 				'rules'	 => 'required|min_length[8]|max_length[32]|matches[password]'
 			),
 			array(
@@ -113,7 +112,7 @@
 				'rules'	 => 'required|exact_length[5]|numeric'
 			),
 			array(
-				'field'	 => 'agree_to_terms',
+				'field'	 => 'agree_to_terms_and_policies',
 				'label'	 => 'Agree To Terms and Policies',
 				'rules'	 => 'required'
 			),
@@ -157,9 +156,28 @@
 				'rules'	 => 'required|exact_length[5]|numeric'
 			)
 		),
+		'forgot_password' => array(
+			array(
+				'field'	 => 'email',
+				'label'	 => 'Email',
+				'rules'	 => 'required|valid_email|callback_emailExists'
+			)
+		),
+		'login'	 => array(
+			array(
+				'field'	 => 'username',
+				'label'	 => 'Username',
+				'rules'	 => 'required'
+			),
+			array(
+				'field'	 => 'password',
+				'label'	 => 'Password',
+				'rules'	 => 'required'
+			)
+		),
 		'advanced_search' => array(
 			array(
-				'field' => 'title',
+				'field' => 'event_title',
 				'label' => 'Event Title',
 				'rules' => ''
 			),
@@ -179,15 +197,42 @@
 				'rules' => 'numeric|exact_length[5]'
 			),
 			array(
-				'field' => 'event_start',
+				'field' => 'start_date',
 				'label' => 'Start Date',
 				'rules' => ''
 			),
 			array(
-				'field' => 'event_end',
+				'field' => 'end_date',
 				'label' => 'End Date',
 				'rules' => ''
 			)
+		),
+		'update_profile'	 => array(
+			array(
+				'field'	 => 'email',
+				'label'	 => 'Email',
+				'rules'	 => 'valid_email|is_unique[USERS.email]'
+			),
+			array(
+				'field'	 => 'current_password',
+				'label'	 => 'Current Password',
+				'rules'	 => 'required'
+			),
+			array(
+				'field'	 => 'new_password',
+				'label'	 => 'New Password',
+				'rules'	 => 'min_length[8]|max_length[32]|callback_validate_password'//using a callback to validate
+			),
+			array(
+				'field'	 => 'confirm_new_password',
+				'label'	 => 'Confirm New Password',
+				'rules'	 => 'min_length[8]|max_length[32]|matches[new_password]'
+			),
+			array(
+				'field'	 => 'zip',
+				'label'	 => 'Zip',
+				'rules'	 => 'exact_length[5]|numeric'
+			),
 		)
 	);
 ?>

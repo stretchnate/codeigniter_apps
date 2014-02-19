@@ -27,50 +27,31 @@ class Event extends N8_Controller {
 			$event_form->setId("event_add_form");
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
-			$field->setContainerClass("form_field");
 			$field->setLabel("Event Name*");
-			$field->setLabelContainerClass("form_label");
-			$field->setFieldContainerClass("field_container");
-			$field->setId("event_name");
-			$field->setName("event_name");
-			$field->setValue($this->input->post('event_name'));
-			$field->addErrorLabel( 'error', null, form_error( 'event_name' ) );
+			$field->setValue($this->input->post($field->getName()));
+			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
 
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
-			$field->setContainerClass("form_field");
 			$field->setLabel("Start Date*");
-			$field->setLabelContainerClass("form_label");
-			$field->setFieldContainerClass("field_container");
-			$field->setId("event_start");
-			$field->setName("event_start_datetime");
-			$field->setValue($this->input->post('event_start_datetime'));
-			$field->addErrorLabel( 'error', null, form_error( 'event_start_datetime' ) );
+			$field->setValue($this->input->post($field->getName()));
+			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
 
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
-			$field->setContainerClass("form_field");
 			$field->setLabel("End Date*");
-			$field->setLabelContainerClass("form_label");
-			$field->setFieldContainerClass("field_container");
-			$field->setId("event_end");
-			$field->setName("event_end_datetime");
-			$field->setValue($this->input->post('event_end_datetime'));
-			$field->addErrorLabel( 'error', null, form_error( 'event_end_datetime' ) );
+			$field->setValue($this->input->post($field->getName()));
+			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
 
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
-			$field->setContainerClass("form_field");
 			$field->setLabel("Location Name*");
-			$field->setLabelContainerClass("form_label");
-			$field->setFieldContainerClass("field_container");
-			$field->setId("event_location_name");
 			$field->setName("event_details_locations[0][event_location_name]");
-			$field->setValue($this->input->post('event_details_locations[0][event_location_name]'));
-			$field->addErrorLabel( 'error', null, form_error( 'event_details_locations[0][event_location_name]' ) );
+			$field->setValue($this->input->post($field->getName()));
+			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
 
 			$error = form_error( 'event_details_locations[0][event_location_name]' );
 			if(form_error( 'event_details_locations[0][lat_long]' )) {
@@ -82,165 +63,112 @@ class Event extends N8_Controller {
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_HIDDEN);
 			$field->setName("event_details_locations[0][lat_long]");
 			$field->setId("event_details_locations[0][lat_long]");
-			$field->setValue($this->input->post('event_details_locations[0][lat_long]'));
+			$field->setValue($this->input->post($field->getName()));
 
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
-			$field->setContainerClass("form_field");
 			$field->setLabel("Address*");
-			$field->setLabelContainerClass("form_label");
-			$field->setFieldContainerClass("field_container");
-			$field->setId("event_address");
 			$field->setName("event_details_locations[0][event_address]");
-			$field->setValue($this->input->post('event_details_locations[0][event_address]'));
-			$field->addErrorLabel( 'error', null, form_error( 'event_details_locations[0][event_address]' ) );
+			$field->setValue($this->input->post($field->getName()));
+			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
 
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
-			$field->setContainerClass("form_field");
 			$field->setLabel("City*");
-			$field->setLabelContainerClass("form_label");
-			$field->setFieldContainerClass("field_container");
-			$field->setId("event_city");
 			$field->setName("event_details_locations[0][event_city]");
-			$field->setValue($this->input->post('event_details_locations[0][event_city]'));
-			$field->addErrorLabel( 'error', null, form_error( 'event_details_locations[0][event_city]' ) );
+			$field->setValue($this->input->post($field->getName()));
+			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
 
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
-			$field->setContainerClass("form_field");
 			$field->setLabel("State*");
-			$field->setLabelContainerClass("form_label");
-			$field->setFieldContainerClass("field_container");
-			$field->setId("event_state");
 			$field->setName("event_details_locations[0][event_state]");
-			$field->setValue($this->input->post('event_details_locations[0][event_state]'));
-			$field->addErrorLabel( 'error', null, form_error( 'event_details_locations[0][event_state]' ) );
+			$field->setValue($this->input->post($field->getName()));
+			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
 
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
-			$field->setContainerClass("form_field");
 			$field->setLabel("Zip*");
-			$field->setLabelContainerClass("form_label");
-			$field->setFieldContainerClass("field_container");
-			$field->setId("event_zip");
 			$field->setName("event_details_locations[0][event_zip]");
 			$field->setMaxLength("5");
-			$field->setValue($this->input->post('event_details_locations[0][event_zip]'));
-			$field->addErrorLabel( 'error', null, form_error( 'event_details_locations[0][event_zip]' ) );
+			$field->setValue($this->input->post($field->getName()));
+			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
 
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
-			$field->setContainerClass("form_field");
 			$field->setLabel("Country*");
-			$field->setLabelContainerClass("form_label");
-			$field->setFieldContainerClass("field_container");
-			$field->setId("event_country");
 			$field->setName("event_details_locations[0][event_country]");
 
-			$country = ($this->input->post('event_details_locations[0][event_country]')) ? $this->input->post('event_details_locations[0][event_country]') : "USA";
+			$country = ($this->input->post($field->getName())) ? $this->input->post($field->getName()) : "USA";
 			$field->setValue($country);
-			$field->addErrorLabel( 'error', null, form_error( 'event_details_locations[0][event_country]' ) );
+			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
 
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
-			$field->setContainerClass("form_field");
 			$field->setLabel("Price (optional)");
-			$field->setLabelContainerClass("form_label");
-			$field->setFieldContainerClass("field_container");
-			$field->setId("event_cost");
 			$field->setName("event_details_locations[0][event_cost]");
-			$field->setValue($this->input->post('event_details_locations[0][event_cost]'));
+			$field->setValue($this->input->post($field->getName()));
 
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_CHECKBOX);
-			$field->setContainerClass("form_field");
 			$field->setLabel("Smoking");
-			$field->setLabelContainerClass("form_label");
-			$field->setFieldContainerClass("field_container");
-			$field->setId("event_location_smoking");
 			$field->setName("event_details_locations[0][smoking]");
-			$field->setValue($this->input->post('event_details_locations[0][smoking]'));
+			$field->setValue($this->input->post($field->getName()));
 
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_CHECKBOX);
-			$field->setContainerClass("form_field");
 			$field->setLabel("Food Available");
-			$field->setLabelContainerClass("form_label");
-			$field->setFieldContainerClass("field_container");
-			$field->setId("event_location_food");
 			$field->setName("event_details_locations[0][food]");
-			$field->setValue($this->input->post('event_details_locations[0][food]'));
+			$field->setValue($this->input->post($field->getName()));
 
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_SELECT);
-			$field->setContainerClass("form_field");
 			$field->setLabel("Age Range*");
-			$field->setLabelContainerClass("form_label");
-			$field->setFieldContainerClass("field_container");
-			$field->setId("event_location_age");
 			$field->setName("event_details_locations[0][age]");
 			$field->addOption("", "");
 			$field->addOption("18_35", "18-35");
 			$field->addOption("30_50", "30-50");
-			$field->setSelectedOption($this->input->post('event_details_locations[0][age]'));
-			$field->addErrorLabel( 'error', null, form_error( 'event_details_locations[0][age]' ) );
+			$field->setSelectedOption($this->input->post($field->getName()));
+			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
 
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_TEXTAREA);
-			$field->setContainerClass("form_field");
 			$field->setLabel("Description*");
-			$field->setLabelContainerClass("form_label");
-			$field->setFieldContainerClass("field_container");
-			$field->setId("event_description");
-			$field->setName("event_description");
 			$field->setRows("3");
 			$field->setCols("31");
-			$field->setValue($this->input->post('event_description'));
-			$field->addErrorLabel( 'error', null, form_error( 'event_description' ) );
+			$field->setValue($this->input->post($field->getName()));
+			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
 
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_SELECT);
-			$field->setContainerClass("form_field");
 			$field->setLabel("Category*");
-			$field->setLabelContainerClass("form_label");
-			$field->setFieldContainerClass("field_container");
-			$field->setId("event_category");
-			$field->setName("event_category");
 			$field->addOption("", "");
 			$field->addOption("1", "Church Events");
 			$field->addOption("2", "Festivals");
-			$field->setSelectedOption($this->input->post('event_category'));
-			$field->addErrorLabel( 'error', null, form_error( 'event_category' ) );
+			$field->setSelectedOption($this->input->post($field->getName()));
+			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
 
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_FILE);
-			$field->setContainerClass("form_field");
 			$field->setLabel("Event Image");
-			$field->setLabelContainerClass("form_label");
-			$field->setFieldContainerClass("field_container");
-			$field->setId("event_image");
-			$field->setName("event_image");
 			$field->setAccept(Form_Field_Input_File::ACCEPT_TYPE_IMAGE);
-			$field->setValue($this->input->post('event_image'));
+			$field->setValue($this->input->post($field->getName()));
 
 			$event_form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_BUTTON);
-			$field->setContainerClass("form_field");
-			$field->setFieldContainerClass("field_container");
 			$field->setId("event_submit");
 			$field->setContent("Add Event");
 

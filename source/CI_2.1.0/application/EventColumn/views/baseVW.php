@@ -73,7 +73,7 @@
 				<body>
 					<div id="wrapper">
 						<div id="header">
-							<h1><a href="/home/"><img src="/images/header_tx.png" alt="Event Column, create and find events" /></a></h1>
+							<h1><a href="/"><img src="/images/header_tx.png" alt="Event Column, create and find events" /></a></h1>
 							<span class="welcome">
 								Welcome <span class="purple"><?=$this->username; ?></span> |
 								<?php
@@ -83,7 +83,7 @@
 									<?php
 								} else {
 									?>
-									<a href="/login">Login</a>
+									<a href="/login">Login/Register</a>
 									<?php
 								}
 								?>

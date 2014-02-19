@@ -13,6 +13,12 @@
 			parent::__construct();
 		}
 
+		/**
+		 * generates the view
+		 *
+		 * @return void
+		 * @since 1.0
+		 */
 		public function generateView() {
 			?>
 			<div id="login-content">
@@ -20,7 +26,7 @@
 				$this->login_form->renderForm();
 			?>
 				<div>
-					<a href="javascript:void(null);">Forgot Password</a>
+					<a href="login/forgotPassword">Forgot Password</a>
 					&nbsp;|&nbsp;
 					<a href="/register">Create an Account</a>
 				</div>
@@ -28,8 +34,15 @@
 			<?php
 		}
 
-		public function setLoginForm($login_form) {
+		/**
+		 * sets the login form
+		 *
+		 * @param Form $login_form
+		 * @return \UserLoginVW
+		 */
+		public function setLoginForm(Form $login_form) {
 			$this->login_form = $login_form;
+			return $this;
 		}
 	}
 

@@ -40,8 +40,6 @@
 				$this->renderView($this->input->post());
 			} else {
 				if($search_type == 'advanced_search') {
-					$this->load->driver('cache', array('adapter' => 'apc'));
-
 					$errors = array();
 					$errors['event_title'] = array(
 													'value' => $this->input->post('event_title'),
@@ -73,9 +71,10 @@
 													'error' => form_error('end_date')
 												);
 
-					$cache_key = Utilities::generateCacheKey('error_');
+					$cache_key = CacheUtil::generateCacheKey('error_');
 
-					$this->cache->save($cache_key, $errors, 600);
+					$cache_util = new CacheUtil();
+					$cache_util->saveCache($cache_key, $errors);
 
 					redirect('/search/advanced/'.$cache_key);
 				} else {

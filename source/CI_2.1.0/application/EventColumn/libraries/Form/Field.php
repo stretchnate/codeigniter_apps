@@ -28,15 +28,15 @@
 		const FIELD_TYPE_RECAPTCHA		 = 'recaptcha';
 
 		protected $element_javascript = null;
-		protected $container_class;
+		protected $container_class    = 'form_field';
 		protected $container_id;
 		protected $label;
 		protected $label_id;
 		protected $label_class;
 		protected $label_container_id;
-		protected $label_container_class;
+		protected $label_container_class = 'field_label';
 		protected $field_container_id;
-		protected $field_container_class;
+		protected $field_container_class = 'field_container';
 		protected $error_label;
 		//element attributes
 		protected $attributes = array(
@@ -65,7 +65,7 @@
 
 		protected function renderField( $field ) {
 			?>
-			<div<?=isset( $this->container_class ) ? " class='" . $this->container_class . "'" : ''; ?><?=isset( $this->container_id ) ? " id='" . $this->container_id . "'" : ""; ?>>
+			<div<?=( $this->container_class ) ? " class='" . $this->container_class . "'" : ''; ?><?=isset( $this->container_id ) ? " id='" . $this->container_id . "'" : ""; ?>>
 				<?=$this->generateLabel(); ?>
 				<div<?=($this->field_container_id) ? " id='" . $this->field_container_id . "'" : ''; ?><?=($this->field_container_class) ? " class='" . $this->field_container_class . "'" : ''; ?>>
 					<?php
@@ -147,6 +147,10 @@
 			}
 		}
 
+		public function getName() {
+			return $this->attributes['name'];
+		}
+
 		public function setAutofocus( $autofocus ) {
 			$this->attributes['autofocus'] = ($autofocus) ? 'autofocus' : null;
 			return $this;
@@ -172,8 +176,20 @@
 			return $this;
 		}
 
+		/**
+		 * sets the element id if $this->label is empty
+		 *
+		 * @param type $id
+		 * @return \Form_Field
+		 */
 		public function setId( $id ) {
-			$this->attributes['id'] = $id;
+			//we can only override the id if the label is empty
+			if(!$this->label) {
+				$this->attributes['id'] = $id;
+			} else {
+				throw new Exception("can't set ID when label is being used ".$backtrace);
+			}
+
 			return $this;
 		}
 
@@ -182,8 +198,25 @@
 			return $this;
 		}
 
+		/**
+		 * sets the label for the element and the id of the element, also sets the name of the element if name is not
+		 * already present
+		 *
+		 * @param string $label
+		 * @return \Form_Field
+		 */
 		public function setLabel( $label ) {
+			$regex = '~[^\w]+~';
+			if(!$this->attributes['name']) {
+				$name = strtolower(str_replace(" ", "_", $label));
+				$this->setName( preg_replace($regex, '', $name) );
+			}
+
+			$id = strtolower(str_replace(" ", "_", $label));
+			$this->setId(preg_replace($regex, '', $id));
+
 			$this->label = $label;
+
 			return $this;
 		}
 

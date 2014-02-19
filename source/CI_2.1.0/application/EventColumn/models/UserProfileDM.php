@@ -8,11 +8,13 @@
 	class UserProfileDM extends BaseDM {
 
 		const ACCESS_LEVEL_USER = 1;//access level for all users
+		const MAX_LOGIN_ATTEMPTS = 5;
 
 		private $user_id;
 		private $email;
 		private $username;
 		private $password;
+		private $temporary_password;
 		private $account_active;
 		private $access_level;
 		private $date_added;
@@ -43,6 +45,7 @@
 				$this->email			 = $result->email;
 				$this->username			 = $result->username;
 				$this->password			 = $result->password;
+				$this->temporary_password = $this->setTemporaryPassword($result->temporary_password);
 				$this->account_active	 = $result->account_active;
 				$this->access_level      = $result->access_level;
 				$this->date_added		 = $result->date_added;
@@ -89,6 +92,7 @@
 			$sets['email']				 = $this->email;
 			$sets['username']			 = $this->username;
 			$sets['password']			 = $this->password;
+			$sets['temporary_password']  = $this->temporary_password;
 			$sets['account_active']		 = $this->account_active;
 			$sets['access_level']	     = $this->access_level;
 			$sets['zip']				 = $this->zip;
@@ -113,10 +117,75 @@
 			$values['username']			 = $this->username;
 			$values['email']			 = $this->email;
 			$values['password']			 = $this->password;
+			$values['temporary_password'] = $this->temporary_password;
 			$values['zip']				 = $this->zip;
 			$values['agree_to_terms']	 = $this->agree_to_terms;
 
 			return $this->db->insert( "USERS", $values );
+		}
+
+		/**
+		 * loads a profile from an email address, used for password recovery
+		 *
+		 * @throws Exception
+		 */
+		public function loadProfileByEmail() {
+			$query = $this->db->get_where('USERS', array('email' => $this->email));
+
+			if($query->num_rows > 0) {
+				if($query->num_rows > 1) {
+					throw new Exception('multiple users with same email address');
+				} else {
+					$result = $query->row();
+
+					$this->user_id			 = $result->user_id;
+					$this->email			 = $result->email;
+					$this->username			 = $result->username;
+					$this->password			 = $result->password;
+					$this->temporary_password = $this->setTemporaryPassword($result->temporary_password);
+					$this->account_active	 = $result->account_active;
+					$this->access_level      = $result->access_level;
+					$this->date_added		 = $result->date_added;
+					$this->zip				 = $result->zip;
+					$this->agree_to_terms	 = $result->agree_to_terms;
+					$this->login_attempts	 = $result->login_attempts;
+					$this->locked_out		 = $result->locked_out;
+					$this->locked_out_reason = $result->locked_out_reason;
+				}
+			}
+		}
+
+		/**
+		 * validate user entered password against what we have in the db
+		 *
+		 * @param  string $password
+		 * @return boolean
+		 * @since 1.0
+		 */
+		public function checkUserPassword($password) {
+			require_once(APPPATH . 'third_party/phpass-0.3/PasswordHash.php');
+
+			$phpass = new PasswordHash(Auth::PHPASS_ITERATIONS, Auth::PHPASS_PORTABLE_HASH);
+			return $phpass->CheckPassword( $password, $this->getPassword() );
+		}
+
+		/**
+		 * increases login attempts and sets locked_out if user has had too many failed login attempts
+		 * caches this object if locked_out is true.
+		 *
+		 * @return void
+		 * @since 1.0
+		 */
+		public function increaseLoginAttempts() {
+			$this->login_attempts = $this->login_attempts + 1;
+
+			if($this->login_attempts >= self::MAX_LOGIN_ATTEMPTS) {
+				$this->locked_out = true;
+				$this->locked_out_reason = "too many failed login attempts";
+				$this->save();
+				$cache_util = new CacheUtil();
+				$cache_util->saveCache($this->session->userdata('profile_dm_cache_key'), serialize($this), 3600);
+			}
 		}
 
 		public function setEmail( $email ) {
@@ -131,6 +200,11 @@
 
 		public function setPassword( $password ) {
 			$this->password = $password;
+			return $this;
+		}
+
+		public function setTemporaryPassword( $temporary_password ) {
+			$this->temporary_password = Utilities::getBoolean($temporary_password);
 			return $this;
 		}
 
@@ -149,6 +223,10 @@
 
 		public function getPassword() {
 			return $this->password;
+		}
+
+		public function getTemporaryPassword() {
+			return $this->temporary_password;
 		}
 
 		public function getZip() {

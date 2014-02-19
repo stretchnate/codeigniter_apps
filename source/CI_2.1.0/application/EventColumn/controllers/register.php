@@ -26,103 +26,63 @@
 				$register_form->setId('register_form');
 
 				$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
-				$field->setContainerClass( "form_field" );
 				$field->setLabel( "Username*" );
-				$field->setLabelContainerClass( "form_label" );
-				$field->setFieldContainerClass( "field_container" );
-				$field->setId( "username" );
-				$field->setName( "username" );
-				$field->setValue( $this->input->post( 'username' ) );
-				$field->addErrorLabel( 'error', null, form_error( 'username' ) );
+				$field->setValue( $this->input->post( $field->getName() ) );
+				$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
 
 				$register_form->addField( $field );
 
 				$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
-				$field->setContainerClass( "form_field" );
 				$field->setLabel( "Email*" );
-				$field->setLabelContainerClass( "form_label" );
-				$field->setFieldContainerClass( "field_container" );
-				$field->setId( "email" );
-				$field->setName( "email" );
-				$field->setValue( $this->input->post( 'email' ) );
-				$field->addErrorLabel( 'error', null, form_error( 'email' ) );
+				$field->setValue( $this->input->post( $field->getName() ) );
+				$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
 
 				$register_form->addField( $field );
 
 				$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
-				$field->setContainerClass( "form_field" );
 				$field->setLabel( "Confirm Email*" );
-				$field->setLabelContainerClass( "form_label" );
-				$field->setFieldContainerClass( "field_container" );
-				$field->setId( "confirm_email" );
-				$field->setName( "confirm_email" );
-				$field->setValue( $this->input->post( 'confirm_email' ) );
-				$field->addErrorLabel( 'error', null, form_error( 'confirm_email' ) );
+				$field->setValue( $this->input->post( $field->getName() ) );
+				$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
 
 				$register_form->addField( $field );
 
 				$field = Form::getNewField( Form_Field::FIELD_TYPE_PASSWORD );
-				$field->setContainerClass( "form_field" );
 				$field->setLabel( "Password*" );
-				$field->setLabelContainerClass( "form_label" );
-				$field->setFieldContainerClass( "field_container" );
-				$field->setId( "password" );
-				$field->setName( "password" );
-				$field->addErrorLabel( 'error', null, form_error( 'password' ) );
+				$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
 
 				$register_form->addField( $field );
 
 				$field = Form::getNewField( Form_Field::FIELD_TYPE_PASSWORD );
-				$field->setContainerClass( "form_field" );
 				$field->setLabel( "Confirm Password*" );
-				$field->setLabelContainerClass( "form_label" );
-				$field->setFieldContainerClass( "field_container" );
-				$field->setId( "password_retype" );
-				$field->setName( "password_retype" );
-				$field->addErrorLabel( 'error', null, form_error( 'password_retype' ) );
+				$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
 
 				$register_form->addField( $field );
 
 				$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
-				$field->setContainerClass( "form_field" );
 				$field->setLabel( "Zip*" );
-				$field->setLabelContainerClass( "form_label" );
-				$field->setFieldContainerClass( "field_container" );
-				$field->setId( "zip" );
-				$field->setName( "zip" );
 				$field->setMaxLength( "5" );
-				$field->setValue( $this->input->post( 'zip' ) );
-				$field->addErrorLabel( 'error', null, form_error( 'zip' ) );
+				$field->setValue( $this->input->post( $field->getName() ) );
+				$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
 
 				$register_form->addField( $field );
 
 				$field = Form::getNewField( Form_Field::FIELD_TYPE_CHECKBOX );
-				$field->setContainerClass( "form_field" );
 				$field->setLabel( "Agree to Terms and Policies*" );
-				$field->setLabelContainerClass( "form_label" );
-				$field->setFieldContainerClass( "field_container" );
-				$field->setId( "agree_to_terms" );
-				$field->setName( "agree_to_terms" );
 				$field->setValue( "agreed" );
-				if( $this->input->post( 'agree_to_terms' ) == 'agreed' ) {
+				if( $this->input->post( $field->getName() ) == 'agreed' ) {
 					$field->setChecked( true );
 				}
-				$field->addErrorLabel( 'error', null, form_error( 'agree_to_terms' ) );
+				$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
 
 				$register_form->addField( $field );
 
 				$field = Form::getNewField( Form_Field::FIELD_TYPE_RECAPTCHA );
-				$field->setContainerClass( "form_field" );
 				$field->setLabel( "Please proove you're human*" );
-				$field->setLabelContainerClass( "form_label" );
-				$field->setFieldContainerClass( "field_container" );
 				$field->addErrorLabel('error', 'recaptcha_error', form_error('recaptcha_response_field'));
 
 				$register_form->addField( $field );
 
 				$field = Form::getNewField( Form_Field::FIELD_TYPE_BUTTON );
-				$field->setContainerClass( "form_field" );
-				$field->setFieldContainerClass( "field_container" );
 				$field->setId( "register_submit" );
 				$field->setContent( "Submit" );
 
@@ -183,23 +143,6 @@
 				$this->index();
 			}
 		}
-
-		/**
-		 * callback function to validate the password field
-		 *
-		 * @param  string $str
-		 * @return boolean
-		 */
-		public function validate_password( $str ) {
-			$result = alpha_special( $str );
-
-			if( $result === 0 ) {
-				$this->form_validation->set_message( 'validate_password', 'Invalid characters found in the %s field. Allowed characters are a-zA-Z0-9_-!$@%*&^?|' );
-			}
-
-			return Utilities::getBoolean( $result );
-		}
-
 	}
 
 ?>
