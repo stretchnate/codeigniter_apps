@@ -7,6 +7,10 @@ class Event extends N8_Controller {
 
 	public function __construct() {
 		parent::__construct();
+
+		$this->load->view('Event');
+		$this->view = new EventVW();
+		$this->generateCategoriesNav();
 	}
 
 	/**
@@ -18,8 +22,6 @@ class Event extends N8_Controller {
 	 */
 	public function index() {
 		$this->auth->restrict();
-		$this->load->view('Event');
-
 		try {
 			$event_form = new Form();
 			$event_form->setAction("event/addEvent");
@@ -151,15 +153,19 @@ class Event extends N8_Controller {
 
 			$event_form->addField($field);
 
-			$field = Form::getNewField(Form_Field::FIELD_TYPE_SELECT);
-			$field->setLabel("Category*");
-			$field->addOption("", "");
-			$field->addOption("1", "Church Events");
-			$field->addOption("2", "Festivals");
-			$field->setSelectedOption($this->input->post($field->getName()));
-			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
+//			$field = Form::getNewField(Form_Field::FIELD_TYPE_SELECT);
+//			$field->setLabel("Category*");
+//			$field->addOption("", "");
+//			$field->addOption("1", "Church Events");
+//			$field->addOption("2", "Festivals");
+//			$field->setSelectedOption($this->input->post($field->getName()));
+//			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
+			$error_array = array('class' => 'error', 'id' => null, 'content' => form_error('category'));
+			$categories_list = new CategoriesList();
+			$categories_list->fetchCategories();
+			$categories_list->buildSelectObject("Category*", null, $this->input->post('category'), $error_array);
 
-			$event_form->addField($field);
+			$event_form->addField($categories_list->getSelectObject());
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_FILE);
 			$field->setLabel("Event Image");
@@ -174,12 +180,11 @@ class Event extends N8_Controller {
 
 			$event_form->addField($field);
 
-			$view = new EventVW();
-			$view->setErrors($this->getErrors());
-			$view->setEventForm($event_form);
-			$view->setPageId("event_add");
+			$this->view->setErrors($this->getErrors());
+			$this->view->setEventForm($event_form);
+			$this->view->setPageId("event_add");
 
-			$view->renderView();
+			$this->view->renderView();
 		} catch (Exception $e) {
 			log_message('error', $e->getMessage(), false);
 			show_error("there was an error loading this page. Please try again <!-- {$e->getMessage()} -->", 500);

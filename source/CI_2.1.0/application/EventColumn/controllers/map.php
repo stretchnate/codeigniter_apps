@@ -15,6 +15,7 @@
 			$this->view = new MapVW();
 			$this->view->setPageId('map');
 			$this->view->setMiniSearch(new Plugins_MiniSearch());
+			$this->generateCategoriesNav();
 		}
 
 		/**
@@ -25,7 +26,15 @@
 		 */
 		public function index() {
 			//load the map view
-			$this->view->renderView();
+			$location_array = explode("|", $this->session->userdata('location'));
+			if($location_array) {
+				$data['city'] = $location_array[0];
+				$data['state'] = $location_array[1];
+			} else {
+				$data['zip'] = $this->session->userdata('zip');
+			}
+
+			$this->renderView($data);
 		}
 
 		/**
@@ -96,6 +105,7 @@
 			$city = null;
 			$state = null;
 			$zip = null;
+			$category_id = null;
 			$start_date = null;
 			$end_date   = null;
 
@@ -128,7 +138,7 @@
 			}
 
 			try {
-				$iterator = new EventIterator($event_id, $event_name, $city, $state, $zip, $start_date, $end_date);
+				$iterator = new EventIterator($event_id, $event_name, $city, $state, $zip, $category_id, $start_date, $end_date);
 				$this->view->setEventIterator($iterator);
 			} catch(Exception $e) {
 				$this->setMessage($e->getMessage());
@@ -145,6 +155,19 @@
 		 */
 		public function preview($event_id) {
 			$data = array('event_id' => $event_id);
+			$this->renderView($data);
+		}
+
+		/**
+		 * show events by category (location based)
+		 *
+		 * @param  int  $category_id
+		 * @return void
+		 * @since  1.0
+		 */
+		public function bycategory($category_id) {
+			$location_array = explode("|", $this->session->userdata('location'));
+			$data = array('category_id' => $category_id, 'city' => $location_array[0], 'state' => $location_array[1]);
 			$this->renderView($data);
 		}
 	}

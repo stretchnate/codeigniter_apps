@@ -48,11 +48,7 @@
 			$form->setAction('');
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_TEXT);
-			$field->setContainerClass( "form-field" );
 			$field->setLabel( "Username" );
-			$field->setLabelContainerClass( "form-label" );
-			$field->setFieldContainerClass( "field-container" );
-			$field->setId( "username" );
 			$field->setName( "username" );
 			$field->setValue( $this->input->post( 'username' ) );
 			$field->addErrorLabel( 'error', null, form_error( 'username' ) );
@@ -60,11 +56,7 @@
 			$form->addField( $field );
 
 			$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
-			$field->setContainerClass( "form-field" );
 			$field->setLabel( "Email" );
-			$field->setLabelContainerClass( "form-label" );
-			$field->setFieldContainerClass( "field-container" );
-			$field->setId( "email" );
 			$field->setName( "email" );
 			$field->setValue( $this->input->post( 'email' ) );
 			$field->addErrorLabel( 'error', null, form_error( 'email' ) );
@@ -72,11 +64,7 @@
 			$form->addField($field);
 
 			$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
-			$field->setContainerClass( "form-field" );
 			$field->setLabel( "Subject" );
-			$field->setLabelContainerClass( "form-label" );
-			$field->setFieldContainerClass( "field-container" );
-			$field->setId( "subject" );
 			$field->setName( "subject" );
 			$field->setValue( $this->input->post( 'subject' ) );
 			$field->addErrorLabel( 'error', null, form_error( 'subject' ) );
@@ -84,11 +72,7 @@
 			$form->addField($field);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_TEXTAREA);
-			$field->setContainerClass("form-field");
 			$field->setLabel("Email Text");
-			$field->setLabelContainerClass("form-label");
-			$field->setFieldContainerClass("field-container");
-			$field->setId("email-text");
 			$field->setName("email_text");
 			$field->setRows("3");
 			$field->setCols("31");
@@ -96,17 +80,12 @@
 			$form->addField($field);
 
 			$field = Form::getNewField( Form_Field::FIELD_TYPE_RECAPTCHA );
-			$field->setContainerClass( "form-field" );
 			$field->setLabel( "Please proove you're human*" );
-			$field->setLabelContainerClass( "form-label" );
-			$field->setFieldContainerClass( "field-container" );
 			$field->addErrorLabel('error', 'recaptcha_error', form_error('recaptcha_response_field'));
 
 			$form->addField( $field );
 
 			$field = Form::getNewField( Form_Field::FIELD_TYPE_SUBMIT );
-			$field->setContainerClass( "form-field" );
-			$field->setFieldContainerClass( "field-container" );
 			$field->setId( "submit" );
 			$field->setName("submit");
 			$field->setValue("submit");

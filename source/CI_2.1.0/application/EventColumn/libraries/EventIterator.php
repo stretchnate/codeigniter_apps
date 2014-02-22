@@ -11,7 +11,8 @@
 		private $ci;
 
 		/**
-		 * initialize the iterator
+		 * initialize the iterator, while none of the params are "required" by the method call
+		 * you must pass an event_id or (city and state) or zip.
 		 *
 		 * @param int    $event_id
 		 * @param string $name
@@ -25,12 +26,12 @@
 		 * @access public
 		 * @throws Exception
 		 */
-		public function __construct($event_id = null, $name = null, $city = null, $state = null, $zip = null, $start_date = null, $end_date = null) {
+		public function __construct($event_id = null, $name = null, $city = null, $state = null, $zip = null, $category_id = null, $start_date = null, $end_date = null) {
 			$this->ci =& get_instance();
 			$this->ci->load->database();
 
-			if(($city && !$state) || (!$city && $state)) {
-				throw new Exception(__CLASS__." ERROR: city without state or state without city not allowed");
+			if(!$event_id && !$zip && (!$city || !$state)) {
+				throw new Exception(__CLASS__." ERROR: invalid search parameters passed. Must pass event_id or zip or (city and state)");
 			}
 
 			if(!$start_date) {
@@ -44,10 +45,12 @@
 			$where = ' e.event_start_datetime <= "'.$end_date.'"';
 			$where .= ' AND e.event_end_datetime >= "'.$start_date.'"';
 
-			if(($city && $state) || $zip) {
+			if($event_id) {
+				$this->loadEventsById($event_id);
+			} elseif($category_id && $zip) {
+				$this->loadEventsByCategory($where, $category_id, $city, $state, $zip);
+			} elseif(($city && $state) || $zip) {
 				$this->loadEventsByLocation($where, $city, $state, $zip);
-			} elseif($name || $event_id) {
-				$this->loadEvents($where, $name, $event_id);
 			}
 
 			if(($city && $state) || $zip) {
@@ -116,22 +119,15 @@
 		}
 
 		/**
-		 * loads the event_dm_array with instances of EventModel_EventDM based on the where_clause argument
+		 * loads the event_dm_array with instances of EventModel_EventDM based on the event_id argument
 		 *
-		 * @param  string $where
+		 * @param  int  $event_id
 		 * @return void
 		 * @since  1.0
 		 * @access private
 		 */
-		private function loadEvents($where, $name = null, $event_id = null) {
-			if($name) {
-				$where .= ' AND event_name LIKE "%'.$name.'%"';
-			}
-
-			if($event_id) {
-				//search only by id if it is provided
-				$where = ' event_id = '.$event_id;
-			}
+		private function loadEventsById($event_id) {
+			$where = ' event_id = '.$event_id;
 
 			$query = $this->ci->db->select()
 								->from('EVENTS e')
@@ -145,6 +141,38 @@
 
 					$this->event_dm_array[] = $event_dm;
 				}
+			}
+
+			unset($query);
+		}
+
+		/**
+		 * loads the event_dm_array with instances of EventModel_EventDM based on the category_id and zip (if provided)
+		 *
+		 * @param  int $category_id
+		 * @param  int $zip
+		 * @return void
+		 * @since  1.0
+		 */
+		private function loadEventsByCategory($where, $category_id, $city, $state, $zip) {
+			$where .= ' e.event_category = '.$category_id;
+			if($city && $state) {
+				$where .= ' el.location_city = '.$city.' AND el.location_state = '.$state;
+			} else {
+				$where .= ' el.zip = '.$zip;
+			}
+
+			$query = $this->ci->db->select('e.event_id')
+					->from('EVENTS e')
+					->join('EVENT_LOCATIONS el', 'e.event_id = el.event_id', 'inner')
+					->where($where, null, false)
+					->get();
+
+			foreach($query->result() as $row) {
+				$event_dm = new EventModel_EventDM();
+				$event_dm->load($row->event_id);
+
+				$this->event_dm_array[] = $event_dm;
 			}
 
 			unset($query);

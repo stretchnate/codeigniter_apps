@@ -65,6 +65,7 @@ class Auth {
 			// Our user exists and is not locked out, set session.
 			$this->CI->session->set_userdata('username', $username);
 			$this->CI->session->set_userdata('user_id', $query->row()->user_id);
+			$this->CI->session->set_userdata('zip', $query->row()->zip);
 			$this->CI->session->set_userdata('profile_dm_cache_key', CacheUtil::generateCacheKey('profile_dm_'));
 
 			$result = true;

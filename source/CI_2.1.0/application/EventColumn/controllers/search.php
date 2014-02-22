@@ -6,6 +6,14 @@
 	 */
 	class search extends N8_Controller {
 
+		public function __construct() {
+			parent::__construct();
+
+			$this->load->view('Search');
+			$this->view = new SearchVW();
+			$this->generateCategoriesNav();
+		}
+
 		public function advanced($cache_key = null) {
 			if($cache_key) {
 				$cache_util = new CacheUtil();
@@ -27,8 +35,6 @@
 			}
 
 			try {
-				$this->load->view('Search');
-
 				$form = new Form();
 				$form->setAction('map/search');
 				$form->addHiddenInput('search_type', 'advanced_search');
@@ -85,12 +91,11 @@
 
 				$form->addField( $field );
 
-				$view = new SearchVW();
-				$view->setErrors( $this->getErrors() );
-				$view->setSearchForm( $form );
-				$view->setPageId('advanced_search');
+				$this->view->setErrors( $this->getErrors() );
+				$this->view->setSearchForm( $form );
+				$this->view->setPageId('advanced_search');
 
-				$view->renderView();
+				$this->view->renderView();
 			} catch(Exception $e) {
 				$this->logMessage( $e->getMessage(), N8_Error::ERROR );
 				show_error( "there was an error loading this page. Please try again <!-- {$e->getMessage()} -->", 500 );

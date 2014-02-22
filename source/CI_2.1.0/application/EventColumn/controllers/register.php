@@ -16,7 +16,7 @@
 			$this->load->view( 'Register' );
 			$this->view = new RegisterVW();
 			$this->view->setPageId('register');
-
+			$this->generateCategoriesNav();
 		}
 
 		public function index() {

@@ -150,6 +150,15 @@ li {
 
 }
 
+#main-nav li a, #main-nav li a:visited, #side-nav li a, #side-nav li a:visited {
+    color: #ffffff;
+    text-decoration:none;
+}
+
+#side-nav li a:hover {
+    text-decoration: underline;
+}
+
 #login-content {
     margin:10px;
 }

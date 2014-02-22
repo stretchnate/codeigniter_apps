@@ -18,6 +18,7 @@
 		protected $show_main_nav	 = true;
 		protected $username		 = 'Guest';
 		protected $page_id		 = 'default';
+		protected $categories_nav;
 
 		abstract protected function generateView();
 
@@ -213,8 +214,17 @@
 		 */
 		public function renderView() {
 			$this->generateHeader();
+
+			if($this->categories_nav) {
+				$this->renderCategoriesNav();
+			}
+
 			$this->generateView();
 			$this->generateFooter();
+		}
+
+		public function renderCategoriesNav() {
+			echo "<div id='side-nav'>".$this->categories_nav->getUL()."</div>";
 		}
 
 		public function setTitle( $title ) {
@@ -251,6 +261,11 @@
 
 		public function setMiniSearch(Plugins_MiniSearch $mini_search) {
 			$this->mini_search = $mini_search;
+		}
+
+		public function setCategoriesNav(DataList $categories_nav) {
+			$this->categories_nav = $categories_nav;
+			return $this;
 		}
 	}
 ?>

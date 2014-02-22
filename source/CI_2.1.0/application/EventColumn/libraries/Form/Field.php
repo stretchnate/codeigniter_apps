@@ -187,7 +187,8 @@
 			if(!$this->label) {
 				$this->attributes['id'] = $id;
 			} else {
-				throw new Exception("can't set ID when label is being used ".$backtrace);
+				$backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT);
+				throw new Exception("can't set ID when label is being used ".print_r($backtrace, true));
 			}
 
 			return $this;
