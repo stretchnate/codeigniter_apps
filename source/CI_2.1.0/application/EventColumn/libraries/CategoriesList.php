@@ -49,7 +49,11 @@
 					->where('el.zip = '.$zip)
 					->get();
 
-			$this->loadResults($query);
+			if($query->num_rows() < 1) {
+				$this->fetchCategories();
+			} else {
+				$this->loadResults($query);
+			}
 		}
 
 		/**
