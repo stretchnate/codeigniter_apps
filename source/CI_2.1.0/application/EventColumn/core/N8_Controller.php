@@ -97,9 +97,14 @@
 			$categories_list = new CategoriesList();
 			$categories_list->setHrefBase( '/map/bycategory' );
 
-			$zip = $this->session->userdata( 'zip' );
-			if( ! empty( $zip ) ) {
-				$categories_list->fetchCategoriesByZip( $zip );
+			$location_array = $this->session->userdata( 'location' );
+			if( ! empty( $location_array ) ) {
+				try {
+					$categories_list->fetchCategoriesByLocation( $location_array['city'], $location_array['state'], $location_array['zip'] );
+				} catch(UnexpectedValueException $e) {
+					$this->logMessage($e->getMessage());
+					$categories_list->fetchCategories();
+				}
 			} else {
 				$categories_list->fetchCategories();
 			}

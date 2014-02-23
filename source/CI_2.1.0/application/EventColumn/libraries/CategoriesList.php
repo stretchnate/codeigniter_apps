@@ -35,18 +35,31 @@
 		}
 
 		/**
-		 * loads all event categories from a specified zip into $this->category_dm_array
+		 * loads all event categories from a specified location into $this->category_dm_array
 		 *
+		 * @param  string $city
+		 * @param  string $state
+		 * @param  int    $zip
+		 * @throws UnexpectedValueException
 		 * @return void
 		 * @since  1.0
 		 */
-		public function fetchCategoriesByZip($zip) {
-			$query = $this->ci->db->select('DISTINCT e.event_category')
+		public function fetchCategoriesByLocation($city = null, $state = null, $zip = null) {
+			if($city && $state) {
+				$where = '(el.location_city = "'.$city.'" AND el.location_state = "'.$state.'")';
+			} elseif($zip) {
+				$where = 'el.zip = '.$zip;
+			} else {
+				throw new UnexpectedValueException("ERROR: Expecting city and state or zip in ".__CLASS__."::".__METHOD__);
+			}
+
+			$where .= ' AND (ec.parent_category_id = "" OR ec.parent_category_id IS NULL)';
+			$query = $this->ci->db->select('e.event_category')
+					->distinct()
 					->from('EVENTS e')
 					->join('EVENT_LOCATIONS el', 'el.event_id = e.event_id', 'inner')
 					->join('EVENT_CATEGORIES ec', 'ec.category_id = e.event_category', 'inner')
-					->where('(ec.parent_category_id = "" OR ec.parent_category_id IS NULL)')
-					->where('el.zip = '.$zip)
+					->where($where, null, false)
 					->get();
 
 			if($query->num_rows() < 1) {
@@ -89,7 +102,7 @@
 <?
 				if($include_links !== false) {
 ?>
-					<a href="<?=$this->href_base . '/' . $category_dm->getCategoryId(); ?>">
+					<a href="<?=$this->href_base . $category_dm->getCategoryId(); ?>">
 <?
 				}
 
@@ -129,7 +142,7 @@
 <?
 				if($include_links !== false) {
 ?>
-					<a href="<?=$this->href_base . '/' . $category_dm->getCategoryId(); ?>">
+					<a href="<?=$this->href_base . $category_dm->getCategoryId(); ?>">
 <?
 				}
 
@@ -210,6 +223,11 @@
 		 */
 		public function setHrefBase($href_base) {
 			$this->href_base = $href_base;
+
+			if(!preg_match('~[/]$~', $this->href_base)) {
+				$this->href_base .= '/';
+			}
+
 			return $this;
 		}
 
