@@ -118,7 +118,19 @@
 		private function getLocation() {
 			$ip		 = $this->input->server( 'REMOTE_ADDR' );
 			$details = json_decode( file_get_contents( "http://ipinfo.io/{$ip}/json" ) );
-			$location = isset($details->city) ? $details->city . "|" . $details->state : 'Orlando|Florida';
+
+			$location = array('city' => '', 'state' => '', 'zip' => '');
+			if((isset($details->city) && isset($details->region))) {
+				$location['city']  =  $details->city;
+				$location['state'] = $details->region;
+
+				if(isset($details->postal)) {
+					$location['zip'] = $details->postal;
+				}
+			} else {
+				$location = array('city' => 'Orlando', 'state' => 'Florida', 'zip' => '32801');
+			}
+
 			$this->session->set_userdata('location',$location);
 		}
 
