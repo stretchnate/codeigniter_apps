@@ -21,15 +21,13 @@
 		/**
 		 * the main map view
 		 *
-		 * @todo make this automatically search on the users zip if logged in.
 		 * @return void
 		 */
 		public function index() {
 			//load the map view
-			$location_array = explode("|", $this->session->userdata('location'));
-			if($location_array) {
-				$data['city'] = $location_array[0];
-				$data['state'] = $location_array[1];
+			$location_array = $this->session->userdata('location');
+			if(!empty($location_array)) {
+				$data = $location_array;
 			} else {
 				$data['zip'] = $this->session->userdata('zip');
 			}
@@ -166,8 +164,18 @@
 		 * @since  1.0
 		 */
 		public function bycategory($category_id) {
-			$location_array = explode("|", $this->session->userdata('location'));
-			$data = array('category_id' => $category_id, 'city' => $location_array[0], 'state' => $location_array[1]);
+			$location_array = $this->session->userdata('location');
+			$data = array('category_id' => $category_id);
+			if(!empty($location_array)) {
+				$data = array(
+							'city' => $location_array['city'],
+							'state' => $location_array['state']
+						);
+			} else {
+				//fall back on user defined zip
+				$data['zip'] = $this->session->userdata('zip');
+			}
+
 			$this->renderView($data);
 		}
 	}
