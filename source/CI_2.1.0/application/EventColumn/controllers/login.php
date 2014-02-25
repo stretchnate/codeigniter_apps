@@ -18,7 +18,7 @@
 			$this->load->view( 'UserLogin' );
 			try {
 				$login_form = new Form();
-				$login_form->setAction( "login/login" );
+				$login_form->setAction( "login/processLogin" );
 				$login_form->setId("login_form");
 
 				$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
@@ -53,7 +53,13 @@
 			}
 		}
 
-		public function login() {
+		/**
+		 * process the user login
+		 *
+		 * @return void
+		 * @since  1.0
+		 */
+		public function processLogin() {
 			if(!$this->auth->isSiteActive()) {
 				redirect("/inactive/");
 			}

@@ -171,8 +171,10 @@ class Auth {
 		$profile_key = $this->CI->session->userdata('profile_dm_cache_key');
 		if(!empty($profile_key)) {
 			$cache_util = new CacheUtil();
-			$user_profile_dm = unserialize($cache_util->fetchCache($this->session->userdata('profile_dm_cache_key')));
-			$result = Utilities::getBoolean($user_profile_dm->getLockedOut());
+			$user_profile_dm = unserialize($cache_util->fetchCache($this->CI->session->userdata('profile_dm_cache_key')));
+			if(is_object($user_profile_dm) && $user_profile_dm instanceof UserProfileDM) {
+				$result = Utilities::getBoolean($user_profile_dm->getLockedOut());
+			}
 		}
 
 		return $result;
