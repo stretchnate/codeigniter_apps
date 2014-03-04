@@ -62,6 +62,16 @@ class Utilities {
 
 		return date($format, $date);
 	}
+
+	/**
+	 * determines if the current invocation is running via CLI
+	 *
+	 * @return bool
+	 * @static
+	 */
+	public static function isCLI() {
+		return php_sapi_name() === 'cli';
+	}
 }
 
 ?>

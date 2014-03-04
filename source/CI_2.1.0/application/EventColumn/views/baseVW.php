@@ -76,14 +76,16 @@
 						<div id="header">
 							<h1><a href="/"><img src="/images/header_tx.png" alt="Event Column, create and find events" /></a></h1>
 							<span class="welcome">
-								Welcome <span class="purple"><?=$this->username; ?></span> |
+								Welcome
 								<?php
 								if( $this->username !== 'Guest' ) {
 									?>
+									<span class="purple"><a href="/userProfile"><?=$this->username; ?></a></span> |
 									<a href="/login/logout">Logout</a>
 									<?php
 								} else {
 									?>
+									<span class="purple"><?=$this->username; ?></span> |
 									<a href="/login">Login/Register</a>
 									<?php
 								}

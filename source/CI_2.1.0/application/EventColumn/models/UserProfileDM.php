@@ -92,7 +92,11 @@
 			$sets['email']				 = $this->email;
 			$sets['username']			 = $this->username;
 			$sets['password']			 = $this->password;
-			$sets['temporary_password']  = $this->temporary_password;
+
+			if($this->temporary_password === true) {
+				$sets['temporary_password'] = $this->temporary_password;
+			}
+
 			$sets['account_active']		 = $this->account_active;
 			$sets['access_level']	     = $this->access_level;
 			$sets['zip']				 = $this->zip;
@@ -117,7 +121,11 @@
 			$values['username']			 = $this->username;
 			$values['email']			 = $this->email;
 			$values['password']			 = $this->password;
-			$values['temporary_password'] = $this->temporary_password;
+
+			if($this->temporary_password === true) {
+				$values['temporary_password'] = $this->temporary_password;
+			}
+
 			$values['zip']				 = $this->zip;
 			$values['agree_to_terms']	 = $this->agree_to_terms;
 

@@ -8,7 +8,7 @@
 		function __construct() {
 			parent::__construct();
 
-			if( ! $this->session->userdata( 'location' ) ) {
+			if( ! $this->session->userdata( 'location' ) && Utilities::isCLI() !== true) {
 				$this->getLocation();
 			}
 		}
@@ -56,10 +56,15 @@
 		 * @return boolean
 		 */
 		public function validate_password( $str ) {
-			$result = alpha_special( $str );
+			$result = true;
 
-			if( $result === 0 ) {
-				$this->form_validation->set_message( 'validate_password', 'Invalid characters found in the %s field. Allowed characters are a-zA-Z0-9_-!$@%*&^?|' );
+			if(!is_null($str) && $str != '') {
+				$this->load->helper('form_validation');
+				$result = alpha_special( $str );
+
+				if( $result === 0 ) {
+					$this->form_validation->set_message( 'validate_password', 'Invalid characters found in the %s field. Allowed characters are a-zA-Z0-9_-!$@%*&^?|' );
+				}
 			}
 
 			return Utilities::getBoolean( $result );
