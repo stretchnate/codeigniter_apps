@@ -16,7 +16,7 @@
 
 		public function generateView() {
 			?>
-			
+
 			<div id="event-map">
 				<div id='event-form'>
 					<?php
@@ -26,7 +26,10 @@
 							echo "<p>";
 							echo $this->event_iterator->getEventName() . "<br />";
 							echo $this->event_iterator->getEventCategory() . "<br />";
-							echo $this->event_iterator->getEventStart() . "<br />";
+
+							$start_date = new DateTime($this->event_iterator->getEventStart());
+							echo $start_date->format("m/d/Y g:i a") . "<br />";
+
 							echo $this->event_iterator->getEventDescription() . "<br />";
 							foreach($this->event_iterator->getEventLocations() as $location) {
 								$address = $location->getEventLocation() . "<br />";
