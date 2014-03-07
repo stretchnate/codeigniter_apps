@@ -97,7 +97,7 @@ class Event extends N8_Controller {
 			$field->setLabel("Zip*");
 			$field->setName("event_details_locations[0][event_zip]");
 			$field->setMaxLength("5");
-			$field->setValue($this->input->post($field->getName()));
+			$field->setValue($this->input->post('event_details_locations[0]["event_zip"]'));
 			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
 
 			$event_form->addField($field);
@@ -163,9 +163,10 @@ class Event extends N8_Controller {
 			$error_array = array('class' => 'error', 'id' => null, 'content' => form_error('category'));
 			$categories_list = new CategoriesList();
 			$categories_list->fetchCategories();
-			$categories_list->buildSelectObject("Category*", null, $this->input->post('category'), $error_array);
+			$categories_list->buildSelectObject("Category*", 'category', $this->input->post('category'), $error_array);
+			$categories_obj = $categories_list->getSelectObject();
 
-			$event_form->addField($categories_list->getSelectObject());
+			$event_form->addField($categories_obj);
 
 			$field = Form::getNewField(Form_Field::FIELD_TYPE_FILE);
 			$field->setLabel("Event Image");
@@ -216,7 +217,7 @@ class Event extends N8_Controller {
 					$this->setErrors($event_model->getErrors());
 					$this->index();
 				} else {
-					redirect('/map/preview/'.$event_model->getEventDM()->getEventId());
+					redirect('/map/event_details/'.$event_model->getEventDM()->getEventId());
 				}
 			} catch(Exception $e) {
 				$this->setMessage($e->getMessage());

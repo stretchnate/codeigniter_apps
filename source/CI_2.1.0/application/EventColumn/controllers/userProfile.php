@@ -30,12 +30,6 @@
 				$form->setAction( "userProfile/update" );
 				$form->setId('user_profile_form');
 
-//				$field = Form::getNewField(Form_Field::FIELD_TYPE_HIDDEN);
-//				$field->setName('user_id');
-//				$field->setValue($this->session->userdata('user_id'));
-//
-//				$form->addField($field);
-
 				$field = Form::getNewField(Form_Field::FIELD_TYPE_HIDDEN);
 				$field->setName('user_profile');
 				$field->setValue($cache_key);

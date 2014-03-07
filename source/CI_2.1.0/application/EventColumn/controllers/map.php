@@ -119,7 +119,9 @@
 				$state = $data['state'];
 			}
 
-			if(!empty($data['zip'])) {
+			if(!empty($data['mini_search_zip'])) {
+				$zip = $data['mini_search_zip'];
+			} else if(!empty($data['zip'])) {
 				$zip = $data['zip'];
 			}
 
@@ -151,7 +153,7 @@
 		 *
 		 * @param int $event_id
 		 */
-		public function preview($event_id) {
+		public function event_details($event_id) {
 			$data = array('event_id' => $event_id);
 			$this->renderView($data);
 		}

@@ -49,10 +49,10 @@ class EventModel extends N8_Model {
 		$this->event_dm = new EventModel_EventDM();
 		$this->event_dm->setEventOwner($event['event_owner']);
 		$this->event_dm->setEventName($event['event_name']);
-		$this->event_dm->setEventStartDatetime($event['event_start_datetime']);
-		$this->event_dm->setEventEndDatetime($event['event_end_datetime']);
-		$this->event_dm->setEventDescription($event['event_description']);
-		$this->event_dm->setEventCategory($event['event_category']);
+		$this->event_dm->setEventStartDatetime($event['start_date']);
+		$this->event_dm->setEventEndDatetime($event['end_date']);
+		$this->event_dm->setEventDescription($event['description']);
+		$this->event_dm->setEventCategory($event['category']);
 
 		if(isset($event['event_image'])) {
 			$this->event_dm->setEventImage($event['event_image']);
