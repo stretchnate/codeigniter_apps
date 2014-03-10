@@ -39,6 +39,9 @@
 								$address .= $location->getLocationZip();
 								echo $address;
 							}
+							echo "<br />";
+							echo "<a href='/map/event_details/".  EventMask::maskEventId($this->event_iterator->getEventId())."'>" .
+									"event page</a>";
 							echo "</p>";
 
 							$this->event_iterator->next();

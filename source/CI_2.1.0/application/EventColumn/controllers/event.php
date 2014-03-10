@@ -217,7 +217,7 @@ class Event extends N8_Controller {
 					$this->setErrors($event_model->getErrors());
 					$this->index();
 				} else {
-					redirect('/map/event_details/'.$event_model->getEventDM()->getEventId());
+					redirect('/map/event_details/'.  EventMask::maskEventId($event_model->getEventDM()->getEventId()));
 				}
 			} catch(Exception $e) {
 				$this->setMessage($e->getMessage());

@@ -1,12 +1,7 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- * Description of Utilities
+ * a collection of utility functions that can be called statically
  *
  * @author stretch
  */
