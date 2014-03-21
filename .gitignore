@@ -15,5 +15,5 @@ source/CI_2.1.0/application/EventColumn/models/testDM.php
 robots.txt
 
 #need to find a better way to do this
-source/CI_2.1.0/application/config/config.php
-source/CI_2.1.0/application/EventColumn/config/config.php
+#source/CI_2.1.0/application/config/config.php
+#source/CI_2.1.0/application/EventColumn/config/config.php
