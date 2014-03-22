@@ -1,12 +1,12 @@
 <?php
-	require_once ('baseVW.php');
+	require_once ('topViews/searchHeaderVW.php');
 
 	/**
 	 * Description of Map
 	 *
 	 * @author stretch
 	 */
-	class MapVW extends BaseVW {
+	class MapVW extends searchHeaderVW {
 
 		protected $event_iterator;
 

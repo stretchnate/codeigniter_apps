@@ -11,17 +11,19 @@
 		private $meta_array	 = array( );
 		private $title;
 		private $title_arg;
-		private $mini_search;
 
 		protected $errors;
 		protected $messages;
-		protected $show_main_nav	 = true;
 		protected $username		 = 'Guest';
 		protected $page_id		 = 'default';
 		protected $categories_nav;
 
 		abstract protected function generateView();
+		abstract protected function generateHeader();
 
+		/**
+		 * baseVW construct method.
+		 */
 		public function __construct() {
 			$ci =& get_instance();
 			if( isset( $ci->session ) ) {
@@ -39,7 +41,7 @@
 		 * @access protected
 		 * @since 1.0
 		 */
-		protected function generateHeader() {
+		protected final function startBody() {
 			$this->buildHead();
 			//Set no caching
 			header( "Expires: Mon, 26 Jul 1997 05:00:00 GMT" );
@@ -73,43 +75,38 @@
 				</head>
 				<body>
 					<div id="wrapper">
-						<div id="header">
-							<h1><a href="/"><img src="/images/header_tx.png" alt="Event Column, create and find events" /></a></h1>
-							<span class="welcome">
-								Welcome
-								<?php
-								if( $this->username !== 'Guest' ) {
-									?>
-									<span class="purple"><a href="/userProfile"><?=$this->username; ?></a></span> |
-									<a href="/login/logout">Logout</a>
-									<?php
-								} else {
-									?>
-									<span class="purple"><?=$this->username; ?></span> |
-									<a href="/login">Login/Register</a>
-									<?php
-								}
-								?>
-							</span>
+			<?php
+		}
+
+		/**
+		 * generates the main nav
+		 *
+		 * @return void
+		 * @access protected
+		 * @since  1.1
+		 */
+		protected final function generateMainNav() {
+			?>
+						<div id="main-nav">
+							<ul>
+								<li><a href="/map">Map</a></li>
+								<li class="selected"><a href="/event">Create</a></li>
+								<li style="margin-right:0px;">Calendar</li>
+							</ul>
+							<div class="clear">&nbsp;</div>
 						</div>
-						<?php
-						if( $this->show_main_nav !== false ) {
-							?>
+			<?php
+		}
 
-							<div id="main-nav">
-								<ul>
-									<li><a href="/map">Map</a></li>
-									<li class="selected"><a href="/event">Create</a></li>
-									<li style="margin-right:0px;">Calendar</li>
-									<li class="last">&nbsp;</li>
-								</ul>
-								<?= isset($this->mini_search) ? $this->mini_search->renderForm() : ''; ?>
-								<div class="clear">&nbsp;</div>
-							</div>
-
-							<?php
-						}
-						?>
+		/**
+		 * begines the content <div>
+		 *
+		 * @return void
+		 * @access protected
+		 * @since 1.1
+		 */
+		protected function beginContent() {
+			?>
 						<div id="content">
 							<div id="error_messages" class="error">
 								<?php
@@ -122,7 +119,7 @@
 								}
 								?>
 							</div>
-							<?php
+			<?php
 		}
 
 		/**
@@ -142,41 +139,68 @@
 								<li><a href="/content/policies">Policies</a></li>
 							</ul>
 						</div>
+			<?php
+		}
+
+		/**
+		 * ends the html of the page
+		 *
+		 * @return void
+		 * @access private
+		 * @since 1.1
+		 */
+		private function endPage() {
+			?>
 					</div><!-- end div id wrapper -->
 				</body>
 			</html>
 			<?php
 		}
 
+		/**
+		 * builds the <head> elements
+		 *
+		 * @return void
+		 * @access private
+		 * @since 1.0
+		 */
 		private function buildHead() {
 			$config_xml = new SimpleXMLElement( self::VIEW_CONFIG_FILE, null, true );
-
 			if( Utilities::XMLIsValid( $config_xml, self::VIEW_CONFIG_SCHEMA ) ) {
 				$default_config = $config_xml->xpath( 'Page[@id="default"]/Head' );
-				if( ! empty( $default_config ) ) {
-					$default_config = $default_config[0];
-
-					if( $default_config instanceof SimpleXMLElement ) {
-						foreach( $default_config->children() as $head_item ) {
-							$this->addHeadItem( $head_item );
-						}
-					}
+				if( ! empty( $default_config ) && $default_config[0] instanceof SimpleXMLElement) {
+					$this->setHeadItems($default_config[0]);
 				}
 
 				$page_config = $config_xml->xpath( 'Page[@id="' . $this->page_id . '"]/Head' );
-
-				if( ! empty( $page_config ) ) {
-					$page_config = $page_config[0];
-
-					if( $page_config instanceof SimpleXMLElement ) {
-						foreach( $page_config->children() as $head_item ) {
-							$this->addHeadItem( $head_item );
-						}
-					}
+				if( ! empty( $page_config ) && $page_config[0] instanceof SimpleXMLElement) {
+					$this->setHeadItems($page_config[0]);
 				}
 			}
 		}
 
+		/**
+		 * sets head items for the <head> element
+		 *
+		 * @param SimpleXMLElement $config
+		 * @return void
+		 * @access private
+		 * @since 1.1
+		 */
+		private function setHeadItems(SimpleXMLElement $config) {
+			foreach( $config->children() as $head_item ) {
+				$this->addHeadItem( $head_item );
+			}
+		}
+
+		/**
+		 * adds a head item for the <head> element
+		 *
+		 * @param SimpleXMLElement $head_item
+		 * @return void
+		 * @access private
+		 * @since 1.1
+		 */
 		private function addHeadItem( SimpleXMLElement $head_item ) {
 			switch( $head_item->getName() ) {
 				case 'title':
@@ -214,8 +238,11 @@
 		 * @access  public
 		 * @since   1.0
 		 */
-		public function renderView() {
+		public final function renderView() {
+			$this->startBody();
 			$this->generateHeader();
+			$this->generateMainNav();
+			$this->beginContent();
 
 			if($this->categories_nav) {
 				$this->renderCategoriesNav();
@@ -223,9 +250,17 @@
 
 			$this->generateView();
 			$this->generateFooter();
+			$this->endPage();
 		}
 
-		public function renderCategoriesNav() {
+		/**
+		 * builds a categories nav
+		 *
+		 * @return void
+		 * @access protected
+		 * @since 1.0
+		 */
+		protected function renderCategoriesNav() {
 			echo "<div id='side-nav'>".$this->categories_nav->getUL()."</div>";
 		}
 
@@ -251,10 +286,6 @@
 
 		public function setNotificationMessages( $messages ) {
 			$this->messages['notification'] = is_array( $messages ) ? $messages : array( $messages );
-		}
-
-		public function showMainNav( $show_main_nav ) {
-			$this->show_main_nav = Utilities::getBoolean( $show_main_nav );
 		}
 
 		public function setPageId( $page_id ) {

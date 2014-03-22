@@ -44,7 +44,6 @@
 				$this->view->setPageId('login');
 				$this->view->setErrors( $this->getErrors() );
 				$this->view->setLoginForm( $login_form );
-				$this->view->showMainNav(false);
 
 				$this->view->renderView();
 			} catch( Exception $e ) {
@@ -107,7 +106,6 @@
 				$this->view->setPageId('login');
 				$this->view->setErrors( $this->getErrors() );
 				$this->view->setForgotPasswordForm( $form );
-				$this->view->showMainNav(false);
 				$this->view->renderView();
 
 			} catch(Exception $e) {

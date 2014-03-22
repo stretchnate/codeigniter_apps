@@ -1,7 +1,7 @@
 <?php
-require_once('baseVW.php');
+require_once('topViews/searchHeaderVW.php');
 
-class EventVW extends BaseVW {
+class EventVW extends searchHeaderVW {
 
 	protected $map;
 	private $event_form;

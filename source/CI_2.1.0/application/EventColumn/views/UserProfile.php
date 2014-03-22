@@ -1,12 +1,12 @@
 <?php
-	require_once('baseVW.php');
+	require_once('topViews/searchHeaderVW.php');
 
 	/**
 	 * Description of userProfile
 	 *
 	 * @author stretch
 	 */
-	class UserProfileVW extends BaseVW {
+	class UserProfileVW extends searchHeaderVW {
 
 		protected $form;
 
@@ -24,7 +24,7 @@
 				</div>
 
 			</div>
-			<?
+			<?php
 		}
 
 		public function setForm(Form $form) {

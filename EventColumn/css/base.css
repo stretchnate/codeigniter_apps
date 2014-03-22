@@ -9,8 +9,12 @@
 html {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12px;
-	background-color: #000000;
-	color: #ffffff;
+	/*background-color: #FFFFFF;*/
+	color: #000000;
+}
+
+body {
+    margin:0;
 }
 
 h1 {
@@ -54,8 +58,8 @@ li {
     display: inline;
 }
 
-.purple, #header span.welcome span.purple a, #header span.welcome span.purple a:visited {
-    color:#A85FCB;
+.purple {
+    color:#9966FF;
 }
 
 #wrapper {
@@ -63,7 +67,12 @@ li {
 }
 
 #header {
-	background: url('../images/header.png') repeat-x;
+	/*background: url('../images/header.png') repeat-x;*/
+        background-color: #9966ff;
+        float:left;
+        margin:0;
+        width:100%;
+        position:relative;
 }
 
 #header h1 {
@@ -88,35 +97,29 @@ li {
 }
 
 #main-nav ul {
-	float:left;
 	margin:0;
 	padding-left:0;
+        width:100%;
 }
 
 #main-nav li {
-	background: url('/images/tab.png') repeat-x;
+	/*background: url('/images/tab.png') repeat-x;*/
+        background-color: #0099FF;
 	color: #ffffff;
 	display: block;
 	float:left;
 	height: 30px;
-	min-width: 90px;
+	min-width: 33%;
 	text-align: center;
 	padding: 13px 0 0 0;
 	margin: 0 2px 0 0;
 	font-size: 15px;
 }
 
-#main-nav li.selected {
-	background-color: #000000;
-}
-
-#main-nav li.last {
-	background: url('/images/tab_1.png') #ffffff no-repeat;
-}
-
 #mini_search_container {
-    float:left;
-    margin-top:20px;
+    position:absolute;
+    top:44px;
+    right:0;
 }
 
 .mini_search_field_container {
@@ -206,9 +209,14 @@ li {
 }
 
 div.event-form-field {
-	margin:2px 0 2px 0;
+    margin:2px 0 2px 0;
 }
 
 #footer ul {
-	float:right;
+    float:right;
+}
+
+#footer li a, #footer li a:visited {
+    color:#9966FF;
+    text-decoration:none;
 }

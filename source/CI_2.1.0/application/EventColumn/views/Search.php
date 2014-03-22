@@ -1,11 +1,11 @@
 <?php
-	require_once ('baseVW.php');
+	require_once ('topViews/searchHeaderVW.php');
 	/**
 	 * Description of Search
 	 *
 	 * @author stretch
 	 */
-	class SearchVW extends BaseVW {
+	class SearchVW extends searchHeaderVW {
 
 		protected $search_form;
 
@@ -30,5 +30,4 @@
 			$this->search_form = $search_form;
 		}
 	}
-
 ?>

@@ -1,11 +1,11 @@
 <?php
-	require_once('baseVW.php');
+	require_once('topViews/searchHeaderVW.php');
 	/**
 	 * Description of UserLogin
 	 *
 	 * @author stretch
 	 */
-	class UserLoginVW extends BaseVW {
+	class UserLoginVW extends searchHeaderVW {
 
 		protected $login_form;
 

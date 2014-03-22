@@ -1,11 +1,11 @@
 <?php
-	require_once('baseVW.php');
+	require_once('topViews/searchHeaderVW.php');
 	/**
 	 * Description of forgotPassword
 	 *
 	 * @author stretch
 	 */
-	class forgotPasswordVW extends baseVW {
+	class forgotPasswordVW extends searchHeaderVW {
 
 		protected $forgot_password_form;
 
@@ -28,7 +28,7 @@
 				</div>
 				<?=$this->forgot_password_form->renderForm();?>
 			</div>
-			<?
+			<?php
 		}
 
 		/**

@@ -1,12 +1,12 @@
 <?php
-	require_once('baseVW.php');
+	require_once('topViews/searchHeaderVW.php');
 
 	/**
 	 * Description of ContentVW
 	 *
 	 * @author stretch
 	 */
-	class ContentVW extends BaseVW {
+	class ContentVW extends searchHeaderVW {
 
 		protected $content;
 
