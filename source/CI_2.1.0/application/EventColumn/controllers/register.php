@@ -6,6 +6,7 @@
 	/**
 	 * Description of register
 	 *
+	 * @deprecated since version 1.1
 	 * @author stretch
 	 */
 	class register extends N8_Controller {
@@ -95,52 +96,6 @@
 			} catch( Exception $e ) {
 				$this->logMessage( $e->getMessage(), N8_Error::ERROR );
 				show_error( "there was an error loading this page. Please try again <!-- {$e->getMessage()} -->", 500 );
-			}
-		}
-
-		/**
-		 * Validates the user info and adds the user to the database
-		 *
-		 * @return void
-		 * @since 1.0
-		 */
-		public function addUser() {
-			if( $this->validate( 'add_user' ) ) {
-				//add some validation before hashing the password. 32 chars max on pw.
-				$phpass		 = new PasswordHash( Auth::PHPASS_ITERATIONS, Auth::PHPASS_PORTABLE_HASH );
-				$password	 = $phpass->HashPassword( $this->input->post( 'password' ) );
-
-				$user_profile_dm = new UserProfileDM();
-				$user_profile_dm->setUsername( $this->input->post( 'username' ) );
-				$user_profile_dm->setEmail( $this->input->post( 'email' ) );
-				$user_profile_dm->setPassword( $password );
-				$user_profile_dm->setZip( $this->input->post( 'zip' ) );
-				$user_profile_dm->setAgreeToTerms(true);
-
-				if( !$user_profile_dm->save() ) {
-					$message = 'Unable to save user [' . $this->input->post( 'username' ) . ']';
-
-					$this->addError( $message );
-
-					$message .= " with email [" . $this->input->post( 'email' ) . "]";
-					$message .= " and zip [" . $this->input->post( 'zip' ) . "]";
-
-					$this->logMessage( $message, N8_Error::ERROR );
-
-					$this->index();
-				} else {
-					//account created, log user in.
-					$login = $this->auth->process_login($this->input->post('username'), $this->input->post('password'));
-					if($login !== true) {
-						$this->setError($login);
-						$this->index();//@todo do something better than this.
-					} else {
-						// Login successful, let's redirect.
-						$this->auth->redirect();
-					}
-				}
-			} else {
-				$this->index();
 			}
 		}
 	}

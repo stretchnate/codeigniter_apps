@@ -1,6 +1,9 @@
 <?php
 require_once('topViews/searchHeaderVW.php');
 
+/**
+ * @deprecated since version 1.1
+ */
 class RegisterVW extends searchHeaderVW {
 
 	protected $map;
@@ -23,9 +26,7 @@ class RegisterVW extends searchHeaderVW {
 		<?php
 	}
 
-	public function setRegisterForm(Form $register_form) {
-		$this->register_form = $register_form;
-	}
+
 
 }
 ?>

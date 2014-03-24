@@ -162,8 +162,27 @@ li {
     text-decoration: underline;
 }
 
-#login-content {
+#login_register_container {
+    border:2px solid #9966FF;
+    height:470px;
+    width:80%;
+    margin:40px auto 30px auto;
+}
+
+#login_register_container div.login_register {
+    width:48%;
+}
+
+#login_content {
     margin:10px;
+    float:left;
+    border-right:2px solid #9966FF;
+    height:96%;
+}
+
+#register_content {
+    float:left;
+    height:100%;
 }
 
 #page-content {
