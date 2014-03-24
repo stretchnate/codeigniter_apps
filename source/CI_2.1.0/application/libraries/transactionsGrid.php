@@ -7,13 +7,16 @@ class TransactionsGrid extends N8_Error {
 	private $owner_id;
 	private $transactions;
 	private $transactions_grid;
+	private $start_date;
+	private $end_date;
+	private $reporting; //used when running reports.
 	private $theads = array("transaction_id" => "ID",
 							"transaction_date" => "Date",
 							"transaction_amount" => "Amount",
 							"transaction_info" => "Description",
 							"cleared_bank" => "Cleared");
 
-	function __construct($owner = null, $owner_type = null) {
+	function __construct($owner = null, $owner_type = null, $reporting = false) {
 		$this->CI =& get_instance();
 		// Load additional libraries, helpers, etc.
 		$this->CI->load->library('session');
@@ -24,6 +27,8 @@ class TransactionsGrid extends N8_Error {
 		if($owner) {
 			$this->loadOwner($owner);
 		}
+
+		$this->reporting = $reporting;
 	}
 
 	/**
@@ -70,6 +75,29 @@ class TransactionsGrid extends N8_Error {
 	}
 
 	/**
+	 * calculates the balance spent for the report being run
+	 *
+	 * @return type
+	 */
+	private function calculateBalances() {
+		$balances['deposit_total'] = 0;
+		$balances['deduction_total'] = 0;
+		$balances['balance'] = 0;
+		if(isset($this->transactions) && is_array($this->transactions)) {
+			foreach($this->transactions as $transaction) {
+				if($transaction->to_category == $this->owner_id) {
+					$balances['deposit_total'] = $balances['deposit_total'] + $transaction->transaction_amount;
+					$balances['balance'] = $balances['balance'] + $transaction->transaction_amount;
+				} elseif($transaction->from_category == $this->owner_id) {
+					$balances['deduction_total'] = $balances['deduction_total'] + $transaction->transaction_amount;
+					$balances['balance'] = $balances['balance'] - $transaction->transaction_amount;
+				}
+			}
+		}
+
+		return $balances;
+	}
+	/**
 	 * determines what transactions to get and gets them from the db
 	 * to_category can have a from_category or from_account
 	 * from_category can have a to_category only
@@ -83,9 +111,17 @@ class TransactionsGrid extends N8_Error {
 		$where = "transactions.owner_id = ".$this->CI->session->userdata("user_id");
 
 		if($this->owner_type == "account") {
-			$where .= " AND to_account = {$this->owner_id} OR from_account = {$this->owner_id}";
+			$where .= " AND (to_account = {$this->owner_id} OR from_account = {$this->owner_id})";
 		} else if($this->owner_type == "category") {
-			$where .= " AND to_category = {$this->owner_id} OR from_category = {$this->owner_id}";
+			$where .= " AND (to_category = {$this->owner_id} OR from_category = {$this->owner_id})";
+		}
+
+		if(isset($this->start_date)) {
+			if(!isset($this->end_date)) {
+				$this->end_date = new DateTime();
+			}
+
+			$where .= " AND (DATE_FORMAT(`transaction_date`, '%Y-%m-%d') BETWEEN '".$this->start_date->format("Y-m-d")."' AND '".$this->end_date->format("Y-m-d")."')";
 		}
 
 		$this->CI->db->select()
@@ -172,11 +208,40 @@ class TransactionsGrid extends N8_Error {
 					</table>
 				</div>";
 
+		if($this->reporting === true) {
+			$balances = $this->calculateBalances();
+			$error = ($balances['balance'] < 0) ? " class='error'" : '';
+			$html .= "<div class='bold' style='text-align:right'>"
+					. "<div>Total Deposited: ".money_format('%i',$balances['deposit_total'])."</div>"
+					. "<div>Total Spent: ".money_format('%i',$balances['deduction_total'])."</div><hr>"
+					. "<div{$error}>Balance: ".money_format('%i',$balances['balance'])."</div></div>";
+		}
+
 		return $html;
 	}
 
 	public function getTransactionsGrid() {
 		return $this->transactions_grid;
+	}
+
+	/**
+	 * sets the start date object
+	 * @param DateTime $start_date
+	 * @return \TransactionsGrid
+	 */
+	public function setStartDate(DateTime $start_date) {
+		$this->start_date = $start_date;
+		return $this;
+	}
+
+	/**
+	 * sets the end date object
+	 * @param DateTime $end_date
+	 * @return \TransactionsGrid
+	 */
+	public function setEndDate(DateTime $end_date) {
+		$this->end_date = $end_date;
+		return $this;
 	}
 }
 // End of library class

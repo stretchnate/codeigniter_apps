@@ -7,7 +7,7 @@ class Report extends N8_Controller {
 		$this->load->helper('html');
 		$this->load->library('utilities');
 	}
-	
+
 	function index() {
 		$this->auth->restrict();
 
@@ -40,13 +40,15 @@ class Report extends N8_Controller {
 			$this->load->model('transactions', 'TRAN', TRUE);
 			$rowsPerPage = 100;
 			$offset = 0;
-			$dates['start_date'] = $this->input->post('start_date');
-			$dates['end_date'] = $this->input->post('end_date');
+			$start_date = $this->input->post('start_date');
+			$end_date   = $this->input->post('end_date');
 			// $data['transactions'] = $this->TRAN->getTransactionsByDate($this->session->userdata('user_id'), $dates, $offset, $rowsPerPage, $this->input->post('account'));
-			
-			$t_grid = new TransactionsGrid($this->input->post('account'), "category");
+
+			$t_grid = new TransactionsGrid($this->input->post('account'), "category", true);
+			$t_grid->setStartDate(new DateTime($start_date));
+			$t_grid->setEndDate(new DateTime($end_date));
 			$t_grid->run();
-			
+
 			$transactions["transactions"] = $t_grid->getTransactionsGrid();
 		}
 
