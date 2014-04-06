@@ -24,16 +24,16 @@
 			?>
 			<div id="login_register_container">
 				<div id="login_content" class="login_register">
+					<h2>Login</h2>
 				<?php
 					$this->login_form->renderForm();
 				?>
 					<div>
 						<a href="login/forgotPassword">Forgot Password</a>
-						&nbsp;|&nbsp;
-						<a href="/register">Create an Account</a>
 					</div>
 				</div>
 				<div id="register_content" class="login_register">
+					<h2>Sign Up</h2>
 				<?php
 					$this->register_form->renderForm();
 				?>

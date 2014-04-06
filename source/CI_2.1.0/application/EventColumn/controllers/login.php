@@ -19,95 +19,11 @@
 
 		public function index() {
 			try {
-				$login_form = new Form();
-				$login_form->setAction( "login/processLogin" );
-				$login_form->setId("login_form");
+				//build the login form
+				$login_form = $this->buildLoginForm();
 
-				$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
-				$field->setLabel( "Username" );
-				$field->setValue( $this->input->post( $field->getName() ) );
-				$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
-
-				$login_form->addField( $field );
-
-				$field = Form::getNewField( Form_Field::FIELD_TYPE_PASSWORD );
-				$field->setLabel( "Password" );
-				$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
-
-				$login_form->addField( $field );
-
-				$field = Form::getNewField( Form_Field::FIELD_TYPE_BUTTON );
-				$field->setId( "login-submit" );
-				$field->setContent( "Login" );
-
-				$login_form->addField( $field );
-
-				$register_form = new Form();
-				$register_form->setAction( "register/addUser" );
-				$register_form->setId('register_form');
-
-				$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
-				$field->setLabel( "Username*" );
-				$field->setValue( $this->input->post( $field->getName() ) );
-				$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
-
-				$register_form->addField( $field );
-
-				$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
-				$field->setLabel( "Email*" );
-				$field->setValue( $this->input->post( $field->getName() ) );
-				$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
-
-				$register_form->addField( $field );
-
-				$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
-				$field->setLabel( "Confirm Email*" );
-				$field->setValue( $this->input->post( $field->getName() ) );
-				$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
-
-				$register_form->addField( $field );
-
-				$field = Form::getNewField( Form_Field::FIELD_TYPE_PASSWORD );
-				$field->setLabel( "Password*" );
-				$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
-
-				$register_form->addField( $field );
-
-				$field = Form::getNewField( Form_Field::FIELD_TYPE_PASSWORD );
-				$field->setLabel( "Confirm Password*" );
-				$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
-
-				$register_form->addField( $field );
-
-				$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
-				$field->setLabel( "Zip*" );
-				$field->setMaxLength( "5" );
-				$field->setValue( $this->input->post( $field->getName() ) );
-				$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
-
-				$register_form->addField( $field );
-
-				$field = Form::getNewField( Form_Field::FIELD_TYPE_CHECKBOX );
-				$field->setLabel( "Agree to Terms and Policies*" );
-				$field->setValue( "agreed" );
-				if( $this->input->post( $field->getName() ) == 'agreed' ) {
-					$field->setChecked( true );
-				}
-				$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
-
-				$register_form->addField( $field );
-
-				$field = Form::getNewField( Form_Field::FIELD_TYPE_RECAPTCHA );
-				$field->setLabel( "Please proove you're human*" );
-				$field->addErrorLabel('error', 'recaptcha_error', form_error('recaptcha_response_field'));
-
-				$register_form->addField( $field );
-
-				$field = Form::getNewField( Form_Field::FIELD_TYPE_BUTTON );
-				$field->setId( "register_submit" );
-				$field->setContent( "Submit" );
-
-				$register_form->addField( $field );
+				//build the register form
+				$register_form = $this->buildRegisterForm();
 
 				$this->view->setErrors( $this->getErrors() );
 				$this->view->setLoginForm( $login_form );
@@ -118,6 +34,145 @@
 				$this->logMessage( $e->getMessage(), N8_Error::ERROR );
 				show_error( "there was an error loading this page. Please try again <!-- {$e->getMessage()} -->", 500 );
 			}
+		}
+
+		/**
+		 * builds the login form
+		 *
+		 * @return \Form
+		 * @access private
+		 * @since 1.1
+		 */
+		private function buildLoginForm() {
+			$login_form = new Form();
+			$login_form->setAction( "login/processLogin" );
+			$login_form->setId("login_form");
+
+			$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
+			$field->setName("login_username");
+			$field->setId("login_username");
+			$field->setClass("toggle_text");
+			$uname_val = ($this->input->post( $field->getName() ) != '') ? $this->input->post( $field->getName() ) : "Username";
+			$field->setValue( $uname_val );
+			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
+
+			$login_form->addField( $field );
+
+			/*
+			 * We'll start with an input field and have jquery convert it to a password field
+			 * once the user focuses on the field. this allows us to put our label inside the field
+			 */
+			$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
+			$field->setName( "login_password" )->setId("login_password");
+			$field->setClass("replace_type new_type_password toggle_text");
+			$field->setValue("Password");
+			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
+
+			$login_form->addField( $field );
+
+			$field = Form::getNewField( Form_Field::FIELD_TYPE_BUTTON );
+			$field->setId( "login_submit" );
+			$field->setContent( "Login" );
+
+			$login_form->addField( $field );
+
+			return $login_form;
+		}
+
+		/**
+		 * builds the register form
+		 *
+		 * @return \Form
+		 * @access private
+		 * @since 1.1
+		 */
+		private function buildRegisterForm() {
+			$register_form = new Form();
+			$register_form->setAction( "login/addUser" );
+			$register_form->setId('register_form');
+
+			$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
+			$field->setClass("toggle_text");
+			$field->setName( "username" )->setId("username");
+			$uname_val = ($this->input->post( $field->getName() ) != '') ? $this->input->post( $field->getName() ) : "Username";
+			$field->setValue( $uname_val );
+			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
+
+			$register_form->addField( $field );
+
+			$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
+			$field->setClass("toggle_text");
+			$field->setName( "email" )->setId("email");
+			$email_val = ($this->input->post( $field->getName() ) != '') ? $this->input->post( $field->getName() ) : "Email";
+			$field->setValue( $email_val );
+			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
+
+			$register_form->addField( $field );
+
+			$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
+			$field->setClass("toggle_text");
+			$field->setName( "confirm_email" )->setId('confirm_email');
+			$confirm_email_val = ($this->input->post( $field->getName() ) != '') ? $this->input->post( $field->getName() ) : "Confirm Email";
+			$field->setValue( $confirm_email_val );
+			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
+
+			$register_form->addField( $field );
+
+			/*
+			 * We'll start with an input field and have jquery convert it to a password field
+			 * once the user focuses on the field. this allows us to put our label inside the field
+			 */
+			$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
+			$field->setName( "password" )->setId("password");
+			$field->setClass("replace_type new_type_password toggle_text");
+			$field->setValue("Password");
+			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
+
+			$register_form->addField( $field );
+
+			$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
+			$field->setName( "confirm_password" )->setId("confirm_password");
+			$field->setClass("replace_type new_type_password toggle_text");
+			$field->setValue("Confirm Password");
+			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
+
+			$register_form->addField( $field );
+
+			$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
+			$field->setClass("toggle_text");
+			$field->setName( "zip" )->setId('zip');
+			$field->setMaxLength( "5" );
+			$zip_val = ( $this->input->post( $field->getName() ) != '') ? $this->input->post( $field->getName() ) : "Zip";
+			$field->setValue( $zip_val );
+			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
+
+			$register_form->addField( $field );
+
+			$field = Form::getNewField( Form_Field::FIELD_TYPE_CHECKBOX );
+			$field->setLabelContainerClass("float_right checkbox_label");
+			$field->setLabel( "Agree to Terms and Policies" );
+			$field->setValue( "agreed" );
+			if( $this->input->post( $field->getName() ) == 'agreed' ) {
+				$field->setChecked( true );
+			}
+			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
+
+			$register_form->addField( $field );
+
+			$field = Form::getNewField( Form_Field::FIELD_TYPE_RECAPTCHA );
+			$field->setContainerClass("recaptcha_container");
+			$field->setLabel( "Please proove you're human" );
+			$field->addErrorLabel('error', 'recaptcha_error', form_error('recaptcha_response_field'));
+
+			$register_form->addField( $field );
+
+			$field = Form::getNewField( Form_Field::FIELD_TYPE_BUTTON );
+			$field->setId( "register_submit" );
+			$field->setContent( "Sign Up" );
+
+			$register_form->addField( $field );
+
+			return $register_form;
 		}
 
 		/**
@@ -146,7 +201,9 @@
 		/**
 		 * main controller method for forgot password.
 		 *
-		 *
+		 * @access public
+		 * @since 1.0
+		 * @return void
 		 */
 		public function forgotPassword() {
 			$this->load->view('forgotPassword');

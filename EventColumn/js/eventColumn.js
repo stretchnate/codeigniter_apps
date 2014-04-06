@@ -4,6 +4,9 @@
      */
 
      $(document).ready(function() {
+        var default_vals = new Array();
+        var default_types = new Array();
+
         $("#mini_search_zip").focus(function() {
            var default_message = 'search events by zip code';
            if($(this).val() == default_message) {
@@ -45,6 +48,45 @@
         $("#mini_search_zip").keyup(function() {
            var pattern = /[^\d]/g;
            $("#mini_search_zip").val($("#mini_search_zip").val().replace(pattern, ''));
+        });
+
+        $(".replace_type").focus(function() {
+            var types = $(this).attr("class").split(" ");
+            var new_type = $(this).attr("type");
+            var regex = /^new_type_/;
+
+            if(default_types[$(this).attr("id")] === undefined) {
+                default_types[$(this).attr("id")] = $(this).attr("type");
+            }
+
+            for(var i in types) {
+                if(regex.test(types[i]) === true) {
+                    new_type = types[i].substring(9);
+                    break;
+                }
+            }
+
+            $(this).attr("type", new_type);
+        });
+
+        $(".toggle_text").focus(function() {
+            if(default_vals[$(this).attr("id")] === undefined) {
+                default_vals[$(this).attr("id")] = $(this).val();
+            }
+
+            if($(this).val() === default_vals[$(this).attr("id")]) {
+                $(this).val("");
+            }
+        });
+
+        $(".toggle_text").blur(function() {
+            if($(this).val() == '') {
+                $(this).val(default_vals[$(this).attr("id")]);
+
+                if(default_types[$(this).attr("id")] !== undefined) {
+                    $(this).attr("type", default_types[$(this).attr("id")]);
+                }
+            }
         });
      });
 

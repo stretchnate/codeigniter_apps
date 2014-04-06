@@ -7,10 +7,10 @@
 */
 
 html {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	/*background-color: #FFFFFF;*/
-	color: #000000;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    /*background-color: #FFFFFF;*/
+    color: #000000;
 }
 
 body {
@@ -18,24 +18,28 @@ body {
 }
 
 h1 {
-	font-size:200%;
+    font-size:200%;
+}
+
+h2 {
+    font-size: 253%;
 }
 
 ul {
-	list-style-type: none;
+    list-style-type: none;
 }
 
 li {
-	display: inline;
+    display: inline;
 }
 
 .clear {
-	clear:both;
-	line-height: 0px;
-	height:0px;
-	font-size:0px;
-	margin:0px;
-	padding: 0px;
+    clear:both;
+    line-height: 0px;
+    height:0px;
+    font-size:0px;
+    margin:0px;
+    padding: 0px;
 }
 
 .error, .notification, .successs {
@@ -62,27 +66,31 @@ li {
     color:#9966FF;
 }
 
+.float_right {
+    float:right;
+}
+
 #wrapper {
 
 }
 
 #header {
-	/*background: url('../images/header.png') repeat-x;*/
-        background-color: #9966ff;
-        float:left;
-        margin:0;
-        width:100%;
-        position:relative;
+    /*background: url('../images/header.png') repeat-x;*/
+    background-color: #9966ff;
+    float:left;
+    margin:0;
+    width:100%;
+    position:relative;
 }
 
 #header h1 {
-	margin-bottom:0px;
-        float:left;
+    margin-bottom:0px;
+    float:left;
 }
 
 #header span.welcome {
-	float:right;
-        margin:15px 0 0 0;
+    float:right;
+    margin:15px 0 0 0;
 }
 
 #header span.welcome a, #header span.welcome a:visited, #footer li a, #footer li a:visited {
@@ -91,29 +99,29 @@ li {
 }
 
 #main-nav {
-	background-color: #ffffff;
-	color: #000000;
-        clear:both;
+    background-color: #ffffff;
+    color: #000000;
+    clear:both;
 }
 
 #main-nav ul {
-	margin:0;
-	padding-left:0;
-        width:100%;
+    margin:0;
+    padding-left:0;
+    width:100%;
 }
 
 #main-nav li {
-	/*background: url('/images/tab.png') repeat-x;*/
-        background-color: #0099FF;
-	color: #ffffff;
-	display: block;
-	float:left;
-	height: 30px;
-	min-width: 33%;
-	text-align: center;
-	padding: 13px 0 0 0;
-	margin: 0 2px 0 0;
-	font-size: 15px;
+    /*background: url('/images/tab.png') repeat-x;*/
+    background-color: #0099FF;
+    color: #ffffff;
+    display: block;
+    float:left;
+    height: 30px;
+    min-width: 33%;
+    text-align: center;
+    padding: 13px 0 0 0;
+    margin: 0 2px 0 0;
+    font-size: 15px;
 }
 
 #mini_search_container {
@@ -127,30 +135,29 @@ li {
 }
 
 #content {
-	background-color:#ffffff;
-	color:#000000;
-	float:left;
-	width:100%;
+    background-color:#ffffff;
+    color:#000000;
+    float:left;
+    width:100%;
 }
 
 #side-nav {
-	background: url('/images/tab.png') repeat;
-	margin-top: 60px;
-	width: 170px;
-	color: #ffffff;
-	float: left;
+    background: url('/images/tab.png') repeat;
+    margin-top: 60px;
+    width: 170px;
+    color: #ffffff;
+    float: left;
 }
 
 #side-nav ul {
-	padding-top: 10px;
-	padding-bottom: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 
 }
 
 #side-nav li {
-	display:block;
-	font-size: 120%;
-
+    display:block;
+    font-size: 120%;
 }
 
 #main-nav li a, #main-nav li a:visited, #side-nav li a, #side-nav li a:visited {
@@ -164,13 +171,17 @@ li {
 
 #login_register_container {
     border:2px solid #9966FF;
-    height:470px;
+    height:540px;
     width:80%;
     margin:40px auto 30px auto;
 }
 
 #login_register_container div.login_register {
     width:48%;
+}
+
+#login_register_container h2 {
+    color: #32CCFE;
 }
 
 #login_content {
@@ -183,6 +194,25 @@ li {
 #register_content {
     float:left;
     height:100%;
+    margin:10px 0 0 0;
+}
+
+.checkbox_label {
+    margin:4px 280px 0 0;
+}
+
+.recaptcha_container {
+    padding:10px;
+}
+
+.field_label, .checkbox_label {
+    font-weight: bold;
+}
+
+input.toggle_text {
+    color:#32CCFE;
+    border: 1px solid #32CCFE;
+    margin: 6px 0 6px 0;
 }
 
 #page-content {
@@ -207,13 +237,13 @@ li {
 }
 
 #event-map {
-	background-color: #c9c9c9;
-	width: 950px;
-	min-height: 560px;
-	float: left;
-	margin: 40px 0 40px 30px;
-	position: relative;
-        padding: 10px;
+    background-color: #c9c9c9;
+    width: 950px;
+    min-height: 560px;
+    float: left;
+    margin: 40px 0 40px 30px;
+    position: relative;
+    padding: 10px;
 }
 
 #event-list {

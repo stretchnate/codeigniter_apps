@@ -165,12 +165,12 @@
 		),
 		'login'	 => array(
 			array(
-				'field'	 => 'username',
+				'field'	 => 'login_username',
 				'label'	 => 'Username',
 				'rules'	 => 'required'
 			),
 			array(
-				'field'	 => 'password',
+				'field'	 => 'login_password',
 				'label'	 => 'Password',
 				'rules'	 => 'required'
 			)

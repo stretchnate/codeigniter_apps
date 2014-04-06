@@ -95,15 +95,15 @@
 			ob_start();
 ?>
 			<ol>
-<?
+<?php
 				foreach($this->category_dm_array as $category_dm) {
 ?>
 				<li>
-<?
+<?php
 				if($include_links !== false) {
 ?>
 					<a href="<?=$this->href_base . $category_dm->getCategoryId(); ?>">
-<?
+<?php
 				}
 
 					echo $category_dm->getCategoryName();
@@ -111,15 +111,15 @@
 				if($include_links !== false) {
 ?>
 					</a>
-<?
+<?php
 				}
 ?>
 				</li>
-<?
+<?php
 				}
 ?>
 			</ol>
-<?
+<?php
 			$this->ol = ob_get_contents();
 			ob_end_clean();
 		}
@@ -135,15 +135,15 @@
 			ob_start();
 ?>
 			<ul>
-<?
+<?php
 				foreach($this->category_dm_array as $category_dm) {
 ?>
 				<li>
-<?
+<?php
 				if($include_links !== false) {
 ?>
 					<a href="<?=$this->href_base . $category_dm->getCategoryId(); ?>">
-<?
+<?php
 				}
 
 					echo $category_dm->getCategoryName();
@@ -151,15 +151,15 @@
 				if($include_links !== false) {
 ?>
 					</a>
-<?
+<?php
 				}
 ?>
 				</li>
-<?
+<?php
 				}
 ?>
 			</ul>
-<?
+<?php
 			$this->ul = ob_get_contents();
 			ob_end_clean();
 		}
