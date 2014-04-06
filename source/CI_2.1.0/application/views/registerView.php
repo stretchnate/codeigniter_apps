@@ -23,14 +23,14 @@ header("Pragma: no-cache");
 		<!-- <h1><a href=""><img src="/images/logo.png" alt="The Header" /></a></h1> -->
 		<div id="date"><?php echo date('l, F j'); ?></div>
 	</div>
-	
+
 	<div id="container">
 		<?php $date = date('l, F jS H:ia'); ?>
 		<h1>Register</h1>
 		<?php
 			//echo validation_errors();
 			if(isset($error))
-				echo "<p>{$error}</p>";
+				echo "<div class='error'>".$error."</div>";
 		?>
 		<div>
 			<form name="registerForm" id="registerForm" action="/admin/registerUser/" method="post">
@@ -74,10 +74,26 @@ header("Pragma: no-cache");
 <!--						&nbsp;-->
 <!--						Yes-->
 <!--					</p>-->
+					<div>
+						<label for="terms">Terms and Conditions:</label><br/>
+						<textarea id="terms" cols="80" rows="20" readonly="readonly"><?php
+							?>This is a budget management website, it will not make you rich, good looking or popular. It simply allows you to track your spending, much like a checkbook register (if you are old enough to know what that is). We will not share your information, we simply ask for an email so we can contact you if there is a problem. as of 4/6/2014 we haven't had to use anyone's email for any reason, granted there have only been two people using this site in that time frame so things could change.
+
+<?php						?>You may use this site at your own risk. Just so you are aware what the risks are, the data for this site is backed up twice a week, in the event of a failure the data will be restored to the last good backup, which means you could lose some of your information, it will be up to you to re-insert said information. Also if the site gets a lot of traffic we could experience some heavy bandwidth usage which may result in slowness, if that happens we'll look into hosting the site on a better server/location. You may stop using the site at any time, we don't really care.
+
+<?php						?>We do not collect bank account information for any reason, in fact the only information we collect that could identify you is your email address, of which could be fake as far as we know, it makes no difference to us. The reason for this is so we don't have to concern ourselves with protecting your data, if someone hacks our system all they will get is a bunch of hypothetical account/category names and some numbers. They might get an idea of how much money you make but they won't know where you keep it unless your account/category names identify the bank/account which you keep it in. So we advise you to be smart about naming accounts/categories once your registration is complete.
+
+<?php						?>Now for the CYA stuff. money.stretchnate.co and it's affiliates will not be held responsible for any loss or damage to you, your financial future or your current financial situation that results in using money.stretchnate.co. As was previously stated, you may use this site at your own risk, we are not responsible for anything that happens as a result of you using money.stretchnate.co
+
+<?php						?>By clicking "I agree" you are agreeing to these terms.
+						</textarea>
+						<span class="error">*</span>I agree:&nbsp;
+						<input type="checkbox" id="agree_to_terms" class="required" name="agree_to_terms" />
+					</div>
 				</div>
 				<!--<div id="charitableAcct">
 					<p class="fat">
-						Charitable Account Name: 
+						Charitable Account Name:
 						<input type="text" name="caName" value="<?php //if(isset($_POST['caName'])) echo $_POST['caName']; ?>" />
 					</p>
 					<p class="fat">
@@ -96,7 +112,7 @@ header("Pragma: no-cache");
 						What is the <a href="javascript:void(null)" class="tool-tip" title="i.e. in what order do you want your check deducted for this account?">Priority</a> of this account?
 						<select name="priority" id="priority">
 							<option value="1">1 (first)</option>
-							<?php 
+							<?php
 //							for($i = 2;$i < 10;$i++) {
 //								echo "<option value='{$i}'>{$i}</option>\n";
 //							}
