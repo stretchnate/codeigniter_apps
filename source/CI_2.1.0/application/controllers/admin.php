@@ -53,20 +53,45 @@ class Admin extends N8_Controller {
 	 */
 	function registerUser() {
 		$data['error'] = "Unable to add user, please try again.";
-		$rules = array('username' => 'trim|required|min_length[4]',
-		    'password' => 'trim|required|alpha_numeric|min_length[6]',
-		    'confirmPassword' => 'trim|required|matches[password]',
-		    'email' => 'trim|required|valid_email|');
-		if ($_POST['charitable'] == 1) {
+		$rules = array(
+					array(
+						'field' => 'username',
+						'label' => 'Username',
+						'rules' => 'trim|required|min_length[4]'
+					),
+					array(
+						'field' => 'password',
+						'label' => 'Password',
+						'rules' => 'trim|required|alpha_numeric|min_length[6]'
+					),
+					array(
+						'field' => 'confirmPassword',
+						'label' => 'Confirm Password',
+						'rules' => 'trim|required|matches[password]'
+					),
+					array(
+						'field' => 'email',
+						'label' => 'Email',
+						'rules' => 'trim|required|valid_email'
+					),
+					array(
+						'field' => 'agree_to_terms',
+						'label' => 'Terms and Conditions',
+						'rules' => 'callback_agreeToTerms'
+					)
+				);
+
+		if($_POST['charitable'] == 1) {
 			$rules['caName'] = 'trim';
 			if ($_POST['calc'] < 3) {//3 = manually
 				$rules['multiplier'] = 'trim|required|numeric';
 			}
 		}
-		if ($this->validate($rules)) {
-			$this->load->model('admin_model', 'Admin', TRUE);
-			$create_user = $this->Admin->createUser(); //create our user login in the db
-			if ($create_user > 0) {
+
+		if($this->validate($rules)) {
+			$this->load->model('admin_model','Admin',TRUE);
+			$create_user = $this->Admin->createUser();//create our user login in the db
+			if($create_user > 0) {
 				$data['error'] = "Account Successfully Created.";
 				//account created, log user in.
 				$login = array($this->input->post('username'), $this->input->post('password'));
@@ -76,8 +101,8 @@ class Admin extends N8_Controller {
 				}
 			}
 		} else {
-			$data['error'] = $this->validation->error_string;
-			$this->load->view('registerView', $data);
+			$data['error'] = $this->form_validation->error_string();
+			$this->load->view('registerView',$data);
 		}
 	}
 
@@ -97,6 +122,32 @@ class Admin extends N8_Controller {
 		echo json_encode($response);
 	}
 
+	function validate($rules) {
+		$this->load->helper(array('form', 'url'));
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules($rules);
+		if($this->form_validation->run() === FALSE) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	/**
+	 * callback function for validating agree to terms checkbox
+	 * @return boolean
+	 */
+	public function agreeToTerms() {
+		$response = ($this->input->post('agree_to_terms') == 'on'
+					|| $this->input->post('agree_to_terms') == 'checked'
+					|| $this->input->post('agree_to_terms') === true);
+
+		if(!$response) {
+			$this->form_validation->set_message( 'agreeToTerms', 'You must agree to the Terms and Conditions (click "I agree")' );
+		}
+
+		return $response;
+	}
 }
 
 ?>
