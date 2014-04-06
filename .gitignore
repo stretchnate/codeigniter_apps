@@ -17,3 +17,6 @@ robots.txt
 #the config.php files are ignored by the local .git/info/exclude file
 #source/CI_2.1.0/application/config/config.php
 #source/CI_2.1.0/application/EventColumn/config/config.php
+
+#wordpress ignore
+wordpress/*
