@@ -209,7 +209,7 @@ li {
     font-weight: bold;
 }
 
-input.toggle_text {
+.toggle_text {
     color:#32CCFE;
     border: 1px solid #32CCFE;
     margin: 6px 0 6px 0;
@@ -237,7 +237,7 @@ input.toggle_text {
 }
 
 #event-map {
-    background-color: #c9c9c9;
+    border:2px solid #9966FF;
     width: 950px;
     min-height: 560px;
     float: left;

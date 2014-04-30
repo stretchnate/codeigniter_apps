@@ -17,17 +17,18 @@
 
     <Page id="login">
         <Head>
-            <title>EventColumn.com - login to add new Events</title>
+            <title>EventColumn.com - login to add new Events or create an account</title>
             <js>/js/login.js</js>
+            <js>/js/register.js</js>
         </Head>
     </Page>
 
-    <Page id="register">
+    <!--Page id="register">
         <Head>
             <title>EventColumn.com - Create an account</title>
             <js>/js/register.js</js>
         </Head>
-    </Page>
+    </Page-->
 
     <Page id="user_profile">
         <Head>

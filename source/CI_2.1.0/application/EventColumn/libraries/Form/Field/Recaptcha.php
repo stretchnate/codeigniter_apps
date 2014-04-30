@@ -70,7 +70,7 @@
 					$key = 'production';
 					break;
 
-				case 'http://eventcolumn.stretchnate.co':
+				case 'http://eventcolumn.stretchnate.com':
 				default:
 					$key = 'test';
 					break;
@@ -98,7 +98,7 @@
 					$key = 'production';
 					break;
 
-				case 'http://eventcolumn.stretchnate.co':
+				case 'http://eventcolumn.stretchnate.com':
 				default:
 					$key = 'test';
 					break;
