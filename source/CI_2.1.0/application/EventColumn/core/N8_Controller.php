@@ -144,5 +144,30 @@
 			$this->session->set_userdata('location',$location);
 		}
 
+		/**
+		 * builds a very general field and returns it.
+		 *
+		 * @todo  this method needs a lot of work. Needs validation on the arguments
+		 *        it also needs to be able to add more than a name/id and default label.
+		 *
+		 * @param string $type
+		 * @param string $name_id
+		 * @param string $default_label
+		 * @return Form_Field_*
+		 */
+		protected function buildField($type, $name_id, $default_label) {
+			$field = Form::getNewField($type);
+			$field->setClass('toggle_text');
+			$field->setName($name_id)->setId($name_id);
+			$name_value = ($this->input->post($field->getName()) != '') ?
+									$this->input->post($field->getName()) :
+									$default_label;
+
+			$field->setValue($name_value);
+			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
+
+			return $field;
+		}
+
 	}
 

@@ -48,31 +48,17 @@
 			$login_form->setAction( "login/processLogin" );
 			$login_form->setId("login_form");
 
-			$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
-			$field->setName("login_username");
-			$field->setId("login_username");
-			$field->setClass("toggle_text");
-			$uname_val = ($this->input->post( $field->getName() ) != '') ? $this->input->post( $field->getName() ) : "Username";
-			$field->setValue( $uname_val );
-			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
-
-			$login_form->addField( $field );
+			$login_form->addField( $this->buildField(Form_Field::FIELD_TYPE_INPUT, "login_username", "Username"));
 
 			/*
 			 * We'll start with an input field and have jquery convert it to a password field
 			 * once the user focuses on the field. this allows us to put our label inside the field
 			 */
-			$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
-			$field->setName( "login_password" )->setId("login_password");
-			$field->setClass("replace_type new_type_password toggle_text");
-			$field->setValue("Password");
-			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
+			$login_form->addField( $this->buildField(Form_Field::FIELD_TYPE_INPUT, "login_password", "Password"));
 
-			$login_form->addField( $field );
-
-			$field = Form::getNewField( Form_Field::FIELD_TYPE_BUTTON );
+			$field = Form::getNewField( Form_Field::FIELD_TYPE_SUBMIT );
 			$field->setId( "login_submit" );
-			$field->setContent( "Login" );
+			$field->setValue( "Login" );
 
 			$login_form->addField( $field );
 
@@ -91,62 +77,27 @@
 			$register_form->setAction( "login/addUser" );
 			$register_form->setId('register_form');
 
-			$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
-			$field->setClass("toggle_text");
-			$field->setName( "username" )->setId("username");
-			$uname_val = ($this->input->post( $field->getName() ) != '') ? $this->input->post( $field->getName() ) : "Username";
-			$field->setValue( $uname_val );
-			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
-
-			$register_form->addField( $field );
-
-			$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
-			$field->setClass("toggle_text");
-			$field->setName( "email" )->setId("email");
-			$email_val = ($this->input->post( $field->getName() ) != '') ? $this->input->post( $field->getName() ) : "Email";
-			$field->setValue( $email_val );
-			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
-
-			$register_form->addField( $field );
-
-			$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
-			$field->setClass("toggle_text");
-			$field->setName( "confirm_email" )->setId('confirm_email');
-			$confirm_email_val = ($this->input->post( $field->getName() ) != '') ? $this->input->post( $field->getName() ) : "Confirm Email";
-			$field->setValue( $confirm_email_val );
-			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
-
-			$register_form->addField( $field );
-
+			$register_form->addField( $this->buildField(Form_Field::FIELD_TYPE_INPUT, "username", "Username"));
+			$register_form->addField( $this->buildField(Form_Field::FIELD_TYPE_INPUT, "email", "Email"));
+			$register_form->addField( $this->buildField(Form_Field::FIELD_TYPE_INPUT, "confirm_email", "Confirm Email"));
 			/*
 			 * We'll start with an input field and have jquery convert it to a password field
 			 * once the user focuses on the field. this allows us to put our label inside the field
 			 */
-			$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
-			$field->setName( "password" )->setId("password");
-			$field->setClass("replace_type new_type_password toggle_text");
-			$field->setValue("Password");
-			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
+			$password_field = $this->buildField(Form_Field::FIELD_TYPE_INPUT, "password", "Password");
+			$password_field->setClass("replace_type new_type_password toggle_text");
 
-			$register_form->addField( $field );
+			$register_form->addField($password_field);
 
-			$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
-			$field->setName( "confirm_password" )->setId("confirm_password");
-			$field->setClass("replace_type new_type_password toggle_text");
-			$field->setValue("Confirm Password");
-			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
+			$confirm_password_field = $this->buildField(Form_Field::FIELD_TYPE_INPUT, "confirm_password", "Confirm Password");
+			$confirm_password_field->setClass("replace_type new_type_password toggle_text");
 
-			$register_form->addField( $field );
+			$register_form->addField($confirm_password_field);
 
-			$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
-			$field->setClass("toggle_text");
-			$field->setName( "zip" )->setId('zip');
-			$field->setMaxLength( "5" );
-			$zip_val = ( $this->input->post( $field->getName() ) != '') ? $this->input->post( $field->getName() ) : "Zip";
-			$field->setValue( $zip_val );
-			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
+			$zip_field = $this->buildField(Form_Field::FIELD_TYPE_INPUT, "zip", "Zip");
+			$zip_field->setMaxLength("5");
 
-			$register_form->addField( $field );
+			$register_form->addField($zip_field);
 
 			$field = Form::getNewField( Form_Field::FIELD_TYPE_CHECKBOX );
 			$field->setLabelContainerClass("float_right checkbox_label");

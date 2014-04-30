@@ -4,6 +4,7 @@
 
      $(document).ready(function() {
         $("#login_form").submit(function() {
+console.log("submitting");
            $("#login_form").validate({
               rules: {
                   login_username: "required",
@@ -15,7 +16,7 @@
               }
            });
            if( !$("#login_form").valid() ) {
-//               $("#login_form").submit();
+               $("#login_form").submit();
                 return false;
            }
         });

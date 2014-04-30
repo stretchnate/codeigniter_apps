@@ -140,19 +140,6 @@ class Event extends N8_Controller {
 		}
 	}
 
-	private function buildField($type, $name_id, $default_label) {
-		$field = Form::getNewField($type);
-		$field->setClass('toggle_text');
-		$field->setName($name_id)->setId($name_id);
-		$name_value = ($this->input->post($field->getName()) != '') ?
-								$this->input->post($field->getName()) :
-								$default_label;
-
-		$field->setValue($name_value);
-		$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
-
-		return $field;
-	}
 	/**
 	 * add a new event
 	 *
