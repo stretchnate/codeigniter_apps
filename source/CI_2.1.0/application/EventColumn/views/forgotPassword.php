@@ -21,12 +21,15 @@
 		 */
 		public function generateView() {
 			?>
-			<div id="login-content">
-				<h2>Forgot Password</h2>
-				<div>
-					Please provide your email so we can send you a temporary password.
+			<div id="pane_container">
+				<div id="left_pane" class='columns'>
+					<h2>Forgot Password</h2>
+					<div>
+						Please provide your email so we can send you a temporary password.
+					</div>
+					<?=$this->forgot_password_form->renderForm();?>
 				</div>
-				<?=$this->forgot_password_form->renderForm();?>
+				<div id="right_pane" class='columns'>&nbsp;</div>
 			</div>
 			<?php
 		}

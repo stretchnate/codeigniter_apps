@@ -5,7 +5,7 @@
  *
  * @author stretch
  */
-class Form_Field_Input_File extends Form_Field_Input {
+class Form_Field_Input_File extends Form_Field_Input implements Form_Field_Interface {
 
 	const ACCEPT_TYPE_IMAGE = 'image/*';
 	const ACCEPT_TYPE_VIDEO = 'video/*';

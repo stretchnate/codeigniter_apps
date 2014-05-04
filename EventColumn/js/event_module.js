@@ -5,17 +5,12 @@
      * @since 1.0
      */
 
-    function submitEvent() {
-        $("#event_add_form").submit();
-    }
-
     /**
      * converts an address into lattitude logitude coordinates.
      *
-     * @param {form} event_form
      * @returns {string}
      */
-    function geocode(event_form) {
+    function geocode() {
         var geocoder = new google.maps.Geocoder();
         var location = $("input[name='event_details_locations[0][event_address]']").val();
 
@@ -23,14 +18,15 @@
         location += ", " + $("input[name='event_details_locations[0][event_state]']").val();
         location += " " + $("input[name='event_details_locations[0][event_zip]']").val();
 
-        geocoder.geocode({'address': location}, function(results, status) {
+        return geocoder.geocode({'address': location}, function(results, status) {
             if (status === google.maps.GeocoderStatus.OK) {
                 var lat_long = results[0].geometry.location.toString().replace(/(\(|\))/g, '');
                 $("input[name='event_details_locations[0][lat_long]']").val(lat_long);
-                submitEvent();
+                $("#event_add_form").submit();
             } else {
                 $("input[name='event_details_locations[0][lat_long]']").val("unable to get coordinates");
                 alert("unable to convert "+location+" to coordinates");
+                return false;
             }
         });
     }
@@ -48,7 +44,7 @@
          }, jQuery.validator.format("you cannot end before you begin"));
 
        $("#event_submit").click(function() {
-          $("#event_add_form").validate({
+            $(this).validate({
                 rules: {
                     event_name: "required",
                     start_date: {
@@ -84,9 +80,11 @@
                     category: "Category is required"
                 }
             });
-          if($("#event_add_form").valid()) {
-              geocode();
-          }
+            if($("#event_add_form").valid()) {
+                geocode();
+            }
+
+            return false;
        });
 
         $("#start_date").datetimepicker(timepickerSettings(false));

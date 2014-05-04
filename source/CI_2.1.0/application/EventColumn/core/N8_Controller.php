@@ -145,29 +145,41 @@
 		}
 
 		/**
-		 * builds a very general field and returns it.
+		 * returns the post value of an input, or default if no post value exists
 		 *
-		 * @todo  this method needs a lot of work. Needs validation on the arguments
-		 *        it also needs to be able to add more than a name/id and default label.
-		 *
-		 * @param string $type
-		 * @param string $name_id
-		 * @param string $default_label
-		 * @return Form_Field_*
+		 * @param mixed $name
+		 * @param mixed $default_value
+		 * @return mixed
+		 * @since 1.1
+		 * @access protected
 		 */
-		protected function buildField($type, $name_id, $default_label) {
-			$field = Form::getNewField($type);
-			$field->setClass('toggle_text');
-			$field->setName($name_id)->setId($name_id);
-			$name_value = ($this->input->post($field->getName()) != '') ?
-									$this->input->post($field->getName()) :
-									$default_label;
+		protected function getPostValue($name, $default_value = '') {
+			if(strpos($name, '[') !== false) {
+				/*
+				 * 1. replace the [] brackets with a * (except the last ])
+				 * 2. trim the last ]
+				 * 3. explode on the * to get the array parts
+				 */
+				$parts = explode('*', trim(preg_replace('/(\]\[|\[)/', '*', $name), ']'));
 
-			$field->setValue($name_value);
-			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
+				$i = 1;
+				$limit = count($parts);
+				$value = $this->input->post($parts[0]);
 
-			return $field;
+				//drill down to get our value
+				while($i < $limit) {
+					$value = $value[$parts[$i]];
+					$i++;
+				}
+
+				if(is_null($value)) {
+					$value = $default_value;
+				}
+			} else {
+				$value = ($this->input->post($name)) ? $this->input->post($name) : $default_value;
+			}
+
+			return $value;
 		}
-
 	}
 

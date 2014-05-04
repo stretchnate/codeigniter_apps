@@ -1,11 +1,12 @@
 <?php
 
 /**
- * generates a single <button> field for the Form object using the CI form_helper functions
+ * generates a single <fieldset> tag for the Form object using the CI form_helper functions
+ * should be used in conjuction with the Form_Field_FieldsetClose class
  *
  * @author stretch
  */
-class Form_Field_Fieldset extends Form_Field {
+class Form_Field_Fieldset extends Form_Field implements Form_Field_Interface {
 
 	private $legend;
 

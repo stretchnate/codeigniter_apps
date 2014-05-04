@@ -21,116 +21,131 @@ class Event extends N8_Controller {
 	 * @since 1.0
 	 */
 	public function index() {
-		$this->auth->restrict();
 		try {
-			$event_form = new Form();
-			$event_form->setAction("event/addEvent");
-			$event_form->setEnctype(Form::FORM_ENCTYPE_MULTIPART);
-			$event_form->setId("event_add_form");
+			$this->auth->restrict();
 
-			$event_form->addField( $this->buildField(Form_Field::FIELD_TYPE_INPUT, 'event_name', 'Event Name') );
-			$event_form->addField( $this->buildField(Form_Field::FIELD_TYPE_INPUT, 'start_date', 'Start Date') );
-			$event_form->addField( $this->buildField(Form_Field::FIELD_TYPE_INPUT, 'end_date', 'End Date') );
-			$location_field = $this->buildField(Form_Field::FIELD_TYPE_INPUT,
-												'event_details_locations[0][event_location_name]',
-												'Location Name');
+			if($this->input->post('event_submit')) {
+				$this->addEvent();
+			}
+
+			$form_builder = new FormBuilder('', 'post', null, 'event_add_form',
+											null, null, null, Form::FORM_ENCTYPE_MULTIPART);
+
+			$form_builder->addSimpleField(Form_Field::FIELD_TYPE_INPUT, 'event_name', 'event_name', 'toggle_text', $this->getPostValue('event_name', 'title'));
+			$form_builder->addSimpleField(Form_Field::FIELD_TYPE_INPUT, 'start_date', 'start_date', 'toggle_text', $this->getPostValue('start_date', 'start date'));
+			$form_builder->addSimpleField(Form_Field::FIELD_TYPE_INPUT, 'end_date', 'end_date', 'toggle_text', $this->getPostValue('end_date', 'end date'));
+
+			$location_field = $form_builder->buildSimpleField(Form_Field::FIELD_TYPE_INPUT, 'event_details_locations[0][event_location_name]', 'event_details_locations[0][event_location_name]', 'toggle_text', $this->getPostValue('event_details_locations[0][event_location_name]', 'venue'));
 
 			$error = form_error( 'event_details_locations[0][event_location_name]' );
 			if(form_error( 'event_details_locations[0][lat_long]' )) {
 				$error .= "<br />".form_error( 'event_details_locations[0][lat_long]' );
 			}
 
-			$event_form->addField($location_field);
+			$form_builder->addFieldToForm($location_field);
 
-			$event_form->addField( $this->buildField(Form_Field::FIELD_TYPE_HIDDEN,
-													'event_details_locations[0][lat_long]',
-													'') );
+			$form_builder->addSimpleField(Form_Field::FIELD_TYPE_HIDDEN,
+										'event_details_locations[0][lat_long]',
+										'event_details_locations[0][lat_long]',
+										null,
+										$this->getPostValue('event_details_locations[0][lat_long]', ''));
 
-			$event_form->addField( $this->buildField(Form_Field::FIELD_TYPE_INPUT,
-													'event_details_locations[0][event_address]',
-													'Address') );
+			$form_builder->addSimpleField(Form_Field::FIELD_TYPE_INPUT,
+										'event_details_locations[0][event_address]',
+										'event_details_locations[0][event_address]',
+										'toggle_text',
+										$this->getPostValue('event_details_locations[0][event_address]', 'address'));
 
-			$event_form->addField( $this->buildField(Form_Field::FIELD_TYPE_INPUT,
-													'event_details_locations[0][event_city]',
-													'City') );
+			$form_builder->addSimpleField(Form_Field::FIELD_TYPE_INPUT,
+										'event_details_locations[0][event_city]',
+										'event_details_locations[0][event_city]',
+										'toggle_text',
+										$this->getPostValue('event_details_locations[0][event_city]', 'city'));
 
-			$event_form->addField( $this->buildField(Form_Field::FIELD_TYPE_INPUT,
-													'event_details_locations[0][event_state]',
-													'State') );
+			$form_builder->addSimpleField(Form_Field::FIELD_TYPE_INPUT,
+										'event_details_locations[0][event_state]',
+										'event_details_locations[0][event_state]',
+										'toggle_text',
+										$this->getPostValue('event_details_locations[0][event_state]', 'state'));
 
-			$zip_field = $this->buildField(Form_Field::FIELD_TYPE_INPUT,
-													'event_details_locations[0][event_zip]',
-													'Zip');
+			$zip_field = $form_builder->buildSimpleField(Form_Field::FIELD_TYPE_INPUT,
+														'event_details_locations[0][event_zip]',
+														'event_details_locations[0][event_zip]',
+														'toggle_text',
+														$this->getPostValue('event_details_locations[0][event_zip]', 'zip'));
 			$zip_field->setMaxLength("5");
-			$event_form->addField($zip_field);
+			$form_builder->addFieldToForm($zip_field);
 
-			$event_form->addField( $this->buildField(Form_Field::FIELD_TYPE_INPUT,
-													'event_details_locations[0][event_country]',
-													'Country') );
+			$form_builder->addSimpleField(Form_Field::FIELD_TYPE_HIDDEN,
+										'event_details_locations[0][event_country]',
+										'event_details_locations[0][event_country]',
+										null, 'USA');
 
-			$event_form->addField( $this->buildField(Form_Field::FIELD_TYPE_INPUT,
-													'event_details_locations[0][event_cost]',
-													'Price (optional)') );
+			$form_builder->addSimpleField(Form_Field::FIELD_TYPE_INPUT,
+										'event_details_locations[0][event_cost]',
+										'event_details_locations[0][event_cost]',
+										'toggle_text',
+										$this->getPostValue('event_details_locations[0][event_cost]', 'admission'));
 
-			$smoke_field = Form::getNewField(Form_Field::FIELD_TYPE_CHECKBOX);
-            $smoke_field->setLabel("Smoking");
-            $smoke_field->setName("event_details_locations[0][smoking]");
-			$smoke_field->setClass('toggle_text');
-            $smoke_field->setValue($this->input->post($smoke_field->getName()));
-			$smoke_field->addErrorLabel( 'error', null, form_error( $smoke_field->getName() ) );
+			$smoke_field = $form_builder->buildSimpleField(Form_Field::FIELD_TYPE_CHECKBOX,
+															'event_details_locations[0][smoking]',
+															null, 'toggle_text', '');
+            $smoke_field->setLabel("smoking");
 
-			$event_form->addField($smoke_field);
+			$form_builder->addFieldToForm($smoke_field);
 
-			$food_field = Form::getNewField(Form_Field::FIELD_TYPE_CHECKBOX);
-            $food_field->setLabel("Food Available");
-            $food_field->setName("event_details_locations[0][food]");
-			$food_field->setClass('toggle_text');
-            $food_field->setValue($this->input->post($food_field->getName()));
-			$food_field->addErrorLabel( 'error', null, form_error( $food_field->getName() ) );
+			$food_field = $form_builder->buildSimpleField(Form_Field::FIELD_TYPE_SELECT,
+															'event_details_locations[0][food]',
+															'event_details_locations[0][food]',
+															'toggle_text', '');
+            $food_field->addOption("", "Food & drinks");
+			$food_field->addOption("free", "Free");
+			$food_field->addOption("on_sale", "On Sale");
+			$food_field->addOption("no", "No");
 
-			$event_form->addField($food_field);
+			$form_builder->addFieldToForm($food_field);
 
-			$age_field = Form::getNewField(Form_Field::FIELD_TYPE_SELECT);
-			$age_field->setClass('toggle_text');
-			$age_field->setName("event_details_locations[0][age]");
-			$age_field->setId("event_details_locations[0][age]");
+			$age_field = $form_builder->buildSimpleField(Form_Field::FIELD_TYPE_SELECT,
+															'event_details_locations[0][age]',
+															'event_details_locations[0][age]',
+															'toggle_text', '');
 			$age_field->addOption("", "Age Range*");
 			$age_field->addOption("18_35", "18-35");
 			$age_field->addOption("30_50", "30-50");
 			$age_field->setSelectedOption($this->input->post($age_field->getName()));
-			$age_field->addErrorLabel( 'error', null, form_error( $age_field->getName() ) );
 
-			$event_form->addField($age_field);
+			$form_builder->addFieldToForm($age_field);
 
-			$description_field = $this->buildField(Form_Field::FIELD_TYPE_TEXTAREA, 'description', 'Description');
+			$description_field = $form_builder->buildSimpleField(Form_Field::FIELD_TYPE_TEXTAREA,
+															'description', 'description',
+															'toggle_text',
+															$this->getPostValue('description' , 'description'));
+
 			$description_field->setRows("3");
 			$description_field->setCols("31");
 
-			$event_form->addField($description_field);
+			$form_builder->addFieldToForm($description_field);
 
 			$error_array = array('class' => 'error', 'id' => null, 'content' => form_error('category'));
 			$categories_list = new CategoriesList();
 			$categories_list->fetchCategories();
-			$categories_list->buildSelectObject("Category*", 'category', $this->input->post('category'), $error_array);
+			$categories_list->buildSelectObject("category", 'toggle_text', 'Event Type', $this->input->post('category'), $error_array);
 			$categories_obj = $categories_list->getSelectObject();
 
-			$event_form->addField($categories_obj);
+			$form_builder->addFieldToForm($categories_obj);
 
-			$file_field = Form::getNewField(Form_Field::FIELD_TYPE_FILE);
-			$file_field->setLabel("Event Image");
+			$file_field = $form_builder->buildSimpleField(Form_Field::FIELD_TYPE_FILE, 'event_file', 'event_file', null, '');
+
+			$file_field->setLabel("event image");
 			$file_field->setAccept(Form_Field_Input_File::ACCEPT_TYPE_IMAGE);
-			$file_field->setValue($this->input->post($file_field->getName()));
 
-			$event_form->addField($file_field);
+			$form_builder->addFieldToForm($file_field);
 
-			$button = Form::getNewField(Form_Field::FIELD_TYPE_BUTTON);
-			$button->setId("event_submit");
-			$button->setContent("Add Event");
-
-			$event_form->addField($button);
+			$form_builder->addSimpleField(Form_Field::FIELD_TYPE_HIDDEN, 'event_submit', null, null, 'event_submit' );
+			$form_builder->addSimpleField(Form_Field::FIELD_TYPE_BUTTON, null, 'event_submit', 'ec_button', 'add event');
 
 			$this->view->setErrors($this->getErrors());
-			$this->view->setEventForm($event_form);
+			$this->view->setEventForm($form_builder->getForm());
 			$this->view->setPageId("event_add");
 
 			$this->view->renderView();
@@ -148,8 +163,8 @@ class Event extends N8_Controller {
 	 * @since 1.0
 	 */
 	public function addEvent() {
-		if ($this->validate('add_event')) {
-			try {
+		try {
+			if ($this->validate('add_event')) {
 				$post = & $this->input->post();
 				$locations = $post['event_details_locations'];
 				unset($post['event_details_locations']);
@@ -161,18 +176,15 @@ class Event extends N8_Controller {
 				$event_model->saveEvent($post, $locations);
 
 				if ($event_model->getErrors()) {
-					//load form displaying error message
 					$this->setErrors($event_model->getErrors());
-					$this->index();
 				} else {
 					redirect('/map/event_details/'.  EventMask::maskEventId($event_model->getEventDM()->getEventId()));
 				}
-			} catch(Exception $e) {
-				$this->setMessage($e->getMessage());
-				$this->index();
 			}
-		} else {
-			$this->index();
+		} catch(Exception $e) {
+			$this->setError($e->getMessage());
+			$log = 'Exception Caught in '.$e->getFile().' on line '.$e->getLine().': '.$e->getMessage();
+			$this->logMessage($log, N8_ERROR::ERROR);
 		}
 	}
 

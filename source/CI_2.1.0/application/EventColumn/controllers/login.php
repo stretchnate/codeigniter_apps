@@ -31,8 +31,8 @@
 
 				$this->view->renderView();
 			} catch( Exception $e ) {
-				$this->logMessage( $e->getMessage(), N8_Error::ERROR );
-				show_error( "there was an error loading this page. Please try again <!-- {$e->getMessage()} -->", 500 );
+				$message = "there was an error loading this page. Please try again.";
+				Utilities::show500($message, $e);
 			}
 		}
 
@@ -44,25 +44,16 @@
 		 * @since 1.1
 		 */
 		private function buildLoginForm() {
-			$login_form = new Form();
-			$login_form->setAction( "login/processLogin" );
-			$login_form->setId("login_form");
+			if($this->input->post('login_submit')) {
+				$this->processLogin();
+			}
 
-			$login_form->addField( $this->buildField(Form_Field::FIELD_TYPE_INPUT, "login_username", "Username"));
+			$form_builder = new FormBuilder("", 'post', null, 'login_form');
+			$form_builder->addSimpleField(Form_Field::FIELD_TYPE_INPUT, "login_username", "login_username", 'toggle_text', $this->getPostValue('login_username', 'Username'));
+			$form_builder->addSimpleField(Form_Field::FIELD_TYPE_INPUT, "login_password", "login_password", 'replace_type new_type_password toggle_text', 'Password');
+			$form_builder->addSimpleField(Form_Field::FIELD_TYPE_SUBMIT, "login_submit", "login_submit", null, 'Login');
 
-			/*
-			 * We'll start with an input field and have jquery convert it to a password field
-			 * once the user focuses on the field. this allows us to put our label inside the field
-			 */
-			$login_form->addField( $this->buildField(Form_Field::FIELD_TYPE_INPUT, "login_password", "Password"));
-
-			$field = Form::getNewField( Form_Field::FIELD_TYPE_SUBMIT );
-			$field->setId( "login_submit" );
-			$field->setValue( "Login" );
-
-			$login_form->addField( $field );
-
-			return $login_form;
+			return $form_builder->getForm();
 		}
 
 		/**
@@ -73,57 +64,45 @@
 		 * @since 1.1
 		 */
 		private function buildRegisterForm() {
-			$register_form = new Form();
-			$register_form->setAction( "login/addUser" );
-			$register_form->setId('register_form');
-
-			$register_form->addField( $this->buildField(Form_Field::FIELD_TYPE_INPUT, "username", "Username"));
-			$register_form->addField( $this->buildField(Form_Field::FIELD_TYPE_INPUT, "email", "Email"));
-			$register_form->addField( $this->buildField(Form_Field::FIELD_TYPE_INPUT, "confirm_email", "Confirm Email"));
-			/*
-			 * We'll start with an input field and have jquery convert it to a password field
-			 * once the user focuses on the field. this allows us to put our label inside the field
-			 */
-			$password_field = $this->buildField(Form_Field::FIELD_TYPE_INPUT, "password", "Password");
-			$password_field->setClass("replace_type new_type_password toggle_text");
-
-			$register_form->addField($password_field);
-
-			$confirm_password_field = $this->buildField(Form_Field::FIELD_TYPE_INPUT, "confirm_password", "Confirm Password");
-			$confirm_password_field->setClass("replace_type new_type_password toggle_text");
-
-			$register_form->addField($confirm_password_field);
-
-			$zip_field = $this->buildField(Form_Field::FIELD_TYPE_INPUT, "zip", "Zip");
-			$zip_field->setMaxLength("5");
-
-			$register_form->addField($zip_field);
-
-			$field = Form::getNewField( Form_Field::FIELD_TYPE_CHECKBOX );
-			$field->setLabelContainerClass("float_right checkbox_label");
-			$field->setLabel( "Agree to Terms and Policies" );
-			$field->setValue( "agreed" );
-			if( $this->input->post( $field->getName() ) == 'agreed' ) {
-				$field->setChecked( true );
+			if($this->input->post('register_submit')) {
+				$this->addUser();
 			}
-			$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
 
-			$register_form->addField( $field );
+			$form_builder = new FormBuilder('', 'post', null, 'register_form');
+			$form_builder->addSimpleField(Form_Field::FIELD_TYPE_INPUT, 'username', 'username', 'toggle_text', $this->getPostValue('username', 'Username'));
+			$form_builder->addSimpleField(Form_Field::FIELD_TYPE_INPUT, 'email', 'email', 'toggle_text', $this->getPostValue('email', 'Email'));
+			$form_builder->addSimpleField(Form_Field::FIELD_TYPE_INPUT, 'confirm_email', 'confirm_email', 'toggle_text', $this->getPostValue('confirm_email', 'Confirm Email'));
+			$form_builder->addSimpleField(Form_Field::FIELD_TYPE_INPUT, 'password', 'password', 'replace_type new_type_password toggle_text', 'Password');
+			$form_builder->addSimpleField(Form_Field::FIELD_TYPE_INPUT, 'confirm_password', 'confirm_password', 'replace_type new_type_password toggle_text', 'Confirm Password');
 
-			$field = Form::getNewField( Form_Field::FIELD_TYPE_RECAPTCHA );
-			$field->setContainerClass("recaptcha_container");
-			$field->setLabel( "Please proove you're human" );
-			$field->addErrorLabel('error', 'recaptcha_error', form_error('recaptcha_response_field'));
+			$zip_field = $form_builder->buildSimpleField(Form_Field::FIELD_TYPE_INPUT, 'zip', 'zip', 'toggle_text', $this->getPostValue('zip', 'Zip'));
+			$zip_field->setMaxLength('5');
+			$form_builder->addFieldToForm($zip_field);
 
-			$register_form->addField( $field );
+			//build terms field
+			$terms_field = Form::getNewField( Form_Field::FIELD_TYPE_CHECKBOX );
+			$terms_field->setLabelContainerClass("float_right checkbox_label");
+			$terms_field->setLabel( "Agree to Terms and Policies" );
+			$terms_field->setValue( "agreed" );
+			if( $this->input->post( $terms_field->getName() ) == 'agreed' ) {
+				$terms_field->setChecked( true );
+			}
+			$terms_field->addErrorLabel( 'error', null, form_error( $terms_field->getName() ) );
 
-			$field = Form::getNewField( Form_Field::FIELD_TYPE_BUTTON );
-			$field->setId( "register_submit" );
-			$field->setContent( "Sign Up" );
+			$form_builder->addFieldToForm($terms_field);
 
-			$register_form->addField( $field );
+			//build recaptcha field
+			$recaptcha_field = Form::getNewField( Form_Field::FIELD_TYPE_RECAPTCHA );
+			$recaptcha_field->setContainerClass("recaptcha_container");
+			$recaptcha_field->setLabel( "Please proove you're human" );
+			$recaptcha_field->addErrorLabel('error', 'recaptcha_error', form_error('recaptcha_response_field'));
 
-			return $register_form;
+			$form_builder->addFieldToForm( $recaptcha_field );
+
+			//add submit button to form
+			$form_builder->addSimpleField(Form_Field::FIELD_TYPE_BUTTON, null, 'register_submit', null, 'Sign Up');
+
+			return $form_builder->getForm();
 		}
 
 		/**
@@ -132,16 +111,15 @@
 		 * @return void
 		 * @since  1.0
 		 */
-		public function processLogin() {
+		protected function processLogin() {
 			if(!$this->auth->isSiteActive()) {
 				redirect("/inactive/");
 			}
 
 			if($this->validate('login')) {
-				$login = $this->auth->process_login($this->input->post('username'), $this->input->post('password'));
+				$login = $this->auth->process_login($this->input->post('login_username'), $this->input->post('login_password'));
 				if($login !== true) {
 					$this->setError($login);
-					$this->index();
 				} else {
 					// Login successful, let's redirect.
 					$this->auth->redirect();
@@ -160,33 +138,24 @@
 			$this->load->view('forgotPassword');
 
 			try {
-				$form = new Form();
-				$form->setAction( "login/generatePassword" );
-				$form->setId("forgot_password_form");
+				if($this->input->post('forgot_password_submit')) {
+					$this->generatePassword();
+				}
 
-				$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
-				$field->setLabel( "Email" );
-				$field->setValue( $this->input->post( 'email' ) );
-				$field->addErrorLabel( 'error', null, form_error( 'email' ) );
-
-				$form->addField($field);
-
-				$field = Form::getNewField( Form_Field::FIELD_TYPE_BUTTON );
-				$field->setId( "forgot_password_submit" );
-				$field->setContent( "Submit" );
-
-				$form->addField( $field );
+				$form_builder = new FormBuilder('login/forgotPassword', 'post', null, 'forgot_password_form');
+				$form_builder->addSimpleField(Form_Field::FIELD_TYPE_INPUT, 'email', 'email', 'toggle_text', $this->getPostValue('email', 'Email'));
+				$form_builder->addSimpleField(Form_Field::FIELD_TYPE_BUTTON, 'forgot_password_submit', 'forgot_password_submit', null, 'Submit');
 
 				//add the view
 				$this->view = new forgotPasswordVW();
 				$this->view->setPageId('login');
 				$this->view->setErrors( $this->getErrors() );
-				$this->view->setForgotPasswordForm( $form );
+				$this->view->setForgotPasswordForm( $form_builder->getForm() );
 				$this->view->renderView();
 
 			} catch(Exception $e) {
 				$this->logError( $e->getMessage() );
-				show_error( "there was an error loading this page. Please try again <!-- {$e->getMessage()} -->", 500 );
+				Utilities::show500('there was an error loading this page. Please try again', $e);
 			}
 
 		}
@@ -197,7 +166,7 @@
 		 * @return void
 		 * @since 1.0
 		 */
-		public function generatePassword() {
+		protected function generatePassword() {
 			if($this->validate('forgot_password')) {
 				try {
 					$this->load->helper('password');
@@ -205,14 +174,16 @@
 
 					$phpass		   = new PasswordHash( Auth::PHPASS_ITERATIONS, Auth::PHPASS_PORTABLE_HASH );
 					$password_hash = $phpass->HashPassword( $password );
+
 					if($this->savePassword($this->input->post('email'), $password_hash) === true) {
 						$this->sendPasswordEmail($this->input->post('email'), $password);
 					} else {
-						$this->forgotPassword();
+						$this->setError('unable to generate new password');
 					}
 				} catch(Exception $e) {
-					$this->logMessage($e->getMessage(), N8_Error::ERROR);
-					$this->forgotPassword();
+					$this->setError($e->getMessage());
+					$log = "Exception caught in ".$e->getFile()." on line ".$e->getLine().": ".$e->getMessage();
+					$this->logMessage($log, N8_ERROR::ERROR);
 				}
 			}
 		}
@@ -307,21 +278,16 @@
 					$message .= " and zip [" . $this->input->post( 'zip' ) . "]";
 
 					$this->logMessage( $message, N8_Error::ERROR );
-
-					$this->index();
 				} else {
 					//account created, log user in.
 					$login = $this->auth->process_login($this->input->post('username'), $this->input->post('password'));
 					if($login !== true) {
 						$this->setError($login);
-						$this->index();//@todo do something better than this.
 					} else {
 						// Login successful, let's redirect.
 						$this->auth->redirect();
 					}
 				}
-			} else {
-				$this->index();
 			}
 		}
 	}

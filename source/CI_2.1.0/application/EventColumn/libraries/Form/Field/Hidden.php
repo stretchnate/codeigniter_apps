@@ -5,7 +5,7 @@
  *
  * @author stretch
  */
-class Form_Field_Hidden extends Form_Field {
+class Form_Field_Hidden extends Form_Field implements Form_Field_Interface {
 
 	private $hidden_elements_array = array();
 

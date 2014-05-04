@@ -175,19 +175,19 @@
 		 * @return void
 		 * @since  1.0
 		 */
-		public function buildSelectObject($label, $name, $default_selected = null, $error_label_array = array(), $multi = false) {
-			if(empty($error_label_array)) {
-				$error_label_array = array('class' => 'error', 'id' => '', 'content' => '');
-			}
-
+		public function buildSelectObject($name, $class = null, $label = null, $default_selected = null, $error_label_array = array('class' => 'error', 'id' => '', 'content' => ''), $multi = false) {
 			if($multi !== false) {
 				$this->select = new Form_Field_Select_MultiSelect();
 			} else {
 				$this->select = new Form_Field_Select();
 			}
 
-			$this->select->setLabel($label);
+			if(isset($label)) {
+				$this->select->addOption('', $label);
+			}
+
 			$this->select->setName($name);
+			$this->select->setClass($class);
 
 			foreach($this->category_dm_array as $category_dm) {
 				$this->select->addOption($category_dm->getCategoryId(), $category_dm->getCategoryName());

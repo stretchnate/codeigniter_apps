@@ -5,7 +5,7 @@
 	 *
 	 * @author stretch
 	 */
-	class Form_Field_Recaptcha extends Form_Field {
+	class Form_Field_Recaptcha extends Form_Field implements Form_Field_Interface {
 
 		//@todo move these keys to a config file or the db.
 		private static $recaptcha_public_keys = array(

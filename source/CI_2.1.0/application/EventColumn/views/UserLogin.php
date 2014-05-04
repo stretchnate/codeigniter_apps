@@ -22,8 +22,8 @@
 		 */
 		public function generateView() {
 			?>
-			<div id="login_register_container">
-				<div id="login_content" class="login_register">
+			<div id="pane_container">
+				<div id="left_pane" class="columns">
 					<h2>Login</h2>
 				<?php
 					$this->login_form->renderForm();
@@ -32,7 +32,7 @@
 						<a href="login/forgotPassword">Forgot Password</a>
 					</div>
 				</div>
-				<div id="register_content" class="login_register">
+				<div id="right_pane" class="columns">
 					<h2>Sign Up</h2>
 				<?php
 					$this->register_form->renderForm();

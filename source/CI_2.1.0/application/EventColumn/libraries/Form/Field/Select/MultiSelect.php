@@ -5,7 +5,7 @@
  *
  * @author stretch
  */
-class Form_Field_Select_MultiSelect extends Form_Field_Select {
+class Form_Field_Select_MultiSelect extends Form_Field_Select implements Form_Field_Interface {
 
 	protected $selected_option = array();
 

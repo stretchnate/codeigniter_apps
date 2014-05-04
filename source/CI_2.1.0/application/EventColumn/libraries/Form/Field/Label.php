@@ -5,7 +5,7 @@
  *
  * @author stretch
  */
-class Form_Field_Label extends Form_Field {
+class Form_Field_Label extends Form_Field implements Form_Field_Interface {
 
 	private $for = null;
 	private $content = null;

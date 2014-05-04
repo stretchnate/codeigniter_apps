@@ -5,7 +5,7 @@
  *
  * @author stretch
  */
-class Form_Field_Input_Checkbox extends Form_Field_Input {
+class Form_Field_Input_Checkbox extends Form_Field_Input implements Form_Field_Interface {
 
 	protected $checked = false;
 

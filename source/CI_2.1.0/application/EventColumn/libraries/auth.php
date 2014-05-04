@@ -57,6 +57,7 @@ class Auth {
 		} else if ($query->row()->locked_out == true) {
 			$result = 'Your account has been locked out, please <a href="javascript:void(null)"> reset your password</a> to regain access';
 		} else if ($phpass->CheckPassword($password, $query->row()->password) === false) {
+
 			//the users password didn't match
 			$result = 'invalid username or password';
 			$this->updateLoginAttempts($username);
@@ -68,6 +69,10 @@ class Auth {
 			$this->CI->session->set_userdata('zip', $query->row()->zip);
 			$this->CI->session->set_userdata('profile_dm_cache_key', CacheUtil::generateCacheKey('profile_dm_'));
 
+			if($query->row()->login_attempts > 0) {
+				$this->resetLoginAttempts($username);
+			}
+
 			$result = true;
 		}
 
@@ -77,7 +82,7 @@ class Auth {
 	/**
 	 * updates login attempt count for failed logins
 	 *
-	 * @param type $username
+	 * @param string $username
 	 * @return void
 	 */
 	public function updateLoginAttempts(&$username) {
@@ -88,11 +93,24 @@ class Auth {
 			   ->get();
 
 		if ($results->row()->login_attempts == (self::USER_LOCKOUT_THRESHOLD - 1)) {
-			$data['lockout'] = true;
+			$data['locked_out'] = true;
 			log_message('error', $username . ' has been locked out', false);
 		}
 
 		$data['login_attempts'] = $results->row()->login_attempts + 1;
+
+		$this->CI->db->where('username', $username)
+			   ->update('USERS', $data);
+	}
+
+	/**
+	 * resets a users login attempts on a successful login
+	 *
+	 * @param string $username
+	 */
+	public function resetLoginAttempts(&$username) {
+		$data = array();
+		$data['login_attempts'] = 0;
 
 		$this->CI->db->where('username', $username)
 			   ->update('USERS', $data);

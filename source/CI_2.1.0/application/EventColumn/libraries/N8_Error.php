@@ -89,7 +89,7 @@ class N8_Error {
 	 * @param string $message
 	 * @param string $severity
 	 */
-	public function logMessage($message, $severity = self::ERROR) {
+	public static function logMessage($message, $severity = self::ERROR) {
 		switch($severity) {
 			case self::ERROR:
 			case self::DEBUG:

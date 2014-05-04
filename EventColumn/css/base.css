@@ -70,6 +70,18 @@ li {
     float:right;
 }
 
+.ec_button {
+    border-radius:5px;
+    color:#FFFFFF;
+    background-color:#0099FF;
+}
+
+input[type=file] {
+    border-radius:5px;
+    color:#FFFFFF;
+    background-color:#0099FF;
+}
+
 #wrapper {
 
 }
@@ -169,29 +181,30 @@ li {
     text-decoration: underline;
 }
 
-#login_register_container {
+#pane_container {
     border:2px solid #9966FF;
-    height:540px;
+    min-height:540px;
     width:80%;
     margin:40px auto 30px auto;
 }
 
-#login_register_container div.login_register {
+#pane_container div.columns {
     width:48%;
+    min-height:520px;
 }
 
-#login_register_container h2 {
+#pane_container h2 {
     color: #32CCFE;
 }
 
-#login_content {
+#left_pane {
     margin:10px;
     float:left;
     border-right:2px solid #9966FF;
     height:96%;
 }
 
-#register_content {
+#right_pane {
     float:left;
     height:100%;
     margin:10px 0 0 0;

@@ -5,7 +5,7 @@
  *
  * @author stretch
  */
-class Form_Field_Input extends Form_Field {
+class Form_Field_Input extends Form_Field implements Form_Field_Interface {
 
 	public function __construct() {
 		parent::__construct();

@@ -7,6 +7,9 @@
         var default_vals = new Array();
         var default_types = new Array();
 
+        /**
+         * clear the mini search bar
+         */
         $("#mini_search_zip").focus(function() {
            var default_message = 'search events by zip code';
            if($(this).val() == default_message) {
@@ -14,6 +17,9 @@
            }
         });
 
+        /**
+         * default message for mini search bar
+         */
         $("#mini_search_zip").blur(function() {
            var default_message = 'search events by zip code';
            if($(this).val() == '') {
@@ -21,6 +27,9 @@
            }
         });
 
+        /**
+         * mini search submit action
+         */
         $("#mini_search_submit").click(function() {
            $("#mini_search").validate({
               rules: {
@@ -45,11 +54,17 @@
            }
         });
 
+        /**
+         * force numerical zip on mini search
+         */
         $("#mini_search_zip").keyup(function() {
            var pattern = /[^\d]/g;
            $("#mini_search_zip").val($("#mini_search_zip").val().replace(pattern, ''));
         });
 
+        /**
+         * replace input type (e.g. text to password)
+         */
         $(".replace_type").focus(function() {
             var types = $(this).attr("class").split(" ");
             var new_type = $(this).attr("type");
@@ -69,6 +84,18 @@
             $(this).attr("type", new_type);
         });
 
+        /**
+         * switch type back if neccessary (e.g. password to text)
+         */
+        $(".replace_type").blur(function() {
+            if($(this).val() == '' && default_types[$(this).attr("id")] !== undefined) {
+                $(this).attr("type", default_types[$(this).attr("id")]);
+            }
+        });
+
+        /**
+         * toggle input text (default messages)
+         */
         $(".toggle_text").focus(function() {
             if(default_vals[$(this).attr("id")] === undefined) {
                 default_vals[$(this).attr("id")] = $(this).val();
@@ -79,13 +106,13 @@
             }
         });
 
+        /**
+         * toggle input text (default messages)
+         */
+        
         $(".toggle_text").blur(function() {
             if($(this).val() == '') {
                 $(this).val(default_vals[$(this).attr("id")]);
-
-                if(default_types[$(this).attr("id")] !== undefined) {
-                    $(this).attr("type", default_types[$(this).attr("id")]);
-                }
             }
         });
      });

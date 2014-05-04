@@ -20,7 +20,7 @@ class Form {
 	const FORM_TARGET_TOP = '_top';
 
 	private $fields = array();
-	private $action = '';
+	private $action;
 	private $enctype;
 	private $hidden_inputs = array();
 	private $attributes = array(
@@ -32,8 +32,25 @@ class Form {
 	    'target' => null
 	);
 
-	function __construct() {
+	function __construct($action = '', $method = 'post', $name = null, $id = null, $novalidate = null, $target = null, $autocomplete = null, $enctype = null) {
+		try {
+			$this->setAction($action);
+			$this->setMethod($method);
+			$this->setName($name);
+			$this->setId($id);
+			$this->setNovalidate($novalidate);
+			$this->setAutocomplete($autocomplete);
 
+			if(!is_null($target)) {
+				$this->setTarget($target);
+			}
+
+			if(!is_null($enctype)) {
+				$this->setEnctype($enctype);
+			}
+		} catch(Exception $ex) {
+			Utilities::show500('Oops! there was a problem loading this page', $ex);
+		}
 	}
 
 	/**
@@ -101,7 +118,12 @@ class Form {
 		return $attributes;
 	}
 
-	public function addField($field) {
+	/**
+	 * adds a field to the form
+	 *
+	 * @param Form_field_Interface $field
+	 */
+	public function addField(Form_Field_Interface $field) {
 		$this->fields[] = $field;
 	}
 
@@ -293,7 +315,11 @@ class Form {
 		return $this->action;
 	}
 
-	public function getAttributes() {
+	public function getAttributes($attribute = null) {
+		if($attribute) {
+			return isset($this->attributes[$attribute]) ? $this->attributes[$attribute] : false;
+		}
+
 		return $this->attributes;
 	}
 

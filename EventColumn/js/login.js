@@ -4,7 +4,6 @@
 
      $(document).ready(function() {
         $("#login_form").submit(function() {
-console.log("submitting");
            $("#login_form").validate({
               rules: {
                   login_username: "required",

@@ -5,7 +5,7 @@
  *
  * @author stretch
  */
-class Form_Field_Input_Checkbox_Radio extends Form_Field_Input_Checkbox {
+class Form_Field_Input_Checkbox_Radio extends Form_Field_Input_Checkbox implements Form_Field_Interface {
 
 	public function __construct() {
 		parent::__construct();

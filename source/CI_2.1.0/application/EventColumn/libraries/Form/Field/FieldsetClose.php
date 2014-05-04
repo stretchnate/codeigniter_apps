@@ -1,11 +1,11 @@
 <?php
 
 /**
- * generates a single <button> field for the Form object using the CI form_helper functions
+ * generates a single closing </fieldset> tag should be used in conjunction with the Form_Field_Fieldset class
  *
  * @author stretch
  */
-class Form_Field_FieldsetClose {
+class Form_Field_FieldsetClose extends Form_field implements Form_Field_Interface {
 
 	private $trailing_html = null;
 

@@ -5,7 +5,7 @@
  *
  * @author stretch
  */
-class Form_Field_Input_Button extends Form_Field_Input {
+class Form_Field_Input_Button extends Form_Field_Input implements Form_Field_Interface {
 
 	private $content = null;
 
@@ -35,6 +35,16 @@ class Form_Field_Input_Button extends Form_Field_Input {
 		return $this;
 	}
 
+	/**
+	 * This is an alias for setContent
+	 *
+	 * @param mixed $value
+	 * @return \Form_Field_Input_Button
+	 */
+	public function setValue($value) {
+		$this->setContent($value);
+		return $this;
+	}
 }
 
 ?>
