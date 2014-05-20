@@ -11,11 +11,25 @@
 		public function __construct() {
 			parent::__construct();
 
-			$this->load->view('Map');
-			$this->view = new MapVW();
+			$this->initializeView('all_events');
+		}
+
+		protected function initializeView($type) {
+			switch($type) {
+				case 'single_event':
+					$this->load->view('SingleEvent');
+					$this->view = new SingleEventVW();
+					break;
+
+				case 'all_events':
+				default:
+					$this->load->view('Map');
+					$this->view = new MapVW();
+					$this->generateCategoriesNav();
+			}
+
 			$this->view->setPageId('map');
 			$this->view->setMiniSearch(new Plugins_MiniSearch());
-			$this->generateCategoriesNav();
 		}
 
 		/**
@@ -154,6 +168,7 @@
 		 * @param int $event_id
 		 */
 		public function event_details($event_id) {
+			$this->initializeView('single_event');
 			$data = array('event_id' => EventMask::unmaskEventId($event_id));
 			$this->renderView($data);
 		}

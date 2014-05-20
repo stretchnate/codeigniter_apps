@@ -22,7 +22,8 @@ h1 {
 }
 
 h2 {
-    font-size: 253%;
+    font-size: 200%;
+    color:#0099FF;
 }
 
 ul {
@@ -149,8 +150,8 @@ input[type=file] {
 #content {
     background-color:#ffffff;
     color:#000000;
-    float:left;
-    width:100%;
+    width:1180px;
+    margin: 0 auto 0 auto;
 }
 
 #side-nav {
@@ -249,25 +250,48 @@ input[type=file] {
     z-index: 0;
 }
 
-#event-map {
+#event_map {
     border:2px solid #9966FF;
-    width: 950px;
-    min-height: 560px;
-    float: left;
-    margin: 40px 0 40px 30px;
+    width: 1156px;
+    min-height: 710px;
+    margin: 40px 0 40px 0;
     position: relative;
     padding: 10px;
 }
 
-#event-list {
+#event_list {
     float:left;
-    margin-right:20px;
-    width:154px;
+    margin:0 70px 0 70px;
+    width:35%;
+    font-size: 120%
+}
+
+#event_list div {
+    margin: 10px 0 10px 0;
+}
+
+#event_list span.label {
+    color: #32CCFE;
+}
+
+#flyer_map_container {
+    width: 50%;
+    height: 700px;
+    float: left;
+    border-left:2px solid #9966FF;
+    padding: 0 10px 0 10px;
+}
+
+#flyer_map_container div.flyer {
+    height: 350px;
+}
+
+#flyer_map_container div.map {
+
 }
 
 #map_canvas {
-    width: 770px;
-    height: 554px;
+    height: 350px;
 }
 
 div.event-form-field {

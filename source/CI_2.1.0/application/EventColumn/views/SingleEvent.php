@@ -6,7 +6,7 @@
 	 *
 	 * @author stretch
 	 */
-	class MapVW extends searchHeaderVW {
+	class SingleEventVW extends searchHeaderVW {
 
 		protected $event_iterator;
 
