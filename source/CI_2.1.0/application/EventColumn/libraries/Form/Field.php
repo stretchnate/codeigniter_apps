@@ -39,6 +39,7 @@
         const FIELD_TYPE_CHECKBOX       = 'checkbox';
         const FIELD_TYPE_RADIO          = 'radio';
         const FIELD_TYPE_SUBMIT         = 'submit';
+        const FIELD_TYPE_IMAGE          = 'image';
         const FIELD_TYPE_LABEL          = 'label';
         const FIELD_TYPE_RESET          = 'reset';
         const FIELD_TYPE_BUTTON         = 'button';

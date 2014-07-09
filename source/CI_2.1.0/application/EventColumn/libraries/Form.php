@@ -160,6 +160,10 @@
                     $field = new Form_Field_Input();
                     break;
 
+                case Form_Field::FIELD_TYPE_IMAGE:
+                    $field = new Form_Field_Input_Image();
+                    break;
+
                 case Form_Field::FIELD_TYPE_PASSWORD:
                     $field = new Form_Field_Input_Password();
                     break;
