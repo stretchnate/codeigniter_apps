@@ -202,14 +202,14 @@ input[type=file] {
 
 #pane_container {
     border:2px solid #9966FF;
-    min-height:540px;
+    min-height:670px;
     width:80%;
     margin:40px auto 30px auto;
 }
 
 #pane_container div.columns {
     width:48%;
-    min-height:520px;
+    min-height:650px;
 }
 
 #pane_container h2 {
@@ -245,6 +245,10 @@ input[type=file] {
     color:#32CCFE;
     border: 1px solid #32CCFE;
     margin: 6px 0 6px 0;
+}
+
+.form_text {
+    height:36px;
 }
 
 #page-content {
