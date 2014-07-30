@@ -11,7 +11,7 @@
          jQuery.validator.addMethod("passwordCheck", function(value, element, expression) {
              return this.optional(element) || (value.length < 8 || value.length > 32);
          }, jQuery.validator.format("{0} must be between 8 and 32 characters"));
-        $("#register_submit").click(function() {
+        $("#register_form").submit(function() {
            $("#register_form").validate({
               rules: {
                   username: "required",
@@ -20,19 +20,19 @@
                       rangelength: [8,32],
                       validValues: "^[\\w!\\$@%\\*&\\^\\?\\|\\+=\\.-]{8,32}$"
                   },
-                  confirm_password: {
-                      required: true,
-                      equalTo: "#password"
-                  },
+//                  confirm_password: {
+//                      required: true,
+//                      equalTo: "#password"
+//                  },
                   email: {
                       required: true,
                       email: true
                   },
-                  confirm_email: {
-                      required: true,
-                      email: true,
-                      equalTo: "#email"
-                  },
+//                  confirm_email: {
+//                      required: true,
+//                      email: true,
+//                      equalTo: "#email"
+//                  },
                   agree_to_terms_and_policies: "required"
               },
               messages: {
@@ -42,24 +42,25 @@
                       rangelength: "Password must be between 8 and 32 characters long",
                       validValues: "Password characters can be a-z,A-Z,0-9,_!$@%*&^?|+=.-"
                   },
-                  confirm_password: {
-                      required: "Please re-type your password",
-                      equalTo: "Confirm Password must equal Password"
-                  },
+//                  confirm_password: {
+//                      required: "Please re-type your password",
+//                      equalTo: "Confirm Password must equal Password"
+//                  },
                   email: {
                       required: "Email is required",
                       email: "Email has an invalid email address"
                   },
-                  confirm_email: {
-                      required: "Confirm Email is required",
-                      email: "Confirm Email has an invalid email address",
-                      equalTo: "Confirm Email must match Email"
-                  },
+//                  confirm_email: {
+//                      required: "Confirm Email is required",
+//                      email: "Confirm Email has an invalid email address",
+//                      equalTo: "Confirm Email must match Email"
+//                  },
                   agree_to_terms_and_policies: "please agree to our terms and policies"
               }
            });
-           if($("#register_form").valid()) {
-               $("#register_form").submit();
+
+            if(!$("#register_form").valid()) {
+               return false;
            }
         });
 

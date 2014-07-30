@@ -77,20 +77,20 @@
          * @since 1.1
          */
         private function buildRegisterForm() {
-            if( $this->input->post( 'register_submit' ) ) {
+            if( $this->input->post( 'username' ) ) {
                 $this->addUser();
             }
 
             $form_builder = new FormBuilder( '', 'post', null, 'register_form' );
             $form_builder->addSimpleField( Form_Field::FIELD_TYPE_INPUT, 'username', 'username', 'toggle_text form_text', $this->getPostValue( 'username', 'Username' ) );
             $form_builder->addSimpleField( Form_Field::FIELD_TYPE_INPUT, 'email', 'email', 'toggle_text form_text', $this->getPostValue( 'email', 'Email' ) );
-            $form_builder->addSimpleField( Form_Field::FIELD_TYPE_INPUT, 'confirm_email', 'confirm_email', 'toggle_text form_text', $this->getPostValue( 'confirm_email', 'Confirm Email' ) );
+//            $form_builder->addSimpleField( Form_Field::FIELD_TYPE_INPUT, 'confirm_email', 'confirm_email', 'toggle_text form_text', $this->getPostValue( 'confirm_email', 'Confirm Email' ) );
             $form_builder->addSimpleField( Form_Field::FIELD_TYPE_INPUT, 'password', 'password', 'replace_type new_type_password toggle_text form_text', 'Password' );
-            $form_builder->addSimpleField( Form_Field::FIELD_TYPE_INPUT, 'confirm_password', 'confirm_password', 'replace_type new_type_password toggle_text form_text', 'Confirm Password' );
+//            $form_builder->addSimpleField( Form_Field::FIELD_TYPE_INPUT, 'confirm_password', 'confirm_password', 'replace_type new_type_password toggle_text form_text', 'Confirm Password' );
 
-            $zip_field = $form_builder->buildSimpleField( Form_Field::FIELD_TYPE_INPUT, 'zip', 'zip', 'toggle_text form_text', $this->getPostValue( 'zip', 'Zip' ) );
-            $zip_field->setMaxLength( '5' );
-            $form_builder->addFieldToForm( $zip_field );
+//            $zip_field = $form_builder->buildSimpleField( Form_Field::FIELD_TYPE_INPUT, 'zip', 'zip', 'toggle_text form_text', $this->getPostValue( 'zip', 'Zip' ) );
+//            $zip_field->setMaxLength( '5' );
+//            $form_builder->addFieldToForm( $zip_field );
 
             //build terms field
             $terms_field = Form::getNewField( Form_Field::FIELD_TYPE_CHECKBOX );

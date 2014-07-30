@@ -91,26 +91,26 @@
 				'label'	 => 'Email',
 				'rules'	 => 'required|valid_email|is_unique[USERS.email]'
 			),
-			array(
-				'field'	 => 'confirm_email',
-				'label'	 => 'Confirm Email',
-				'rules'	 => 'required|valid_email|matches[email]'
-			),
+//			array(
+//				'field'	 => 'confirm_email',
+//				'label'	 => 'Confirm Email',
+//				'rules'	 => 'required|valid_email|matches[email]'
+//			),
 			array(
 				'field'	 => 'password',
 				'label'	 => 'Password',
 				'rules'	 => 'required|min_length[8]|max_length[32]|callback_validate_password'//using a callback to validate
 			),
-			array(
-				'field'	 => 'confirm_password',
-				'label'	 => 'Confirm Password',
-				'rules'	 => 'required|min_length[8]|max_length[32]|matches[password]'
-			),
-			array(
-				'field'	 => 'zip',
-				'label'	 => 'Zip',
-				'rules'	 => 'required|exact_length[5]|numeric'
-			),
+//			array(
+//				'field'	 => 'confirm_password',
+//				'label'	 => 'Confirm Password',
+//				'rules'	 => 'required|min_length[8]|max_length[32]|matches[password]'
+//			),
+//			array(
+//				'field'	 => 'zip',
+//				'label'	 => 'Zip',
+//				'rules'	 => 'required|exact_length[5]|numeric'
+//			),
 			array(
 				'field'	 => 'agree_to_terms_and_policies',
 				'label'	 => 'Agree To Terms and Policies',
