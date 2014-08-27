@@ -98,6 +98,7 @@ input[type=file] {
 
 #header h1 {
     margin-bottom:0px;
+    margin-left:10px;
     float:left;
 }
 
@@ -202,14 +203,14 @@ input[type=file] {
 
 #pane_container {
     border:2px solid #9966FF;
-    min-height:670px;
+    min-height:370px;
     width:80%;
     margin:40px auto 30px auto;
 }
 
 #pane_container div.columns {
-    width:48%;
-    min-height:650px;
+    width:47%;
+    min-height:350px;
 }
 
 #pane_container h2 {
@@ -217,16 +218,23 @@ input[type=file] {
 }
 
 #left_pane {
-    margin:10px;
+    margin:10px 0 0 10px;
     float:left;
-    border-right:2px solid #9966FF;
     height:96%;
 }
 
 #right_pane {
+    border-left:2px solid #9966FF;
     float:left;
     height:100%;
-    margin:10px 0 0 0;
+    margin:10px;
+    padding-left:10px;
+}
+
+.globe_logo_bg {
+    background: url('/images/globe_logo.jpg') no-repeat;
+    height:360px;
+    width:410px;
 }
 
 .checkbox_label {
@@ -239,12 +247,17 @@ input[type=file] {
 
 .field_label, .checkbox_label {
     font-weight: bold;
+    color:#32CCFE;
 }
 
-.toggle_text {
+.toggle_text, .form_input {
     color:#32CCFE;
     border: 1px solid #32CCFE;
     margin: 6px 0 6px 0;
+}
+
+.form_input {
+    margin: 0 0 6px 0;
 }
 
 .form_text {

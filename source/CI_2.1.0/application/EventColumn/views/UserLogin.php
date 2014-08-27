@@ -38,6 +38,7 @@
 					$this->register_form->renderForm();
 				?>
 				</div>
+                <div class="clear">&nbsp;</div>
 			</div>
 			<?php
 		}

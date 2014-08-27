@@ -38,6 +38,7 @@
 
 				$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
 				$field->setLabel( "Username" );
+                $field->setClass('form_input form_text');
 				$field->setValue( $user_profile_dm->getUsername() );
 				$field->setReadonly(true);
 				$field->setDisabled(true);
@@ -47,6 +48,7 @@
 
 				$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
 				$field->setLabel( "Email" );
+                $field->setClass('form_input form_text');
 				$field->setValue( $user_profile_dm->getEmail() );
 				$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
 
@@ -55,41 +57,39 @@
 				$field = Form::getNewField( Form_Field::FIELD_TYPE_HIDDEN );
 				$field->setName( "current_email" );
 				$field->setId("current_email");
+                $field->setClass('form_input form_text');
 				$field->setValue( $user_profile_dm->getEmail() );
 
 				$form->addField( $field );
 
 				$field = Form::getNewField( Form_Field::FIELD_TYPE_PASSWORD );
 				$field->setLabel( "Current Password" );
+                $field->setClass('form_input form_text');
 				$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
 
 				$form->addField( $field );
 
 				$field = Form::getNewField( Form_Field::FIELD_TYPE_PASSWORD );
 				$field->setLabel( "New Password" );
+                $field->setClass('form_input form_text');
 				$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
 
 				$form->addField( $field );
 
 				$field = Form::getNewField( Form_Field::FIELD_TYPE_PASSWORD );
 				$field->setLabel( "Confirm New Password" );
+                $field->setClass('form_input form_text');
 				$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
 
 				$form->addField( $field );
 
-				$field = Form::getNewField( Form_Field::FIELD_TYPE_INPUT );
-				$field->setLabel( "Zip" );
-				$field->setMaxLength( "5" );
-				$field->setValue( $user_profile_dm->getZip() );
-				$field->addErrorLabel( 'error', null, form_error( $field->getName() ) );
+				$submit = Form::getNewField( Form_Field::FIELD_TYPE_IMAGE );
+				$submit->setId( "profile_submit" );
+                $submit->setClass( 'form_input form_text' );
+                $submit->setSrc( '/images/save_profile_btn.jpg' );
+                $submit->setAlt( 'Save' );
 
-				$form->addField( $field );
-
-				$field = Form::getNewField( Form_Field::FIELD_TYPE_SUBMIT );
-				$field->setId( "profile_submit" );
-				$field->setValue( "Submit" );
-
-				$form->addField( $field );
+				$form->addField( $submit );
 
 				$this->view->setErrors( $this->getErrors() );
 				$this->view->setForm( $form );

@@ -19,17 +19,23 @@
 
         public function index() {
             try {
-                //build the login form
-                $login_form = $this->buildLoginForm();
+                if( $this->input->post( 'login_password' ) ) {
+                    $this->processLogin();
+                }
 
-                //build the register form
-                $register_form = $this->buildRegisterForm();
+                if(!$this->input->post('login_password') || $this->isErrors()) {
+                    //build the login form
+                    $login_form = $this->buildLoginForm();
 
-                $this->view->setErrors( $this->getErrors() );
-                $this->view->setLoginForm( $login_form );
-                $this->view->setRegisterForm( $register_form );
+                    //build the register form
+                    $register_form = $this->buildRegisterForm();
 
-                $this->view->renderView();
+                    $this->view->setErrors( $this->getErrors() );
+                    $this->view->setLoginForm( $login_form );
+                    $this->view->setRegisterForm( $register_form );
+
+                    $this->view->renderView();
+                }
             } catch( Exception $e ) {
                 $message = "there was an error loading this page. Please try again.";
                 Utilities::show500( $message, $e );
@@ -44,17 +50,13 @@
          * @since 1.1
          */
         private function buildLoginForm() {
-            if( $this->input->post( 'login_submit' ) ) {
-                $this->processLogin();
-            }
-
             $form_builder = new FormBuilder( "", 'post', null, 'login_form' );
             $form_builder->addSimpleField(
-                    Form_Field::FIELD_TYPE_INPUT, "login_username", "login_username", 'toggle_text form_text', $this->getPostValue( 'login_username', 'Username' )
+                Form_Field::FIELD_TYPE_INPUT, "login_username", "login_username", 'toggle_text form_text', $this->getPostValue( 'login_username', 'Username' )
             );
 
             $form_builder->addSimpleField(
-                    Form_Field::FIELD_TYPE_INPUT, "login_password", "login_password", 'replace_type new_type_password toggle_text form_text', 'Password'
+                Form_Field::FIELD_TYPE_INPUT, "login_password", "login_password", 'replace_type new_type_password toggle_text form_text', 'Password'
             );
 
             $submit = Form::getNewField( Form_Field::FIELD_TYPE_IMAGE );
@@ -84,13 +86,7 @@
             $form_builder = new FormBuilder( '', 'post', null, 'register_form' );
             $form_builder->addSimpleField( Form_Field::FIELD_TYPE_INPUT, 'username', 'username', 'toggle_text form_text', $this->getPostValue( 'username', 'Username' ) );
             $form_builder->addSimpleField( Form_Field::FIELD_TYPE_INPUT, 'email', 'email', 'toggle_text form_text', $this->getPostValue( 'email', 'Email' ) );
-//            $form_builder->addSimpleField( Form_Field::FIELD_TYPE_INPUT, 'confirm_email', 'confirm_email', 'toggle_text form_text', $this->getPostValue( 'confirm_email', 'Confirm Email' ) );
             $form_builder->addSimpleField( Form_Field::FIELD_TYPE_INPUT, 'password', 'password', 'replace_type new_type_password toggle_text form_text', 'Password' );
-//            $form_builder->addSimpleField( Form_Field::FIELD_TYPE_INPUT, 'confirm_password', 'confirm_password', 'replace_type new_type_password toggle_text form_text', 'Confirm Password' );
-
-//            $zip_field = $form_builder->buildSimpleField( Form_Field::FIELD_TYPE_INPUT, 'zip', 'zip', 'toggle_text form_text', $this->getPostValue( 'zip', 'Zip' ) );
-//            $zip_field->setMaxLength( '5' );
-//            $form_builder->addFieldToForm( $zip_field );
 
             //build terms field
             $terms_field = Form::getNewField( Form_Field::FIELD_TYPE_CHECKBOX );

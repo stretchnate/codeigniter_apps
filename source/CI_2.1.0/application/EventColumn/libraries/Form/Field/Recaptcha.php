@@ -28,12 +28,12 @@
         //@todo move these keys to a config file or the db.
         private static $recaptcha_public_keys  = array(
             'local'      => '6LdbwuoSAAAAAPSqvEWCzUjzF4AV239u4d3_LXn1',
-            'test'       => '6LddwuoSAAAAAJ0InljB8jscSUlZGIaPbzLEqBN_',
+            'test'       => '6LflQ_kSAAAAALtAsUMdM5RbH6pZkp2P9EWXLpRw',
             'production' => '6LdcwuoSAAAAAILGBIhw37hMBCOyTBNeXvUrIIHI'
         );
         private static $recaptcha_private_keys = array(
             'local'      => '6LdbwuoSAAAAANM-ZAgTGYs0pJZQbXJKLtE1X7nb',
-            'test'       => '6LddwuoSAAAAAGBG6Jg6Ll2i8SXtsnVO9OorSI6G',
+            'test'       => '6LflQ_kSAAAAALMKmVk8gisrBq7xoR27O3pa5oux',
             'production' => '6LdcwuoSAAAAACHSXwLzlcgMvwSbz7nwjgFZFY8P'
         );
 
