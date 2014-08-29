@@ -7,6 +7,13 @@
         var default_vals = new Array();
         var default_types = new Array();
 
+        $("#search_menu_container .menu").mouseover(function() {
+           $("#search_menu_container .menu_dropdown").show();
+        });
+
+        $("#search_menu_container .menu").mouseout(function() {
+           $("#search_menu_container .menu_dropdown").hide();
+        });
         /**
          * clear the mini search bar
          */
@@ -109,7 +116,7 @@
         /**
          * toggle input text (default messages)
          */
-        
+
         $(".toggle_text").blur(function() {
             if($(this).val() == '') {
                 $(this).val(default_vals[$(this).attr("id")]);

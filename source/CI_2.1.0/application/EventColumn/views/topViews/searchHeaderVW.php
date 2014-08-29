@@ -26,23 +26,19 @@
                     <a href="/"><img src="/images/logo.png" alt="Logo" height="60px" /></a>
                     <img src="/images/header_tx.png" alt="Event Column, create and find events" />
                 </h1>
-                <span class="welcome">
-                    Welcome
-                    <?php
-                    if( $this->username !== 'Guest' ) {
-                        ?>
-                        <a href="/userProfile"><?=$this->username; ?></span> |
-                    <a href="/login/logout">Logout</a>
-                    <?php
-                } else {
-                    ?>
-                    <?=$this->username; ?> |
-                    <a href="/login">Login/Register</a>
-                    <?php
-                }
-                ?>
-            </span>
-            <?=$this->mini_search->renderForm(); ?>
+                <div id="search_menu_container">
+                    <?=$this->mini_search->renderForm(); ?>
+                    <div class="menu">
+                        <div class="menu_dropdown">
+                            <ul>
+                                <li><a href="javascript:void(null)">Profile</a></li>
+                                <li><a href="javascript:void(null)">My Events</a></li>
+                                <li><a href="javascript:void(null)">Advanced Search</a></li>
+                                <li><a href="javascript:void(null)">Logout</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
             <?php
         }

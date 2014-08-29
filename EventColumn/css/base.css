@@ -88,12 +88,10 @@ input[type=file] {
 }
 
 #header {
-    /*background: url('../images/header.png') repeat-x;*/
     background-color: #9966ff;
     float:left;
     margin:0;
     width:100%;
-    position:relative;
 }
 
 #header h1 {
@@ -138,10 +136,44 @@ input[type=file] {
     border: 2px solid #9966FF;
 }
 
+#search_menu_container {
+    float:right;
+    margin-top:20px;
+}
+
+.menu {
+    background: url(/images/menu_btn.jpg) no-repeat;
+    height: 51px;
+    margin: 0 5px;
+    width: 51px;
+    float:left;
+    position:relative;
+}
+
+#search_menu_container .menu_dropdown {
+    background-color: #9966ff;
+    position: absolute;
+    right: -5px;
+    top: 45px;
+    min-width: 156px;
+    height:auto;
+    display:none;
+}
+
+#search_menu_container .menu_dropdown li {
+    margin:3px 0 3px 0;
+    display:block;
+}
+
+#search_menu_container .menu_dropdown li a {
+    color: #ffffff;
+    font-size: 120%;
+    text-decoration: none;
+}
+
 #mini_search_container {
-    position:absolute;
-    top:30px;
-    right:10px;
+    float:left;
+    margin-top:2px;
 }
 
 .mini_search_set {
@@ -151,9 +183,10 @@ input[type=file] {
 #mini_search_zip {
     background-color: #0099ff;
     border: medium none;
-    height: 36px;
+    height: 40px;
     width: 100%;
     color:#FFFFFF;
+    font-size: 180%;
 }
 
 #mini_search_submit {

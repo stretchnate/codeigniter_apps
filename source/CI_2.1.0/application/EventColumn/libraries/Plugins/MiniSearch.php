@@ -44,7 +44,7 @@
             $field->setFieldContainerClass( 'mini_search_field' );
             $field->setSrc( '/images/triangle2.jpg' );
             $field->setAlt( 'Submit' );
-            $field->setHeight( '39px' );
+            $field->setHeight( '1px' );
 
             $this->form->addField( $field );
         }
