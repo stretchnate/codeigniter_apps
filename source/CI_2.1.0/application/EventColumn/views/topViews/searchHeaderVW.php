@@ -31,10 +31,10 @@
                     <div class="menu">
                         <div class="menu_dropdown">
                             <ul>
-                                <li><a href="javascript:void(null)">Profile</a></li>
+                                <li><a href="/userProfile">Profile</a></li>
                                 <li><a href="javascript:void(null)">My Events</a></li>
-                                <li><a href="javascript:void(null)">Advanced Search</a></li>
-                                <li><a href="javascript:void(null)">Logout</a></li>
+                                <li><a href="/search/advanced">Advanced Search</a></li>
+                                <li><a href="/logout">Logout</a></li>
                             </ul>
                         </div>
                     </div>

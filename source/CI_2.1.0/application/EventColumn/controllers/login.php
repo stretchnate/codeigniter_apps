@@ -257,19 +257,12 @@
         }
 
         /**
-         * logs out of a session
-         */
-        public function logout() {
-            $this->auth->logout();
-        }
-
-        /**
          * Validates the user info and adds the user to the database
          *
          * @return void
          * @since 1.0
          */
-        public function addUser() {
+        protected function addUser() {
             require_once(APPPATH . 'third_party/phpass-0.3/PasswordHash.php');
             if( $this->validate( 'add_user' ) ) {
                 //add some validation before hashing the password. 32 chars max on pw.
