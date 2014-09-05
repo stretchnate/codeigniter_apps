@@ -3,7 +3,7 @@
 /**
  * this class is the controller class for adding and updating events as well as event locations and event details
  */
-class Event extends N8_Controller {
+class createEvent extends N8_Controller {
 
 	public function __construct() {
 		parent::__construct();
@@ -102,6 +102,7 @@ class Event extends N8_Controller {
 			$food_field->addOption("free", "Free");
 			$food_field->addOption("on_sale", "On Sale");
 			$food_field->addOption("no", "No");
+            $food_field->setSelectedOption($this->input->post($food_field->getName()));
 
 			$form_builder->addFieldToForm($food_field);
 
@@ -134,7 +135,7 @@ class Event extends N8_Controller {
 
 			$form_builder->addFieldToForm($categories_obj);
 
-			$file_field = $form_builder->buildSimpleField(Form_Field::FIELD_TYPE_FILE, 'event_file', 'event_file', null, '');
+			$file_field = $form_builder->buildSimpleField(Form_Field::FIELD_TYPE_FILE, 'userfile', 'userfile', null, '');
 
 			$file_field->setLabel("event image");
 			$file_field->setAccept(Form_Field_Input_File::ACCEPT_TYPE_IMAGE);
@@ -165,10 +166,12 @@ class Event extends N8_Controller {
 	public function addEvent() {
 		try {
 			if ($this->validate('add_event')) {
+                $upload_data = $this->uploadFlyer();
 				$post = & $this->input->post();
 				$locations = $post['event_details_locations'];
 				unset($post['event_details_locations']);
 
+                $post['event_image'] = substr($upload_data['full_path'], 21);
 				//add event owner to post array
 				$post['event_owner'] = $this->session->userdata('user_id');
 
@@ -188,9 +191,16 @@ class Event extends N8_Controller {
 		}
 	}
 
-	public function transactionTest() {
-		$model = new EventModel();
-		$model->testTransactions();
+    /**
+     * uploads the event flyer
+     *
+     * @throws Exception
+     * @return array
+     */
+	protected function uploadFlyer() {
+        $file_upload = new FileUpload();
+        $file_upload->initialize('event_image');
+        return $file_upload->doUpload();
 	}
 
 }

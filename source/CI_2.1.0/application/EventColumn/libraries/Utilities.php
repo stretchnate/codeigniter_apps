@@ -21,6 +21,28 @@ class Utilities {
 		return $result;
 	}
 
+    public static function stateMapper($state) {
+        $state_array = parse_ini_file(APPPATH . '/site_cfg/stateMapperConfig.ini');
+        $state = strtoupper($state);
+
+        if(strlen($state) > 2) {
+            if(isset($state_array[$state])) {
+                $result = $state_array[$state];
+            } else {
+                throw new UnexpectedValueException("Invalid state");
+            }
+        } else {
+            $result = array_keys($state_array, $state, true);
+            if(empty($result)) {
+                throw new UnexpectedValueException("Invalid state");
+            } else {
+                $result = $result[0];
+            }
+        }
+
+        return $result;
+    }
+
 	/**
 	 * validates an SimpleXMLElement Object against a schema
 	 *

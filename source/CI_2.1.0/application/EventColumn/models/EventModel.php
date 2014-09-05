@@ -68,11 +68,9 @@ class EventModel extends N8_Model {
 				$details->setSmoking($event_details_location['smoking']);
 			}
 
-			if(isset($event_details_location['food'])) {
-				$details->setFoodAvailable($event_details_location['food']);
-			}
-
+			$details->setFoodAvailable($event_details_location['food']);
 			$details->setAgeRange($event_details_location['age']);
+            $details->setAdmission($event_details_location['event_cost']);
 
 			//save the details
 			$details->save();

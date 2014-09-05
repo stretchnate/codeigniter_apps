@@ -50,7 +50,7 @@ class EventModel_EventLocationDM extends BaseDM {
 	public function loadEventDetailsDM() {
 		$this->event_details_dm = new EventModel_EventDetailsDM();
 
-		if (empty($this->event_details_id)) {
+		if (!empty($this->event_details_id)) {
 			$this->event_details_dm->load($this->event_details_id);
 		}
 	}
@@ -388,7 +388,5 @@ class EventModel_EventLocationDM extends BaseDM {
 		$this->event_details_id = $event_details_id;
 		return $this;
 	}
-
 }
-
 ?>

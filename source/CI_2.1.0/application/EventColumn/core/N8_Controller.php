@@ -132,13 +132,18 @@
 			$location = array('city' => '', 'state' => '', 'zip' => '');
 			if((isset($details->city) && isset($details->region))) {
 				$location['city']  =  $details->city;
-				$location['state'] = $details->region;
+
+                if(strlen($details->region) > 2) {
+                    $location['state'] = Utilities::stateMapper($details->region);
+                } else {
+                    $location['state'] = $details->region;
+                }
 
 				if(isset($details->postal)) {
 					$location['zip'] = $details->postal;
 				}
 			} else {
-				$location = array('city' => 'Orlando', 'state' => 'Florida', 'zip' => '32801');
+				$location = array('city' => 'Orlando', 'state' => 'FL', 'zip' => '32801');
 			}
 
 			$this->session->set_userdata('location',$location);

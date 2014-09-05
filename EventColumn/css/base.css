@@ -342,6 +342,10 @@ input[type=file] {
     color: #32CCFE;
 }
 
+#event_list span.details {
+    padding:0 0 0 3px;
+}
+
 #flyer_map_container {
     width: 50%;
     height: 700px;
@@ -352,14 +356,19 @@ input[type=file] {
 
 #flyer_map_container div.flyer {
     height: 350px;
+    text-align: center;
 }
 
 #flyer_map_container div.map {
+    height:710px;
+}
 
+#flyer_map_container div.single_map {
+    height:350px;
 }
 
 #map_canvas {
-    height: 350px;
+    height: 100%;
 }
 
 div.event-form-field {

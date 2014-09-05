@@ -226,13 +226,15 @@
          */
         public function setLabel( $label ) {
             $regex = '~[^\w]+~';
-            if( ! $this->attributes['name'] ) {
+            if( !$this->attributes['name'] ) {
                 $name = strtolower( str_replace( " ", "_", $label ) );
                 $this->setName( preg_replace( $regex, '', $name ) );
             }
 
-            $id = strtolower( str_replace( " ", "_", $label ) );
-            $this->setId( preg_replace( $regex, '', $id ) );
+            if(!$this->attributes['id']) {
+                $id = strtolower( str_replace( " ", "_", $label ) );
+                $this->setId( preg_replace( $regex, '', $id ) );
+            }
 
             $this->label = $label;
 

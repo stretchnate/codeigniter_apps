@@ -42,8 +42,8 @@
 				$end_date = date('Y-m-d H:i:s', strtotime('+1 day'));
 			}
 
-			$where = ' e.event_start_datetime <= "'.$end_date.'"';
-			$where .= ' AND e.event_end_datetime >= "'.$start_date.'"';
+			$where = ' e.event_start_datetime <= "'.$start_date.'"';
+			$where .= ' AND e.event_end_datetime >= "'.$end_date.'"';
 
 			if($event_id) {
 				$this->loadEventsById($event_id);
@@ -91,11 +91,11 @@
 		 */
 		private function loadEventsByLocation($where, $city = null, $state = null, $zip = null) {
 			if($city) {
-				$where .= ' AND el.location_city = "'.$city.'"';
+				$where .= ' AND el.location_city = "'.strtoupper($city).'"';
 			}
 
 			if($state) {
-				$where .= ' AND el.location_state = "'.$state.'"';
+				$where .= ' AND el.location_state = "'.strtoupper($state).'"';
 			}
 
 			if($zip) {
@@ -319,6 +319,16 @@
 		public function getEventLocations() {
 			return $this->event_dm_array[$this->position]->getEventLocations();
 		}
-	}
 
+        /**
+		 * returns the event flyer location
+		 *
+		 * @return string
+		 * @since  1.0
+		 * @access public
+		 */
+		public function getEventImage() {
+            return $this->event_dm_array[$this->position]->getEventImage();
+        }
+	}
 ?>

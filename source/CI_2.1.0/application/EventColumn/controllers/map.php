@@ -25,7 +25,7 @@
 				default:
 					$this->load->view('Map');
 					$this->view = new MapVW();
-					$this->generateCategoriesNav();
+//					$this->generateCategoriesNav();
 			}
 
 			$this->view->setPageId('map');

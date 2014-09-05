@@ -2,10 +2,13 @@
 
 class EventModel_EventDetailsDM extends BaseDM {
 
+    const ADMISSION_FREE = 'free';
+
 	private $event_details_id;
 	private $smoking;
 	private $food_available;
 	private $age_range;
+    private $admission = self::ADMISSION_FREE;
 
 	/**
 	 * class construct method
@@ -57,13 +60,12 @@ class EventModel_EventDetailsDM extends BaseDM {
 		 * related to any single event or user and can be spread accross multiple events/users.
 		 */
 		$id = $this->eventDetailsExist();
-
 		if ($id !== false) {
 			$this->event_details_id = $id;
 		} else {
 			$this->insert();
 
-			$this->event_details_id = $this->eventDetailsExist();
+            $this->event_details_id = $this->db->insert_id();
 		}
 
 		return $this->event_details_id;
@@ -83,6 +85,7 @@ class EventModel_EventDetailsDM extends BaseDM {
 		$details_array['smoking'] = $this->smoking;
 		$details_array['food_available'] = $this->food_available;
 		$details_array['age_range'] = $this->age_range;
+        $details_array['admission'] = $this->admission;
 
 		$query = $this->db->get_where('EVENT_DETAILS', $details_array);
 
@@ -103,9 +106,10 @@ class EventModel_EventDetailsDM extends BaseDM {
 	protected function insert() {
 		$values = array();
 
-		$values["smoking"] = $this->smoking;
+		$values["smoking"] = empty($this->smoking) ? 'NO' : 'YES';
 		$values["food_available"] = $this->food_available;
 		$values["age_range"] = $this->age_range;
+        $values["admission"] = $this->admission;
 
 		return $this->db->insert("EVENT_DETAILS", $values);
 	}
@@ -148,7 +152,7 @@ class EventModel_EventDetailsDM extends BaseDM {
 	 * @since  1.0
 	 */
 	public function setSmoking($smoking) {
-		$this->smoking = $smoking;
+		$this->smoking = strtolower($smoking);
 		return $this;
 	}
 
@@ -170,7 +174,7 @@ class EventModel_EventDetailsDM extends BaseDM {
 	 * @since  1.0
 	 */
 	public function setFoodAvailable($food_available) {
-		$this->food_available = $food_available;
+		$this->food_available = strtolower($food_available);
 		return $this;
 	}
 
@@ -192,10 +196,31 @@ class EventModel_EventDetailsDM extends BaseDM {
 	 * @since  1.0
 	 */
 	public function setAgeRange($age_range) {
-		$this->age_range = $age_range;
+		$this->age_range = strtolower($age_range);
 		return $this;
 	}
 
+    /**
+	 * sets the admission
+	 *
+	 * @param  String
+	 * @return Object
+	 * @since  1.0
+	 */
+	public function setAdmission($admission) {
+        $this->admission = (is_numeric($admission)) ? $admission : self::ADMISSION_FREE;
+        return $this;
+    }
+
+    /**
+	 * gets the admission
+	 *
+	 * @return String
+	 * @since  1.0
+	 */
+	public function getAdmission() {
+        return $this->admission;
+    }
 }
 
 ?>

@@ -1,12 +1,12 @@
 <?php
-	require_once ('topViews/searchHeaderVW.php');
+	require_once ('EventDisplayBase.php');
 
 	/**
 	 * Description of Map
 	 *
 	 * @author stretch
 	 */
-	class MapVW extends searchHeaderVW {
+	class MapVW extends EventDisplayBaseVW {
 
 		protected $event_iterator;
 
@@ -22,7 +22,7 @@
 					if(isset($this->event_iterator) && $this->event_iterator instanceof EventIterator) {
 					?>
 						<div id='event_list'>
-							<h2>Event Details</h2>
+							<h2>Events</h2>
 					<?php
 						while($this->event_iterator->valid()) {
 							echo $this->fetchEventDetails();
@@ -32,7 +32,6 @@
 					?>
 						</div>
 						<div id="flyer_map_container">
-							<div class="flyer"></div>
 							<div class="map">
 								<script type="text/javascript">
 									var map;
@@ -118,83 +117,11 @@
 			$html .= '<span class="details">'.$this->event_iterator->getEventName()."</span>";
 			$html .= '</div>';
 
-			$html .= '<div>';
-			$html .= '<span class="label">Start Date:</span>';
-			$html .= '<span class="details">'.$this->fetchEventDate('start')."</span>";
-			$html .= '</div>';
+			$html .= parent::fetchEventDetails();
 
-			$html .= '<div>';
-			$html .= '<span class="label">End Date:</span>';
-			$html .= '<span class="details">'.$this->fetchEventDate('end')."</span>";
-			$html .= '</div>';
-
-			foreach($this->event_iterator->getEventLocations() as $location) {
-				$html .= $this->fetchLocationDetails($location);
-			}
-
-			$html .= '<div>';
-			$html .= '<span class="label">Description:</span>';
-			$html .= '<span class="details">'.$this->event_iterator->getEventDescription()."</span>";
-			$html .= '</div>';
-
-			$html .= $this->getEventPageLink(EventMask::maskEventId($this->event_iterator->getEventId()));
+            $html .= $this->getEventPageLink(EventMask::maskEventId($this->event_iterator->getEventId()));
 
 			return $html;
-		}
-
-		protected function getEventPageLink($event_id) {
-			$html = "<br />";
-			$html .= "<a href='/map/event_details/".$event_id."'>event page</a>";
-
-			return $html;
-		}
-
-		protected function fetchEventDate($type) {
-			switch($type) {
-				case 'end':
-					$date = new DateTime($this->event_iterator->getEventEnd());
-					break;
-
-				case 'start':
-				default:
-					$date = new DateTime($this->event_iterator->getEventStart());
-					break;
-			}
-
-			return $date->format("m/d/Y g:i a");
-		}
-
-		protected function fetchLocationDetails(&$location) {
-			$html = '<div>';
-			$html .= '<span class="label">Venue:</span>';
-			$html .= '<span class="details">'.$location->getEventLocation()."</span>";
-			$html .= '</div>';
-
-			$html .= '<div>';
-			$html .= '<span class="label">Address:</span>';
-			$html .= '<span class="details">'.$location->getLocationAddress()."</span>";
-			$html .= '</div>';
-
-			$html .= '<div>';
-			$html .= '<span class="label">City:</span>';
-			$html .= '<span class="details">'.$location->getLocationCity()."</span>";
-			$html .= '</div>';
-
-			$html .= '<div>';
-			$html .= '<span class="label">State:</span>';
-			$html .= '<span class="details">'.$location->getLocationState()."</span>";
-			$html .= '</div>';
-
-			$html .= '<div>';
-			$html .= '<span class="label">Zip:</span>';
-			$html .= '<span class="details">'.$location->getLocationZip()."</span>";
-			$html .= '</div>';
-
-			return $html;
-		}
-
-		public function setEventIterator(EventIterator $event_iterator) {
-			$this->event_iterator = $event_iterator;
 		}
 	}
 

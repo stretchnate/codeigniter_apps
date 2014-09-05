@@ -64,6 +64,11 @@
 				'label'	 => 'Food',
 				'rules'	 => ''
 			),
+            array(
+				'field'	 => 'event_details_locations[0][event_cost]',
+				'label'	 => 'Admission',
+				'rules'	 => ''
+			),
 			array(
 				'field'	 => 'event_details_locations[0][age]',
 				'label'	 => 'Age Range',
