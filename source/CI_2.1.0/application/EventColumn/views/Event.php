@@ -18,7 +18,7 @@ class EventVW extends searchHeaderVW {
 				$this->event_form->renderForm();
 				?>
 			</div>
-			<div id='right_pane' class='columns'>
+			<div id='right_pane' class='columns globe_logo_bg'>
 
 			</div>
 			<div class='clear'>&nbsp;</div>

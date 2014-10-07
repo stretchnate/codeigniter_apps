@@ -54,7 +54,7 @@
 			}
 
 			$where .= ' AND (ec.parent_category_id = "" OR ec.parent_category_id IS NULL)';
-			$query = $this->ci->db->select('e.event_category')
+			$query = $this->ci->db->select('ec.category_id')
 					->distinct()
 					->from('EVENTS e')
 					->join('EVENT_LOCATIONS el', 'el.event_id = e.event_id', 'inner')

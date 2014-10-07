@@ -201,7 +201,7 @@ input[type=file] {
 }
 
 #ec_world {
-    background: transparent url('/images/transparent_globe.jpg') no-repeat;
+    background: url('/images/transparent_globe.jpg') no-repeat transparent;
     min-width: 500px;
     min-height: 500px;
 }
@@ -243,7 +243,6 @@ input[type=file] {
 
 #pane_container div.columns {
     width:47%;
-    min-height:350px;
 }
 
 #pane_container h2 {
@@ -251,13 +250,13 @@ input[type=file] {
 }
 
 #left_pane {
+    border-right:2px solid #9966FF;
     margin:10px 0 0 10px;
     float:left;
     height:96%;
 }
 
 #right_pane {
-    border-left:2px solid #9966FF;
     float:left;
     height:100%;
     margin:10px;
@@ -298,24 +297,11 @@ input[type=file] {
 }
 
 #page-content {
-    /*background: url('/images/home_globe.png') no-repeat;*/
+    background: url('/images/transparent_globe.jpg') no-repeat transparent scroll center;
     margin:0 auto 0 auto;
     min-height: 500px;
-    width:500px;
+    width:700px;
     position: relative;
-}
-
-#page-content::after {
-    content:"";
-    background: url('/images/home_globe.png') no-repeat;
-    opacity: 0.25;
-    filter:alpha(opacity=25); /* For IE8 and earlier */
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    position: absolute;
-    z-index: 0;
 }
 
 #event_map {

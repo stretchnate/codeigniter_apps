@@ -15,13 +15,13 @@
 
 		public function generateView() {
 			?>
-			<div id="event-map">
-				<div id='event-form'>
+			<div id="pane_container">
+				<div id='left_pane' class='columns'>
 					<?php
 					$this->search_form->renderForm();
 					?>
 				</div>
-
+                <div id="right_pane" class='columns globe_logo_bg'></div>
 			</div>
 			<?php
 		}

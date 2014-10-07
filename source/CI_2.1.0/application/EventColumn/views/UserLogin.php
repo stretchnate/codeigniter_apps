@@ -24,6 +24,12 @@
 			?>
 			<div id="pane_container">
 				<div id="left_pane" class="columns">
+                    <h2>Sign Up</h2>
+                    <?php
+                        $this->register_form->renderForm();
+                    ?>
+				</div>
+				<div id="right_pane" class="columns">
 					<h2>Login</h2>
 				<?php
 					$this->login_form->renderForm();
@@ -31,12 +37,6 @@
 					<div>
 						<a href="login/forgotPassword">Forgot Password</a>
 					</div>
-				</div>
-				<div id="right_pane" class="columns">
-					<h2>Sign Up</h2>
-				<?php
-					$this->register_form->renderForm();
-				?>
 				</div>
                 <div class="clear">&nbsp;</div>
 			</div>
