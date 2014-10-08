@@ -104,6 +104,7 @@
     <Page id="advanced_search">
         <Head>
             <title>EventColumn.com search for events</title>
+            <js>/js/advanced_search.js</js>
             <inline_js>
                 <![CDATA[
                 $(document).ready(function() {

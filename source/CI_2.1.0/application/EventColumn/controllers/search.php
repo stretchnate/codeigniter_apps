@@ -43,9 +43,11 @@
 				$form = new Form();
 				$form->setAction('map/search');
 				$form->addHiddenInput('search_type', 'advanced_search');
+                $form->setName('advanced_search');
 
 				$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
 				$field->setName('event_title')
+                      ->setId('event_title')
                       ->setValue( $cache_array[$field->getName()]['value'] )
                       ->setClass('toggle_text form_text')
                       ->addErrorLabel( 'error', null, $cache_array[$field->getName()]['error'] );
@@ -54,6 +56,7 @@
 
 				$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
 				$field->setName( "city" )
+                      ->setId('city')
                       ->setValue( $cache_array[$field->getName()]['value'] )
 				      ->setClass('toggle_text form_text')
                       ->addErrorLabel( 'error', null, $cache_array[$field->getName()]['error'] );
@@ -62,6 +65,7 @@
 
 				$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
 				$field->setName( "state" )
+                      ->setId('state')
                       ->setValue( $cache_array[$field->getName()]['value'] )
 				      ->setClass('toggle_text form_text')
                       ->addErrorLabel( 'error', null, $cache_array[$field->getName()]['error'] );
@@ -70,6 +74,7 @@
 
 				$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
 				$field->setName( "zip" )
+                      ->setId('zip')
 				      ->setValue( $cache_array[$field->getName()]['value'] )
 				      ->setMaxLength(5)
 				      ->setSize(5)
@@ -80,6 +85,7 @@
 
 				$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
 				$field->setName( "start_date" )
+                      ->setId('start_date')
 				      ->setSize(10)
 				      ->setValue( $cache_array[$field->getName()]['value'] )
 				      ->setClass('toggle_text form_text')
@@ -89,6 +95,7 @@
 
 				$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
 				$field->setName( "end_date" )
+                      ->setId('end_date')
 				      ->setSize(10)
 				      ->setValue( $cache_array[$field->getName()]['value'] )
 				      ->setClass('toggle_text form_text')
@@ -96,9 +103,9 @@
 
 				$form->addField($field);
 
-				$field = Form::getNewField( Form_Field::FIELD_TYPE_SUBMIT );
-				$field->setId( "submit" );
-				$field->setValue( "Change this to a button and add Javascript" );
+				$field = Form::getNewField( Form_Field::FIELD_TYPE_BUTTON );
+				$field->setId( "search_submit" );
+				$field->setContent( 'Search' );
 
 				$form->addField( $field );
 
