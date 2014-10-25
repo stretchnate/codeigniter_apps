@@ -1,6 +1,6 @@
 <?php
 	/**
-	 * Description of search
+	 * this class is for advanced search methods
 	 *
 	 * @author stretch
 	 */
@@ -19,27 +19,36 @@
 //            }
 		}
 
+        /**
+         * generate the advanced search form
+         *
+         * @param string $cache_key
+         */
 		public function advanced($cache_key = null) {
-			if($cache_key) {
-				$cache_util = new CacheUtil();
-				$cache_array = $cache_util->fetchCache($cache_key);
-			} else {
-				$cache_array = array();
-				$cache_array['event_title']['value'] = 'Event Title';
-				$cache_array['event_title']['error'] = null;
-				$cache_array['city']['value'] = 'City';
-				$cache_array['city']['error'] = null;
-				$cache_array['state']['value'] = 'State';
-				$cache_array['state']['error'] = null;
-				$cache_array['zip']['value'] = 'Zip';
-				$cache_array['zip']['error'] = null;
-				$cache_array['start_date']['value'] = 'From Date';
-				$cache_array['start_date']['error'] = null;
-				$cache_array['end_date']['value'] = 'To Date';
-				$cache_array['end_date']['error'] = null;
-			}
+            $cache_array = false;
 
-			try {
+            try {
+                if($cache_key) {
+                    $cache_util = new CacheUtil();
+                    $cache_array = $cache_util->fetchCache($cache_key);
+                }
+
+                if(!$cache_array) {
+                    $cache_array = array();
+                    $cache_array['event_title']['value'] = 'Event Title';
+                    $cache_array['event_title']['error'] = null;
+                    $cache_array['city']['value'] = 'City';
+                    $cache_array['city']['error'] = null;
+                    $cache_array['state']['value'] = 'State';
+                    $cache_array['state']['error'] = null;
+                    $cache_array['zip']['value'] = 'Zip';
+                    $cache_array['zip']['error'] = null;
+                    $cache_array['from_date']['value'] = 'From Date';
+                    $cache_array['from_date']['error'] = null;
+                    $cache_array['to_date']['value'] = 'To Date';
+                    $cache_array['to_date']['error'] = null;
+                }
+
 				$form = new Form();
 				$form->setAction('map/search');
 				$form->addHiddenInput('search_type', 'advanced_search');
@@ -84,21 +93,21 @@
 				$form->addField($field);
 
 				$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
-				$field->setName( "start_date" )
-                      ->setId('start_date')
+				$field->setName( "from_date" )
+                      ->setId('from_date')
 				      ->setSize(10)
 				      ->setValue( $cache_array[$field->getName()]['value'] )
-				      ->setClass('toggle_text form_text')
+				      ->setClass('toggle_text form_text hasDatePicker')
                       ->addErrorLabel( 'error', null, $cache_array[$field->getName()]['error'] );
 
 				$form->addField($field);
 
 				$field = Form::getNewField(Form_Field::FIELD_TYPE_INPUT);
-				$field->setName( "end_date" )
-                      ->setId('end_date')
+				$field->setName( "to_date" )
+                      ->setId('to_date')
 				      ->setSize(10)
 				      ->setValue( $cache_array[$field->getName()]['value'] )
-				      ->setClass('toggle_text form_text')
+				      ->setClass('toggle_text form_text hasDatePicker')
                       ->addErrorLabel( 'error', null, $cache_array[$field->getName()]['error'] );
 
 				$form->addField($field);

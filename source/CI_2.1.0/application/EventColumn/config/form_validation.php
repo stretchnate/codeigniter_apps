@@ -194,7 +194,7 @@
 			array(
 				'field' => 'state',
 				'label' => 'State',
-				'rules' => ''
+				'rules' => 'exact_length[2]'
 			),
 			array(
 				'field' => 'zip',
@@ -202,13 +202,13 @@
 				'rules' => 'numeric|exact_length[5]'
 			),
 			array(
-				'field' => 'start_date',
-				'label' => 'Start Date',
+				'field' => 'from_date',
+				'label' => 'From Date',
 				'rules' => ''
 			),
 			array(
-				'field' => 'end_date',
-				'label' => 'End Date',
+				'field' => 'to_date',
+				'label' => 'To Date',
 				'rules' => ''
 			)
 		),
