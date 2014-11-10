@@ -190,7 +190,7 @@
                 $cache_array = $cache_util->fetchCache($cache_key);
             }
 
-            if(!$cache_array) {
+            if(empty($cache_array)) {
                 $cache_array = array();
                 $cache_array['event_title']['value'] = 'Event Title';
                 $cache_array['event_title']['error'] = null;
