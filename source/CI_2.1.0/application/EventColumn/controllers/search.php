@@ -29,7 +29,7 @@
          */
 		public function advanced($cache_key = null) {
             try {
-                $this->cache_array = $this->getCache($cache_key);
+                $this->getCache($cache_key);
                 $this->startForm();
 				$this->form->addField($this->buildEventTitleField());
                 $this->form->addField($this->buildCityField());
