@@ -108,15 +108,12 @@ class EventModel extends N8_Model {
 	 */
 	protected function updateEvent(array $event, array $event_details_locations) {
 		//create the event object
-		$this->loadEvent($event['event_id']);
+        $cache_key = !empty($event['event_key']) ? $event['event_key'] : null;
+		$this->loadEvent($event['event_id'], $cache_key);
 
-		$this->event_dm->setEventOwner($event['event_owner']);
-		$this->event_dm->setEventName($event['event_name']);
-		$this->event_dm->setEventStartDatetime($event['event_start_datetime']);
-		$this->event_dm->setEventEndDatetime($event['event_end_datetime']);
-		$this->event_dm->setEventDescription($event['event_description']);
-		$this->event_dm->setEventCategory($event['event_category']);
-		$this->event_dm->setEventImage($event['event_image']);
+//        $this->event_dm->setEventOwner($event['event_owner']);
+
+        $this->verifyChanges($event);
 
 		//save the event to the db
 		$this->event_dm->save();
@@ -126,6 +123,37 @@ class EventModel extends N8_Model {
 			$this->updateLocationDetails($event_details_location);
 		}
 	}
+
+    /**
+     * verifies the old version of the event does not match the new version of the event
+     *
+     * @param array $event
+     */
+    protected function verifyChanges($event) {
+        if($this->event_dm->getEventName() !== $event['event_name']) {
+            $this->event_dm->setEventName($event['event_name']);
+        }
+
+        if($this->event_dm->getEventStartDatetime() !== $event['start_date']) {
+            $this->event_dm->setEventStartDatetime($event['start_date']);
+        }
+
+        if($this->event_dm->getEventEndDatetime() !== $event['end_date']) {
+            $this->event_dm->setEventEndDatetime($event['end_date']);
+        }
+
+        if($this->event_dm->getEventDescription() != $event['description']) {
+            $this->event_dm->setEventDescription($event['description']);
+        }
+
+        if($this->event_dm->getEventCategory() != $event['category']) {
+            $this->event_dm->setEventCategory($event['category']);
+        }
+
+        if($event['event_image']) {
+            $this->event_dm->setEventImage($event['event_image']);
+        }
+    }
 
 	/**
 	 * update an existing event location and details
@@ -147,19 +175,19 @@ class EventModel extends N8_Model {
 		$details = $location->getEventDetailsDM();
 
 		$details->setSmoking($event_details_location['smoking']);
-		$details->setFoodAvailable($event_details_location['food_available']);
-		$details->setAgeRange($event_details_location['age_range']);
+		$details->setFoodAvailable($event_details_location['food']);
+		$details->setAgeRange($event_details_location['age']);
 
 		//save the details
 		$details->save();
 
-		$location->setEventLocation($event_details_location['event_location']);
-		$location->setEventLocation($event_details_location['lat_long']);
-		$location->setLocationAddress($event_details_location['location_address']);
-		$location->setLocationCity($event_details_location['location_city']);
-		$location->setLocationState($event_details_location['location_state']);
-		$location->setLocationZip($event_details_location['location_zip']);
-		$location->setLocationCountry($event_details_location['location_country']);
+		$location->setEventLocation($event_details_location['event_location_name']);
+		$location->setLatLong($event_details_location['lat_long']);
+		$location->setLocationAddress($event_details_location['event_address']);
+		$location->setLocationCity($event_details_location['event_city']);
+		$location->setLocationState($event_details_location['event_state']);
+		$location->setLocationZip($event_details_location['event_zip']);
+		$location->setLocationCountry($event_details_location['event_country']);
 		$location->setEventCost($event_details_location['event_cost']);
 		$location->setEventDetailsId($details->getEventDetailsId());
 
@@ -175,9 +203,16 @@ class EventModel extends N8_Model {
 	 * @access public
 	 * @since 1.0
 	 */
-	public function loadEvent($event_id) {
-		$this->event_dm = new EventModel_EventDM();
-		$this->event_dm->load($event_id);
+	public function loadEvent($event_id, $cache_key) {
+        if($cache_key) {
+            $cache_util = new CacheUtil();
+            $this->event_dm = unserialize($cache_util->fetchCache($cache_key));
+        }
+
+        if(!$this->event_dm) {
+            $this->event_dm = new EventModel_EventDM();
+            $this->event_dm->load($event_id);
+        }
 	}
 
 	public function testTransactions() {

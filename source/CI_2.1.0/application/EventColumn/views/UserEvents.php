@@ -2,11 +2,11 @@
 	require_once ('EventDisplayBase.php');
 
 	/**
-	 * Description of Map
+	 * Description of UserEvents
 	 *
 	 * @author stretch
 	 */
-	class MapVW extends EventDisplayBaseVW {
+	class UserEventsVW extends EventDisplayBaseVW {
 
 		public function __construct() {
 			parent::__construct();
@@ -115,7 +115,7 @@
 
 			$html .= parent::fetchEventDetails();
 
-            $html .= $this->getEventPageLink(EventMask::maskEventId($this->event_iterator->getEventId()));
+            $html .= $this->getEventEditLink(EventMask::maskEventId($this->event_iterator->getEventId()));
 
 			return $html;
 		}

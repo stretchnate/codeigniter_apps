@@ -320,6 +320,11 @@ input[type=file] {
     font-size: 120%
 }
 
+#event_list div.event_container {
+    border: 1px dashed #9966FF;
+    padding: 5px;
+}
+
 #event_list div {
     margin: 10px 0 10px 0;
 }

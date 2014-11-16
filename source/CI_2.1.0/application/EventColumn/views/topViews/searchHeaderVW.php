@@ -31,8 +31,8 @@
                     <div class="menu">
                         <div class="menu_dropdown">
                             <ul>
-                                <li><a href="/userProfile">Profile</a></li>
-                                <li><a href="javascript:void(null)">My Events</a></li>
+                                <li><a href="/user/profile">Profile</a></li>
+                                <li><a href="/user/events">My Events</a></li>
                                 <li><a href="/search/advanced">Advanced Search</a></li>
                                 <li><a href="/logout">Logout</a></li>
                             </ul>

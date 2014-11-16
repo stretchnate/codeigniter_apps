@@ -26,38 +26,42 @@
 		 * @access public
 		 * @throws Exception
 		 */
-		public function __construct($event_id = null, $name = null, $city = null, $state = null, $zip = null, $category_id = null, $start_date = null, $end_date = null) {
+		public function __construct($event_id = null, $name = null, $city = null, $state = null, $zip = null, $category_id = null, $start_date = null, $end_date = null, $owner_id = null) {
 			$this->ci =& get_instance();
 			$this->ci->load->database();
 
-			if(!$event_id && !$zip && (!$city || !$state)) {
-				throw new Exception(__CLASS__." ERROR: invalid search parameters passed. Must pass event_id or zip or (city and state)");
-			}
+            if(isset($owner_id)) {
+                $this->loadEventsByOwner($owner_id);
+            } else {
+                if(!$event_id && !$zip && (!$city || !$state)) {
+                    throw new Exception(__CLASS__." ERROR: invalid search parameters passed. Must pass event_id or zip or (city and state)");
+                }
 
-			if(!$start_date) {
-				$start_date = date('Y-m-d H:i:s');
-			}
+                if(!$start_date) {
+                    $start_date = date('Y-m-d H:i:s');
+                }
 
-			if(!$end_date) {
-				$end_date = date('Y-m-d H:i:s', strtotime('+1 day'));
-			}
+                if(!$end_date) {
+                    $end_date = date('Y-m-d H:i:s', strtotime('+1 day'));
+                }
 
-			$where = ' e.event_start_datetime <= "'.$start_date.'"';
-			$where .= ' AND e.event_end_datetime >= "'.$end_date.'"';
+                $where = ' e.event_start_datetime <= "'.$start_date.'"';
+                $where .= ' AND e.event_end_datetime >= "'.$end_date.'"';
 
-			if($event_id) {
-				$this->loadEventsById($event_id);
-			} elseif($category_id && $zip) {
-				$this->loadEventsByCategory($where, $category_id, $city, $state, $zip);
-			} elseif(($city && $state) || $zip) {
-				$this->loadEventsByLocation($where, $city, $state, $zip);
-			}
+                if($event_id) {
+                    $this->loadEventsById($event_id);
+                } elseif($category_id && $zip) {
+                    $this->loadEventsByCategory($where, $category_id, $city, $state, $zip);
+                } elseif(($city && $state) || $zip) {
+                    $this->loadEventsByLocation($where, $city, $state, $zip);
+                }
 
-			if(($city && $state) || $zip) {
-				if(count($this->event_dm_array) > 0) {
-					$this->filterLocations($city, $state, $zip);
-				}
-			}
+                if(($city && $state) || $zip) {
+                    if(count($this->event_dm_array) > 0) {
+                        $this->filterLocations($city, $state, $zip);
+                    }
+                }
+            }
 
 			$this->rewind();
 		}
@@ -117,6 +121,30 @@
 				}
 			}
 		}
+
+        /**
+         * loads the events based on event_owner id
+         *
+         * @param int $owner_id
+         * @return void
+         */
+        private function loadEventsByOwner($owner_id) {
+            $where = ' event_owner = '.$owner_id;
+
+			$query = $this->ci->db->select()
+								->from('EVENTS e')
+								->where($where, null, false)
+								->get();
+
+			if(is_array($query->result())) {
+				foreach($query->result() as $event) {
+					$event_dm = new EventModel_EventDM();
+					$event_dm->load($event->event_id);
+
+					$this->event_dm_array[] = $event_dm;
+				}
+			}
+        }
 
 		/**
 		 * loads the event_dm_array with instances of EventModel_EventDM based on the event_id argument

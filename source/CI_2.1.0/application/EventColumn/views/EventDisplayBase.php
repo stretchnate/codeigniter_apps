@@ -40,6 +40,13 @@
 			return $html;
 		}
 
+        protected function getEventEditLink($event_id) {
+            $html = "<br />";
+			$html .= "<a href='/event/edit/".$event_id."'>edit event</a>";
+
+			return $html;
+        }
+
 		protected function fetchEventDate($type) {
 			switch($type) {
 				case 'end':

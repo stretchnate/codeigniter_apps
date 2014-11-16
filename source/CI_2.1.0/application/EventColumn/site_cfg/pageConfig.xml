@@ -86,6 +86,13 @@
         </Head>
     </Page>
 
+    <Page id="event_update">
+        <Head>
+            <title>EventColumn.com - Update Event</title>
+            <js><![CDATA[http://maps.googleapis.com/maps/api/js?sensor=false]]></js>
+            <js>/js/event_update_module.js</js>
+        </Head>
+    </Page>
     <Page id="map">
         <Head>
             <title>
@@ -94,10 +101,6 @@
                 ]]>
             </title>
             <js><![CDATA[http://maps.googleapis.com/maps/api/js?sensor=false]]></js>
-            <inline_js>
-                <![CDATA[
-                ]]>
-            </inline_js>
         </Head>
     </Page>
 

@@ -8,6 +8,8 @@
 	 */
 	class SingleEventVW extends EventDisplayBaseVW {
 
+        private $user_id;
+
 		public function __construct() {
 			parent::__construct();
 		}
@@ -24,6 +26,10 @@
 					<?php
 						while($this->event_iterator->valid()) {
 							echo $this->fetchEventDetails();
+
+                            if($this->ownerValidated($this->event_iterator->getEventOwnerId())) {
+                                echo $this->getEventEditLink(EventMask::maskEventId($this->event_iterator->getEventId()));
+                            }
 
 							$this->event_iterator->next();
 						}
@@ -112,6 +118,15 @@
 			</div>
 			<?php
 		}
+
+        public function setUserId($user_id) {
+            $this->user_id = $user_id;
+            return $this;
+        }
+
+        private function ownerValidated($owner_id) {
+            return ($owner_id === $this->user_id);
+        }
 	}
 
 ?>

@@ -90,7 +90,7 @@
 						<div id="main-nav">
 							<ul>
 								<li><a href="/map">Map</a></li>
-								<li class="selected"><a href="/createEvent">Create</a></li>
+								<li class="selected"><a href="/event/create">Create</a></li>
 								<!--li style="margin-right:0px;">Calendar</li-->
 							</ul>
 							<div class="clear">&nbsp;</div>

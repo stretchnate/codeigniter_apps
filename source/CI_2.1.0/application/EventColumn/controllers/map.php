@@ -167,8 +167,9 @@
 		 *
 		 * @param int $event_id
 		 */
-		public function event_details($event_id) {
+		public function event_details($event_id, $show_edit_link = false) {
 			$this->initializeView('single_event');
+            $this->view->setUserId($this->session->userdata('user_id'));
 			$data = array('event_id' => EventMask::unmaskEventId($event_id));
 			$this->renderView($data);
 		}
