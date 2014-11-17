@@ -19,7 +19,7 @@
             ?>
             <div id="home-content">
                 <div id="ec_world">
-
+                    <img src="/images/splash.jpg" alt="create and find events" title="create and find events" />
                 </div>
             </div>
             <?php
