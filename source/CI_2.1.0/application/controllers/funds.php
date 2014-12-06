@@ -6,7 +6,7 @@ class Funds extends N8_Controller {
 		$this->load->library('account');
 		$this->load->model("Book_info");
 	}
-	
+
 	function index(){
 		$this->auth->restrict();
 		$data['youAreHere'] = "Add New Funds";
@@ -30,7 +30,7 @@ class Funds extends N8_Controller {
 		$account_id = $this->input->post("account");
 
 		$account_model = $this->ACCT->getAccount($account_id);
-		
+
 		$date = date("Y-m-d H:i:s");
 		if($this->input->post('date')) {
 			$date = date("Y-m-d H:i:s", strtotime($this->input->post('date')));
@@ -52,7 +52,7 @@ class Funds extends N8_Controller {
 
 	/**
 	 * Adds funds to each account automatically
-	 * 
+	 *
 	 */
 	function automaticallyDistributeFunds() {
 		$this->auth->restrict();
@@ -75,7 +75,7 @@ class Funds extends N8_Controller {
 				$net = preg_replace("/[,]+/", "", $this->input->post('net'));
 			}
 
-			$total = ((float) $account_dm->getAccountAmount()) + ((float) $net); 
+			$total = ((float) $account_dm->getAccountAmount()) + ((float) $net);
 
 			$account_dm->setAccountAmount($total);
 			$account_dm->saveAccount();
@@ -213,13 +213,13 @@ class Funds extends N8_Controller {
 		$this->Fops->resetBooks();
 	}
 
-	
+
 	function zeroBalanceAll() {
 		$this->auth->restrict();
 		$this->load->model('funds_operations', 'FOPS', TRUE);
 		$this->FOPS->zeroBalance();
 	}
-	
+
 	 /**
 	 * this function replaces book/setBookInfo() and will handle account deductions as well as refunds and transfers from Bucket.
 	 *
@@ -237,7 +237,7 @@ class Funds extends N8_Controller {
 
 		$date = date("Y-m-d H:i:s");
 		if($this->input->post('date')) {
-			$date = $this->input->post('date')." ".date("G:i:s"); 
+			$date = $this->input->post('date')." ".date("G:i:s");
 			$date = date("Y-m-d H:i:s", strtotime($date));
 		}
 
@@ -254,7 +254,7 @@ class Funds extends N8_Controller {
 
 				$parent_account->transactionStart();
 				$parent_account->setAccountAmount($parent_account->getAccountAmount() - $requested_amount);
-				
+
 				$category->setCurrentAmount($category->getCurrentAmount() + $requested_amount);
 
 				$parent_account->saveAccount();
@@ -291,7 +291,7 @@ class Funds extends N8_Controller {
 				}
 				break;
 
-			case 'deduction':
+            case 'deduction':
 			default:
 				$category->transactionStart();
 				$transaction_info = ($this->input->post("description")) ? $this->input->post("description") : "Deduction";
@@ -307,13 +307,84 @@ class Funds extends N8_Controller {
 					$transaction->setTransactionDate($date);
 					$transaction->setTransactionInfo($transaction_info);
 					$transaction->saveTransaction();
-				} 
+				}
 				$category->transactionEnd();
 				break;
 		}
 
 		redirect("/book/getBookInfo/".$this->input->post('id'));
 	}
+
+    /**
+     * deletes a transaction returning the value of the transaction to the parent account of the category
+     * in which the transaction lived
+     *
+     * @param int $transaction_id
+     */
+    public function deleteTransaction($transaction_id) {
+        $transaction = new Budget_DataModel_TransactionDM($transaction_id);
+
+        if($transaction->getFromAccount()) {
+            //undo an account to category deposit
+            if($this->removeFundsFromCategory($transaction)) {
+                $result = $this->returnFundsToAccount($transaction);
+            }
+        } elseif($transaction->getFromCategory() && !$transaction->getToCategory()) {
+            //undo a category deduction
+            $result = $this->returnFundsToCategory($transaction);
+        } elseif($transaction->getFromCategory() && $transaction->getToCategory()) {
+            //undo a category to category transfer
+            if($this->removeFundsFromCategory($transaction)) {
+                $result = $this->returnFundsToCategory($transaction);
+            }
+        } else {
+            //undo a category refund/deposit
+            $result = $this->removeFundsFromCategory($transaction);
+        }
+
+        if($result === true) {
+            $transaction->deleteTransaction();
+        }
+
+        redirect('/'.$this->input->post('return_uri'));
+    }
+
+    /**
+     * remove funds from a category
+     *
+     * @param Budget_DataModel_TransactionDM $transaction
+     * @return type
+     */
+    private function removeFundsFromCategory(Budget_DataModel_TransactionDM $transaction) {
+        $category     = new Budget_DataModel_CategoryDM($transaction->getToCategory());
+        $new_cat_amt  = bcsub($category->getCurrentAmount(), $transaction->getTransactionAmount(), 2);
+        $category->setCurrentAmount($new_cat_amt);
+        return $category->saveCategory();
+    }
+
+    /**
+     * take funds from a transaction and put them back into the category
+     *
+     * @param Budget_DataModel_TransactionDM $transaction
+     */
+    private function returnFundsToCategory(Budget_DataModel_TransactionDM $transaction) {
+        $category = new Budget_DataModel_CategoryDM($transaction->getFromCategory());
+        $new_amt  = bcadd($category->getCurrentAmount(), $transaction->getTransactionAmount(), 2);
+        $category->setCurrentAmount($new_amt);
+        return $category->saveCategory();
+    }
+
+    /**
+     * takes funds from a category/transaction and put them back into an account
+     *
+     * @param Budget_DataModel_TransactionDM $transaction
+     */
+    private function returnFundsToAccount(Budget_DataModel_TransactionDM $transaction) {
+        $account      = new Budget_DataModel_AccountDM($transaction->getFromAccount());
+        $new_acct_amt = bcadd($account->getAccountAmount(), $transaction->getTransactionAmount(), 2);
+        $account->setAccountAmount($new_acct_amt);
+        return $account->saveAccount();
+    }
 }
 
 ?>

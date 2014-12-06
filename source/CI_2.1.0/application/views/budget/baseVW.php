@@ -5,10 +5,10 @@
 		protected $errors;
 		protected $notes;
 		protected $CI;
-		
+
 
 		abstract protected function generateView();
-		
+
 		public function __construct(&$CI) {
 			$this->CI = $CI;
 		}
@@ -36,7 +36,7 @@
 				<link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH; ?>jquery.dataTables_1.9.0.css" />
 				<?php if(isset($this->scripts) && is_array($this->scripts)) {
 					foreach($this->scripts as $script)
-						echo $script."\n\t"; 
+						echo $script."\n\t";
 				}?>
 				<script type="text/javascript">
 					$(document).ready(function() {
@@ -61,7 +61,7 @@
 							Hello <a href="/userCTL"><?=$this->CI->session->userdata('logged_user')?></a><?=" - ".date('l, F j'); ?>
 						</div>
 					</div>
-					<h1><a href="/">Budget 3.1<span style="font-size:40%;">beta</span></a></h1>
+					<h1><a href="/">Budget 3.1<span style="font-size:40%;"></span></a></h1>
 					<div id="nav">
 						<div class="nav-background">
 							<?php
@@ -120,7 +120,7 @@
 				<div class="clear">&nbsp;</div>
 			</div><!-- end div container -->
 				<div id="footer" class="border">
-					<div id="copy"><a href="/blackjack/blackjack/" target="_blank">Play Blackjack</a>&nbsp;&nbsp;<span class="version">v 3.0</span> &copy; <?php $year = date('Y'); echo $year;?> Me.</div>
+					<div id="copy"><a href="/blackjack/blackjack/" target="_blank">Play Blackjack</a>&nbsp;&nbsp;<span class="version">v 3.1</span> &copy; <?php $year = date('Y'); echo $year;?> Me.</div>
 				</div>
 			</body>
 			</html>
@@ -129,7 +129,7 @@
 
 		/**
 		 * renders the entire view from header to footer
-		 * 
+		 *
 		 * @return  void
 		 * @access  public
 		 * @since   07.01.2013
@@ -160,5 +160,5 @@
 			$this->CI = $ci;
 		}
 	}
-	
+
 ?>

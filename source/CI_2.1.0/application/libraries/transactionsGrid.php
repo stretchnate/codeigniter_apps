@@ -14,7 +14,9 @@ class TransactionsGrid extends N8_Error {
 							"transaction_date" => "Date",
 							"transaction_amount" => "Amount",
 							"transaction_info" => "Description",
-							"cleared_bank" => "Cleared");
+							"cleared_bank" => "Cleared",
+                            "delete_transaction" => "Delete"
+                            );
 
 	function __construct($owner = null, $owner_type = null, $reporting = false) {
 		$this->CI =& get_instance();
@@ -151,6 +153,15 @@ class TransactionsGrid extends N8_Error {
 							$('#transactions_grid').dataTable({
 								'aaSorting': [[0,'desc']]
 							 });
+
+                            $('.delete_transaction_form').submit(function() {
+                                var action = $(this).attr('action').split('/');
+                                var transaction_id = action[3];
+
+                                if(!window.confirm('are you sure you want to delete transaction id ' + transaction_id + '?')) {
+                                    return false;
+                                }
+                            });
 						});
 					</script>
 					<table id='transactions_grid'>
@@ -193,8 +204,17 @@ class TransactionsGrid extends N8_Error {
 										break;
 
 									case "cleared_bank":
-										$html .= "<td><input type='checkbox' value='".$transaction->transaction_id."' {$checked}/>";
+										$html .= "<td style='text-align:center'><input type='checkbox' value='".$transaction->transaction_id."' {$checked}/>";
 										break;
+
+                                    case "delete_transaction":
+                                        $html .= "<td style='text-align:center'>"
+                                                . "<form method='post' action='/funds/deleteTransaction/".$transaction->transaction_id."' class='delete_transaction_form'>"
+                                                    . "<input type='hidden' name='return_uri' value='".$this->CI->uri->uri_string."' />"
+                                                    . "<input type='image' src='/images/small_red_ex.png' alt='delete transaction {$transaction->transaction_id}' title='delete transaction {$transaction->transaction_id}' />"
+                                                . "</form>"
+                                            . "</td>";
+                                        break;
 
 									default:
 										if( property_exists("Budget_DataModel_TransactionDM", $property) && isset($transaction->$property) ) {

@@ -35,18 +35,22 @@ class Budget_DataModel_AccountDM extends N8_Model {
 
 	public function saveAccount() {
 		if($this->account_id > 0) {
-			if(!$this->updateAccount()) {
+            $result = $this->updateAccount();
+			if($result === false) {
 				$this->setError("There was a problem updating the account ".$this->account_name);
 			}
 		} else {
 			$this->insertAccount();
 			$this->insert_id = $this->db->insert_id();
-			return $this->insert_id;
+			$result = $this->insert_id;
 		}
+
+        return $result;
 	}
 
 	private function updateAccount() {
-		$sets = array();
+        $result = false;
+		$sets   = array();
 
 		$sets["account_name"]     = $this->account_name;
 		$sets["account_amount"]   = $this->dbNumberFormat($this->account_amount);
@@ -55,9 +59,10 @@ class Budget_DataModel_AccountDM extends N8_Model {
 
 		$this->db->where("account_id", $this->account_id);
 		if($this->db->update("accounts", $sets)) {
-			return true;
+			$result = true;
 		}
-		return false;
+
+        return $result;
 	}
 
 	private function insertAccount(){
@@ -132,7 +137,7 @@ class Budget_DataModel_AccountDM extends N8_Model {
 
 	/**
 	 * builds the category array based on pay frequency
-	 * 
+	 *
 	 * @param  int    $pay_frequency
 	 * @return array
 	 * @since  05.01.2013
@@ -154,7 +159,7 @@ class Budget_DataModel_AccountDM extends N8_Model {
 
 	/**
 	 * returns the pay frequency (in days) for the account
-	 * 
+	 *
 	 * @return int
 	 * @since 05.01.2013
 	 */
@@ -221,7 +226,7 @@ class Budget_DataModel_AccountDM extends N8_Model {
 	public function getActive() {
 		return $this->active;
 	}
-	
+
 	public function setActive($active) {
 		$this->active = $active;
 	}
