@@ -317,7 +317,9 @@ class Funds extends N8_Controller {
 
     /**
      * deletes a transaction returning the value of the transaction to the parent account of the category
-     * in which the transaction lived
+     * in which the transaction lived.
+     * @todo - look into making this transactional so if we fail to delete the transaction we don't go out of balance on the
+     * accounts and categories.
      *
      * @param int $transaction_id
      */
