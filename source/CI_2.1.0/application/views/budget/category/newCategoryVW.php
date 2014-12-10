@@ -1,23 +1,23 @@
 <?php
 	require_once('views/budget/baseVW.php');
-	
+
 	class Budget_Category_NewCategoryVW extends Budget_BaseVW {
 
 		private $accounts;
-		
+
 		public function __construct(&$CI) {
 			parent::__construct($CI);
 		}
 
 		/**
 		 * generates the body of the view
-		 * 
+		 *
 		 * @access  protected
 		 * @since   07.01.2013
 		 */
 		public function generateView() {
 			?>
-			<h1>New Category Form</h1>
+			<h2>New Category Form</h2>
 			<div class="formResult result">
 				<span id="ajax-load"><img src='<?php echo IMG_PATH; ?>ajax-loader.gif' alt='loading...' /></span>
 				<span id="result-message">&nbsp;</span>
@@ -55,7 +55,7 @@
 							<td>
 								<span class="error">*</span>
 								<label for="nec">
-									<a href="javascript:void(null)" class="tool-tip" title="how much do you spend on this bill each month?">Amount Necessary:</a> 
+									<a href="javascript:void(null)" class="tool-tip" title="how much do you spend on this bill each month?">Amount Necessary:</a>
 								</label>
 							</td>
 							<td><input type="text" class="required" name="nec" id="nec" value="$" /></td>
@@ -65,7 +65,7 @@
 							<td>
 								<span class="error">*</span>
 								<label for="startAmt">
-									<a href="javascript:void(null)" class="tool-tip" title="how much do you have saved already for this bill?">Starting Amount:</a> 
+									<a href="javascript:void(null)" class="tool-tip" title="how much do you have saved already for this bill?">Starting Amount:</a>
 								</label>
 							</td>
 							<td>
@@ -109,7 +109,7 @@
 										10 => "October",
 										11 => "November",
 										12 => "December");
-										
+
 										foreach($months as $index => $month) {
 										?>
 										<option value="<?= $index; ?>"><?= $month; ?></option>
@@ -148,7 +148,7 @@
 							<td>Priority: </td>
 							<td>
 								<select name="priority">
-								<?php 
+								<?php
 								for($i = 1;$i < 11; $i++) {
 									echo "<option value='$i'>$i</option>";
 								}

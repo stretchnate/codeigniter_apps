@@ -8,13 +8,13 @@ body{
 	background:#ffffff;
 }
 
-h1 {
+h1, h2 {
 	margin:0;
 	color:#6FA7D1;
 	text-shadow:0 1px 1px #FFFFFF;
 }
 
-h1 a {
+h1 a, h2 a {
 	text-decoration:none;
 }
 

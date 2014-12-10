@@ -12,9 +12,11 @@
 		}
 	}
 	?>
-	<h1><?php echo $bookName; ?></h1>
-	<div id="edit"><a class="button border" href="/book/editBook/<?php echo $bookId; ?>/">Edit <?php echo $bookName; ?></a></div>
-	<div id="account-general-info">
+    <h2>
+        <a href="/book/editBook/<?php echo $bookId; ?>/"><?php echo $bookName; ?></a>
+    </h2>
+
+    <div id="account-general-info">
 		<div class="left half">
 			<div class="bucket-amount">
 				<?php echo $parentAccount->account_name; ?> Amount: $<?php echo number_format($parentAccount->account_amount,2,'.',','); ?>
@@ -93,13 +95,13 @@
 						<input type="text" name="date" autocomplete="off" /> yyyy-mm-dd
 					</div>
 				</div>
-				<div class="form-element">		
+				<div class="form-element">
 					<div class="label bold ta-right">Description:</div>
 					<div>
 						<textarea name="description" rows="1" cols="20"></textarea>
 					</div>
 				</div>
-				<div class="form-element">		
+				<div class="form-element">
 					<div class="label bold ta-right">
 						<span class="error">*</span>Amount:
 					</div>

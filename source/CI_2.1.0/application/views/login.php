@@ -21,17 +21,17 @@ header("Pragma: no-cache");
 	<div id="header">
 		<div id="date"><?php echo date('l, F j'); ?></div>
 	</div>
-	
+
 	<div id="container">
 		<?php $date = date('l, F j'); ?>
-		
+
 		<h2>Please log in first</h2>
 		<?php
 		if(isset($error)) {
 			echo "<p>$error</p>";
 		}
 		?>
-		<form name="loginForm" action="/admin/login" method="post">
+		<form name="loginForm" action="/admin/login" method="post" style="float:left;">
 		<p>
 			<label for="username"><span class="error">*</span>Username: <br />
 			<input type="text" class="required" name="username" value="" id="username" /></label>
@@ -45,6 +45,10 @@ header("Pragma: no-cache");
 			<a href="/admin/register/" id="register">Register</a>
 		</p>
 		</form>
+        <div style="float:left;">
+            <?= $adsense_1; ?>
+        </div>
+        <div class="clear">&nbsp;</div>
 	</div>
 	<div id="footer">
 		<div id="copy">Copyright&copy; <?php $year = date('Y'); echo $year;?> Me.</div>

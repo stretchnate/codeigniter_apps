@@ -1,5 +1,5 @@
 	<div id="book-summary">
-	<h1>Transfer Funds</h1>
+	<h2>Transfer Funds</h2>
 	<form name="transferForm" id="transferForm" action="/fundsTransferCTL/transferFunds/" method="post">
 		<table>
 			<tr>
@@ -39,7 +39,7 @@
 							?>
 								<option value="<?php echo $account->account_id;?>"><?php echo $account->account_name." (has $".number_format($account->account_amount,2).")";?></option>
 							<?
-								
+
 							}
 							?>
 						</select>
@@ -74,7 +74,7 @@
 							?>
 								<option value="<?php echo $account->account_id;?>"><?php echo $account->account_name;?></option>
 							<?
-								
+
 							}
 							?>
 						</select>

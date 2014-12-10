@@ -100,12 +100,19 @@
 		 */
 		protected function generateFooter() {
 			$uri = str_replace("/", "_", $this->CI->uri->uri_string());
+            $n = 0;
+            $ads = 0;
 			?>
 				</div><!-- end div content -->
 				<div id="post-it-notes">
-					<?
+					<?php
 					if( isset($this->notes) && is_array($this->notes)) {
-						foreach($this->notes as $note) { ?>
+						foreach($this->notes as $note) {
+                            if($n % 2 == 0) {
+                                $this->showAd();
+                                $ads++;
+                            }
+                    ?>
 						<div class="post-it">
 							<?php echo  $note->note_text; ?>
 							<br />
@@ -113,9 +120,15 @@
 							<br />
 							<a href="/notes/deleteNote/<?php echo $note->note_id;?>/<?php echo $uri?>">Delete Note</a>
 						</div>
-						<?
+						<?php
 						}
-					} ?>
+					}
+
+                    while($ads < 3) {
+                        $this->showAd();
+                        $ads++;
+                    }
+                    ?>
 				</div>
 				<div class="clear">&nbsp;</div>
 			</div><!-- end div container -->
@@ -124,8 +137,18 @@
 				</div>
 			</body>
 			</html>
-		<?
+		<?php
 		}
+
+        /**
+         * displays an adservice ad
+         *
+         * @return void
+         */
+        protected function showAd() {
+            $ad = AdFactory::getAdService();
+            $ad->displayAd();
+        }
 
 		/**
 		 * renders the entire view from header to footer
