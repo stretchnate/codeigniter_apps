@@ -35,19 +35,16 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 		$category = $category[0];
 
 		foreach($category as $column => $value) {
-			// if( property_exists($this, $column) ) {
-				// $this->$column = trim($value);
-			// }
-
 			$value = trim($value);
 			switch($column) {
-				case "bookId":         $this->category_id              = $value; break;
-				case "bookName":       $this->category_name            = $value; break;
-				case "bookAmtNec":     (float)$this->amount_necessary  = $value; break;
-				case "bookAmtCurrent": (float)$this->current_amount    = $value; break;
-				case "ownerId":        $this->owner_id                 = $value; break;
-				case "account_id":     $this->parent_account_id        = $value; break;
+                case "bookId":          $this->category_id             = $value; break;
+                case "bookName":        $this->category_name           = $value; break;
+                case "bookAmtNec":      (float)$this->amount_necessary = $value; break;
+                case "bookAmtCurrent":  (float)$this->current_amount   = $value; break;
+                case "ownerId":         $this->owner_id                = $value; break;
+                case "account_id":      $this->parent_account_id       = $value; break;
 				case "InterestBearing": $this->interest_bearing        = Utilities::getBoolean($value); break;
+                case "due_months":      $this->due_months              = explode('|', $value); break;
 				default:
 					$this->$column = $value;
 			}
@@ -55,11 +52,15 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 	}
 
 	function checkExisitingCategory(&$category_name, &$user_id) {
-	
+
 	}
 
+    /**
+     * saves the category to the database
+     *
+     * @return boolean
+     */
 	public function saveCategory() {
-
 		if( $this->validateCategory() ) {
 			if($this->category_id > 0) {
 				return $this->updateCategory();
@@ -71,6 +72,11 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 		}
 	}
 
+    /**
+     * updates an existing category
+     *
+     * @return boolean
+     */
 	private function updateCategory() {
 		$result = false;
 
@@ -83,7 +89,7 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 		$sets["priority"]        = $this->priority;
 		$sets["active"]          = $this->active;
 		$sets["due_day"]         = $this->due_day;
-		$sets["due_months"]      = $this->due_months;
+		$sets["due_months"]      = implode('|', $this->due_months);
 		$sets["account_id"]      = $this->parent_account_id;
 		$sets["InterestBearing"] = $this->interest_bearing;
 
@@ -98,6 +104,11 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 		return $result;
 	}
 
+    /**
+     * inserts a new category
+     *
+     * @return type
+     */
 	function insertCategory() {
 		$values = array();
 		$values["bookName"]        = $this->category_name;
@@ -107,13 +118,18 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 		$values["priority"]        = $this->priority;
 		$values["active"]          = ($this->active) ? $this->active : 0;
 		$values["due_day"]         = $this->due_day;
-		$values["due_months"]      = $this->due_months;
+		$values["due_months"]      = implode('|', $this->due_months);
 		$values["account_id"]      = $this->parent_account_id;
 		$values["InterestBearing"] = $this->interest_bearing;
 
 		return $this->db->insert("booksummary", $values);
 	}
 
+    /**
+     * validates the category data
+     *
+     * @return boolean
+     */
 	private function validateCategory() {
 		$valid = true;
 
@@ -144,6 +160,12 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 		return $valid;
 	}
 
+    /**
+     * fetches the transactions for the category
+     *
+     * @param string $direction
+     * @return array
+     */
 	public function fetchTransactions($direction = "asc") {
 		$this->db->select();
 
@@ -166,14 +188,14 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 
 	/**
 	 * determines the next due date of the category
-	 * 
+	 *
 	 * @return void (saves object (DateTime) to $this->next_due_date
 	 * @since  04.28.2013
 	 */
 	private function calculateNextDueDate() {
 		$due_date = null;
 		$today    = new DateTime();
-		$months   = explode("|", $this->due_months);
+		$months   = $this->due_months;
 
 		//if it's an every check category the due date is set to tomorrow
 		if($this->due_day == 0) {
@@ -213,7 +235,7 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 
 	/**
 	 * determines how many days until due
-	 * 
+	 *
 	 * @return void
 	 * @since  05.01.2013
 	 */
@@ -237,11 +259,11 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 	public function getCategoryId() {
 		return $this->category_id;
 	}
-	
+
 	public function getCategoryName() {
 		return $this->category_name;
 	}
-	
+
 	public function setCategoryName($category_name) {
 		$this->category_name = $category_name;
 	}
@@ -249,7 +271,7 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 	public function getAmountNecessary() {
 		return (float)$this->amount_necessary;
 	}
-	
+
 	public function setAmountNecessary($amount_necessary) {
 		$this->amount_necessary = (float)$amount_necessary;
 	}
@@ -257,7 +279,7 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 	public function getCurrentAmount() {
 		return (float)$this->current_amount;
 	}
-	
+
 	public function setCurrentAmount($current_amount) {
 		$this->current_amount = (float)$current_amount;
 	}
@@ -265,7 +287,7 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 	public function getOwnerId() {
 		return $this->owner_id;
 	}
-	
+
 	public function setOwnerId($owner_id = null) {
 		if( $owner_id && $owner_id == $this->session->userdata("user_id")) {
 			$this->owner_id = $owner_id;
@@ -277,7 +299,7 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 	public function getPriority() {
 		return $this->priority;
 	}
-	
+
 	public function setPriority($priority) {
 		$this->priority = $priority;
 	}
@@ -285,7 +307,7 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 	public function getActive() {
 		return $this->active;
 	}
-	
+
 	public function setActive($active) {
 		$this->active = $active;
 	}
@@ -302,18 +324,15 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 		return $this->due_months;
 	}
 
-	public function setDueMonths($due_months) {
-		if(is_array($due_months)) {
-			$due_months = implode("|", $due_months);
-		}
-
+	public function setDueMonths(array $due_months) {
 		$this->due_months = $due_months;
+        return $this;
 	}
 
 	public function getParentAccountId() {
 		return $this->parent_account_id;
 	}
-	
+
 	public function setParentAccountId($parent_account_id) {
 		$this->parent_account_id = $parent_account_id;
 	}

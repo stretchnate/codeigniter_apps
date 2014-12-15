@@ -1,12 +1,20 @@
 <?php
 class Funds extends N8_Controller {
 
+    /**
+     * constructor
+     */
 	function Funds() {
 		parent::__construct();
 		$this->load->library('account');
 		$this->load->model("Book_info");
 	}
 
+    /**
+     * displays the add new funds page
+     *
+     * @return void
+     */
 	function index(){
 		$this->auth->restrict();
 		$data['youAreHere'] = "Add New Funds";
@@ -22,6 +30,11 @@ class Funds extends N8_Controller {
 		$this->load->view('footer');
 	}
 
+    /**
+     * saves the funds to the account
+     *
+     * @return void
+     */
 	function addFunds(){
 		$this->auth->restrict();
 		$this->load->model("accounts", "ACCT", TRUE);
@@ -197,6 +210,17 @@ class Funds extends N8_Controller {
 		}
 	}
 
+    /**
+     * adds a deposit to an account
+     *
+     * @param int $account
+     * @param int $owner_id
+     * @param string $date
+     * @param float $net
+     * @param float $gross
+     * @param string $source
+     * @return boolean
+     */
 	function addDepositToAccount($account, &$owner_id, &$date, &$net, &$gross, &$source) {
 		$this->load->model('Funds_operations', 'Fops',TRUE);
 		$data = array('ownerId' => $owner_id,
@@ -206,18 +230,6 @@ class Funds extends N8_Controller {
 						'net' => $net,
 						'account_id' => $account);
 		return $this->Fops->insertMain($owner_id, $data);
-	}
-
-	function clearBooks(){
-		$this->load->model('Funds_operations','Fops',TRUE);
-		$this->Fops->resetBooks();
-	}
-
-
-	function zeroBalanceAll() {
-		$this->auth->restrict();
-		$this->load->model('funds_operations', 'FOPS', TRUE);
-		$this->FOPS->zeroBalance();
 	}
 
 	 /**

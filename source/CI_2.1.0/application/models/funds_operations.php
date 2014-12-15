@@ -1,10 +1,10 @@
 <?php
 class Funds_operations extends N8_Model {
-		
+
 	function Funds_operations(){
 			parent::__construct();
 	}
-	
+
 	function insertMain($id,$data){
 		$query = $this->db->insert('new_funds', $data);
 		return $this->db->insert_id();
@@ -24,22 +24,6 @@ class Funds_operations extends N8_Model {
 		$schedule = $query->row();
 		return $schedule;
 	}
-	
-	function resetBooks(){
-		$this->db->query('delete from new_funds;');
-		$this->db->query('update booksummary set bookAmtCurrent = 0;');
-		$this->db->query('delete from booktransactions;');
-		header('Location:/');
-	}
-
-	function zeroBalance($id = NULL) {
-		if( !empty($id) ) {
-			$this->db->where('bookId = '.$id);
-		}
-		$this->db->set('bookAmtCurrent',0);
-		$this->db->update('booksummary');
-		header("Location:/");
-	}
 
 	function setBucketAmount($bucket,$amount) {
 		//update bucket with new current amount
@@ -51,7 +35,7 @@ class Funds_operations extends N8_Model {
 		}
 		return true;
 	}
-	
+
 	function setAccountAmount($account,$amount) {
 		//update account with new current amount
 		$data = array('bookAmtCurrent' => $amount);
@@ -62,7 +46,7 @@ class Funds_operations extends N8_Model {
 		}
 		return true;
 	}
-	
+
 	function transferToAccount($id,$amount) {
 		//get account amount
 		$accountAmount = $this->getAccountAmount($id);
@@ -79,14 +63,14 @@ class Funds_operations extends N8_Model {
 		}
 		return true;
 	}
-	
+
 	//TODO add some error checking to this and getAccountAmount()
 	function getBucketAmount($id) {
 		$query = $this->db->get_where('_buckets',array('bucketId' => $id));
 		$row = $query->row();
 		return $row->amount;
 	}
-	
+
 	function getAccountAmount($id) {
 		$query = $this->db->get_where('booksummary',array('bookId' => $id));
 		$row = $query->row();
