@@ -19,7 +19,7 @@
 
         /**
          * gets the ci instance and calculates the monthly need for the account
-         * 
+         *
          * @param Budget_DataModel_AccountDM $account_dm
          */
         public function __construct(Budget_DataModel_AccountDM $account_dm) {
@@ -105,7 +105,7 @@
          */
         private function trimDate($date) {
             $pattern = '/ \d{2}:\d{2}:\d{2}$/';
-            return preg_replace($pattern, $date);
+            return preg_replace($pattern, '', $date);
         }
 
         /**
