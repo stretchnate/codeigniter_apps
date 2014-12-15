@@ -5,6 +5,9 @@
      * @author stretch
      */
     class AdFactory {
+        const AD_MEDIUM_RECTANGLE = 'medium_rectangle';
+        const AD_AUTO             = 'auto';
+
         private static $add_services = array('adsense');
 
         /**

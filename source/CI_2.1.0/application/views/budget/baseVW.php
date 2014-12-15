@@ -147,7 +147,7 @@
          */
         protected function showAd() {
             $ad = AdFactory::getAdService();
-            $ad->displayAd();
+            $ad->displayAd(AdFactory::AD_MEDIUM_RECTANGLE);
         }
 
 		/**
