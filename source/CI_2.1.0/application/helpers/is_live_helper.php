@@ -9,7 +9,8 @@
      */
     if ( ! function_exists('isLive')) {
         function isLive() {
-            return (base_url() == 'http://money.stretchnate.com');
+            echo base_url();
+            return (base_url() == 'http://money.stretchnate.com/');
         }
     }
 
