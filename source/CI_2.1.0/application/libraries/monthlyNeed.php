@@ -85,7 +85,7 @@
                 //count back two weeks at a time to see which deposits have a two week pattern
                 foreach($weeks_back as $weeks) {
                     //if the past date is in the array increase the score ($j) by one
-                    if(in_array(strtotime($date . $weeks), $this->deposits)) {
+                    if(in_array(strtotime($date . $weeks), $this->deposit_dates)) {
                         $j++;
                     }
                 }
