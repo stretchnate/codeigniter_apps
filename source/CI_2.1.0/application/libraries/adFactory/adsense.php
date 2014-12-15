@@ -9,9 +9,10 @@
         public function __construct() {}
 
         public function displayAd() {
+            if(isLive()) {
             ?>
             <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-                <!-- Category - 3 (stretchnate.com) -->
+                 <!--Category - 3 (stretchnate.com)-->
                 <ins class="adsbygoogle"
                      style="display:block"
                      data-ad-client="ca-pub-6403299303438002"
@@ -21,6 +22,8 @@
                 (adsbygoogle = window.adsbygoogle || []).push({});
             </script>
             <?php
-//             echo "<div class='google_ad'>google adsense ad will go here</div>";
+            } else {
+                echo "<div class='google_ad'>google adsense ad will go here</div>";
+            }
         }
     }
