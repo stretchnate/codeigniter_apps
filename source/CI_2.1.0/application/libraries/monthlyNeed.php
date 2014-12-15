@@ -63,7 +63,7 @@
                     date('Y/m/d', strtotime('-3 months')));
 
             foreach($deposits as $deposit) {
-                $this->deposit_dates = $this->trimDate($deposit->date);
+                $this->deposit_dates[] = $this->trimDate($deposit->date);
             }
         }
 
