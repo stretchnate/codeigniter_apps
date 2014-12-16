@@ -186,6 +186,7 @@ img {
 	margin:0 auto;
 	position:relative;
 	background:#ffffff;
+        min-height:300px;
 }
 
 #edit{

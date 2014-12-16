@@ -45,7 +45,7 @@ header("Pragma: no-cache");
 			<a href="/admin/register/" id="register">Register</a>
 		</p>
 		</form>
-        <div style="float:left;">
+        <div style="float:left;margin-left:30px;">
             <?= $adsense; ?>
         </div>
         <div class="clear">&nbsp;</div>
