@@ -43,8 +43,8 @@ class Admin extends N8_Controller {
         $ads = array();
         $ad = AdFactory::getAdService('adsense');
         ob_start();
-        $ad->displayAd(AdFactory::AD_MEDIUM_RECTANGLE);
-        $ads['adsense_1'] = ob_get_contents();
+        $ad->displayAd(AdFactory::AD_AUTO);
+        $ads['adsense'] = ob_get_contents();
         ob_end_clean();
 
         return $ads;

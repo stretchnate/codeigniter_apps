@@ -46,12 +46,13 @@ header("Pragma: no-cache");
 		</p>
 		</form>
         <div style="float:left;">
-            <?= $adsense_1; ?>
+            <?= $adsense; ?>
         </div>
         <div class="clear">&nbsp;</div>
 	</div>
 	<div id="footer">
 		<div id="copy">Copyright&copy; <?php $year = date('Y'); echo $year;?> Me.</div>
 	</div>
+    <?= $adsense; ?>
 </body>
 </html>
