@@ -61,9 +61,9 @@
 							Hello <a href="/userCTL"><?=$this->CI->session->userdata('logged_user')?></a><?=" - ".date('l, F j'); ?>
 						</div>
 					</div>
-					<h1><a href="/">Budget 3.1<span style="font-size:40%;"></span></a></h1>
+					<h1><a href="/">Smart Budget<span style="font-size:40%;"></span></a></h1>
 					<div id="nav">
-						<div class="nav-background">
+                        <div class="nav-background">
 							<?php
 								$nav = new NavigationUlLIB("main_nav");
 								echo $nav->getUl();
@@ -73,6 +73,7 @@
 					</div>
 				</div>
 				<div id="container">
+                    <?= $this->showAd(AdFactory::AD_AUTO); ?>
 					<?php
 					if( isset($sidebar_links) ) { ?>
 					<div id="sidebar">
@@ -101,16 +102,16 @@
 		protected function generateFooter() {
 			$uri = str_replace("/", "_", $this->CI->uri->uri_string());
             $n = 0;
-            $ads = 0;
 			?>
 				</div><!-- end div content -->
 				<div id="post-it-notes">
 					<?php
 					if( isset($this->notes) && is_array($this->notes)) {
 						foreach($this->notes as $note) {
-                            if($n % 2 == 0) {
-                                $this->showAd();
-                                $ads++;
+                            $n++;
+
+                            if($n == 2) {
+                                $this->showAd(AdFactory::AD_WIDE_SKYSCRAPER);
                             }
                     ?>
 						<div class="post-it">
@@ -124,17 +125,18 @@
 						}
 					}
 
-                    while($ads < 3) {
-                        $this->showAd();
-                        $ads++;
+                    if($n < 2) {
+                        $this->showAd(AdFactory::AD_WIDE_SKYSCRAPER);
                     }
                     ?>
 				</div>
 				<div class="clear">&nbsp;</div>
-			</div><!-- end div container -->
-				<div id="footer" class="border">
-					<div id="copy"><a href="/blackjack/blackjack/" target="_blank">Play Blackjack</a>&nbsp;&nbsp;<span class="version">v 3.1</span> &copy; <?php $year = date('Y'); echo $year;?> Me.</div>
-				</div>
+
+            <div id="footer" class="border">
+                <div id="copy"><a href="/blackjack/blackjack/" target="_blank">Play Blackjack</a>&nbsp;&nbsp;<span class="version">v 3.2</span> &copy; <?php $year = date('Y'); echo $year;?> Me.</div>
+            </div>
+            <?= $this->showAd(AdFactory::AD_AUTO); ?>
+            </div><!-- end div container -->
 			</body>
 			</html>
 		<?php
@@ -145,9 +147,9 @@
          *
          * @return void
          */
-        protected function showAd() {
+        protected function showAd($ad_type) {
             $ad = AdFactory::getAdService();
-            $ad->displayAd(AdFactory::AD_MEDIUM_RECTANGLE);
+            $ad->displayAd($ad_type);
         }
 
 		/**

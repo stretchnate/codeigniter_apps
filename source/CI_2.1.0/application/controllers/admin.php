@@ -34,21 +34,8 @@ class Admin extends N8_Controller {
 			}
 		}
 
-        $data = $this->getLoginAds();
-
-		$this->load->view('login', $data);
+		$this->load->view('login');
 	}
-
-    protected function getLoginAds() {
-        $ads = array();
-        $ad = AdFactory::getAdService('adsense');
-        ob_start();
-        $ad->displayAd(AdFactory::AD_AUTO);
-        $ads['adsense'] = ob_get_contents();
-        ob_end_clean();
-
-        return $ads;
-    }
 
 	function logout() {
 		if($this->auth->logout())

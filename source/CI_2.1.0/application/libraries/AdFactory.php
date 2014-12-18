@@ -6,6 +6,8 @@
      */
     class AdFactory {
         const AD_MEDIUM_RECTANGLE = 'medium_rectangle';
+        const AD_AUTO_TEXT_ONLY   = 'auto_text_only';
+        const AD_WIDE_SKYSCRAPER  = 'wide_skyscraper';
         const AD_AUTO             = 'auto';
 
         private static $add_services = array('adsense');

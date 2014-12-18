@@ -43,7 +43,7 @@ header("Pragma: no-cache");
 				Hello <a href="/userCTL"><?=$this->session->userdata('logged_user')?></a><?=" - ".date('l, F j'); ?>
 			</div>
 		</div>
-		<h1><a href="/">Budget 3.1<span style="font-size:40%;"></span></a></h1>
+		<h1><a href="/">Smart Budget<span style="font-size:40%;"></span></a></h1>
 		<div id="nav">
 			<div class="nav-background">
 				<?php
