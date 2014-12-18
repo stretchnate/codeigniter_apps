@@ -21,3 +21,6 @@ robots.txt
 
 #wordpress ignore
 wordpress/*
+
+#apc ignore
+apc
