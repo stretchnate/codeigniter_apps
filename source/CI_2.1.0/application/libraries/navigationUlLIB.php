@@ -51,7 +51,7 @@ class NavigationUlLIB {
 	public function retrieveLinks() {
 		return $this->CI->UTIL->getLinks($this->category);
 	}
-	
+
 	/**
 	 * creates an array of links from the links db table and creates the a href tag
 	 *
@@ -109,6 +109,11 @@ class NavigationUlLIB {
 						$link_tag[$index] = $value;
 					}
 					break;
+                case "sort_order":
+                case "active_date":
+                case "category":
+                case "term_date":
+                    break;
 				default:
 					if( !empty($value) ) {
 						$attributes[] = $index.'="'.$value.'"';
@@ -134,8 +139,9 @@ class NavigationUlLIB {
 	 */
 	private function generateUl() {
 		if(is_array($this->links_array)) {
+            $category = str_replace("|", "_", $this->category);
 			foreach($this->links_array as $link_id => $link) {
-				$this->ul .= "<li>".$link;
+				$this->ul .= "<li class='{$category}'>".$link;
 
 				$this->generateSubUl($link_id);
 

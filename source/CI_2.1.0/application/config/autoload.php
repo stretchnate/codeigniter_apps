@@ -64,7 +64,7 @@ $autoload['libraries'] = array('auth', 'jsincludes', 'budgetConstants', 'utiliti
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('N8_date_helper', 'html', 'error', 'autoload'); //error is loaded in development only
+$autoload['helper'] = array('N8_date_helper', 'html', 'error', 'autoload', 'is_live'); //error is loaded in development only
 
 
 /*

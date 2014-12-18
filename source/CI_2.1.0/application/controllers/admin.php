@@ -34,9 +34,8 @@ class Admin extends N8_Controller {
 				$this->load->vars($data);
 			}
 		}
-		//$this->load->view('header');
+
 		$this->load->view('login');
-		//$this->load->view('footer');
 	}
 
 	function logout() {

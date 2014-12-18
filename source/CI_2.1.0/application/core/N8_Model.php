@@ -1,6 +1,15 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+
+if (!defined('BASEPATH'))
+	exit('No direct script access allowed');
 
 class N8_Model extends CI_Model {
+
+	protected $content_db;
+
+	public function __construct() {
+		parent::__construct();
+	}
 
 	function transactionStart() {
 		$this->db->trans_start();
@@ -19,4 +28,6 @@ class N8_Model extends CI_Model {
 	function dbNumberFormat($value) {
 		return number_format($value, 2, '.', '');
 	}
+
 }
+

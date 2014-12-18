@@ -7,7 +7,10 @@ class Welcome extends N8_Controller {
 		$this->load->library('utilities');
 		$this->load->helper('html');
 	}
-	
+
+    /**
+     * displays the home page
+     */
 	function index() {
 		$this->auth->restrict();
 		$this->load->model('notes_model', 'NM', TRUE);
@@ -22,7 +25,8 @@ class Welcome extends N8_Controller {
 		$home_model = new Budget_BusinessModel_Home();
 		$home_model->loadAccounts($this->session->userdata('user_id'));
 
-		$home_vw->setAccounts($home_model->getAccounts());
+        //get monthlyNeeds
+        $home_vw->setTotalsArray($this->getTotalsArray($home_model->getAccounts()));
 
 		$last_transaction = null;
 		$category_dm      = new Budget_DataModel_CategoryDM();
@@ -30,9 +34,7 @@ class Welcome extends N8_Controller {
 
 		//because we fetched the transactions in descending order we want the first one
 		if( is_array($transactions) && count($transactions) > 0 ) {
-			$last_transaction = $this->transactionDetails($transactions, 0);
-
-			$last_transaction = $this->UserFriendlyTransactionDetails($last_transaction);
+			$last_transaction = $this->UserFriendlyTransactionDetails($this->transactionDetails($transactions, 0));
 		}
 
 		$home_vw->setLastTransaction($last_transaction);
@@ -41,7 +43,23 @@ class Welcome extends N8_Controller {
 
 		$home_vw->renderView();
 	}
-	
+
+    /**
+     * creates an array of monthlyNeed objects
+     *
+     * @param array $accounts
+     * @return \monthlyNeed
+     */
+    private function getTotalsArray($accounts) {
+        $totals_array = array();
+        foreach($accounts as $account_dm) {
+            $account_id = $account_dm->getAccountId();
+            $totals_array[$account_id] = new monthlyNeed($account_dm);
+        }
+
+        return $totals_array;
+    }
+
 	function php_info() {
 		$this->auth->restrict();
 		$this->load->view('info.php');

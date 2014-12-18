@@ -94,7 +94,7 @@ class Budget_DataModel_TransactionDM extends N8_Model {
 		$sets["transaction_amount"] = $this->dbNumberFormat($this->transaction_amount);
 		$sets["transaction_date"]   = $this->transaction_date;
 		$sets["transaction_info"]   = $this->transaction_info;
-		
+
 		if($this->db->where("transaction_id", $this->transaction_id)->update("transactions", $sets)) {
 			return true;
 		}
@@ -136,6 +136,17 @@ class Budget_DataModel_TransactionDM extends N8_Model {
 
 		return $this->db->insert("transactions", $values);
 	}
+
+    /**
+     * deletes a transaction
+     *
+     * @return type
+     */
+    public function deleteTransaction() {
+        if(!empty($this->transaction_id)) {
+            return $this->db->delete('transactions', array('transaction_id' => $this->transaction_id));
+        }
+    }
 
 	/**
 	 * validates the transaction to ensure proper relationships between accounts, categories and deposits are satisfied.
@@ -215,7 +226,7 @@ class Budget_DataModel_TransactionDM extends N8_Model {
 		if($this->getFromCategory() && $this->getToCategory()) {
 			if( !$this->getToAccount() && !$this->getFromAccount() && !$this->getDepositId() ) {
 				return true;
-			}	
+			}
 		}
 		return false;
 	}
@@ -270,7 +281,7 @@ class Budget_DataModel_TransactionDM extends N8_Model {
 	public function setTransactionId($transaction_id) {
 		$this->transaction_id = $transaction_id;
 	}
-	
+
 	public function getToCategory() {
 		return $this->to_category;
 	}

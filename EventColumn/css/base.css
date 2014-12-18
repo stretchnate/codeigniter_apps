@@ -1,0 +1,375 @@
+/*
+    Document   : styles
+    Created on : Sep 22, 2013, 9:51:29 AM
+    Author     : stretch
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+html {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    /*background-color: #FFFFFF;*/
+    color: #000000;
+}
+
+body {
+    margin:0;
+}
+
+h1 {
+    font-size:200%;
+}
+
+h2 {
+    font-size: 200%;
+    color:#0099FF;
+}
+
+ul {
+    list-style-type: none;
+}
+
+li {
+    display: inline;
+}
+
+.clear {
+    clear:both;
+    line-height: 0px;
+    height:0px;
+    font-size:0px;
+    margin:0px;
+    padding: 0px;
+}
+
+.error, .notification, .successs {
+    padding:0 0 0 10px;
+}
+
+.error {
+    color:#FF3333;
+}
+
+.notification {
+    color:#FFC322;
+}
+
+.success {
+    color:#33FF33;
+}
+
+.error p, .notification p, .success p {
+    display: inline;
+}
+
+.purple {
+    color:#9966FF;
+}
+
+.float_right {
+    float:right;
+}
+
+.ec_button {
+    border-radius:5px;
+    color:#FFFFFF;
+    background-color:#0099FF;
+}
+
+input[type=file] {
+    border-radius:5px;
+    color:#FFFFFF;
+    background-color:#0099FF;
+}
+
+#wrapper {
+
+}
+
+#header {
+    background-color: #9966ff;
+    float:left;
+    margin:0;
+    width:100%;
+}
+
+#header h1 {
+    margin-bottom:0px;
+    margin-left:10px;
+    float:left;
+}
+
+#header span.welcome {
+    float:right;
+    margin:15px 0 0 0;
+}
+
+#header span.welcome a, #header span.welcome a:visited, #footer li a, #footer li a:visited {
+    color:#FFFFFF;
+    text-decoration: none;
+}
+
+#main-nav {
+    background-color: #9966FF;
+    color: #ffffff;
+    clear:both;
+}
+
+#main-nav ul {
+    margin:0;
+    padding-left:0;
+    width:100%;
+}
+
+#main-nav li {
+    background-color: #0099FF;
+    display: block;
+    float:left;
+    height: 50px;
+    width: 49.67%;/*33*/
+    text-align: center;
+    padding: 13px 0 0 0;
+    margin: 0;
+    font-size: 30px;
+    margin:2px;
+}
+
+#search_menu_container {
+    float:right;
+    margin-top:20px;
+}
+
+.menu {
+    background: url(/images/menu_btn.jpg) no-repeat;
+    height: 51px;
+    margin: 0 5px;
+    width: 51px;
+    float:left;
+    position:relative;
+}
+
+#search_menu_container .menu_dropdown {
+    background-color: #9966ff;
+    position: absolute;
+    right: -5px;
+    top: 45px;
+    min-width: 156px;
+    height:auto;
+    display:none;
+}
+
+#search_menu_container .menu_dropdown li {
+    margin:3px 0 3px 0;
+    display:block;
+}
+
+#search_menu_container .menu_dropdown li a {
+    color: #ffffff;
+    font-size: 120%;
+    text-decoration: none;
+}
+
+#mini_search_container {
+    float:left;
+    margin-top:2px;
+}
+
+.mini_search_set {
+    float:left;
+}
+
+#mini_search_zip {
+    background-color: #0099ff;
+    border: medium none;
+    height: 40px;
+    width: 100%;
+    color:#FFFFFF;
+    font-size: 180%;
+}
+
+#mini_search_submit {
+    background: transparent url('/images/triangle2.jpg') no-repeat;
+}
+
+#content {
+    background-color:#ffffff;
+    color:#000000;
+    width:1180px;
+    margin: 0 auto 0 auto;
+}
+
+#ec_world {
+    background: url('/images/transparent_globe.jpg') no-repeat transparent;
+    min-width: 500px;
+    min-height: 500px;
+}
+
+#side-nav {
+    background: url('/images/tab.png') repeat;
+    margin-top: 60px;
+    width: 170px;
+    color: #ffffff;
+    float: left;
+}
+
+#side-nav ul {
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+}
+
+#side-nav li {
+    display:block;
+    font-size: 120%;
+}
+
+#main-nav li a, #main-nav li a:visited, #side-nav li a, #side-nav li a:visited {
+    color: #ffffff;
+    text-decoration:none;
+}
+
+#side-nav li a:hover {
+    text-decoration: underline;
+}
+
+#pane_container {
+    border:2px solid #9966FF;
+    min-height:370px;
+    width:80%;
+    margin:40px auto 30px auto;
+}
+
+#pane_container div.columns {
+    width:47%;
+}
+
+#pane_container h2 {
+    color: #32CCFE;
+}
+
+#left_pane {
+    border-right:2px solid #9966FF;
+    margin:10px 0 0 10px;
+    float:left;
+    height:96%;
+}
+
+#right_pane {
+    float:left;
+    height:100%;
+    margin:10px;
+    padding-left:10px;
+}
+
+.globe_logo_bg {
+    background: url('/images/globe_logo.jpg') no-repeat;
+    height:360px;
+    width:410px;
+}
+
+.checkbox_label {
+    margin:4px 280px 0 0;
+}
+
+.recaptcha_container {
+    padding:10px;
+}
+
+.field_label, .checkbox_label {
+    font-weight: bold;
+    color:#32CCFE;
+}
+
+.toggle_text, .form_input {
+    color:#32CCFE;
+    border: 1px solid #32CCFE;
+    margin: 6px 0 6px 0;
+}
+
+.form_input {
+    margin: 0 0 6px 0;
+}
+
+.form_text {
+    height:36px;
+}
+
+#page-content {
+    background: url('/images/transparent_globe.jpg') no-repeat transparent scroll center;
+    margin:0 auto 0 auto;
+    min-height: 500px;
+    width:700px;
+    position: relative;
+}
+
+#event_map {
+    border:2px solid #9966FF;
+    width: 1156px;
+    min-height: 710px;
+    margin: 40px 0 40px 0;
+    position: relative;
+    padding: 10px;
+}
+
+#event_list {
+    float:left;
+    margin:0 70px 0 70px;
+    width:35%;
+    font-size: 120%
+}
+
+#event_list div.event_container {
+    border: 1px dashed #9966FF;
+    padding: 5px;
+}
+
+#event_list div {
+    margin: 10px 0 10px 0;
+}
+
+#event_list span.label {
+    color: #32CCFE;
+}
+
+#event_list span.details {
+    padding:0 0 0 3px;
+}
+
+#flyer_map_container {
+    width: 50%;
+    height: 700px;
+    float: left;
+    border-left:2px solid #9966FF;
+    padding: 0 10px 0 10px;
+}
+
+#flyer_map_container div.flyer {
+    height: 350px;
+    text-align: center;
+}
+
+#flyer_map_container div.map {
+    height:710px;
+}
+
+#flyer_map_container div.single_map {
+    height:350px;
+}
+
+#map_canvas {
+    height: 100%;
+}
+
+div.event-form-field {
+    margin:2px 0 2px 0;
+}
+
+#footer ul {
+    float:right;
+}
+
+#footer li a, #footer li a:visited {
+    color:#9966FF;
+    text-decoration:none;
+}

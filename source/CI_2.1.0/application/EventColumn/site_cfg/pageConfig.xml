@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PageConfig>
+    <Page id="default">
+        <Head>
+            <title>EventColumn.com find events in your area</title>
+            <css>/css/base.css</css>
+            <css>/jquery-ui-1.10.3.custom/css/custom-theme/jquery-ui-1.10.3.custom.css</css>
+            <js>/js/jquery.1.10.2.min.js</js>
+            <js>/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js</js>
+            <js>/js/jquery/validation/dist/jquery.validate.1.11.1.min.js</js>
+            <js>/js/eventColumn.js</js>
+            <meta name="keywords">Events, church, concert, parties</meta>
+            <meta name="description">EventColumn.com search for and create events in your area</meta>
+            <meta name="author">eventcolumn.com</meta>
+        </Head>
+    </Page>
+
+    <Page id="login">
+        <Head>
+            <title>EventColumn.com - login to add new Events or create an account</title>
+            <js>/js/login.js</js>
+            <js>/js/register.js</js>
+        </Head>
+    </Page>
+
+    <!--Page id="register">
+        <Head>
+            <title>EventColumn.com - Create an account</title>
+            <js>/js/register.js</js>
+        </Head>
+    </Page-->
+
+    <Page id="user_profile">
+        <Head>
+            <title>EventColumn.com - user profile</title>
+            <js>/js/register.js</js>
+        </Head>
+    </Page>
+    <!-- below is an example of a page configuration and an explanation of how they affect the default configuration -->
+    <Page id="example">
+        <Head>
+            <title>This will overwrite the default title</title>
+            <css>this will be added to the list of css files to load (does not overwrite)</css>
+            <js>this will add a new js file(does not overwrite)</js>
+            <meta name="author">this will overwrite the author meta tag</meta>
+            <meta name="copyright">this will add a copyright meta tag or overwrite the copyright meta tag if one exists.</meta>
+        </Head>
+    </Page>
+    <!-- end example config -->
+
+    <Page id="about">
+        <Head>
+            <title>About EventColumn.com</title>
+        </Head>
+        <Body>
+            This is the body content, if we are unable to add links or other HTML we may need to update the xsd to use a complex type for the Body tag.
+        </Body>
+    </Page>
+
+    <Page id="policies">
+        <Head>
+            <title>EventColumn.com Policies</title>
+        </Head>
+        <Body>
+            This is the body content for policies, if we are unable to add links or other HTML we may need to update the xsd to use a complex type for the Body tag.
+        </Body>
+    </Page>
+
+    <Page id="contact">
+        <Head>
+            <title>EventColumn.com Contact us</title>
+        </Head>
+    </Page>
+
+    <Page id="home">
+        <Head>
+            <title>EventColumn.com - What's going on in your world?</title>
+        </Head>
+    </Page>
+
+    <Page id="event_add">
+        <Head>
+            <title>EventColumn.com - add a new Event</title>
+            <js><![CDATA[http://maps.googleapis.com/maps/api/js?sensor=false]]></js>
+            <js>/js/event_module.js</js>
+        </Head>
+    </Page>
+
+    <Page id="event_update">
+        <Head>
+            <title>EventColumn.com - Update Event</title>
+            <js><![CDATA[http://maps.googleapis.com/maps/api/js?sensor=false]]></js>
+            <js>/js/event_update_module.js</js>
+        </Head>
+    </Page>
+    <Page id="map">
+        <Head>
+            <title>
+                <![CDATA[
+                    EventColumn.com - search results for %1$s
+                ]]>
+            </title>
+            <js><![CDATA[http://maps.googleapis.com/maps/api/js?sensor=false]]></js>
+        </Head>
+    </Page>
+
+    <Page id="advanced_search">
+        <Head>
+            <title>EventColumn.com search for events</title>
+            <js>/js/advanced_search.js</js>
+            <inline_js>
+                <![CDATA[
+                $(document).ready(function() {
+                    $("#event_start").datetimepicker(timepickerSettings(false));
+                    $("#event_end").datetimepicker(timepickerSettings(true));
+                });
+                ]]>
+            </inline_js>
+        </Head>
+    </Page>
+</PageConfig>

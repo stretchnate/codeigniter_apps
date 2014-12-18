@@ -7,4 +7,17 @@ webalizer/
 metadata/
 *.metadata
 source/CI_2.1.0/application/logs/
+source/CI_2.1.0/application/EventColumn/logs/
 nbproject/*
+EventColumn/test.php
+EventColumn/event/images/*.*
+source/CI_2.1.0/application/EventColumn/models/TransactionTestDM.php
+source/CI_2.1.0/application/EventColumn/models/testDM.php
+robots.txt
+
+#the config.php files are ignored by the local .git/info/exclude file
+#source/CI_2.1.0/application/config/config.php
+#source/CI_2.1.0/application/EventColumn/config/config.php
+
+#wordpress ignore
+wordpress/*

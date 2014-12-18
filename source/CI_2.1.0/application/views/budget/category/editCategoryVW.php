@@ -1,8 +1,8 @@
 <?php
 	require_once('views/budget/baseVW.php');
-	
+
 	class Budget_Category_EditCategoryVW extends Budget_BaseVW {
-		
+
 		private $category_dm;
 
 		public function __construct(&$CI) {
@@ -11,13 +11,13 @@
 
 		/**
 		 * generates the body of the view
-		 * 
+		 *
 		 * @access  protected
 		 * @since   07.01.2013
 		 */
 		public function generateView() {
 		?>
-			<h1>Edit <?php echo $this->category_dm->getCategoryName(); ?></h1>
+			<h2>Edit <?php echo $this->category_dm->getCategoryName(); ?></h2>
 			<div id="book-summary">
 				<form name="editBookForm" action="/book/saveChange/<?php echo $this->category_dm->getCategoryId(); ?>/" method="post">
 					<table>
@@ -55,7 +55,6 @@
 							<td>
 								<select name="due_months[]" id="due_months" multiple="multiple" size="6">
 								<?php
-									$due_months_array = explode("|", $this->category_dm->getDueMonths());
 									$months = array(
 													1 => "January",
 													2 => "February",
@@ -72,7 +71,7 @@
 
 									foreach($months as $index => $month) {
 										$selected = '';
-										if(in_array($index, $due_months_array)) {
+										if(in_array($index, $this->category_dm->getDueMonths())) {
 											$selected = " selected='selected'";
 										}
 								?>
@@ -98,7 +97,7 @@
 					<a href="javascript:changeConfirm('enable',<?php echo $this->category_dm->getCategoryId(); ?>);">Enable</a> <?php echo $this->category_dm->getCategoryName(); ?>
 				<?php
 					}
-				?>	
+				?>
 			</div>
 			<div id="transactions">
 				<table border="0" cellpadding="3">

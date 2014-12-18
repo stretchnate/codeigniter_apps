@@ -1,4 +1,4 @@
-	<h1>Add Funds Form</h1>
+	<h2>Add Funds Form</h2>
 	<div id="new-book">
 	<?php if(isset($error)) echo $error; ?>
 		<form name="newFundsForm" id="newFundsForm" action="" method="post">
