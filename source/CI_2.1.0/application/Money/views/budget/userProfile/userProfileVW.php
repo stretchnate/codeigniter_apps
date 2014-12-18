@@ -1,5 +1,5 @@
 <?php
-	require_once('views/budget/baseVW.php');
+	require_once(APPPATH.'/views/budget/baseVW.php');
 
 	class Budget_UserProfile_UserProfileVW extends Budget_BaseVW {
 
@@ -11,7 +11,7 @@
 
 		/**
 		 * generates the body of the view
-		 * 
+		 *
 		 * @access  protected
 		 * @since   07.01.2013
 		 */

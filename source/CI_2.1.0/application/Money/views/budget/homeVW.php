@@ -1,5 +1,5 @@
 <?php
-	require_once('views/budget/baseVW.php');
+	require_once('baseVW.php');
 
 	class Budget_HomeVW extends Budget_BaseVW {
 

@@ -12,7 +12,7 @@ class Inactive extends N8_Controller {
 		if(!$active) {
 			$this->load->view("inactive/maintenance");
 		} else {
-			redirect("/welcome/");
+			redirect("/");
 		}
 	}
 }

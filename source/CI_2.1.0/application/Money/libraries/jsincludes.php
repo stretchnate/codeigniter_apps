@@ -41,7 +41,7 @@ Class Jsincludes {
 		$scripts[] = "<script type='text/javascript' src='".self::JS."newFunds.js'></script>";
 		return $scripts;
 	}
-	
+
 	function transferFunds() {
 		$scripts[] = self::JQUERY;
 		$scripts[] = self::JQUERY_UI;
@@ -58,11 +58,11 @@ Class Jsincludes {
 		$scripts[] = "<script type='text/javascript' src='".self::JS."utilities.js'></script>";
 		return $scripts;
 	}
-	
-	function welcome() {
+
+	function home() {
 		$scripts[] = self::JQUERY;
 		$scripts[] = self::JQUERY_UI;
-		$scripts[] = "<script type='text/javascript' src='".self::JS."welcome.js'></script>";
+		$scripts[] = "<script type='text/javascript' src='".self::JS."home.js'></script>";
 		return $scripts;
 	}
 

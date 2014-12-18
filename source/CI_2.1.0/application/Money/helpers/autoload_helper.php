@@ -2,8 +2,8 @@
 
 function __autoload($classname) {
 	$dirs = array(
-	    "/var/www/source/CI_2.1.0/application/models/",
-	    "/var/www/source/CI_2.1.0/application/libraries/",
+	    APPPATH."/models/",
+	    APPPATH."/libraries/",
 	);
 
 	$result = false;

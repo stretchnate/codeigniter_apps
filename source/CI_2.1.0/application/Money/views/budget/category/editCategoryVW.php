@@ -1,5 +1,5 @@
 <?php
-	require_once('views/budget/baseVW.php');
+	require_once(APPPATH.'/views/budget/baseVW.php');
 
 	class Budget_Category_EditCategoryVW extends Budget_BaseVW {
 

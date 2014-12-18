@@ -6,14 +6,13 @@ class Notes extends N8_Controller {
 		$this->load->library('utilities');
 		$this->load->helper('html');
 	}
-	
+
 	function showNoteForm($note_id = null, $result = array(), $category_id = null) {
 		$this->auth->restrict();
 		$this->load->model('notes_model', 'NM', TRUE);
 		$this->load->model('accounts', 'ACCT', TRUE);
 
 		$props['title'] = "Add Edit Notes";
-		// $props['scripts'] = $this->jsincludes->welcome();
 		$props['links'] = $this->utilities->createLinks('main_nav');
 
 		$data = array();
@@ -41,7 +40,7 @@ class Notes extends N8_Controller {
 	function addEditNote($note_id = null) {
 		$this->auth->restrict();
 		$this->load->model('notes_model', 'NM', TRUE);
-		
+
 		$note_text = trim($this->input->post('note_text'));
 		$note_priority = trim($this->input->post('note_priority'));
 		$category_id = trim($this->input->post('account_id'));
@@ -66,7 +65,7 @@ class Notes extends N8_Controller {
 			redirect($uri);
 		}
 		else {
-			redirect("/welcome/");
+			redirect("/");
 		}
 	}
 }

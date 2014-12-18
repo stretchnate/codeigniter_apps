@@ -1,5 +1,5 @@
 <?php
-	$config['index_redirect'] = '/welcome';
+	$config['index_redirect'] = '/';
 	$config['login_redirect'] = '/admin/login';
 
 /* End of file: auth.php */

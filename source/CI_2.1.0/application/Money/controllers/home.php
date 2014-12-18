@@ -1,8 +1,8 @@
 <?php
 
-class Welcome extends N8_Controller {
+class Home extends N8_Controller {
 
-	function Welcome() {
+	function __construct() {
 		parent::__construct();
 		$this->load->library('utilities');
 		$this->load->helper('html');
@@ -19,7 +19,7 @@ class Welcome extends N8_Controller {
 		$CI      =& get_instance();
 		$home_vw = new Budget_HomeVW($CI);
 		$home_vw->setTitle("Your Accounts");
-		$home_vw->setScripts($this->jsincludes->welcome());
+		$home_vw->setScripts($this->jsincludes->home());
 
 		//get the accounts
 		$home_model = new Budget_BusinessModel_Home();
@@ -66,5 +66,5 @@ class Welcome extends N8_Controller {
 	}
 }
 
-/* End of file welcome.php */
-/* Location: ./system/application/controllers/welcome.php */
+/* End of file home.php */
+/* Location: ./system/application/controllers/home.php */

@@ -3,7 +3,7 @@
 
 class Auth {
 	var $CI 			= NULL;
-	var $index_redirect	= '/welcome';
+	var $index_redirect	= '/';
 	var $login_redirect	= '/admin/login';
 	var $inactive_site  = "/inactive/";
 
@@ -17,7 +17,7 @@ class Auth {
 			$this->initialize($props);
 		}
 	}
-	
+
 	function process_login($login = NULL) {
 		// A few safety checks
 		// Our array has to be set
@@ -110,7 +110,7 @@ class Auth {
 			$this->CI->session->set_userdata('last_update', $data['LastUpdate']);
 		}
 	}
-	
+
 	function redirect() {
 		if ($this->CI->session->userdata('redirected_from') == FALSE) {
 			redirect($this->index_redirect);
@@ -118,7 +118,7 @@ class Auth {
 			redirect($this->CI->session->userdata('redirected_from'));
 		}
 	}
-	
+
 	/**
 	 * initialize class preferences
 	 *
@@ -133,7 +133,7 @@ class Auth {
 			}
 		}
 	}
-	
+
 	/**
 	 *
 	 * This function restricts users from certain pages.
@@ -166,7 +166,7 @@ class Auth {
 			redirect($this->login_redirect);
 		}
 	}
-	
+
 	/**
 	 *
 	 * Checks if a user is logged in
@@ -181,7 +181,7 @@ class Auth {
 			return TRUE;
 		}
 	}
-	
+
 	function logout() {
 		$this->updateLoginHistory(FALSE, TRUE);
 		$this->CI->session->sess_destroy();
