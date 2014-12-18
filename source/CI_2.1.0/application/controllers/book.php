@@ -1,6 +1,6 @@
 <?php
 class Book extends N8_Controller {
-	
+
 	function Book() {
 		parent::__construct();
 	}
@@ -16,11 +16,11 @@ class Book extends N8_Controller {
 
 		$data->parentAccount = $this->ACCT->getAccount($data->account_id);
 		$data->accounts = $this->ACCT->getAccountsAndDistributableCategories($this->session->userdata('user_id'));
-		
+
 		// $transactions['transactions'] = $this->ACCT->getUserTransactions($id, $this->session->userdata('user_id'));
 		$t_grid = new TransactionsGrid($id, "category");
 		$t_grid->run();
-		
+
 		$transactions["transactions"] = $t_grid->getTransactionsGrid();
 
 		$props['youAreHere'] = $data->bookName;
@@ -52,7 +52,7 @@ class Book extends N8_Controller {
 		$category_vw =  new Budget_Category_NewCategoryVW($CI);
 		$category_vw->setScripts($this->jsincludes->newBook());
 		$category_vw->setTitle("Add New Category");
-		
+
 		$accounts = $this->ACCT->getAccounts($this->session->userdata("user_id"));
 		$category_vw->setAccounts($accounts);
 		// $category_vw->setErrors($message);
@@ -70,11 +70,11 @@ class Book extends N8_Controller {
 	 */
 	public function editBook($id, $message = null){
 		$this->auth->restrict();
-		
+
 		$category_dm = new Budget_DataModel_CategoryDM($id);
-		
+
 		$this->load->view('budget/category/editCategoryVW');
-		
+
 		$CI =& get_instance();
 		$category_vw = new Budget_Category_EditCategoryVW($CI);
 		$category_vw->setScripts($this->jsincludes->editBook());
@@ -82,7 +82,7 @@ class Book extends N8_Controller {
 		$category_vw->setErrors($message);
 		$category_vw->setCategoryDM($category_dm);
 		$category_vw->renderView();
-		
+
 	}
 
 	function checkName() {
@@ -99,7 +99,7 @@ class Book extends N8_Controller {
 		unset($_POST['name']);
 		echo json_encode($response);
 	}
-	
+
 	function createCategory(){
 		$response['success'] = false;
 		$response['message'] = "";
@@ -119,7 +119,7 @@ class Book extends N8_Controller {
 			$rules['rateType']  = array("field" => "rateType", "label" => "Rate Type", "rules" => "required");
 			$rules['totalOwed'] = array("field" => "totalOwed", "label" => "Current Balance", "rules" => "required|numeric");
 		}
-	
+
 		if($this->validate($rules)){
 			$e = 0;
 			$this->load->model('Book_info', 'BI',TRUE);
@@ -151,9 +151,8 @@ class Book extends N8_Controller {
 					$category_dm->setOwnerId($this->session->userdata('user_id'));
 					$category_dm->setDueDay($this->input->post('dueDay'));
 					$category_dm->setActive(1);
-					
-					$due_months = implode("|", $this->input->post('due_months'));
-					$category_dm->setDueMonths($due_months);
+
+					$category_dm->setDueMonths($this->input->post('due_months'));
 					$category_dm->saveCategory();
 
 					//add interest data if necessary
@@ -205,7 +204,7 @@ class Book extends N8_Controller {
 			exit();
 		}
 	}
-	
+
 	function saveChange($id) {
 		$this->auth->restrict();
 

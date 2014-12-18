@@ -23,7 +23,7 @@ function showAd($ad_type) {
 	<script type="text/javascript" src="<?php echo JS_PATH; ?>login.js"></script>
 </head>
 <body>
-	<div id="header">
+	<div id="header" class="border">
         <h1><a href="/">Smart Budget<span style="font-size:40%;"></span></a></h1>
         <div id="date" class="main_color"><?php echo date('l, F j'); ?></div>
 	</div>
