@@ -105,50 +105,54 @@
 									</div>
 
 									<?php
-									foreach($account_dm->getCategories() as $category_dm){
-									?>
-										<div class="book">
-											<h3 class="border"><span class="text"><?php echo $category_dm->getCategoryName(); ?></span><span class="money">$<?php echo number_format($category_dm->getCurrentAmount(), 2, '.', ',') ?></span></h3>
-											<div class="book-content">
-												<div class="category-container dashed-bottom">
-													<div class="label">Account:</div>
-													<div class="account-name">
-														<a href="/book/getBookInfo/<?php echo $category_dm->getCategoryId(); ?>/"><?php echo $category_dm->getCategoryName(); ?></a>
-														<?php
-															if($category_dm->getDueDay() > 0) {
-																$due_date = $category_dm->getNextDueDate()->format("F d, Y");
-																echo "Due: ".$due_date;
-															}
-														?>
-													</div>
-												</div>
-												<div class="category-container dashed-bottom">
-													<div class="label">Goal:</div>
-													<div class="align-right">$<?php echo number_format($category_dm->getAmountNecessary(), 2, '.', ',') ?></div>
-												</div>
-												<div class="category-container dashed-bottom">
-													<div class="label">Amount Saved:</div>
-													<div class="align-right">$<?php echo number_format($category_dm->getCurrentAmount(), 2, '.', ',') ?></div>
-												</div>
-												<div class="category-container">
-													<div class="label">Difference:</div>
-													<?php
-														$dif = bcsub($category_dm->getAmountNecessary(), $category_dm->getCurrentAmount());
-														if($category_dm->getAmountNecessary() > $category_dm->getCurrentAmount()){
-															echo '<div class="red align-right">-$'.number_format($dif, 2, '.', ',').'</div>';
-														} else if ($category_dm->getAmountNecessary() < $category_dm->getCurrentAmount()){
-															$dif = bcsub($category_dm->getCurrentAmount(), $category_dm->getAmountNecessary());
-															echo '<div class="bold align-right">+$'.number_format($dif, 2, '.', ',').'</div>';
-														} else {
-															echo '<div class="align-right">$'.number_format($dif, 2, '.', ',').'</div>';
-														}
-													?>
-												</div>
-											</div>
-										</div>
-										<div class="clear">&nbsp;</div>
-								<?php
-									}
+                                    if(is_array($account_dm->getCategories()) && count($account_dm->getCategories()) > 0) {
+                                        foreach($account_dm->getCategories() as $category_dm){
+                                        ?>
+                                            <div class="book">
+                                                <h3 class="border"><span class="text"><?php echo $category_dm->getCategoryName(); ?></span><span class="money">$<?php echo number_format($category_dm->getCurrentAmount(), 2, '.', ',') ?></span></h3>
+                                                <div class="book-content">
+                                                    <div class="category-container dashed-bottom">
+                                                        <div class="label">Account:</div>
+                                                        <div class="account-name">
+                                                            <a href="/book/getBookInfo/<?php echo $category_dm->getCategoryId(); ?>/"><?php echo $category_dm->getCategoryName(); ?></a>
+                                                            <?php
+                                                                if($category_dm->getDueDay() > 0) {
+                                                                    $due_date = $category_dm->getNextDueDate()->format("F d, Y");
+                                                                    echo "Due: ".$due_date;
+                                                                }
+                                                            ?>
+                                                        </div>
+                                                    </div>
+                                                    <div class="category-container dashed-bottom">
+                                                        <div class="label">Goal:</div>
+                                                        <div class="align-right">$<?php echo number_format($category_dm->getAmountNecessary(), 2, '.', ',') ?></div>
+                                                    </div>
+                                                    <div class="category-container dashed-bottom">
+                                                        <div class="label">Amount Saved:</div>
+                                                        <div class="align-right">$<?php echo number_format($category_dm->getCurrentAmount(), 2, '.', ',') ?></div>
+                                                    </div>
+                                                    <div class="category-container">
+                                                        <div class="label">Difference:</div>
+                                                        <?php
+                                                            $dif = bcsub($category_dm->getAmountNecessary(), $category_dm->getCurrentAmount());
+                                                            if($category_dm->getAmountNecessary() > $category_dm->getCurrentAmount()){
+                                                                echo '<div class="red align-right">-$'.number_format($dif, 2, '.', ',').'</div>';
+                                                            } else if ($category_dm->getAmountNecessary() < $category_dm->getCurrentAmount()){
+                                                                $dif = bcsub($category_dm->getCurrentAmount(), $category_dm->getAmountNecessary());
+                                                                echo '<div class="bold align-right">+$'.number_format($dif, 2, '.', ',').'</div>';
+                                                            } else {
+                                                                echo '<div class="align-right">$'.number_format($dif, 2, '.', ',').'</div>';
+                                                            }
+                                                        ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="clear">&nbsp;</div>
+                                    <?php
+                                        }
+                                    } else {
+                                        echo "<h3>Please <a style='color:#6fa7d1' href='/book/newBookForm'>add categories</a> to this Account</h3>";
+                                    }
 									?>
 								</div>
 							</div>
