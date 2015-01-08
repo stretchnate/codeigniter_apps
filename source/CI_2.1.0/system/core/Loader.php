@@ -1052,7 +1052,7 @@ class CI_Loader {
 		}
 
 		// Autoload models
-		if (isset($autoload['model'])) {
+		if (!empty($autoload['model'])) {
 			$this->model($autoload['model']);
 		}
 	}

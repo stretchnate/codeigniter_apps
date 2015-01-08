@@ -5,7 +5,7 @@
             if( $classname == 'CI_Model' ) {
                 require_once("/var/www/source/CI_2.1.0/system/core/Model.php");
             } else if( $classname == 'N8_Model' ) {
-                require_once("/var/www/source/CI_2.1.0/application/core/N8_Model.php");
+                require_once("/var/www/source/CI_2.1.0/application/EventColumn/core/N8_Model.php");
             } else {
                 $dirs = array(
                     "/var/www/source/CI_2.1.0/application/EventColumn/models/",

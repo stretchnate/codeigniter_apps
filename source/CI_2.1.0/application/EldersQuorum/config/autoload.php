@@ -52,7 +52,7 @@ $autoload['packages'] = array();
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('auth', 'jsincludes', 'budgetConstants', 'utilities');
+$autoload['libraries'] = array('auth', 'database');
 
 
 /*
@@ -64,7 +64,7 @@ $autoload['libraries'] = array('auth', 'jsincludes', 'budgetConstants', 'utiliti
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('N8_date_helper', 'html', 'error', 'autoload', 'is_live'); //error is loaded in development only
+$autoload['helper'] = array('N8_date_helper', 'html', 'error', 'autoload', 'url'); //error is loaded in development only
 
 
 /*
@@ -109,7 +109,7 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array('book_info');
+$autoload['model'] = array();
 
 
 /* End of file autoload.php */

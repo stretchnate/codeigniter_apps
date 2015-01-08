@@ -56,7 +56,7 @@ if (defined('ENVIRONMENT'))
  * as this file.
  *
  */
-	$system_path = '../../source/CI_2.1.0/system';
+	$system_path = '../source/CI_2.1.0/system';
 
 /*
  *---------------------------------------------------------------
@@ -72,7 +72,7 @@ if (defined('ENVIRONMENT'))
  * NO TRAILING SLASH!
  *
  */
-	$application_folder = '../../source/CI_2.1.0/application/EldersQuorum';
+	$application_folder = '../source/CI_2.1.0/application/EldersQuorum';
 
 /*
  * --------------------------------------------------------------------
