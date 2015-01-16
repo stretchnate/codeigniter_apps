@@ -27,13 +27,11 @@
 
         //@todo move these keys to a config file or the db.
         private static $recaptcha_public_keys  = array(
-            'local'      => '6LdbwuoSAAAAAPSqvEWCzUjzF4AV239u4d3_LXn1',
-            'test'       => '6LflQ_kSAAAAALtAsUMdM5RbH6pZkp2P9EWXLpRw',
+            'local'      => '6LfLLQATAAAAADZe8YVLDOuXnD8EgtSxCo7rIXye',
             'production' => '6LdcwuoSAAAAAILGBIhw37hMBCOyTBNeXvUrIIHI'
         );
         private static $recaptcha_private_keys = array(
-            'local'      => '6LdbwuoSAAAAANM-ZAgTGYs0pJZQbXJKLtE1X7nb',
-            'test'       => '6LflQ_kSAAAAALMKmVk8gisrBq7xoR27O3pa5oux',
+            'local'      => '6LfLLQATAAAAAOY9aJMyGCV-649xYnHCgRPLi_yV',
             'production' => '6LdcwuoSAAAAACHSXwLzlcgMvwSbz7nwjgFZFY8P'
         );
 
@@ -78,18 +76,13 @@
             $url = base_url();
 
             switch( $url ) {
-                case 'http://eventcolumn.local':
+                case 'http://ceq.local':
                     $key = 'local';
                     break;
 
-                case 'http://eventcolumn.com':
-                case 'https://eventcolumn.com':
-                    $key = 'production';
-                    break;
-
-                case 'http://eventcolumn.stretchnate.com':
+                case 'http://hometeaching.stretchnate.com':
                 default:
-                    $key = 'test';
+                    $key = 'production';
                     break;
             }
 
@@ -106,18 +99,13 @@
             $url = base_url();
 
             switch( $url ) {
-                case 'http://eventcolumn.local':
+                case 'http://ceq.local':
                     $key = 'local';
                     break;
 
-                case 'http://eventcolumn.com':
-                case 'https://eventcolumn.com':
-                    $key = 'production';
-                    break;
-
-                case 'http://eventcolumn.stretchnate.com':
+                case 'http://hometeaching.stretchnate.com':
                 default:
-                    $key = 'test';
+                    $key = 'production';
                     break;
             }
 

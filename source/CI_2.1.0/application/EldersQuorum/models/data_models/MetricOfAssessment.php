@@ -48,6 +48,28 @@
         }
 
         /**
+         * loads object values by points and unit id
+         *
+         * @param int $points
+         * @param int $unit_id
+         * @throws Exception
+         */
+        public function loadByPoints($points, $unit_id) {
+            $result = $this->db->get_where('metric_of_assessment', array('points' => $points, 'unit_id' => $unit_id));
+
+            $row = $result->row_array();
+            if(!empty($row)) {
+                foreach($row as $column => $value) {
+                    if(property_exists($this, $column)) {
+                        $this->$column = $value;
+                    }
+                }
+            } else {
+                throw new Exception('unable to load metric for unit '.$unit_id.' and point value of '.$points);
+            }
+        }
+
+        /**
          * saves the class to the db
          *
          * @return mixed

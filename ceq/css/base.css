@@ -85,3 +85,12 @@ label#contact_label {
     display:block;
     padding-top:15px;
 }
+
+div.recaptcha_container {
+    margin-top:15px;
+}
+
+div.recaptcha_container div.field_container {
+    float:none;
+    clear:left;
+}
