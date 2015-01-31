@@ -21,7 +21,7 @@
          * @param int $id
          * @return void
          */
-        public function __constrct($id = null) {
+        public function __construct($id = null) {
             parent::__construct();
 
             if($id) {
@@ -39,8 +39,9 @@
         public function load($member_id) {
             $result = $this->db->get_where('members', array('member_id' => $member_id));
 
-            if(!empty($result->row_array())) {
-                foreach($result->row_array() as $column => $value) {
+            $rows = $result->row_array();
+            if(!empty($rows)) {
+                foreach($rows as $column => $value) {
                     if(property_exists($this, $column)) {
                         $this->$column = $value;
                     }

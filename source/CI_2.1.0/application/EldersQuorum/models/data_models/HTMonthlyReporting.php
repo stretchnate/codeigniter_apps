@@ -26,10 +26,6 @@
             $this->contact_assesment->loadByPoints($metric_of_assessment_value, $this->family->getUnitId());
             $this->concerns = $concerns;
 
-            if(!is_numeric( $date_of_visit )) {
-                $date_of_visit = strtotime($date_of_visit);
-            }
-
             $this->date_of_visit = new DateTime($date_of_visit);
         }
 
@@ -39,7 +35,7 @@
             $values["family_id"]                = $this->family->getMemberId();
             $values["contact_assessment_value"] = $this->contact_assesment->getPoints();
             $values["concerns"]                 = $this->concerns;
-            $values["date_of_visit"]            = $this->date_of_visit->format('%Y-%m-%d');
+            $values["date_of_visit"]            = $this->date_of_visit->format('Y-m-d');
 
             $this->db->insert('ht_monthly_reporting', $values);
             return $this->db->insert_id();
@@ -101,7 +97,11 @@
             if($contact_assessment instanceof MetricOfAssessment) {
                 $this->contact_assesment = $contact_assessment;
             } else {
-                $unit_id = !empty($this->family->getUnitId()) ? $this->family->getUnitId() : $this->home_teacher->getUnitId();
+                $unit_id = $this->family->getUnitId();
+                if(empty($unit_id)) {
+                    $unit_id = $this->home_teacher->getUnitId();
+                }
+
                 if(!empty($unit_id)) {
                     $this->contact_assesment->loadByPoints($contact_assessment, $unit_id);
                 } else {
@@ -127,5 +127,7 @@
 
                 $this->date_of_visit = new DateTime($date_of_visit);
             }
+
+            return $this;
         }
     }

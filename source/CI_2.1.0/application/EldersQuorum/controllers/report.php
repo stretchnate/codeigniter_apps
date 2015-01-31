@@ -34,20 +34,25 @@
         }
 
         private function addReport() {
-            $validator = new Validator();
-            if($validator->validate('add_report')) {
-                $ht_report = new HTMonthlyReporting();
-                $ht_report->load(
-                            $this->input->post('home_teacher'),
-                            $this->input->post('family'),
-                            $this->input->post('assessment'),
-                            $this->input->post('concerns'),
-                            $this->input->post('date_of_visit')
-                        );
+            try {
+                $validator = new Validator();
+                if($validator->validate('add_report')) {
+                    $ht_report = new HTMonthlyReporting();
+                    $ht_report->load(
+                                $this->input->post('home_teacher'),
+                                $this->input->post('family'),
+                                $this->input->post('assessment'),
+                                $this->input->post('concerns'),
+                                $this->input->post('date_of_visit')
+                            );
 
-                if(!$ht_report->save()) {
-                    //log some kind of error here
+                    if(!$ht_report->save()) {
+                        //log some kind of error here
+                    }
                 }
+            } catch(Exception $e) {
+                echo "<!--{$e->getMessage()}-->";
+                die("there was an error saving your report");
             }
         }
 
@@ -163,8 +168,8 @@
                     ->setId('family')
                     ->addOption("", "-- Family --");
 
-            while($this->members_iterator->valid()) {
-                $family = $this->home_teachers_iterator->current();
+            while($this->members_iterator->valid() === true) {
+                $family = $this->members_iterator->current();
                 $family_name = $family->getLastName() . ', ' . $family->getFirstName();
                 $field->addOption($family->getMemberId(), $family_name);
 
