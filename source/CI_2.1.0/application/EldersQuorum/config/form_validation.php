@@ -7,12 +7,12 @@
 			array(
 				'field'	 => 'home_teacher',
 				'label'	 => 'Home Teacher',
-				'rules'	 => 'required'
+				'rules'	 => 'required|callback_notEqualTo[family]'
 			),
 			array(
 				'field'	 => 'family',
 				'label'	 => 'Family',
-				'rules'	 => 'required'
+				'rules'	 => 'required|callback_notEqualTo[home_teacher]'
 			),
             array(
                 'field'  => 'date_of_visit',

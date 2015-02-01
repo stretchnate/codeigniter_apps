@@ -34,4 +34,21 @@
 
             return $result;
         }
+
+        /**
+         * validates the values of two variables, sets the error message if they are equal
+         *
+         * @param mixed $field_1
+         * @param mixed $field_2
+         * @return bool
+         */
+        public static function notEqualTo($field_1, $field_2) {
+            $result = ($field_1 !== $field_2);
+
+            if(!$result) {
+                $this->form_validation->set_message( 'notEqualTo', 'You cannot home teach yourself' );
+            }
+
+            return $result;
+        }
     }

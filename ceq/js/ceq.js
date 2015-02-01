@@ -36,6 +36,19 @@
                 $("#report_form").submit();
             }
         });
+
+        /**
+         * datepicker for date_of_visit field
+         */
+        $("input[name=date_of_visit]").datepicker({
+            showOn: "both",
+            buttonImageOnly: false,
+            dateFormat: "yy-mm-dd",
+            changeMonth: true,
+            changeYear: true,
+            nextText: '',
+            prevText:''
+	});
     });
 
 

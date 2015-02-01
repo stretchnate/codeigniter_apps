@@ -33,8 +33,10 @@
 				<head>
 					<title>Clermont Elders Quorum Home Teaching Reporting</title>
                     <link rel='stylesheet' href='/css/base.css' type='text/css' />
+                    <link rel='stylesheet' href='/css/jquery-ui-1.11.2.custom/jquery-ui.min.css' type='text/css' />
+                    <link rel='stylesheet' href='/css/jquery-ui-1.11.2.custom/jquery-ui.theme.min.css' type='text/css' />
                     <script src="/js/jquery.1.10.2.min.js"></script>
-                    <script src="/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
+                    <script src="/js/jquery/jquery-ui-1.11.2.custom/jquery-ui.min.js"></script>
                     <script src="/js/jquery/validation/dist/jquery.validate.1.11.1.min.js"></script>
                     <script src="/js/ceq.js"></script>
 				</head>

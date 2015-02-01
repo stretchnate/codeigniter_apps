@@ -1,6 +1,6 @@
 <?php
     /**
-     * Description of report
+     * report: handles reporting for home teaching
      *
      * @author stretch
      */
@@ -17,10 +17,16 @@
             $this->view = new ReportVW();
         }
 
+        /**
+         * displays the home teaching reporting form
+         *
+         * @return void
+         */
         public function index() {
+            $response = '';
             $submitted = $this->input->post('report_submission');
             if(!empty($submitted)) {
-                $this->addReport();
+                $response = $this->addReport();
             }
 
             $this->metrics_iterator = new MetricOfAssessmentIterator(1);
@@ -29,11 +35,18 @@
 
             $this->buildReportForm();
 
+            $this->view->setResponse($response);
             $this->view->setForm($this->form);
             $this->view->renderView();
         }
 
+        /**
+         * adds a home teaching report to the database
+         *
+         * @return string
+         */
         private function addReport() {
+            $response = 'Failed to submit report, please try again';
             try {
                 $validator = new Validator();
                 if($validator->validate('add_report')) {
@@ -46,14 +59,28 @@
                                 $this->input->post('date_of_visit')
                             );
 
-                    if(!$ht_report->save()) {
-                        //log some kind of error here
+                    if($ht_report->save()) {
+                        $response = 'Report successfully submitted.';
                     }
                 }
             } catch(Exception $e) {
-                echo "<!--{$e->getMessage()}-->";
-                die("there was an error saving your report");
+                $response .= " <!--{$e->getMessage()}-->";
             }
+
+            return $response;
+        }
+
+        /**
+         * callback method used for validating home teacher to family
+         *
+         * @param int $field_1
+         * @param string $field_2
+         * @return bool
+         */
+        public function notEqualTo($field_1, $field_2) {
+            $field_2 = $this->input->post($field_2);
+
+            return Validator::notEqualTo($field_1, $field_2);
         }
 
         /**
@@ -72,6 +99,11 @@
             $this->form->addField($this->buildFormSubmitButton('Submit Report'));
         }
 
+        /**
+         * builds the date of visit field
+         *
+         * @return \Form_Field_Input
+         */
         private function _buildDateOfVisit() {
             $field = new Form_Field_Input();
             $field->setName('date_of_visit')
@@ -111,6 +143,11 @@
             return $field;
         }
 
+        /**
+         * builds the notes/concerns text area
+         *
+         * @return \Form_Field_Input_Textarea
+         */
         private function buildReportConcernsTextBox() {
             $field = new Form_Field_Input_Textarea();
             $field->setName('concerns')
@@ -148,6 +185,11 @@
             }
         }
 
+        /**
+         * builds the label for the contact type radio group
+         *
+         * @return \Form_Field_Label
+         */
         private function buildContactLabel() {
             $label = new Form_Field_Label();
             $label->setContent('Visit/Contact Type: <label class="error">' . form_error('assessment') . '</label>')
@@ -208,6 +250,11 @@
             return $field;
         }
 
+        /**
+         * initialize the form
+         *
+         * @param string $form_id
+         */
         private function startForm($form_id) {
             $this->form = new Form();
             $this->form->setAction('')
