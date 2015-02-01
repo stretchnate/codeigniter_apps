@@ -1,0 +1,96 @@
+/*
+    Document   : styles
+    Created on : Sep 22, 2013, 9:51:29 AM
+    Author     : stretch
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+html {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    /*background-color: #FFFFFF;*/
+    color: #000000;
+}
+
+body {
+    margin:0;
+}
+
+h1 {
+    font-size:200%;
+}
+
+h2 {
+    font-size: 200%;
+    color:#0099FF;
+}
+
+ul {
+    list-style-type: none;
+}
+
+li {
+}
+
+.clear {
+    clear:both;
+    line-height: 0px;
+    height:0px;
+    font-size:0px;
+    margin:0px;
+    padding: 0px;
+}
+
+.error, .notification, .successs {
+    padding:0 0 0 10px;
+}
+
+.error {
+    color:#FF3333;
+}
+
+.notification {
+    color:#FFC322;
+}
+
+.success {
+    color:#33FF33;
+}
+
+.error p, .notification p, .success p {
+    display: inline;
+}
+
+#wrapper {
+    width:990px;
+    margin: 0px auto 0px auto;
+    padding:15px 0 0 0;
+}
+
+div.form_field {
+    clear:left;
+}
+
+div.field_container, div.field_label {
+    float:left;
+}
+
+div.form_field_textarea {
+    padding-top:15px;
+}
+
+label#contact_label {
+    clear:both;
+    display:block;
+    padding-top:15px;
+}
+
+div.recaptcha_container {
+    margin-top:15px;
+}
+
+div.recaptcha_container div.field_container {
+    float:none;
+    clear:left;
+}
