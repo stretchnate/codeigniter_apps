@@ -80,7 +80,7 @@
                     $key = 'local';
                     break;
 
-                case 'http://hometeaching.stretchnate.com':
+                case 'http://eq.stretchnate.com':
                 default:
                     $key = 'production';
                     break;
