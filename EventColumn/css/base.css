@@ -373,3 +373,11 @@ div.event-form-field {
     color:#9966FF;
     text-decoration:none;
 }
+
+#policy_content ul {
+    list-style-type: none;
+}
+
+#policy_content li {
+    display: block;
+}
