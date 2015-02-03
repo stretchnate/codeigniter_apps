@@ -44,11 +44,31 @@
          */
         public static function notEqualTo($field_1, $field_2) {
             $result = ($field_1 !== $field_2);
+            $ci =& get_instance();
 
             if(!$result) {
-                $this->form_validation->set_message( 'notEqualTo', 'You cannot home teach yourself' );
+                $ci->form_validation->set_message( 'notEqualTo', 'You cannot home teach yourself' );
             }
 
             return $result;
+        }
+
+        /**
+         * validates the recaptcha field
+         *
+         * @param string $server
+         * @param string $challenge_field
+         * @param string $response_field
+         * @return boolean
+         */
+        public static function validateCaptcha($server, $challenge_field, $response_field) {
+            $response = Form_Field_Recaptcha::validate( $server, $challenge_field, $response_field);
+            $ci =& get_instance();
+
+            if( ! $response ) {
+               $ci->form_validation->set_message( 'validateCaptcha', 'The captcha wasn\'t entered correctly please try again' );
+            }
+
+            return $response;
         }
     }

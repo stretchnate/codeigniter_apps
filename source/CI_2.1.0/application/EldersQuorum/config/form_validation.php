@@ -23,6 +23,11 @@
 				'field'	 => 'assessment',
 				'label'	 => 'Visit/Contact Type',
 				'rules'	 => 'required'
+			),
+            array(
+				'field'	 => 'recaptcha_response_field',
+				'label'	 => 'Captcha',
+				'rules'	 => 'callback_validateCaptcha'
 			)
 		)
 	);
