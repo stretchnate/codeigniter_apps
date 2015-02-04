@@ -30,7 +30,7 @@
 						</tr>
 						<tr>
 							<td><label for="amtNec"><span class="error">*</span>Amount Necessary</label></td>
-							<td>$<input type="text" class="required number" name="amtNec" id="amtNec" value="<?php echo number_format($this->category_dm->getAmountNecessary(), 2, '.', ',') ?>" /></td>
+							<td>$<input type="text" class="required number money" name="amtNec" id="amtNec" value="<?php echo number_format($this->category_dm->getAmountNecessary(), 2, '.', ',') ?>" /></td>
 						</tr>
 						<tr>
 							<td>

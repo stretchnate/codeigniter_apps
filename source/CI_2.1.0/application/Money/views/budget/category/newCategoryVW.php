@@ -58,7 +58,7 @@
 									<a href="javascript:void(null)" class="tool-tip" title="how much do you spend on this bill each month?">Amount Necessary:</a>
 								</label>
 							</td>
-							<td><input type="text" class="required" name="nec" id="nec" value="$" /></td>
+							<td><input type="text" class="required money" name="nec" id="nec" value="$" /></td>
 							<td><div id="amt-message" class="result">&nbsp;</div></td>
 						</tr>
 						<tr>
@@ -69,7 +69,7 @@
 								</label>
 							</td>
 							<td>
-								<input type="text" class="required" name="startAmt" id="startAmt" value="$" />
+								<input type="text" class="required money" name="startAmt" id="startAmt" value="$" />
 							</td>
 							<td>&nbsp;</td>
 						</tr>

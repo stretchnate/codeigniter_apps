@@ -23,12 +23,12 @@
 						<label for="gross">Gross Amount: </label>
 					</td>
 					<td>
-						$<input type="text" class="required number" name="gross" /> (before taxes)
+						$<input type="text" class="required number money" name="gross" /> (before taxes)
 					</td>
 				</tr>
 				<tr>
 					<td><label for="net">Net Amount: </label></td>
-					<td>$<input type="text" name="net" id="net" class="number" /> (after taxes)</td>
+					<td>$<input type="text" name="net" id="net" class="number money" /> (after taxes)</td>
 				</tr>
 				<tr>
 					<td>

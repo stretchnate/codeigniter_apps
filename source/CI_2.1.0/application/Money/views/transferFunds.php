@@ -83,7 +83,7 @@
 			</tr>
 			<tr>
 				<td><span class="error">*</span>Amount:</td>
-				<td><input type="text" class="required" name="amount" /></td>
+				<td><input type="text" class="required money" name="amount" /></td>
 			<tr>
 				<td colspan="2">
 					<input type="submit" value="Transfer" />

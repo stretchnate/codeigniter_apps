@@ -55,7 +55,7 @@
                         <div class="label bold ta-left">
                             Amount:
                         </div>
-                        <div><input type="text" class="required number" name="amount" autocomplete="off" /></div>
+                        <div><input type="text" class="required number money" name="amount" autocomplete="off" /></div>
                     </div>
                 </div>
                 <div class="radio-group">
