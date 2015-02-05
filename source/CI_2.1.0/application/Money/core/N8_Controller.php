@@ -5,6 +5,8 @@ if (!defined('BASEPATH'))
 
 class N8_Controller extends CI_Controller {
 
+    protected $view;
+
 	function __construct() {
 		parent::__construct();
 	}

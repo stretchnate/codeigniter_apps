@@ -92,9 +92,27 @@ a.button:hover, input[type=button]:hover, input[type=submit]:hover, button:hover
 }
 
 #date {
+    position: absolute;
+    top:3px;
+    right:133px;
+    font-size:80%;
+    color: #6FA7D1;
+}
+
+#user {
     position:absolute;
     bottom:3px;
     right:133px;
+    z-index: 1000;
+    color: #6FA7D1;
+}
+
+#user a, #date a {
+    text-decoration: none;
+}
+
+#user a:hover, #date a:hover {
+    text-decoration: underline;
 }
 
 #cookie-crumb {

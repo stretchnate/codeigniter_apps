@@ -52,7 +52,7 @@ $db['default']['hostname'] = 'localhost';
 $db['default']['username'] = 'Gom3rP4le';
 $db['default']['password'] = 'T4l3RF10renC3';
 $db['default']['database'] = 'money';
-$db['default']['dbdriver'] = 'mysql';
+$db['default']['dbdriver'] = 'mysqli';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
 $db['default']['db_debug'] = TRUE;
@@ -64,6 +64,21 @@ $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
 
+$db['content']['hostname'] = 'localhost';
+$db['content']['username'] = 'Gom3rP4le';
+$db['content']['password'] = 'T4l3RF10renC3';
+$db['content']['database'] = 'SITE_CONTENT';
+$db['content']['dbdriver'] = 'mysqli';
+$db['content']['dbprefix'] = '';
+$db['content']['pconnect'] = TRUE;
+$db['content']['db_debug'] = TRUE;
+$db['content']['cache_on'] = FALSE;
+$db['content']['cachedir'] = '';
+$db['content']['char_set'] = 'utf8';
+$db['content']['dbcollat'] = 'utf8_general_ci';
+$db['content']['swap_pre'] = '';
+$db['content']['autoinit'] = TRUE;
+$db['content']['stricton'] = FALSE;
 // debug script
 /*
 $dbh=mysql_connect
@@ -75,7 +90,7 @@ $dbh=mysql_connect
     mysql_select_db ($db['default']['database']);
 
     echo '<br />   Connected OK:'  ;
-    die( 'file: ' .__FILE__ . ' Line: ' .__LINE__); 
+    die( 'file: ' .__FILE__ . ' Line: ' .__LINE__);
 */
 //end debug script
 /* End of file database.php */

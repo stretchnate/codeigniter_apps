@@ -56,9 +56,18 @@
 			</head>
 			<body>
 				<div id="header" class="border">
+                    <div id="date">
+                        <?=" ".date('n.j.y'); ?>&nbsp;&nbsp;
+                        <?
+                        if($this->CI->session->userdata('logged_user')) { ?>
+                        <a href='/admin/logout/'>logout</a>
+                        <?
+                        } ?>
+                    </div>
 					<div id="console">
-						<div id="date">
-							Hello <a href="/userCTL"><?=$this->CI->session->userdata('logged_user')?></a><?=" - ".date('l, F j'); ?>
+						<div id="user">
+							Welcome
+                            <a href="/userCTL"><?=$this->CI->session->userdata('logged_user')?></a>
 						</div>
 					</div>
 					<h1><a href="/">Smart Budget<span style="font-size:40%;"></span></a></h1>
