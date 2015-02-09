@@ -29,7 +29,7 @@ function showAd($ad_type) {
 	</div>
 
 	<div id="container">
-		<h2>Please log in first</h2>
+		<h2>Please log in</h2>
 		<?php
 		if(isset($error)) {
 			echo "<p>$error</p>";
@@ -52,7 +52,13 @@ function showAd($ad_type) {
         <div class="clear">&nbsp;</div>
 
         <div id="footer">
-            <div id="copy">Copyright&copy; <?php $year = date('Y'); echo $year;?> Me.</div>
+            <div class='links'>
+                <?= $footer_nav->getUl(); ?>
+            </div>
+            <div id="copy">
+                &copy;2010-<?php $year = date('Y'); echo $year;?> stretchnate.com
+                <!--<span class="version">v3.2</span>-->
+            </div>
         </div>
     <?= showAd(AdFactory::AD_AUTO); ?>
     </div>

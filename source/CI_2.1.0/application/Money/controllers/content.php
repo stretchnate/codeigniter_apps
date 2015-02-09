@@ -10,6 +10,7 @@
             parent::__construct();
             $this->load->view('ContentVW');
             $this->view = new ContentVW(get_instance());
+            $this->view->setScripts(Jsincludes::content());
         }
 
         public function index() {

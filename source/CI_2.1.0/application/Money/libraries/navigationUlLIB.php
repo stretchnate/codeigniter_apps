@@ -16,6 +16,7 @@ class NavigationUlLIB {
 	protected $sublinks_array = array();
 	protected $ul;
 	protected $category;
+    protected $CI;
 
 	/**
 	 * @param $category String Optional
@@ -58,8 +59,6 @@ class NavigationUlLIB {
 	 * @return void
 	 */
 	private function createLinksArray() {
-		$this->CI->auth->restrict();
-
 		$data = $this->retrieveLinks();
 
 		if( is_array($data) && count($data) > 0 ) {

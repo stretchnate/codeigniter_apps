@@ -34,25 +34,13 @@
 				<link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH; ?>base.css" />
 				<link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH; ?>redmond/jquery-ui-1.8.21.custom.css" />
 				<link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH; ?>jquery.dataTables_1.9.0.css" />
-				<?php if(isset($this->scripts) && is_array($this->scripts)) {
+				<?php
+                if(isset($this->scripts) && is_array($this->scripts)) {
 					foreach($this->scripts as $script)
 						echo $script."\n\t";
-				}?>
-				<script type="text/javascript">
-					$(document).ready(function() {
-						$(".main_nav li, .main_nav li ul").mouseover(function() {
-							if( $(this).children("ul").attr("class") != undefined ) {
-								$(this).children("ul").show();
-							}
-						});
-
-						$(".main_nav li, .main_nav li ul").mouseout(function() {
-							if( $(this).children("ul").attr("class") != undefined ) {
-								$(this).children("ul").hide();
-							}
-						});
-					});
-				</script>
+				}
+                ?>
+				<script type="text/javascript" src="/javascript/nav.js"></script>
 			</head>
 			<body>
 				<div id="header" class="border">
@@ -141,8 +129,18 @@
 				</div>
 				<div class="clear">&nbsp;</div>
 
-            <div id="footer" class="border">
-                <div id="copy"><a href="/blackjack/blackjack/" target="_blank">Play Blackjack</a>&nbsp;&nbsp;<span class="version">v 3.2</span> &copy; <?php $year = date('Y'); echo $year;?> Me.</div>
+            <div id="footer">
+                <div class='links'>
+                    <?php
+                    $footer_nav = new NavigationUlLIB('footer');
+                    echo $footer_nav->getUl();
+                    ?>
+                </div>
+                <div id="copy">
+                    &copy;2010-<?php $year = date('Y'); echo $year;?> stretchnate.com
+                    <!--<span class="version">v3.2</span>-->
+                    <!--<a href="/blackjack/blackjack/" target="_blank">Play Blackjack</a>-->
+                </div>
             </div>
             <?= $this->showAd(AdFactory::AD_AUTO); ?>
             </div><!-- end div container -->

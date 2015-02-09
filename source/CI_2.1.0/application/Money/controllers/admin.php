@@ -35,7 +35,8 @@ class Admin extends N8_Controller {
 			}
 		}
 
-		$this->load->view('login');
+        $data['footer_nav'] = new NavigationUlLIB('footer');
+		$this->load->view('login', $data);
 	}
 
 	function logout() {

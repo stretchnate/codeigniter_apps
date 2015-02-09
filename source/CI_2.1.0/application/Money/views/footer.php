@@ -30,8 +30,18 @@
         ?>
 	</div>
 	<div class="clear">&nbsp;</div>
-	<div id="footer" class="border">
-		<div id="copy"><a href="/blackjack/blackjack/" target="_blank">Play Blackjack</a>&nbsp;&nbsp;<span class="version">v 3.2</span>&nbsp;&copy; <?php $year = date('Y'); echo $year;?> Me.</div>
+	<div id="footer">
+        <div class='links'>
+            <?php
+            $footer_nav = new NavigationUlLIB('footer');
+            echo $footer_nav->getUl();
+            ?>
+        </div>
+        <div id="copy">
+            &copy;2010-<?php $year = date('Y'); echo $year;?> stretchnate.com
+            <!--<span class="version">v3.2</span>-->
+            <!--<a href="/blackjack/blackjack/" target="_blank">Play Blackjack</a>-->
+        </div>
 	</div>
     <?= showAd(AdFactory::AD_AUTO); ?>
     </div><!-- end div container -->

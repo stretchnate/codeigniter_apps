@@ -88,4 +88,11 @@ Class Jsincludes {
 		$scripts[] = "<script type='text/javascript' src='".self::JS."user_profile.js'></script>";
 		return $scripts;
 	}
+
+    public static function content() {
+        $scripts[] = self::JQUERY;
+		$scripts[] = self::JQUERY_UI;
+		$scripts[] = self::UTILITIES;
+        return $scripts;
+    }
 }
