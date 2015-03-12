@@ -129,7 +129,9 @@ class TransactionsGrid extends N8_Error {
 		$this->CI->db->select()
 					->from("transactions")
 					->join("cleared_transactions", "transactions.transaction_id = cleared_transactions.transactionId AND cleared_transactions.end_date IS NULL", "left")
-					->where($where, null, false);
+					->where($where, null, false)
+                    ->order_by("transaction_id", "desc")
+                    ->limit(1500);//@todo - need to find a way to override this when needed
 		$query = $this->CI->db->get();
 
 		return $query->result();
