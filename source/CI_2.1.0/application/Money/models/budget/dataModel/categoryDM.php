@@ -239,8 +239,8 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 	 * @return void
 	 * @since  05.01.2013
 	 */
-	private function calculateDaysUntilDue() {
-		$today         = new DateTime();
+	private function calculateDaysUntilDue($from_date = null) {
+		$today         = new DateTime($from_date);
 		$next_due_date = $this->getNextDueDate();
 
 		//unfortunatley until I'm updated to 5.3.2 or higher this won't work so we have to use the below rudimentary code :(
@@ -345,9 +345,9 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 		return $this->interest_bearing;
 	}
 
-	public function getDaysUntilDue() {
+	public function getDaysUntilDue($from_date = null) {
 		if(is_null($this->days_until_due)) {
-			$this->calculateDaysUntilDue();
+			$this->calculateDaysUntilDue($from_date);
 		}
 
 		return $this->days_until_due;

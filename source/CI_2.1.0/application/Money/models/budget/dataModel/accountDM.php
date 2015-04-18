@@ -112,7 +112,7 @@ class Budget_DataModel_AccountDM extends N8_Model {
 	 * @return array
 	 * @since 05.01.2013
 	 */
-	public function orderCategoriesByDueFirst() {
+	public function orderCategoriesByDueFirst($from_date) {
 		if(empty($this->categories)) {
 			$this->loadCategories();
 		}
@@ -122,7 +122,7 @@ class Budget_DataModel_AccountDM extends N8_Model {
 
 		//order the categoryDM's by due first
 		foreach($this->categories as $category_dm) {
-			$days_until_due = $category_dm->getDaysUntilDue();
+			$days_until_due = $category_dm->getDaysUntilDue($from_date);
 
 			foreach($pay_frequency_array_keys as $key) {
 				if($key > $days_until_due) {

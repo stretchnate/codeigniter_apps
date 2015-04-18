@@ -117,7 +117,7 @@ class Funds extends N8_Controller {
 			bcscale(2);
 
 			$divider = 1;
-			$category_dm_array = $account_dm->orderCategoriesByDueFirst();
+			$category_dm_array = $account_dm->orderCategoriesByDueFirst($date);
 
 			//loop through each category and update the current amount
 			foreach($category_dm_array as $category_dms) {
@@ -130,7 +130,7 @@ class Funds extends N8_Controller {
 						if($category->getCurrentAmount() < $category->getAmountNecessary()) {
 
 							//determine if we need to use regular divider or simply top off the category
-							if( ($category->getDaysUntilDue() <= $account_dm->getPayFrequency())
+							if( ($category->getDaysUntilDue($date) <= $account_dm->getPayFrequency())
 								|| ((( round($category->getAmountNecessary() / $divider, 2) ) + $category->getCurrentAmount()) > $category->getAmountNecessary()) ) {
 
 								$depositAmount = bcsub($category->getAmountNecessary(), $category->getCurrentAmount());
