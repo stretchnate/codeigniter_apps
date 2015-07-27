@@ -89,8 +89,8 @@ class Budget_DataModel_AccountDM extends N8_Model {
 
 	protected function getCategoryIds() {
 		$this->db->select('bookId');
-		$this->db->order_by('priority');
 		$this->db->order_by('due_day');
+		$this->db->order_by('priority');
 		$query = $this->db->get_where('booksummary',array('account_id' => $this->account_id, 'active' => 1));
 
 		return $query->result();
