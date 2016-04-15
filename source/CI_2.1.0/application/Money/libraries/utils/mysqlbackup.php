@@ -64,14 +64,7 @@ class MySQLBackup {
 					log_message('debug', "mysqlbackup: Attempting to gzip ".$dmp_file);
 					exec("gzip ".$dmp_file, $gzip_array = array(), $gzip_result);
 
-					//copy the file to ubuntu one
-					if(file_exists($dmp_file.".gz")) {
-						if(copy($dmp_file.".gz", self::UBUNTU_ONE . $filename)) {
-							log_message('debug', "mysqlbackup: copied ".$dmp_file.".gz to Ubuntu 1");
-						} else {
-							log_message('debug', "mysqlbackup: Warning - could not copy ".$dmp_file.".gz to Ubuntu 1");
-						}
-					} else {
+					if(!file_exists($dmp_file.".gz")) {
 						log_message('debug', "mysqlbackup: Warning - could not gzip ".$dmp_file);
 					}
 				} else {
