@@ -1,19 +1,19 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 	function error($var, $str_left="", $str_right="") {
-	
+
 		if(is_null($var)) {
 			$var = $str_left;
 			$str_left = "";
 			$str_right = "";
 		}
-	
+
 		$error = var_export($var, true);
 		$error = $str_left . $error . $str_right . "\n";
 		error_log($error, 3 ,'/home/stretch/logs/dnate_errors.log');
 	}
 
-	function clearLog($log = "/home/stretch/logs/dnate_dbo.log") {
+	function clean($log = "/home/stretch/logs/dnate_dbo.log") {
 		file_put_contents($log, "");
 	}
 	/**
@@ -62,10 +62,10 @@
 		$methods    = get_class_methods($class);
 		$reflection = new ReflectionClass($class);
 		$txt       = $indent."\t" . $reflection->getName();
-		
+
 		foreach($methods as $method) {
 			if(strpos($method, 'get') !== false) {
-				
+
 
 				if($reflection->getMethod($method)->getNumberOfParameters() > 0) {
 					$txt .= $indent."\t" . $reflection->getName() .'::'. $method . " requires " . $reflection->getMethod($method)->getNumberOfParameters() . " arguments, moving on.";
@@ -357,7 +357,7 @@
 		foreach($letters as $letter) {
 			$total_possible = $total_possible * count($letter);
 		}
-		
+
 		$i = 0;
 		$possibility = null;
 		$switch      = null;
@@ -365,7 +365,7 @@
 		while($i < $total_possible) {
 			for($z = count($letters) -1; $z >= 0; $z--) {
 				$q = $z - 1;
-			
+
 				// last letter always loops
 				if( $z == count($letters) - 1) {
 					$possibility = $letters[$z][$cnt[$z]];

@@ -7,59 +7,75 @@ header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 ?>
 
-<!DOCTYPE html PUBLIC  "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title><?php echo $title ?></title>
+	<title><?php echo $title ?></title>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" /><!-- support for border-radius in IE9 -->
-    <link rel="shortcut icon" href="<?php echo IMG_PATH; ?>favicon.ico"/>
-	<link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH; ?>base.css" />
-	<link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH; ?>redmond/jquery-ui-1.8.21.custom.css" />
-	<link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH; ?>jquery.dataTables_1.9.0.css" />
-	<?php if(isset($scripts)) {
+	<meta charset='utf-8'>
+	<!-- ensure proper mobile rendering and touch zooming with the following tag -->
+	<meta name='viewport' content='width=device-width, initial-scale=1'>
+	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
+	<link rel="shortcut icon" href="<?php echo IMG_PATH; ?>favicon.ico"/>
+	<link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH; ?>main.css" />
+	<!--<link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH; ?>redmond/jquery-ui-1.8.21.custom.css" />-->
+	<!--<link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH; ?>jquery.dataTables_1.9.0.css" />-->
+	<?php
+	if(isset($scripts) && is_array($scripts)) {
 		foreach($scripts as $script)
 			echo $script."\n\t";
-	}?>
+	}
+	?>
 	<script type="text/javascript" src="/javascript/nav.js"></script>
 </head>
 <body>
-	<div id="header" class="border">
-		<div id="date">
-            <?=" ".date('n.j.y'); ?>&nbsp;&nbsp;
-            <?
-            if($this->session->userdata('logged_user')) { ?>
-            <a href='/admin/logout/'>logout</a>
-            <?
-            } ?>
-        </div>
-        <div id="console">
-            <div id="user">
-                Welcome
-                <a href="/userCTL"><?=$this->session->userdata('logged_user')?></a>
-            </div>
-        </div>
-		<h1><a href="/">Smart Budget<span style="font-size:40%;"></span></a></h1>
-		<div id="nav">
-			<div class="nav-background">
+	<nav class="navbar navbar-default">
+		<div class="container">
+			<h1><a href="/">Smart Budget<span style="font-size:40%;"></span></a></h1>
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#" title="Quantum">Smart Budget</a>
+			</div>
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<?php
-					// echo $links;
-					$nav = new NavigationUlLIB("main_nav");
+					$nav = new NavigationUlLIB("main_nav", "nav navbar-nav");
 					echo $nav->getUl();
 				?>
-				<div class="clear"></div>
+				<ul class="nav navbar-nav navbar-left">
+					<li class="dropdown">
+						<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+							My Accounts <span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+						<?php
+							foreach($accounts as $account) {
+								$id = strtolower(str_replace(' ', '_', $account->getAccountName())).'-tab';
+								echo "<li><a href='javascript:void(null)' id='$id' class='tabs-link'>".$account->getAccountName()."</a></li>";
+							}
+						?>
+						</ul>
+					</li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown">
+						<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+							<?=$logged_user?> <span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="/userCTL">Profile</a></li>
+							<li><a href="/admin/logout">logout</a></li>
+						</ul>
+					</li>
+				</ul>
 			</div>
 		</div>
-	</div>
-	<div id="container">
-		<?php
-		if( isset($sidebar_links) ) { ?>
-		<div id="sidebar">
-		<?php
-			echo $sidebar_links;
-		?>
-		</div>
-		<?php
-		} ?>
+	</nav>
+	<div class="container">
 		<div id="content">
 			<div class="error">
 				<?

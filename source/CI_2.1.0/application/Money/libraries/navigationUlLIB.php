@@ -22,14 +22,14 @@ class NavigationUlLIB {
 	 * @param $category String Optional
 	 * @return void
 	 */
-	function __construct( $category = null ) {
+	function __construct( $category = null, $ul_class = null ) {
 		$this->CI =& get_instance();
 		$this->CI->load->database();
 		$this->CI->load->model('Utils', 'UTIL', TRUE);
 
 		if( $category ) {
 			$this->setCategory($category);
-			$this->setUl($category);
+			$this->setUl($ul_class);
 			$this->buildNav();
 		}
 	}
@@ -66,12 +66,12 @@ class NavigationUlLIB {
 
 				$index = strtolower(str_replace(" ", "_", $link->link_name));
 
-				$this->links_array[$index]    = $this->buildLink($link);
+				$this->links_array[$index] = $this->buildLink($link);
 
 				if($this->CI->UTIL->getLinks($this->category."|".strtolower($link->link_name))) {
 					$nav = new NavigationUlLIB();
 					$nav->setCategory($this->category."|".strtolower($link->link_name));
-					$nav->setUl(strtolower($link->link_name));
+					$nav->setUl('dropdown-menu');
 					$nav->buildNav();
 					$this->sublinks_array[$index] = $nav;
 				}
@@ -120,7 +120,9 @@ class NavigationUlLIB {
 			}
 		}
 
-		if(!$link_data->link_url && (!isset($link_tag) || count($link_tag) < 1) ) {
+		if(strpos($link_data->class, 'dropdown-toggle') !== false) {
+			$link = dropdown_link($link_data->link_name);
+		} else if(!$link_data->link_url && (!isset($link_tag) || count($link_tag) < 1) ) {
 			$link = void_link($link_data->link_name, $attributes);
 		}else if( isset($link_tag) && count($link_tag) > 0 ) {
 			$link = link_tag($link_tag);
@@ -138,9 +140,13 @@ class NavigationUlLIB {
 	 */
 	private function generateUl() {
 		if(is_array($this->links_array)) {
-            $category = str_replace("|", "_", $this->category);
 			foreach($this->links_array as $link_id => $link) {
-				$this->ul .= "<li class='{$category}'>".$link;
+				$class = '';
+				if(strpos($link, 'dropdown-toggle') !== false) {
+					$class = 'dropdown';
+				}
+
+				$this->ul .= "<li class='{$class}'>".$link;
 
 				$this->generateSubUl($link_id);
 

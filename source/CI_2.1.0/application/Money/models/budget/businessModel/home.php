@@ -1,12 +1,18 @@
 <?php
 	class Budget_BusinessModel_Home extends N8_Model {
 
+		/**
+		 * @var Budget_DataModel_AccountDM[]
+		 */
 		protected $accounts = array();
 
 		function __construct(){
 			parent::__construct();
 		}
 
+		/**
+		 * @param int $owner_id
+		 */
 		public function loadAccounts($owner_id) {
 			// $query = $this->db->get_where('accounts',array('owner_id' => $id, 'active' => 1));
 			$account_ids = $this->fetchAccountIds($owner_id);
@@ -19,16 +25,23 @@
 			}
 		}
 
+		/**
+		 * @param int $owner_id
+		 * @return stdClass[]
+		 */
 		private function fetchAccountIds($owner_id) {
 			$this->db->select('account_id')
 					->from('accounts')
 					->where(array('owner_id' => $owner_id, 'active' => 1));
-			
+
 			$query = $this->db->get();
 
 			return $query->result();
 		}
 
+		/**
+		 * @return Budget_DataModel_AccountDM[]
+		 */
 		public function getAccounts() {
 			return $this->accounts;
 		}

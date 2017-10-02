@@ -2,7 +2,7 @@
 /**
  *	This file extends the CI date_helper file in ./system/helpers/
  */
- 
+
 /**
  * This method is for finding the due date of a given account, just pass the due day and (optional) format
  */
@@ -18,6 +18,12 @@ if ( ! function_exists('void_link')) {
 
 		$link .= ">".$text."</a>";
 		return $link;
+	}
+}
+
+if(!function_exists('dropdown_link')) {
+	function dropdown_link($text) {
+		return "<a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>$text <span class='caret'></span></a>";
 	}
 }
 

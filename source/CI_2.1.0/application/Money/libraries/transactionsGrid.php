@@ -10,13 +10,14 @@ class TransactionsGrid extends N8_Error {
 	private $start_date;
 	private $end_date;
 	private $reporting; //used when running reports.
-	private $theads = array("transaction_id" => "ID",
-							"transaction_date" => "Date",
-							"transaction_amount" => "Amount",
-							"transaction_info" => "Description",
-							"cleared_bank" => "Cleared",
-                            "delete_transaction" => "Delete"
-                            );
+	private $theads = array(
+//		"transaction_id" => "ID",
+		"transaction_date" => "Date",
+		"transaction_amount" => "Amount",
+		"transaction_info" => "Description",
+//		"cleared_bank" => "Cleared",
+		"delete_transaction" => "Delete"
+	);
 
 	function __construct($owner = null, $owner_type = null, $reporting = false) {
 		$this->CI =& get_instance();
@@ -194,7 +195,7 @@ class TransactionsGrid extends N8_Error {
 							foreach($this->theads as $property => $value) {
 								switch($property) {
 									case "transaction_date":
-										$html .= "<td>".date("m/d/Y g:i:s a", strtotime($transaction->transaction_date))."</td>";
+										$html .= "<td>".date("m/d/Y", strtotime($transaction->transaction_date))."</td>";
 										break;
 
 									case "transaction_amount":

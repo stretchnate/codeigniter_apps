@@ -15,9 +15,12 @@ class Book extends N8_Controller {
 		$data = $this->ACCT->getAccountData($id);
 
 		$data->parentAccount = $this->ACCT->getAccount($data->account_id);
+
+		$home = new Budget_BusinessModel_Home();
+		$home->loadAccounts($this->session->userdata('user_id'));
+		$props['accounts'] = $home->getAccounts();
 		$data->accounts = $this->ACCT->getAccountsAndDistributableCategories($this->session->userdata('user_id'));
 
-		// $transactions['transactions'] = $this->ACCT->getUserTransactions($id, $this->session->userdata('user_id'));
 		$t_grid = new TransactionsGrid($id, "category");
 		$t_grid->run();
 
@@ -27,12 +30,13 @@ class Book extends N8_Controller {
 		$props['scripts'] = $this->jsincludes->books();
 		$props['title'] = $data->bookName;
 		$props['links'] = $this->utilities->createLinks('main_nav');
+		$props['logged_user'] = $this->session->userdata('logged_user');
 
 		$notes['notes'] = $this->NM->getAllNotes($this->session->userdata('user_id'), $id);
 		$notes['bookId'] = $id;
 
 		$this->load->view('header',$props);
-		$this->load->view('books', $data);
+		$this->load->view('CategoryDetail', $data);
 		$this->load->view('transactions', $transactions);
 		$this->load->view('footer', $notes);
 	}

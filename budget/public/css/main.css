@@ -1,0 +1,16 @@
+/*
+    Created on : Oct 2, 2017, 12:41:31 PM
+    Author     : stretch
+*/
+
+.align-right {
+    text-align:right;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+.float-left {
+    float:left;
+}

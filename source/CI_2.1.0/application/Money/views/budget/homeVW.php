@@ -21,7 +21,7 @@
 		protected function generateView() {
 		?>
 			<div id="accounts-tabs" class="tabs">
-				<ul>
+				<ul class='nav nav-tabs'>
 				<?php
 				if(is_array($this->totals_array)) {
 					$i = 0;
@@ -29,7 +29,7 @@
                         $account_name = $totals->getAccountDM()->getAccountName();
 						$class = "";
 						if($i == 0) {
-							$class = " class='selected_tab'";
+							$class = " class='active'";
 							$i++;
 						}
 
@@ -42,9 +42,6 @@
 				?>
 				</ul>
 				<div id="accounts-container">
-					<p>
-						<a id="expand-contract-all" class="button border" href="javascript:void(null)">Expand All Categories</a>
-					</p>
 					<?php
 					$i = 0;
 
@@ -64,8 +61,23 @@
 							$acct_id = strtolower(preg_replace("/[\s]+/", "_", $account_dm->getAccountName()));
 						?>
 							<div class="account-container" id="<?php echo $acct_id;?>"<?php echo $style;?>>
-								<!--h2><?php echo $account_dm->getAccountName();?></h2-->
-								<div class="border">
+								<div class='well'>
+									<div class="category-container">
+										<label>Distributable Amount:</label>
+										<div class="inline-block align-right">$<?php echo number_format($account_dm->getAccountAmount(),2, '.', ',') ?></div>
+									</div>
+									<div class="category-container">
+										<label>Account Balance:</label>
+										<div id="<?php echo $acct_id;?>-total" class="inline-block align-right">
+											$ <?php echo number_format($total->getTotal(),2,'.',','); ?>
+										</div>
+									</div>
+									<div class="category-container">
+										<label>Monthly Need:</label>
+										<div id="<?php echo $acct_id;?>-total-necessary" class="inline-block align-right">
+											$ <?php echo number_format($total->getTotalNecessary(),2,'.',','); ?>
+										</div>
+									</div>
 									<div>
 										Last Update:
 										<?php
@@ -80,81 +92,54 @@
 										?>
 									</div>
 								</div>
-								<div class="book-summary">
-									<div>
-										<div class="bucket">
-											<div class="category-container">
-												<div class="label">Distributable Amount:</div>
-												<div class="align-right">$<?php echo number_format($account_dm->getAccountAmount(),2, '.', ',') ?></div>
-											</div>
-										</div>
-										<div class="bucket">
-											<div class="category-container dashed-bottom">
-												<div class="label">Account Balance:</div>
-												<div id="<?php echo $acct_id;?>-total" class="align-right">
-                                                    $ <?php echo number_format($total->getTotal(),2,'.',','); ?>
-                                                </div>
-											</div>
-											<div class="category-container">
-												<div class="label">Monthly Need:</div>
-												<div id="<?php echo $acct_id;?>-total-necessary" class="align-right">
-                                                    $ <?php echo number_format($total->getTotalNecessary(),2,'.',','); ?>
-                                                </div>
-											</div>
-										</div>
-									</div>
 
-									<?php
-                                    if(is_array($account_dm->getCategories()) && count($account_dm->getCategories()) > 0) {
-                                        foreach($account_dm->getCategories() as $category_dm){
-                                        ?>
-                                            <div class="book">
-                                                <h3 class="border"><span class="text"><?php echo $category_dm->getCategoryName(); ?></span><span class="money">$<?php echo number_format($category_dm->getCurrentAmount(), 2, '.', ',') ?></span></h3>
-                                                <div class="book-content">
-                                                    <div class="category-container dashed-bottom">
-                                                        <div class="label">Account:</div>
-                                                        <div class="account-name">
-                                                            <a href="/book/getBookInfo/<?php echo $category_dm->getCategoryId(); ?>/"><?php echo $category_dm->getCategoryName(); ?></a>
-                                                            <?php
-                                                                if($category_dm->getDueDay() > 0) {
-                                                                    $due_date = $category_dm->getNextDueDate()->format("F d, Y");
-                                                                    echo "Due: ".$due_date;
-                                                                }
-                                                            ?>
-                                                        </div>
-                                                    </div>
-                                                    <div class="category-container dashed-bottom">
-                                                        <div class="label">Goal:</div>
-                                                        <div class="align-right">$<?php echo number_format($category_dm->getAmountNecessary(), 2, '.', ',') ?></div>
-                                                    </div>
-                                                    <div class="category-container dashed-bottom">
-                                                        <div class="label">Amount Saved:</div>
-                                                        <div class="align-right">$<?php echo number_format($category_dm->getCurrentAmount(), 2, '.', ',') ?></div>
-                                                    </div>
-                                                    <div class="category-container">
-                                                        <div class="label">Difference:</div>
-                                                        <?php
-                                                            $dif = bcsub($category_dm->getAmountNecessary(), $category_dm->getCurrentAmount());
-                                                            if($category_dm->getAmountNecessary() > $category_dm->getCurrentAmount()){
-                                                                echo '<div class="red align-right">-$'.number_format($dif, 2, '.', ',').'</div>';
-                                                            } else if ($category_dm->getAmountNecessary() < $category_dm->getCurrentAmount()){
-                                                                $dif = bcsub($category_dm->getCurrentAmount(), $category_dm->getAmountNecessary());
-                                                                echo '<div class="bold align-right">+$'.number_format($dif, 2, '.', ',').'</div>';
-                                                            } else {
-                                                                echo '<div class="align-right">$'.number_format($dif, 2, '.', ',').'</div>';
-                                                            }
-                                                        ?>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="clear">&nbsp;</div>
-                                    <?php
-                                        }
-                                    } else {
-                                        echo "<h3>Please <a style='color:#6fa7d1' href='/book/newBookForm'>add categories</a> to this Account</h3>";
-                                    }
+								<?php
+								if(is_array($account_dm->getCategories()) && count($account_dm->getCategories()) > 0) {
+									foreach($account_dm->getCategories() as $category_dm){
 									?>
-								</div>
+										<div class="well">
+											<h3 class="border">
+												<a class='text' href="/book/getBookInfo/<?php echo $category_dm->getCategoryId(); ?>/"><?php echo $category_dm->getCategoryName(); ?></a>
+											</h3>
+											<div class="content">
+												<div class="category-container">
+												<?php
+													if($category_dm->getDueDay() > 0) {
+														$due_date = $category_dm->getNextDueDate()->format("F d, Y");
+														echo "Due: ".$due_date;
+													}
+												?>
+												</div>
+												<div class="category-container">
+													<label>Goal:</label>
+													<div class='align-right inline-block'>$<?php echo number_format($category_dm->getAmountNecessary(), 2, '.', ',') ?></div>
+												</div>
+												<div class="category-container">
+													<label>Amount Saved:</label>
+													<div class='align-right inline-block'>$<?php echo number_format($category_dm->getCurrentAmount(), 2, '.', ',') ?></div>
+												</div>
+												<div class="category-container">
+													<label>Difference:</label>
+													<?php
+														$dif = bcsub($category_dm->getAmountNecessary(), $category_dm->getCurrentAmount());
+														if($category_dm->getAmountNecessary() > $category_dm->getCurrentAmount()){
+															echo '<div class="red inline-block align-right">-$'.number_format($dif, 2, '.', ',').'</div>';
+														} else if ($category_dm->getAmountNecessary() < $category_dm->getCurrentAmount()){
+															$dif = bcsub($category_dm->getCurrentAmount(), $category_dm->getAmountNecessary());
+															echo '<div class="bold inline-block align-right">+$'.number_format($dif, 2, '.', ',').'</div>';
+														} else {
+															echo '<div class="align-right inline-block">$'.number_format($dif, 2, '.', ',').'</div>';
+														}
+													?>
+												</div>
+											</div>
+										</div>
+								<?php
+									}
+								} else {
+									echo "<h3>Please <a style='color:#6fa7d1' href='/book/newBookForm'>add categories</a> to this Account</h3>";
+								}
+								?>
 							</div>
 						<?php
 						$i++;

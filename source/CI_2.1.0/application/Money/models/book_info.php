@@ -1,6 +1,6 @@
 <?php
 class Book_info extends N8_Model {
-		
+
 	function Book_info(){
 		parent::__construct();
 	}
@@ -16,7 +16,7 @@ class Book_info extends N8_Model {
 		}
 		return $book;
 	}
-	
+
 	function getAccountsInfo($owner_id, $account_id){
 		$data = array();
 		$query = $this->db->select('bs.*', FALSE)
@@ -30,7 +30,7 @@ class Book_info extends N8_Model {
 
 		return $query->result();
 	}
-	
+
 	/**
 	 * returns all categories including bucket and any charitable account.
 	 * @return false if no bucket, or categories array
@@ -47,7 +47,7 @@ class Book_info extends N8_Model {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * gets the bucket account only
 	 * @return $response array
@@ -61,7 +61,7 @@ class Book_info extends N8_Model {
 		}
 		return $response;
 	}
-	
+
 	/**
 	 * gets charitable account only
 	 * @return $response array
@@ -80,7 +80,7 @@ class Book_info extends N8_Model {
 	function getUserTransactions($bookId = null, $ownerId, $offset = 0, $rowsPerPage = 20) {
 //		$limit = $this->db->limit($offset, $rowsPerPage);
 //		$query = $this->db->get_where('booktransactions', array('ownerId' => $this->session->userdata('user_id')),$limit);
-		$sql = "SELECT t.*,b.bookName, ct.date_added AS `cleared` from booktransactions t 
+		$sql = "SELECT t.*,b.bookName, ct.date_added AS `cleared` from booktransactions t
 				LEFT JOIN booksummary b on (b.bookId = t.bookId)
 				LEFT JOIN cleared_transactions ct ON (t.transactionId = ct.transactionId AND ct.end_date IS NULL)";
 
@@ -128,7 +128,7 @@ class Book_info extends N8_Model {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * formerly getInfo selects all rows from booksummary for any one account(book).
 	 *
@@ -138,17 +138,17 @@ class Book_info extends N8_Model {
 		$row = $query->row();
 		return $row;
 	}
-	
+
 	function setInterest($id, $rate, $rateType, $amtOwed) {
 		$data = array('bookID' => $id, 'rate' => $rate,'rate-type' => $rateType, 'amtOwed' => $amtOwed);
 		$query = $this->db->insert('interest',$data);
 		if(!$query)
 			$result = 0;
-		else 
+		else
 			$result = 1;
 		return $result;
 	}
-	
+
 	function checkExisting($ownerId, $account_id, $category_name) {
 		$data = array('bookName' => trim($category_name),'ownerId' => $ownerId, 'account_id' => $account_id);
 		$query = $this->db->get_where('booksummary',$data);
@@ -165,7 +165,7 @@ class Book_info extends N8_Model {
 		$this->db->where($id);
 		$this->db->delete($table);
 	}
-	
+
 	public function newTransaction($array) {
 		$query = $this->db->insert('booktransactions', $array);
 		if(!$query) {
