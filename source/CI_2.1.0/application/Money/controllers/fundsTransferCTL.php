@@ -1,6 +1,6 @@
 <?php
 class fundsTransferCTL extends N8_Controller {
-	
+
 	function fundsTransferCTL() {
 		parent::__construct();
 		$this->load->library('account');
@@ -124,7 +124,7 @@ class fundsTransferCTL extends N8_Controller {
 		// $transactions['transactions'] = $this->ACCT->getUserTransactions(null, $this->session->userdata('user_id'));
 		$t_grid = new TransactionsGrid();
 		$t_grid->run();
-		
+
 		$transactions["transactions"] = $t_grid->getTransactionsGrid();
 
 		$props['youAreHere'] = "Transfer Funds";
@@ -132,6 +132,7 @@ class fundsTransferCTL extends N8_Controller {
 		$props['title'] = "Transfer Funds";
 		$props['links'] = $this->utilities->createLinks('main_nav');
 		$props['errors'] = $errors;
+		$props['logged_user'] = $this->session->userdata('logged_user');
 
 		$this->load->view('header', $props);
 		$this->load->view('transferFunds', $data);

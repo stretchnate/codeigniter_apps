@@ -14,3 +14,34 @@
 .float-left {
     float:left;
 }
+
+.form-group-label {
+    margin-bottom: 0px;
+}
+
+#ajax-load {
+    display:none;
+}
+
+#footer {
+    margin:0 auto;
+    text-align:center;
+    padding:10px 0 0 0;
+    font-size: 85%;
+}
+
+#footer .links ul {
+    list-style-type:none;
+    margin:3px 0 3px 0;
+}
+
+#footer .links li {
+    display: inline;
+    margin:0 2px 0 2px;
+}
+
+.content_section h2 span {
+    font-size: 58%;
+    display:block;
+    color:dimgray;
+}

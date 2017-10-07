@@ -1,6 +1,6 @@
 <?php
 class AccountCTL extends N8_Controller {
-	
+
 	function AccountCTL() {
 		parent::__construct();
 	}
@@ -30,6 +30,7 @@ class AccountCTL extends N8_Controller {
 		$data['scripts'] = $this->jsincludes->newAccount();
 		$data['youAreHere'] = "Add New Account";
 		$data['title'] = "Add New Account";
+		$data['logged_user'] = $this->session->userdata('logged_user');
 
 		$this->load->view('header',$data);
 		$this->load->view('/account/newAccountVW');
@@ -44,7 +45,7 @@ class AccountCTL extends N8_Controller {
 
 		$this->load->model("Book_info");
 		$this->load->model("accounts", "ACCT", TRUE);
-		
+
 		$response = array('success' => false, 'message' => "there was a problem adding your account");
 
 		$account_name = $this->input->post("name");

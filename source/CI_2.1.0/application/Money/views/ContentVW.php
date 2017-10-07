@@ -16,7 +16,7 @@
 
         protected function generateView() {
             foreach($this->content as $content) {
-                echo $content->getContent();
+                echo sprintf($content->getContent(), COMPANY_NAME);
             }
         }
 

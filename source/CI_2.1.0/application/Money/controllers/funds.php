@@ -20,6 +20,7 @@ class Funds extends N8_Controller {
 		$data['youAreHere'] = "Add New Funds";
 		$data['scripts'] = $this->jsincludes->newFunds();
 		$data['title'] = "Add New Funds";
+		$data['logged_user'] = $this->session->userdata('logged_user');
 
 		$this->load->model('accounts', 'ACCT', TRUE);
 

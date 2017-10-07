@@ -16,6 +16,7 @@ class Report extends N8_Controller {
 
 		$sidebar = new NavigationUlLIB('report');
 		$header_data['sidebar_links'] = $sidebar->getUl();
+		$header_data['logged_user'] = $this->session->userdata('logged_user');
 
 		$this->load->view('header', $header_data);
 		// $this->load->view('sidebar', $sidebar);

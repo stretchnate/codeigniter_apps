@@ -15,10 +15,6 @@
 
 		public function __construct(&$CI) {
 			$this->CI = $CI;
-
-			$home = new Budget_BusinessModel_Home();
-			$home->loadAccounts($this->CI->session->userdata('user_id'));
-			$this->accounts = $home->getAccounts();
 	}
 
 		/**
@@ -46,6 +42,8 @@
 				<link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH; ?>main.css" />
 				<!--<link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH; ?>redmond/jquery-ui-1.8.21.custom.css" />-->
 				<!--<link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH; ?>jquery.dataTables_1.9.0.css" />-->
+				<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js'></script>
+				<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
 				<?php
                 if(isset($this->scripts) && is_array($this->scripts)) {
 					foreach($this->scripts as $script)
@@ -57,7 +55,7 @@
 			<body>
 				<nav class="navbar navbar-default">
 					<div class="container">
-						<h1><a href="/">Smart Budget<span style="font-size:40%;"></span></a></h1>
+						<h1><a href="/"><?= COMPANY_NAME; ?></a></h1>
 						<div class="navbar-header">
 							<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
 								<span class="sr-only">Toggle navigation</span>
@@ -65,28 +63,13 @@
 								<span class="icon-bar"></span>
 								<span class="icon-bar"></span>
 							</button>
-							<a class="navbar-brand" href="#" title="Quantum">Smart Budget</a>
+							<a class="navbar-brand" href="#" title="Quantum">Q</a>
 						</div>
 						<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 							<?php
 								$nav = new NavigationUlLIB("main_nav", "nav navbar-nav");
 								echo $nav->getUl();
 							?>
-							<ul class="nav navbar-nav navbar-left">
-								<li class="dropdown">
-									<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-										My Accounts <span class="caret"></span>
-									</a>
-									<ul class="dropdown-menu">
-									<?php
-										foreach($this->accounts as $account) {
-											$id = strtolower(str_replace(' ', '_', $account->getAccountName())).'-tab';
-											echo "<li><a href='javascript:void(null)' id='$id' class='tabs-link'>".$account->getAccountName()."</a></li>";
-										}
-									?>
-									</ul>
-								</li>
-							</ul>
 							<ul class="nav navbar-nav navbar-right">
 								<li class="dropdown">
 									<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -103,7 +86,7 @@
 				</nav>
 				<div class="container">
 				<?= $this->showAd(AdFactory::AD_AUTO); ?>
-				
+
 				<div id="content">
 					<div class="error">
 						<?
@@ -124,35 +107,9 @@
 			$uri = str_replace("/", "_", $this->CI->uri->uri_string());
             $n = 0;
 			?>
-				</div><!-- end div content -->
-				<div id="post-it-notes">
-					<?php
-					if( isset($this->notes) && is_array($this->notes)) {
-						foreach($this->notes as $note) {
-                            $n++;
-
-                            if($n == 2) {
-                                $this->showAd(AdFactory::AD_WIDE_SKYSCRAPER);
-                            }
-                    ?>
-						<div class="post-it">
-							<?php echo  $note->note_text; ?>
-							<br />
-							<a href="/notes/showNoteForm/<?php echo $note->note_id;?>">Edit Note</a>
-							<br />
-							<a href="/notes/deleteNote/<?php echo $note->note_id;?>/<?php echo $uri?>">Delete Note</a>
-						</div>
-						<?php
-						}
-					}
-
-                    if($n < 2) {
-                        $this->showAd(AdFactory::AD_WIDE_SKYSCRAPER);
-                    }
-                    ?>
-				</div>
-				<div class="clear">&nbsp;</div>
-
+			</div><!-- end div content -->
+			</div><!-- end div container -->
+			<div class="container-fluid">
             <div id="footer">
                 <div class='links'>
                     <?php

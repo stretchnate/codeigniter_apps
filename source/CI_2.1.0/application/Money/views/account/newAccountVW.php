@@ -5,32 +5,20 @@
 	</div>
 	<div id="new-book">
 		<form name="newAccountForm" id="newAccountForm" action="/accountCTL/createNewAccount/" method="post">
-			<table>
-				<tr>
-					<td>
-						<span class="error">*</span>
-						<label for="name">Account Name: </label>
-					</td>
-					<td><input type="text" name="name" id="name" /><br /></td>
-					<td><div class="result ajaxResult"></div></td>
-				</tr>
-				<tr>
-					<td>
-						<span class="error">*</span>
-						<label for="pay_schedule">How Often are you paid:</label>
-					</td>
-					<td>
-						<select name="pay_schedule" class="required">
-							<option value="">- - Please Select - -</option>
-							<option value="1">Bi-Weekly</option>
-							<option value="2">Weekly</option>
-							<option value="3">Twice a Month</option>
-							<option value="4">Monthly</option>
-						</select>
-					</td>
-					<td><div id="amt-message" class="result">&nbsp;</div></td>
-				</tr>
-			</table>
-			<input type="submit" value="Add Account" />
+			<div class="form-group">
+				<input type="text" name="name" id="name" value='Account Name' class='required form-control' />
+			</div>
+			<div class="form-group">
+				<select name="pay_schedule" class="required form-control">
+					<option value="">- - How Often are you paid - -</option>
+					<option value="1">Bi-Weekly</option>
+					<option value="2">Weekly</option>
+					<option value="3">Twice a Month</option>
+					<option value="4">Monthly</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<input type="submit" value="Add Account" class='form-control' />
+			</div>
 		</form>
 	</div>
