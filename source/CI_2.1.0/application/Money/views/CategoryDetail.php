@@ -2,9 +2,9 @@
         <a href="/book/editBook/<?php echo $bookId; ?>/"><?php echo $bookName; ?></a>
     </h2>
 
-    <div id="account-general-info" class="accounts-dropdown">
+    <div id="account-general-info" class="accounts-dropdown input-group">
 		Go To:
-		<select name="accounts_select">
+		<select name="accounts_select" class="form-control">
 		<?php
 			foreach($accounts as $account) {?>
 			<optgroup label="<?php echo $account->account_name;?>">
@@ -32,58 +32,38 @@
             <form name="bookEditForm" id="bookEditForm" action="/funds/updateAccountFunds/" method="post" style="margin:10px 0 20px 0">
                 <input type="hidden" name="id" value="<?php echo $bookId; ?>" />
                 <input type="hidden" name="parent_account" value="<?php echo $parentAccount->account_id;?>" />
-				<div class="row">
-					<div class='col-xs-3'>
-						<label for='date'>Date:</label>
-					</div>
-					<div class='col-xs-3'>
-						<input type="text" name="date" id='date' autocomplete="off" />
+				<div class="input-group date" data-provide="datepicker">
+					<input type="text" class="form-control">
+					<div class="input-group-addon">
+						<span class="glyphicon glyphicon-calendar"></span>
 					</div>
 				</div>
-				<div class="row">
-					<div class='col-xs-3'>
-						<label for='description'>Description:</label>
-					</div>
-					<div class='col-xs-3'>
-						<input type="text" name="description" id='description' autocomplete="off" />
+				<div class="input-group">
+					<input type="text" name="description" class="form-control" id='description' autocomplete="off" />
+					<div class="input-group-addon">
+						<span class="glyphicon glyphicon-pencil"></span>
 					</div>
 				</div>
-				<div class="row">
-					<div class='col-xs-3'>
-						<label for='amount'>
-							Amount:
-						</label>
-					</div>
-					<div class='col-xs-3'>
-						<input type="text" class="required number money" name="amount" id='amount' autocomplete="off" />
+				<div class="input-group">
+					<input type="text" class="required number money form-control" name="amount" id='amount' autocomplete="off" />
+					<div class="input-group-addon">
+						<span class="glyphicon glyphicon-usd"></span>
 					</div>
 				</div>
-				<div class="row">
-					<div class='col-xs-3'>
-						<label for="add_from_account" title='Add Funds from <?php echo $parentAccount->account_name; ?>'>Credit: </label>
-					</div>
-					<div class='col-xs-3'>
-						<input type="radio" id="add_from_account" class="required" name="operation" value="addFromBucket" />
-					</div>
+				<div class="input-group">
+					<select class="required form-control" name="operation">
+						<option value="0">-- Select Operation --</option>
+						<option value="addFromBucket">Credit</option>
+						<option value="deduction" selected="selected">Debit</option>
+						<option value="refund">Refund</option>
+					</select>
 				</div>
-				<div class='row'>
-					<div class='col-xs-3'>
-						<label for="deduction" title='Deduct Funds from <?php echo $parentAccount->account_name; ?>'>Debit: </label>
-					</div>
-					<div class='col-xs-3'>
-						<input type="radio" id="deduction" class="required" name="operation" value="deduction" checked="checked" />
-					</div>
+				<div class="input-group">
+					<span id="refund">Refund Transaction ID: <input type="text" name="refundId" /></span>
 				</div>
-				<div class='row'>
-					<div class='col-xs-3'>
-					<label for="refund_radio">Refund: </label>
-					</div>
-					<div class='col-xs-3'>
-						<input type="radio" id="refund_radio" class="required" name="operation" value="refund" />
-						<span id="refund">Refund Transaction ID: <input type="text" name="refundId" /></span>
-					</div>
+                <div id="submit" class="input-group">
+					<input type="submit" value="Submit" class="form-control" />
 				</div>
-                <div id="submit"><input type="submit" value="Submit" /></div>
             </form>
         </div>
 

@@ -24,4 +24,8 @@ $(function() {
 
         $(this).val(amount);
     });
+
+    $('.date.glyphicon').click(function() {
+        $(this).parent().sibling('input.form-control').datepicker();
+    });
 });
