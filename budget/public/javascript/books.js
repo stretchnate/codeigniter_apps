@@ -1,10 +1,32 @@
 $(document).ready(function() {
     $("#refund").hide();
-    $("input[name=operation]").click(function() {
+
+    /**
+     * show/hide refund transaction id field
+     */
+    $("select[name=operation]").change(function() {
         if($(this).val() == 'refund') {
                 $("#refund").show();
         } else {
                 $("#refund").hide();
+        }
+    });
+
+    /**
+     * toggle refund value
+     */
+    $("#refund").focus(function() {
+        if($(this).val() === 'Refund Transaction ID') {
+            $(this).val('');
+        }
+    });
+
+    /**
+     * toggle refund value
+     */
+    $("#refund").blur(function() {
+        if(!$(this).val()) {
+            $(this).val('Refund Transaction ID');
         }
     });
 

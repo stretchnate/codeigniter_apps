@@ -3,7 +3,7 @@
     </h2>
 
     <div id="account-general-info" class="accounts-dropdown input-group">
-		Go To:
+		<label>Go To:</label>
 		<select name="accounts_select" class="form-control">
 		<?php
 			foreach($accounts as $account) {?>
@@ -59,7 +59,7 @@
 					</select>
 				</div>
 				<div class="input-group">
-					<span id="refund">Refund Transaction ID: <input type="text" name="refundId" /></span>
+					<input id="refund" type="text" class="numeric" name="refundId" value="Refund Transaction ID" />
 				</div>
                 <div id="submit" class="input-group">
 					<input type="submit" value="Submit" class="form-control" />
@@ -120,4 +120,5 @@
                 <div class="col-xs-3"><?php echo $symbol.number_format($dif,2,'.',','); ?></div>
             </div>
         </div>
+		<?= isset($transactions) ? $transactions : null; ?>
 	</div>

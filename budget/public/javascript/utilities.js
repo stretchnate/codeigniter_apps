@@ -25,6 +25,17 @@ $(function() {
         $(this).val(amount);
     });
 
+    /**
+     * trim non-numeric chars
+     */
+    $(".numeric").keyup(function() {
+        var new_val = $(this).val().replace(/[\D]/g, '');
+        $(this).val(new_val);
+    });
+
+    /**
+     * add datepicker to glyphicon click
+     */
     $('.date.glyphicon').click(function() {
         $(this).parent().sibling('input.form-control').datepicker();
     });

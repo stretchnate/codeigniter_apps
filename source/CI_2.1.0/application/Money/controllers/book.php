@@ -24,7 +24,7 @@ class Book extends N8_Controller {
 		$t_grid = new TransactionsGrid($id, "category");
 		$t_grid->run();
 
-		$transactions["transactions"] = $t_grid->getTransactionsGrid();
+		$data->transactions = $t_grid->getTransactionsGrid();
 
 		$props['youAreHere'] = $data->bookName;
 		$props['scripts'] = $this->jsincludes->books();
@@ -37,7 +37,6 @@ class Book extends N8_Controller {
 
 		$this->load->view('header',$props);
 		$this->load->view('CategoryDetail', $data);
-		$this->load->view('transactions', $transactions);
 		$this->load->view('footer', $notes);
 	}
 
