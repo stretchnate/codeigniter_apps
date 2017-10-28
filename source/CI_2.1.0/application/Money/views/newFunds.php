@@ -3,58 +3,43 @@
 	<?php if(isset($error)) echo $error; ?>
 		<form name="newFundsForm" id="newFundsForm" action="" method="post">
 			<input type="hidden" name="job" />
-			<table>
-				<tr>
-					<td><label for="date">Date: </label></td>
-					<td><input type="text" name="date" />yyyy-mm-dd</td>
-				</tr>
-				<tr>
-					<td>
-						<span class="error">*</span>
-						<label for="source">Source: </label>
-					</td>
-					<td>
-						<input type="text" class="required" name="source" />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<span class="error">*</span>
-						<label for="gross">Gross Amount: </label>
-					</td>
-					<td>
-						$<input type="text" class="required number money" name="gross" /> (before taxes)
-					</td>
-				</tr>
-				<tr>
-					<td><label for="net">Net Amount: </label></td>
-					<td>$<input type="text" name="net" id="net" class="number money" /> (after taxes)</td>
-				</tr>
-				<tr>
-					<td>
-						<span class="error">*</span>
-						<label for="account">Into Account</label>
-					</td>
-					<td>
-						<select name="account" class="required">
-							<option value="">- - Select Account - -</option>
-							<?
-							foreach($accounts as $account) {
-							?>
-							<option value="<?php echo $account->account_id;?>"><?php echo $account->account_name;?></option>
-							<?
-							} ?>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2">Manual <input type="checkbox" name="manual" id="manual" /></td>
-				</tr>
-				<tr>
-					<td colspan="2">
-						<input type="submit" value="Submit" />
-					</td>
-				</tr>
-			</table>
+			<div class="form-group">
+				<div class='input-group date' data-provide="datepicker">
+					<input type="text" class="form-control" name="date">
+					<div class="input-group-addon">
+						<span class="glyphicon glyphicon-calendar"></span>
+					</div>
+				</div>
+			</div>
+			<div class='form-group'>
+				<label for="source" class='form-group-label'>Source</label>
+				<input type="text" class="required form-control" name="source" />
+			</div>
+			<div class='form-group'>
+				<label for="gross" class='form-group-label'>Gross Amount</label>
+				<input type="text" class="required number money form-control" name="gross" class='form-control' />
+			</div>
+			<div class='form-group'>
+				<label for="net" class='form-group-label'>Net Amount</label>
+				<input type="text" name="net" id="net" class="number money form-control" class='form-control' />
+			</div>
+			<div class='form-group'>
+				<label for="account" class='form-group-label'>Account</label>
+				<select name="account" class="required form-control">
+					<option value="">- - Select Account - -</option>
+					<?
+					foreach($accounts as $account) {
+					?>
+					<option value="<?php echo $account->account_id;?>"><?php echo $account->account_name;?></option>
+					<?
+					} ?>
+				</select>
+			</div>
+			<div class='form-check'>
+				<label class='form-check-label'>
+					<input type="checkbox" name="manual" id="manual" class='form-check-input' /> Manually distribute to Categories
+				</label>
+			</div>
+			<input type="submit" value="Submit" class="btn btn-primary" />
 		</form>
 	</div>

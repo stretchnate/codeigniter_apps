@@ -46,6 +46,7 @@ if (defined('ENVIRONMENT'))
 	}
 }
 
+define('COMPANY_NAME', 'Smart Budget'); //Quantum
 /*
  *---------------------------------------------------------------
  * SYSTEM FOLDER NAME

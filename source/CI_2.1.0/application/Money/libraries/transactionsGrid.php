@@ -11,7 +11,7 @@ class TransactionsGrid extends N8_Error {
 	private $end_date;
 	private $reporting; //used when running reports.
 	private $theads = array(
-//		"transaction_id" => "ID",
+		"transaction_id" => "ID",
 		"transaction_date" => "Date",
 		"transaction_amount" => "Amount",
 		"transaction_info" => "Description",
@@ -108,9 +108,9 @@ class TransactionsGrid extends N8_Error {
 	 * to_account can have a from_account or deposit_id
 	 * deposit_id can have a to_account only
 	 *
-	 * @param $transactions
+	 * @param int $limit
 	 */
-	private function getTransactions() {
+	private function getTransactions($limit = 500) {
 		$where = "transactions.owner_id = ".$this->CI->session->userdata("user_id");
 
 		if($this->owner_type == "account") {
@@ -132,52 +132,103 @@ class TransactionsGrid extends N8_Error {
 					->join("cleared_transactions", "transactions.transaction_id = cleared_transactions.transactionId AND cleared_transactions.end_date IS NULL", "left")
 					->where($where, null, false)
                     ->order_by("transaction_id", "desc")
-                    ->limit(800);//@todo - need to find a way to override this when needed
+                    ->limit($limit);
 		$query = $this->CI->db->get();
 
 		return $query->result();
 	}
 
+	/**
+	 * @param string $theads
+	 */
 	public function setTheads($theads) {
 		if(!array_keys($theads, "cleared_bank")) {
 			$theads["cleared_bank"] = "Cleared";
 		}
 		$this->theads = $theads;
 	}
+
 	/**
 	 * generates the transactions grid and returns it as an HTML string
 	 *
 	 * @return string
 	 */
 	private function generateGrid() {
-		$html = "<div id='transactions'>
-					<script type='text/javascript'>
-						$(document).ready(function() {
-							$('#transactions_grid').dataTable({
-								'aaSorting': [[0,'desc']]
-							 });
+		$html = "<div id='transactions'>".$this->generateBootstrapGrid()."</div>";
 
-                            $('.delete_transaction_form').submit(function() {
-                                var action = $(this).attr('action').split('/');
-                                var transaction_id = action[3];
+		if($this->reporting === true) {
+			$balances = $this->calculateBalances();
+			$error = ($balances['balance'] < 0) ? " class='error'" : '';
+			$html .= "<div class='bold' style='text-align:right'>"
+					. "<div>Total Deposited: ".money_format('%i',$balances['deposit_total'])."</div>"
+					. "<div>Total Spent: ".money_format('%i',$balances['deduction_total'])."</div><hr>"
+					. "<div{$error}>Balance: ".money_format('%i',$balances['balance'])."</div></div>";
+		}
 
-                                if(!window.confirm('are you sure you want to delete transaction id ' + transaction_id + '?')) {
-                                    return false;
-                                }
-                            });
-						});
-					</script>
-					<table id='transactions_grid'>
-						<thead>
-							<tr>";
-							foreach($this->theads as $thead) {
-								$html .= "<th>".$thead."</th>";
+		return $html;
+	}
+
+	/**
+	 * adjust grid for screensize
+	 *
+	 * @return string
+	 */
+	private function responsiveJS() {
+		ob_start();
+		?>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				adjustGrid();
+
+				$(window).resize(function() {
+					adjustGrid();
+				});
+			});
+
+			function adjustGrid() {
+				if($('nav.navbar').width() < 992) {
+					$('#transactions_grid div.optional').hide();
+					$('#transactions_grid div.adjust').addClass('col-xs-3').removeClass('col-xs-1');
+					$('#transactions_grid span.year').hide();
+				} else {
+					$('#transactions_grid span.year').show();
+					$('#transactions_grid div.adjust').addClass('col-xs-1').removeClass('col-xs-3');
+					$('#transactions_grid div.optional').show();
+				}
+			}
+		</script>
+		<?php
+		$js = ob_get_contents();
+		ob_end_flush();
+
+		return $js;
+	}
+
+	/**
+	 * generate a grid system without table elements (bootstrap)
+	 */
+	private function generateBootstrapGrid() {
+		$html = $this->responsiveJS();
+		$html .= "<div id='transactions_grid' class='well'>
+						<div class='row header'>";
+							foreach($this->theads as $property => $thead) {
+								switch($property) {
+									case "transaction_id":
+									case "transaction_date":
+									case "transaction_amount":
+									case "delete_transaction":
+									case "cleared_bank":
+										$html .= "<div class='col-xs-1 adjust'>".$thead."</div>";
+										break;
+
+									case "transaction_info":
+										$html .= "<div class='col-xs-8 optional'>".$thead."</div>";
+										break;
+								}
 							}
-						$html .= "</tr>
-						</thead>
-						<tbody>";
+						$html .= "</div>";
+
 						foreach($this->transactions as $transaction) {
-							$cleared = null;
 							$add_subtract = null;
 
 							$checked = "";
@@ -191,54 +242,45 @@ class TransactionsGrid extends N8_Error {
 								$add_subtract = "subtract";
 							}
 
-							$html .= "<tr class='transaction'>";
+							$html .= "<div class='row transaction'>";
 							foreach($this->theads as $property => $value) {
 								switch($property) {
 									case "transaction_date":
-										$html .= "<td>".date("m/d/Y", strtotime($transaction->transaction_date))."</td>";
+										$date = date("m/d", strtotime($transaction->transaction_date));
+										$date .= "<span class='year'>".date("/Y", strtotime($transaction->transaction_date))."</span>";
+										$html .= "<div class='col-xs-1 adjust date'>".$date."</div>";
 										break;
 
 									case "transaction_amount":
-										$html .= "<td class='{$add_subtract}'>".number_format($transaction->transaction_amount, 2, ".", ",")."</td>";
+										$html .= "<div class='col-xs-1 adjust {$add_subtract}'>".number_format($transaction->transaction_amount, 2, ".", ",")."</div>";
 										break;
 
 									case "transaction_info":
-										$html .= "<td align='right'>".$transaction->transaction_info."</td>";
+										$html .= "<div class='col-xs-8 optional' style='text-align:right'>".$transaction->transaction_info."</div>";
 										break;
 
 									case "cleared_bank":
-										$html .= "<td style='text-align:center'><input type='checkbox' value='".$transaction->transaction_id."' {$checked}/>";
+										$html .= "<div class='col-xs-1 adjust' style='text-align:center'><input type='checkbox' value='".$transaction->transaction_id."' {$checked}/></div>";
 										break;
 
                                     case "delete_transaction":
-                                        $html .= "<td style='text-align:center'>"
+                                        $html .= "<div class='col-xs-1 adjust' style='text-align:center'>"
                                                 . "<form method='post' action='/funds/deleteTransaction/".$transaction->transaction_id."' class='delete_transaction_form'>"
                                                     . "<input type='hidden' name='return_uri' value='".$this->CI->uri->uri_string."' />"
                                                     . "<input type='image' src='/images/small_red_ex.png' alt='delete transaction {$transaction->transaction_id}' title='delete transaction {$transaction->transaction_id}' />"
                                                 . "</form>"
-                                            . "</td>";
+                                            . "</div>";
                                         break;
 
 									default:
 										if( property_exists("Budget_DataModel_TransactionDM", $property) && isset($transaction->$property) ) {
-											$html .= "<td>".$transaction->$property."</td>";
+											$html .= "<div class='col-xs-1 adjust'>".$transaction->$property."</div>";
 										}
 								}
 							}
-							$html .= "</tr>";
+							$html .= "</div>";
 						}
-		$html .=		"</tbody>
-					</table>
-				</div>";
-
-		if($this->reporting === true) {
-			$balances = $this->calculateBalances();
-			$error = ($balances['balance'] < 0) ? " class='error'" : '';
-			$html .= "<div class='bold' style='text-align:right'>"
-					. "<div>Total Deposited: ".money_format('%i',$balances['deposit_total'])."</div>"
-					. "<div>Total Spent: ".money_format('%i',$balances['deduction_total'])."</div><hr>"
-					. "<div{$error}>Balance: ".money_format('%i',$balances['balance'])."</div></div>";
-		}
+		$html .=	"</div>";
 
 		return $html;
 	}

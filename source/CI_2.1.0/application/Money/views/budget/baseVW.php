@@ -118,7 +118,7 @@
                     ?>
                 </div>
                 <div id="copy">
-                    &copy;2010-<?php $year = date('Y'); echo $year;?> stretchnate.com
+                    &copy;2010-<?php $year = date('Y'); echo $year;?> <?=COMPANY_NAME;?>
                     <!--<span class="version">v3.2</span>-->
                     <!--<a href="/blackjack/blackjack/" target="_blank">Play Blackjack</a>-->
                 </div>

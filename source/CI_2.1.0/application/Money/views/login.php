@@ -14,25 +14,24 @@ function showAd($ad_type) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Smart Budget - Login</title>
+    <title>Quantum - Login</title>
 	<meta charset='utf-8'>
 	<!-- ensure proper mobile rendering and touch zooming with the following tag -->
 	<meta name='viewport' content='width=device-width, initial-scale=1'>
 	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
 	<link rel="shortcut icon" href="<?php echo IMG_PATH; ?>favicon.ico"/>
-	<link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH; ?>base.css" />
-	<link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH; ?>ui-lightness/jquery-ui-1.8.2.custom.css" />
+	<link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH; ?>main.css" />
+	<!--<link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH; ?>ui-lightness/jquery-ui-1.8.2.custom.css" />-->
 	<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js'></script>
 	<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
     <!--<script type="text/javascript" src="<?php echo JS_PATH; ?>jquery-1.4.2.min.js"></script>-->
-	<script type='text/javascript' src='<?php echo JS_PATH; ?>jquery-ui-1.8.21.custom.min.js'></script>
+	<!--<script type='text/javascript' src='<?php echo JS_PATH; ?>jquery-ui-1.8.21.custom.min.js'></script>-->
 	<script type="text/javascript" src="<?php echo JS_PATH; ?>login.js"></script>
 </head>
 <body>
 	<div class="container-fluid">
 		<div id="header" class="border">
-			<h1><a href="/">Smart Budget<span style="font-size:40%;"></span></a></h1>
-			<div id="date" class="main_color"><?php echo date('l, F j'); ?></div>
+			<h1><a href="/"><?= COMPANY_NAME; ?></a></h1>
 		</div>
 
 		<h2>Please log in</h2>
@@ -41,28 +40,25 @@ function showAd($ad_type) {
 			echo "<p>$error</p>";
 		}
 		?>
-		<form name="loginForm" action="/admin/login" method="post" style="float:left;">
+		<form name="loginForm" action="/admin/login" method="post">
 			<div class="form-group">
-				<label for="username"><span class="error">*</span>Username: <br />
-				<input type="text" class="form-control required" name="username" value="" id="username" /></label>
+				<label for="username">Username</label>
+				<input type="text" class="form-control required" name="username" value="" id="username" />
 			</div>
 			<div class="form-group">
-				<label for="passw"><span class="error">*</span>Password: <br />
-				<input type="password" class="form-control required" name="password" value="" id="passw" /></label>
+				<label for="passw">Password</label>
+				<input type="password" class="form-control required" name="password" value="" id="passw" />
 			</div>
-			<div class="form-group">
-				<input type="submit" class="form-control btn btn-lg" name="submLogin" value="Log In" />
-				<a href="/admin/register/" id="register" class="btn btn-lg">Register</a>
-			</div>
+			<input type="submit" class="btn btn-primary" name="submLogin" value="Log In" />
+			<a href="/admin/register/" id="register" class="btn btn-info">Register</a>
 		</form>
-		<div class="clear">&nbsp;</div>
 
 		<div id="footer">
 			<div class='links'>
 				<?= $footer_nav->getUl(); ?>
 			</div>
 			<div id="copy">
-				&copy;2010-<?php $year = date('Y'); echo $year;?> stretchnate.com
+				&copy;2010-<?php $year = date('Y'); echo $year;?> <?=COMPANY_NAME;?>
 				<!--<span class="version">v3.2</span>-->
 			</div>
 		</div>

@@ -86,9 +86,7 @@
 						</select>
 					</div>
 
-					<div class='form-group'>
-						<input type="submit" value="Add Category" class='form-control' />
-					</div>
+					<input type="submit" value="Add Category" class='btn btn-primary' />
 				</form>
 			</div>
 			<?

@@ -17,8 +17,6 @@
 					<option value="4">Monthly</option>
 				</select>
 			</div>
-			<div class="form-group">
-				<input type="submit" value="Add Account" class='form-control' />
-			</div>
+			<input type="submit" value="Add Account" class='btn btn-primary' />
 		</form>
 	</div>
