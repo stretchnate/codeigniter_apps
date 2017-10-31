@@ -10,7 +10,7 @@ class AccountCTL extends N8_Controller {
 		$response['message'] = "";
 		$this->load->model('Book_info');
 		$this->load->model("accounts", "ACCT", TRUE);
-		$check = $this->ACCT->checkExistingAccount($this->session->userdata('user_id')); // check for exisiting account
+		$check = $this->ACCT->checkExistingAccount($this->session->userdata('user_id'), $this->input->post('name')); // check for exisiting account
 		if($check > 0) {
 			$response['message'] = "this account already exists, please try another name.";
 		} else {

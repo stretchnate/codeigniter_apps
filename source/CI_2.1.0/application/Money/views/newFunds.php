@@ -12,19 +12,15 @@
 				</div>
 			</div>
 			<div class='form-group'>
-				<label for="source" class='form-group-label'>Source</label>
-				<input type="text" class="required form-control" name="source" />
+				<input type="text" class="required form-control" name="source" id="source" value="Source" />
 			</div>
 			<div class='form-group'>
-				<label for="gross" class='form-group-label'>Gross Amount</label>
-				<input type="text" class="required number money form-control" name="gross" class='form-control' />
+				<input type="text" class="required number money form-control" name="gross" id="gross_amount" value="Gross Amount" />
 			</div>
 			<div class='form-group'>
-				<label for="net" class='form-group-label'>Net Amount</label>
-				<input type="text" name="net" id="net" class="number money form-control" class='form-control' />
+				<input type="text" name="net" id="net_amount" class="number money form-control" value="Net Amount" />
 			</div>
 			<div class='form-group'>
-				<label for="account" class='form-group-label'>Account</label>
 				<select name="account" class="required form-control">
 					<option value="">- - Select Account - -</option>
 					<?

@@ -20,54 +20,25 @@
 			//need to look into a template type structure rather than loading a bunch of files for header and footer.
 			?>
 			<form name="user_profile_form" action="/userCTL/update/" method="post">
-				<div class="row">
-					<div class="col-xs-3" style="margin:0 5px 0 0;">
-						<label for="username">Username:</label>
-					</div>
-					<div class="col-xs-3">
-						<span id="username"><?=$this->user_dm->getUsername();?></span>
-					</div>
+				<div class="form-group">
+					<label for="username"><?=$this->user_dm->getUsername();?></label>
 				</div>
-				<div class="row">
-					<div class="col-xs-3" style="margin:3px 5px 3px 0;">
-						<label for="email">Email:</label>
-					</div>
-					<div class="col-xs-3">
-						<input type="text" value="<?=$this->user_dm->getEmail();?>" id="email" name="email" class="required email left" />
-						<div class="error"> <?=form_error('email');?></div>
-					</div>
+				<div class="form-group">
+					<input type="text" value="<?=$this->user_dm->getEmail();?>" id="email" name="email" class="required email left form-control" value="Email" />
+					<div class="error"> <?=form_error('email');?></div>
 				</div>
-				<div class="row clear-both">
-					<div class="col-xs-3" style="margin:3px 5px 3px 0;">
-						<label for="new_password">New Password:</label>
-					</div>
-					<div class="col-xs-3">
-						<input type="password" value="" id="new_password" name="new_password" />
-					</div>
+				<div class="form-group clear-both">
+					<input type="password" value="New Password" class="form-control" id="new_password" name="new_password" />
 				</div>
-				<div class="row">
-					<div class="col-xs-3" style="margin:3px 5px 3px 0;">
-						<label for="confirm_new_password">Confirm New Password:</label>
-					</div>
-					<div class="col-xs-3">
-						<input type="password" value="" id="confirm_new_password" name="confirm_new_password" class="left" />
-						<div class="error"> <?=form_error('confirm_new_password');?></div>
-					</div>
+				<div class="form-group">
+					<input type="password" value="Confirm New Password" id="confirm_new_password" name="confirm_new_password" class="form-control" />
+					<div class="error"> <?=form_error('confirm_new_password');?></div>
 				</div>
-				<div class="row clear-both">
-					<div class="col-xs-3" style="margin:3px 5px 3px 0;">
-						<label for="password">Password:</label>
-					</div>
-					<div class="col-xs-3">
-						<input type="password" value="" id="password" name="password" class="required left" />
-						<div class="error"> <?=form_error('password');?></div>
-					</div>
+				<div class="form-group">
+					<input type="password" value="Password" id="password" name="password" class="required form-control" />
+					<div class="error"> <?=form_error('password');?></div>
 				</div>
-				<div class="row clear-both">
-					<div class="col-xs-3" style="margin:3px 5px 3px 0;">
-						<input type="button" value="Submit Changes" name="user_form_submit" />
-					</div>
-				</div>
+				<input type="button" value="Submit Changes" name="user_form_submit" />
 			</form>
 			<?
 		}

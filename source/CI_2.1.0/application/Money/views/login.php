@@ -27,6 +27,7 @@ function showAd($ad_type) {
     <!--<script type="text/javascript" src="<?php echo JS_PATH; ?>jquery-1.4.2.min.js"></script>-->
 	<!--<script type='text/javascript' src='<?php echo JS_PATH; ?>jquery-ui-1.8.21.custom.min.js'></script>-->
 	<script type="text/javascript" src="<?php echo JS_PATH; ?>login.js"></script>
+	<script type="text/javascript" src="<?php echo JS_PATH; ?>utilities.js"></script>
 </head>
 <body>
 	<div class="container-fluid">
@@ -42,12 +43,10 @@ function showAd($ad_type) {
 		?>
 		<form name="loginForm" action="/admin/login" method="post">
 			<div class="form-group">
-				<label for="username">Username</label>
-				<input type="text" class="form-control required" name="username" value="" id="username" />
+				<input type="text" class="form-control required" name="username" value="Username" id="username" />
 			</div>
 			<div class="form-group">
-				<label for="passw">Password</label>
-				<input type="password" class="form-control required" name="password" value="" id="passw" />
+				<input type="password" class="form-control required" name="password" value="Password" id="password" />
 			</div>
 			<input type="submit" class="btn btn-primary" name="submLogin" value="Log In" />
 			<a href="/admin/register/" id="register" class="btn btn-info">Register</a>

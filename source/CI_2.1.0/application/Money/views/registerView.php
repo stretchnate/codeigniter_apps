@@ -23,6 +23,7 @@ header("Pragma: no-cache");
     <!--<script type="text/javascript" src="<?php echo JS_PATH; ?>jquery-1.4.2.min.js"></script>-->
 	<!--<script type='text/javascript' src='<?php echo JS_PATH; ?>jquery-ui-1.8.21.custom.min.js'></script>-->
 	<script type="text/javascript" src="<?php echo JS_PATH; ?>register.js"></script>
+	<script type="text/javascript" src="<?php echo JS_PATH; ?>utilities.js"></script>
 </head>
 <body>
 	<div class="container-fluid">
@@ -35,21 +36,17 @@ header("Pragma: no-cache");
 		<div>
 			<form name="registerForm" id="registerForm" action="/admin/registerUser/" method="post">
 				<div class='form-group'>
-					<label for='username'>Username</label>
-					<input type="text" id="username" class="required form-control" name="username" size="32" value="<?php if(isset($_POST['username'])) echo $_POST['username']; ?>" />
+					<input type="text" id="username" class="required form-control" name="username" size="32" value="<?= isset($_POST['username']) ? $_POST['username'] : 'Username'; ?>" />
 					<span class="ajaxResult result">&nbsp;</span>
 				</div>
 				<div class='form-group'>
-					<label for='password'>Password</label>
-					<input type="password" id="password" class="required form-control" name="password" size="32" value="" />
+					<input type="password" id="password" class="required form-control" name="password" size="32" value="Password" />
 				</div>
 				<div class='form-group'>
-					<label for='confirmPassword'>Confirm Password</label>
-					<input type="password" id="confirmPassword" class="required form-control" name="confirmPassword" size="32" value="" />
+					<input type="password" id="confirm_password" class="required form-control" name="confirm_password" size="32" value="Confirm Password" />
 				</div>
 				<div class='form-group'>
-					<label for='email'>Email</label>
-					<input type="text" id="email" class="required email form-control" name="email" size="32" value="<?php if(isset($_POST['email'])) echo $_POST['email']; ?>" /><br />
+					<input type="text" id="email" class="required email form-control" name="email" size="32" value="<?= isset($_POST['email']) ? $_POST['email'] : 'Email'; ?>" /><br />
 					<input type="hidden" name="charitable" value="0" />
 				</div>
 

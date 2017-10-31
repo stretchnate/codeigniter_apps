@@ -15,9 +15,9 @@
 			</div>
 		</div>
 		<div class='form-group'>
-			<label class="form-group-label">From</label>
 			<div class="transfer-categories">
 				<select name="from" id="from" class="required form-control">
+					<option>-- From --</option>
 				<?php
 				foreach($accounts as $account){
 				?>
@@ -34,7 +34,7 @@
 			</div>
 			<div class="transfer-accounts">
 				<select name="from-accounts" class="form-control">
-					<option value="">- - Select Account - -</option>
+					<option value="">-- From Account --</option>
 					<?php
 					foreach($accounts as $account){
 					?>
@@ -47,9 +47,9 @@
 			</div>
 		</div>
 		<div class='form-group'>
-			<label class="form-group-label">To</label>
 			<div class="transfer-categories">
 				<select name="to" id="to" class="required form-control">
+					<option>-- To --</option>
 				<?php
 				foreach($accounts as $account){
 				?>
@@ -67,7 +67,7 @@
 			</div>
 			<div class="transfer-accounts">
 				<select name="to-accounts" class="form-control">
-					<option value="">- - Select Account - -</option>
+					<option value="">- - To Account - -</option>
 					<?php
 					foreach($accounts as $account){
 					?>
@@ -80,8 +80,7 @@
 			</div>
 		</div>
 		<div class='form-group'>
-			<label class="form-group-label">Amount</label>
-			<input type="text" class="required money form-control" name="amount" />
+			<input type="text" class="required money form-control" name="amount" id="amount" value="Amount" />
 		</div>
 		<input type="submit" value="Transfer" class="btn btn-primary" />
 	</form>

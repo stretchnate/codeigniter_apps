@@ -1,6 +1,6 @@
 <?php
 class Accounts extends Book_info {
-		
+
 	function Accounts(){
 		parent::__construct();
 	}
@@ -102,8 +102,8 @@ class Accounts extends Book_info {
 		return false;
 	}
 
-	function checkExistingAccount($owner_id) {
-		$data = array('account_name' => $this->input->post('name'),'owner_id' => $owner_id);
+	function checkExistingAccount($owner_id, $account_name) {
+		$data = array('account_name' => $account_name,'owner_id' => $owner_id);
 		$query = $this->db->get_where('accounts',$data);
 		$num = $query->num_rows();
 		return $num;

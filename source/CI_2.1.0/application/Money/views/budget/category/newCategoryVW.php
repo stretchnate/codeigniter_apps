@@ -37,17 +37,17 @@
 						</select>
 					</div>
 					<div class='form-group'>
-						<input type="text" name="name" id="name" class='form-control' value='Category Name' />
+						<input type="text" name="name" id="name" class='form-control' value='Name' />
 					</div>
 					<div class='form-group'>
 						<div class="ajaxResult result"></div>
-						<input type="text" class="required money form-control" name="nec" id="nec" value="Amount Due" />
+						<input type="text" class="required money form-control" name="nec" id="amount_due" value="Amount Due" />
 					</div>
 					<div class='form-group'>
-						<input type="text" class="required money form-control" name="startAmt" id="startAmt" value="Starting Amount" />
+						<input type="text" class="required money form-control" name="startAmt" id="starting_amount" value="Starting Amount" />
 					</div>
 					<div class='form-group'>
-						<input type="text" class="required number form-control" name="dueDay" id="dueDay" value="Due Date" />
+						<input type="text" class="required number form-control" name="dueDay" id="due_date" value="Due Date" />
 					</div>
 					<div class='form-group-label'>
 
@@ -72,7 +72,7 @@
 						</select>
 					</div>
 					<div class='form-group'>
-						<input type="text" name="totalOwed" class='form-control' value='Current Balance' />
+						<input type="text" name="totalOwed" class='form-control' value='Current Balance' id="current_balance" />
 					</div>
 
 					<div class='form-group'>

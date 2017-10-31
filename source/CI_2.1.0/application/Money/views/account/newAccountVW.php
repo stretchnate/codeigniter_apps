@@ -6,7 +6,7 @@
 	<div id="new-book">
 		<form name="newAccountForm" id="newAccountForm" action="/accountCTL/createNewAccount/" method="post">
 			<div class="form-group">
-				<input type="text" name="name" id="name" value='Account Name' class='required form-control' />
+				<input type="text" name="name" id="name" value='Name' class='required form-control' />
 			</div>
 			<div class="form-group">
 				<select name="pay_schedule" class="required form-control">
