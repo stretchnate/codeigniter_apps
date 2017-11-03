@@ -19,6 +19,8 @@ class TransactionsGrid extends N8_Error {
 		"delete_transaction" => "Delete"
 	);
 
+	private $offset;
+
 	function __construct($owner = null, $owner_type = null, $reporting = false) {
 		$this->CI =& get_instance();
 		// Load additional libraries, helpers, etc.
@@ -110,7 +112,9 @@ class TransactionsGrid extends N8_Error {
 	 *
 	 * @param int $limit
 	 */
-	private function getTransactions($limit = 500) {
+	private function getTransactions($limit = 20, $offset = 0) {
+		$this->offset = $offset;
+
 		$where = "transactions.owner_id = ".$this->CI->session->userdata("user_id");
 
 		if($this->owner_type == "account") {
@@ -132,7 +136,7 @@ class TransactionsGrid extends N8_Error {
 					->join("cleared_transactions", "transactions.transaction_id = cleared_transactions.transactionId AND cleared_transactions.end_date IS NULL", "left")
 					->where($where, null, false)
                     ->order_by("transaction_id", "desc")
-                    ->limit($limit);
+                    ->limit($limit, $this->offset);
 		$query = $this->CI->db->get();
 
 		return $query->result();
@@ -154,7 +158,9 @@ class TransactionsGrid extends N8_Error {
 	 * @return string
 	 */
 	private function generateGrid() {
-		$html = "<div id='transactions'>".$this->generateBootstrapGrid()."</div>";
+		$html = "<div id='transactions'>"
+				.$this->generateBootstrapGrid()
+				."</div>";
 
 		if($this->reporting === true) {
 			$balances = $this->calculateBalances();
@@ -166,6 +172,68 @@ class TransactionsGrid extends N8_Error {
 		}
 
 		return $html;
+	}
+
+	/**
+	 * generate the pagination links for the transactions grid
+	 * @return string
+	 */
+	private function generatePagination() {
+		$html = array(
+			'<nav aria-label="Transaction Pages">',
+			'<ul class="pagination">',
+			'<li class="page-item">
+				<a class="page-link" href="javascript:void(0)" aria-label="Previous">
+				<span aria-hidden="true">&laquo;</span>
+				<span class="sr-only">Previous</span>
+			  </a>
+			</li>'
+		);
+
+		$page_count = $this->getTransactionsTotal() / count($this->transactions);
+		for($i = 1;$i <= $page_count;$i++) {
+			$html[] = '<li class="page-item"><a class="page-link" href="javascript:void(0)">'.$i.'</a></li>';
+		}
+
+		$html[] = '<li class="page-item">
+					<a class="page-link" href="javascript:void(0)">
+						<span aria-hidden="true">&raquo;</span>
+						<span class="sr-only">Next</span>
+					</a>
+				</li>';
+		$html[] = '</ul>';
+		$html[] = '</nav>';
+
+		return implode('', $html);
+	}
+
+	/**
+	 * returns the total number of transactions
+	 * @return type
+	 */
+	private function getTransactionsTotal() {
+		$where = "transactions.owner_id = ".$this->CI->session->userdata("user_id");
+
+		if($this->owner_type == "account") {
+			$where .= " AND (to_account = {$this->owner_id} OR from_account = {$this->owner_id})";
+		} else if($this->owner_type == "category") {
+			$where .= " AND (to_category = {$this->owner_id} OR from_category = {$this->owner_id})";
+		}
+
+		if(isset($this->start_date)) {
+			if(!isset($this->end_date)) {
+				$this->end_date = new DateTime();
+			}
+
+			$where .= " AND (DATE_FORMAT(`transaction_date`, '%Y-%m-%d') BETWEEN '".$this->start_date->format("Y-m-d")."' AND '".$this->end_date->format("Y-m-d")."')";
+		}
+
+		$this->CI->db->select('count(*) as total')
+					->from("transactions")
+					->where($where, null, false);
+		$query = $this->CI->db->get();
+
+		return $query->row()->total;
 	}
 
 	/**
@@ -210,6 +278,7 @@ class TransactionsGrid extends N8_Error {
 	private function generateBootstrapGrid() {
 		$html = $this->responsiveJS();
 		$html .= "<div id='transactions_grid' class='well'>
+						<div id='grid'>
 						<div class='row header'>";
 							foreach($this->theads as $property => $thead) {
 								switch($property) {
@@ -280,7 +349,9 @@ class TransactionsGrid extends N8_Error {
 							}
 							$html .= "</div>";
 						}
-		$html .=	"</div>";
+		$html .= "</div>";
+		$html .= $this->generatePagination();
+		$html .= "</div>";
 
 		return $html;
 	}
