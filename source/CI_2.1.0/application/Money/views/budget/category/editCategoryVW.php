@@ -16,6 +16,12 @@
 		 * @since   07.01.2013
 		 */
 		public function generateView() {
+			$due_date = 'Due Date';
+			if($this->category_dm->getDueDay()) {
+				$date = new DateTime(date('Y-m-').$this->category_dm->getDueDay());
+				$due_date = $date->format('m/d/Y');
+			}
+			$dd_checked = $this->category_dm->getDueDay() === 0 ? ' checked' : null;
 		?>
 			<div>
 				<h2>Edit <?php echo $this->category_dm->getCategoryName(); ?></h2>
@@ -25,24 +31,29 @@
 							$dif = bcsub($this->category_dm->getAmountNecessary(), $this->category_dm->getCurrentAmount());
 						?>
 						<div class="form-group">
-							<label for="name">Name</label>
-							<input type="text" class="form-control required" name="name" id="name" value="<?php echo $this->category_dm->getCategoryName(); ?>" />
+							<input type="text" class="form-control required" name="name" id="name" value="<?= $this->category_dm->getCategoryName() ? $this->category_dm->getCategoryName() : 'Name'; ?>" />
 						</div>
 						<div class="form-group">
-							<label for="amtNec">Amount Due</label>
-							$<input type="text" class="required number money form-control" name="amtNec" id="amtNec" value="<?php echo number_format($this->category_dm->getAmountNecessary(), 2, '.', ',') ?>" />
+							<input type="text" class="required number money form-control" name="amtNec" id="amtNec" value="<?= $this->category_dm->getAmountNecessary() ? number_format($this->category_dm->getAmountNecessary(), 2, '.', ',') : 'Amount Due' ?>" />
 						</div>
 						<div class="form-group">
-							<label for="dueDay">
-								<a href="javascript:void(null);" class="tool-tip" title="This is the day of the month this bill is due (enter 0 to max this account each paycheck)">
-									Due Day
-								</a>
-							</label>
-							<input type="text" class="required number form-control" name="dueDay" id="dueDay" value="<?php echo $this->category_dm->getDueDay(); ?>" />
+							<div class="input-group date" data-provide='datepicker'>
+								<input type="text" class="form-control" name="dueDay" id="due_date" value="<?= $due_date; ?>" />
+								<!--<input type="text" class="form-control" name="dueDay">-->
+								<div class="input-group-addon">
+									<span class="glyphicon glyphicon-calendar"></span>
+								</div>
+							</div>
+							<div class="form-check form-check-inline">
+								<label class="form-check-label">
+									<input id='due_date_checkbox' type="checkbox" class="form-check-input" name="dueDay"<?=$dd_checked; ?>>
+									No Due Date
+								</label>
+							</div>
 						</div>
 						<div class="form-group">
 							<label class="form-group-label">
-								<a href="javascript:void(null);" class="tool-tip" title="ctrl + click to select each month this category is due (ctrl + a to select all)">Due Months</a>
+								<a href="javascript:void(null);" class="tool-tip" title="ctrl + click to select each month this category is due (ctrl + a to select all)">Months Due</a>
 							</label>
 							<?php
 								$months = array(

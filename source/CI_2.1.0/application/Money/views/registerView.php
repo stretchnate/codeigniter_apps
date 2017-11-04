@@ -20,6 +20,7 @@ header("Pragma: no-cache");
 	<!--<link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH; ?>ui-lightness/jquery-ui-1.8.2.custom.css" />-->
 	<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js'></script>
 	<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
     <!--<script type="text/javascript" src="<?php echo JS_PATH; ?>jquery-1.4.2.min.js"></script>-->
 	<!--<script type='text/javascript' src='<?php echo JS_PATH; ?>jquery-ui-1.8.21.custom.min.js'></script>-->
 	<script type="text/javascript" src="<?php echo JS_PATH; ?>register.js"></script>

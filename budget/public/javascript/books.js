@@ -6,9 +6,9 @@ $(document).ready(function() {
      */
     $("select[name=operation]").change(function() {
         if($(this).val() == 'refund') {
-                $("#refund").show();
+            $("#refund").show();
         } else {
-                $("#refund").hide();
+            $("#refund").hide();
         }
     });
 

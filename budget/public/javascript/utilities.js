@@ -1,14 +1,4 @@
 $(function() {
-//    $('.tool-tip').tooltip({
-//        track: true,
-//        delay: 1,
-//        showURL: false,
-//        opacity: .85,
-//        fixPNG: true,
-//        top: 15,
-//        left: 5
-//    });
-
     $('.money').blur(function() {
         //remove all comma's and dollar signs
         var regex    = new RegExp(/[\$,]/g);
@@ -31,13 +21,6 @@ $(function() {
     $(".numeric").keyup(function() {
         var new_val = $(this).val().replace(/[\D]/g, '');
         $(this).val(new_val);
-    });
-
-    /**
-     * add datepicker to glyphicon click
-     */
-    $('.date.glyphicon').click(function() {
-        $(this).parent().sibling('input.form-control').datepicker();
     });
 
     /**
@@ -97,7 +80,12 @@ $(function() {
      * @returns {unresolved}
      */
     function getCheckVal(element) {
-        return ucwords(element.attr('id').replace(/_/g, ' '));
+        var result = null;
+        if(element.attr('id')) {
+            result = ucwords(element.attr('id').replace(/_/g, ' '));
+        }
+
+        return result;
     }
 
     /**
