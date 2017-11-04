@@ -234,5 +234,8 @@ class Budget_DataModel_AccountDM extends N8_Model {
 	public function getCategories() {
 		return $this->categories;
 	}
+
+	public function getID() {
+		return $this->account_id;
+	}
 }
-?>

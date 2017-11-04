@@ -360,5 +360,8 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 
 		return $this->next_due_date;
 	}
+
+	public function getID() {
+		return $this->category_id;
+	}
 }
-?>

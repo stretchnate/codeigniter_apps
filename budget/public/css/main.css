@@ -3,6 +3,8 @@
     Author     : stretch
 */
 
+@import 'style.css';
+
 .align-right {
     text-align:right;
 }

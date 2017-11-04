@@ -1,0 +1,13 @@
+/*
+    Created on : Nov 3, 2017, 8:35:30 PM
+    Author     : stretch
+*/
+
+
+.active {
+    background-color:#c9c9c9 !important;
+}
+
+.disabled {
+    opacity:.5;
+}
