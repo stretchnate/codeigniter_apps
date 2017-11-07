@@ -210,7 +210,7 @@ class Book extends N8_Controller {
 
 	function saveChange($id) {
 		$this->auth->restrict();
-
+dbo_arr('post', $this->input->post());
 		$category_dm = new Budget_DataModel_CategoryDM($id);
 
 		$category_dm->setCategoryName($this->input->post('name'));

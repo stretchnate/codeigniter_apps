@@ -89,7 +89,7 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 		$sets["priority"]        = $this->priority;
 		$sets["active"]          = $this->active;
 		$sets["due_day"]         = $this->due_day;
-		$sets["due_months"]      = implode('|', $this->due_months);
+		$sets["due_months"]      = implode('|', array_keys($this->due_months));
 		$sets["account_id"]      = $this->parent_account_id;
 		$sets["InterestBearing"] = $this->interest_bearing;
 

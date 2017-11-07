@@ -8,53 +8,51 @@ header("Pragma: no-cache");
 ?>
 
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<html>
 <head>
-    <title>Quantum - Register</title>
+    <title>Quantum - User Registration</title>
 	<meta charset='utf-8'>
 	<!-- ensure proper mobile rendering and touch zooming with the following tag -->
 	<meta name='viewport' content='width=device-width, initial-scale=1'>
 	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
 	<link rel="shortcut icon" href="<?php echo IMG_PATH; ?>favicon.ico"/>
 	<link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH; ?>main.css" />
-	<!--<link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH; ?>ui-lightness/jquery-ui-1.8.2.custom.css" />-->
 	<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js'></script>
 	<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
-    <!--<script type="text/javascript" src="<?php echo JS_PATH; ?>jquery-1.4.2.min.js"></script>-->
-	<!--<script type='text/javascript' src='<?php echo JS_PATH; ?>jquery-ui-1.8.21.custom.min.js'></script>-->
 	<script type="text/javascript" src="<?php echo JS_PATH; ?>register.js"></script>
 	<script type="text/javascript" src="<?php echo JS_PATH; ?>utilities.js"></script>
 </head>
 <body>
 	<div class="container-fluid">
-		<h1>Register</h1>
+		<h1>User Registration</h1>
 		<?php
 			//echo validation_errors();
 			if(isset($error))
-				echo "<div class='error'>".$error."</div>";
+				echo "<div class='text-danger'>".$error."</div>";
 		?>
 		<div>
 			<form name="registerForm" id="registerForm" action="/admin/registerUser/" method="post">
 				<div class='form-group'>
-					<input type="text" id="username" class="required form-control" name="username" size="32" value="<?= isset($_POST['username']) ? $_POST['username'] : 'Username'; ?>" />
+					<input type="text" id="username" class="form-control" name="username" size="32" value="<?= isset($_POST['username']) ? $_POST['username'] : 'Username'; ?>" required>
 					<span class="ajaxResult result">&nbsp;</span>
 				</div>
 				<div class='form-group'>
-					<input type="password" id="password" class="required form-control" name="password" size="32" value="Password" />
+					<input type="password" id="password" class="form-control" name="password" size="32" value="Password" required>
 				</div>
 				<div class='form-group'>
-					<input type="password" id="confirm_password" class="required form-control" name="confirm_password" size="32" value="Confirm Password" />
+					<input type="password" id="confirm_password" class="form-control" name="confirm_password" size="32" value="Confirm Password" required>
 				</div>
 				<div class='form-group'>
-					<input type="text" id="email" class="required email form-control" name="email" size="32" value="<?= isset($_POST['email']) ? $_POST['email'] : 'Email'; ?>" /><br />
+					<input type="text" id="email" class="email form-control" name="email" size="32" value="<?= isset($_POST['email']) ? $_POST['email'] : 'Email'; ?>" required>
 					<input type="hidden" name="charitable" value="0" />
 				</div>
 
 				<div class='form-group'>
 					<div class='form-check'>
 						<label class='form-check-label'>
-							<input type="checkbox" id="agree_to_terms" class="required form-check-input" name="agree_to_terms" />
+							<input type="checkbox" id="agree_to_terms" class="form-check-input" name="agree_to_terms" required>
 							Terms and Conditions
 						</label>
 					</div>
@@ -65,12 +63,12 @@ header("Pragma: no-cache");
 
 <?php						?>We do not collect bank account information for any reason, in fact the only information we collect that could identify you is your email address, of which could be fake as far as we know, it makes no difference to us. The reason for this is so we don't have to concern ourselves with protecting your data, if someone hacks our system all they will get is a bunch of hypothetical account/category names and some numbers. They might get an idea of how much money you make but they won't know where you keep it unless your account/category names identify the bank/account which you keep it in. So we advise you to be smart about naming accounts/categories once your registration is complete.
 
-<?php						?>Now for the CYA stuff. money.stretchnate.co and it's affiliates will not be held responsible for any loss or damage to you, your financial future or your current financial situation that results in using money.stretchnate.co. As was previously stated, you may use this site at your own risk, we are not responsible for anything that happens as a result of you using money.stretchnate.co
+<?php						?>Now for the CYA stuff. <?= COMPANY_NAME; ?> and it's affiliates will not be held responsible for any loss or damage to you, your financial future or your current financial situation that results in using <?= COMPANY_NAME; ?>. As was previously stated, you may use this site at your own risk, we are not responsible for anything that happens as a result of you using <?= COMPANY_NAME; ?>
 
 <?php						?>By clicking the checkbox you are agreeing to these terms.
 					</textarea>
 				</div>
-				<input type="submit" name="register" value="register" class='btn btn-primary' />
+				<input type="submit" name="register" value="Submit" class='btn btn-primary' />
 				<a href="/admin/login/" class='btn btn-info'>Back to Login</a>
 			</form>
 		</div>

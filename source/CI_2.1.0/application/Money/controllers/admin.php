@@ -54,32 +54,32 @@ class Admin extends N8_Controller {
 	function registerUser() {
 		$data['error'] = "Unable to add user, please try again.";
 		$rules = array(
-					array(
-						'field' => 'username',
-						'label' => 'Username',
-						'rules' => 'trim|required|min_length[4]'
-					),
-					array(
-						'field' => 'password',
-						'label' => 'Password',
-						'rules' => 'trim|required|alpha_numeric|min_length[6]'
-					),
-					array(
-						'field' => 'confirmPassword',
-						'label' => 'Confirm Password',
-						'rules' => 'trim|required|matches[password]'
-					),
-					array(
-						'field' => 'email',
-						'label' => 'Email',
-						'rules' => 'trim|required|valid_email'
-					),
-					array(
-						'field' => 'agree_to_terms',
-						'label' => 'Terms and Conditions',
-						'rules' => 'callback_agreeToTerms'
-					)
-				);
+			array(
+				'field' => 'username',
+				'label' => 'Username',
+				'rules' => 'trim|required|min_length[4]'
+			),
+			array(
+				'field' => 'password',
+				'label' => 'Password',
+				'rules' => 'trim|required|alpha_numeric|min_length[6]'
+			),
+			array(
+				'field' => 'confirm_password',
+				'label' => 'Confirm Password',
+				'rules' => 'trim|required|matches[password]'
+			),
+			array(
+				'field' => 'email',
+				'label' => 'Email',
+				'rules' => 'trim|required|valid_email'
+			),
+			array(
+				'field' => 'agree_to_terms',
+				'label' => 'Terms and Conditions',
+				'rules' => 'callback_agreeToTerms'
+			)
+		);
 
 		if($_POST['charitable'] == 1) {
 			$rules['caName'] = 'trim';
@@ -143,7 +143,7 @@ class Admin extends N8_Controller {
 					|| $this->input->post('agree_to_terms') === true);
 
 		if(!$response) {
-			$this->form_validation->set_message( 'agreeToTerms', 'You must agree to the Terms and Conditions (click "I agree")' );
+			$this->form_validation->set_message( 'agreeToTerms', 'You must agree to the Terms and Conditions' );
 		}
 
 		return $response;

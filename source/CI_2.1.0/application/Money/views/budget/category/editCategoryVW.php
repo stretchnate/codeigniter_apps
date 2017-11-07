@@ -21,7 +21,7 @@
 				$date = new DateTime(date('Y-m-').$this->category_dm->getDueDay());
 				$due_date = $date->format('m/d/Y');
 			}
-			$dd_checked = $this->category_dm->getDueDay() === 0 ? ' checked' : null;
+			$dd_checked = $this->category_dm->getDueDay() == 0 ? ' checked' : null;
 		?>
 			<div>
 				<h2>Edit <?php echo $this->category_dm->getCategoryName(); ?></h2>
