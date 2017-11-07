@@ -25,7 +25,7 @@
 			<div id="new-book">
 				<form name="newBookForm" id="newBookForm" action="/book/createCategory/" method="post">
 					<div class='form-group'>
-						<select name="account" id='account' class="required form-control">
+						<select name="account" id='account' class="form-control" required>
 							<option value="">- - Select Account - -</option>
 						<?
 						if( is_array($this->accounts) ) {
@@ -37,17 +37,17 @@
 						</select>
 					</div>
 					<div class='form-group'>
-						<input type="text" name="name" id="name" class='form-control' value='Name' />
+						<input type="text" name="name" id="name" class='form-control' value='Name' required>
 					</div>
 					<div class='form-group'>
 						<div class="ajaxResult result"></div>
-						<input type="text" class="required money form-control" name="nec" id="amount_due" value="Amount Due" />
+						<input type="text" class="money form-control" name="nec" id="amount_due" value="Amount Due" required>
 					</div>
 					<div class='form-group'>
-						<input type="text" class="required money form-control" name="startAmt" id="starting_amount" value="Starting Amount" />
+						<input type="text" class="money form-control" name="startAmt" id="starting_amount" value="Starting Amount" required>
 					</div>
 					<div class='form-group'>
-						<input type="text" class="required number form-control" name="dueDay" id="due_date" value="Due Date" />
+						<input type="text" class="number form-control" name="dueDay" id="due_date" value="Due Date" required>
 					</div>
 					<div class='form-group-label'>
 
@@ -63,7 +63,7 @@
 						);
 					?>
 					<div class='form-group'>
-						<select name='bill_schedule' class='form-control'>
+						<select name='bill_schedule' class='form-control' required>
 							<?php
 							foreach($bill_schedule as $index => $schedule) {
 							 echo "<option value='$index'>$schedule</option>";
@@ -72,11 +72,11 @@
 						</select>
 					</div>
 					<div class='form-group'>
-						<input type="text" name="totalOwed" class='form-control' value='Current Balance' id="current_balance" />
+						<input type="text" name="totalOwed" class='form-control' value='Current Balance' id="current_balance" required>
 					</div>
 
 					<div class='form-group'>
-						<select name="priority" id='priority' class='form-control'>
+						<select name="priority" id='priority' class='form-control' required>
 							<option value=''>Priority</option>
 							<?php
 							for($i = 1;$i < 11; $i++) {
@@ -86,7 +86,7 @@
 						</select>
 					</div>
 
-					<input type="submit" value="Add Category" class='btn btn-primary' />
+					<button id="submit_category" class='btn btn-primary'>Submit Category</button>
 				</form>
 			</div>
 			<?

@@ -46,59 +46,67 @@ $(function() {
     });
 
     $('.form-control[name=password], .form-control[name=confirm_password], .form-control[name=confirm_new_password], .form-control[name=new_password]').attr('type', 'text');
-
-    /**
-     * convert a password field to a text field
-     * @param {type} element
-     * @returns {undefined}
-     */
-    function passwordToText(element) {
-        if(element.attr('type') === 'password') {
-            element.attr('type', 'text');
-        }
-    }
-
-    /**
-     * convert a text field to a password field
-     * @param {type} element
-     * @returns {undefined}
-     */
-    function textToPassword(element) {
-        if(element.attr('name') === 'password'
-        || element.attr('name') === 'confirm_password'
-        || element.attr('name') === 'confirm_new_password'
-        || element.attr('name') === 'new_password') {
-
-            element.attr('type', 'password');
-        }
-    }
-
-    /**
-     * get the value to check against
-     *
-     * @param {type} element
-     * @returns {unresolved}
-     */
-    function getCheckVal(element) {
-        var result = null;
-        if(element.attr('id')) {
-            result = ucwords(element.attr('id').replace(/_/g, ' '));
-        }
-
-        return result;
-    }
-
-    /**
-     * upper case all words in a string
-     * @param {type} value
-     * @returns {unresolved}
-     */
-    function ucwords(value) {
-        var words = value.split(' ');
-        for(var i in words) {
-            words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
-        }
-
-        return words.join(' ');
-    }
 });
+
+function clearDefaults(form_selector) {
+    $(form_selector).each(function() {
+        if($(this).val() === getCheckVal($(this))) {
+            $(this).val('');
+        }
+    });
+}
+
+/**
+ * convert a password field to a text field
+ * @param {type} element
+ * @returns {undefined}
+*/
+function passwordToText(element) {
+   if(element.attr('type') === 'password') {
+       element.attr('type', 'text');
+   }
+}
+
+/**
+ * convert a text field to a password field
+ * @param {type} element
+ * @returns {undefined}
+*/
+function textToPassword(element) {
+   if(element.attr('name') === 'password'
+   || element.attr('name') === 'confirm_password'
+   || element.attr('name') === 'confirm_new_password'
+   || element.attr('name') === 'new_password') {
+
+       element.attr('type', 'password');
+   }
+}
+
+/**
+ * get the value to check against
+ *
+ * @param {type} element
+ * @returns {unresolved}
+*/
+function getCheckVal(element) {
+   var result = null;
+   if(element.attr('id')) {
+       result = ucwords(element.attr('id').replace(/_/g, ' '));
+   }
+
+   return result;
+}
+
+/**
+ * upper case all words in a string
+ * @param {type} value
+ * @returns {unresolved}
+*/
+function ucwords(value) {
+   var words = value.split(' ');
+   for(var i in words) {
+       words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+   }
+
+   return words.join(' ');
+}

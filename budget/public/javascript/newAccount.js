@@ -1,5 +1,6 @@
 $(document).ready(function() {
     $("#add_account").click(function() {
+        clearDefaults("#newAccountForm input[type=text]");
         $("#ajax-load").toggle();
         $("#result-message").html('');
         $("#newAccountForm").validate();

@@ -11,3 +11,7 @@
 .disabled {
     opacity:.5;
 }
+
+.error {
+    color: #a94442;
+}

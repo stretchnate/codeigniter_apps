@@ -1,18 +1,20 @@
 $(document).ready(function () {
-    $("#newBookForm").submit(function () {
-        $("#ajax-load").show();
-        $("#result-message").html('');
+    $("#submit_category").click(function () {
+        clearDefaults("#newBookForm input[type=text]");
+//        $("#ajax-load").show();
+//        $("#result-message").html('');
         $("#newBookForm").validate();
         if ($("#newBookForm").valid()) {
-            $(this).ajaxSubmit({
-                target: '.result',
-                dataType: "json",
-                clearForm: true,
-                success: function (data) {
-                    $('#result-message').html(data.message);
-                    $("#ajax-load").hide();
+            $.post($("#newBookForm").attr('action'), $("#newBookForm").serialize(), function(response) {
+                var new_class = 'text-info';
+                var old_class = 'text-danger';
+                if(!response.success) {
+                    new_class = 'text-danger';
+                    old_class = 'text-info';
                 }
+                $('#result-message').removeClass(old_class).addClass(new_class).html(response.message);
             });
+//            $("#ajax-load").hide();
         }
         return false;
     });
@@ -35,9 +37,9 @@ $(document).ready(function () {
     });
     function checkName() {
         $.post("/book/checkName/", {name: $("#newBookForm input[name=name]").val(), account: $("#newBookForm select[name=account]").val()},
-                function (data) {
-                    $(".ajaxResult").html(data.message);
-                }, "json"
-                );
+            function (data) {
+                $(".ajaxResult").html(data.message);
+            }, "json"
+        );
     }
 });
