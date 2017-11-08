@@ -31,23 +31,8 @@
 	</div>
 
 	<?php
-	$due_date = null;
-	if($due_day > 0) {
-		if( date('d') < $due_day ) {//TODO add logic for classes to determine if paid or not
-			$due_date = date('m/d/Y', mktime(0,0,0,date('m'), $due_day, date('Y')));
-			$class = 'unpaid';
-		} else if( date('d') > $due_day ) {
-			$due_date = date('m/d/Y', mktime(0,0,0,date('m')+1, $due_day, date('Y')));
-			$class = 'paid';
-		} else {
-			$due_date = "TODAY!";
-			$class = 'due';
-		}
-
-		$due_date = sprintf(" <small class='text-muted'>(%s)</small>", $due_date);
+		$due_date = sprintf(" <small class='text-muted'>(%s)</small>", $due_date->format('m/d/Y'));
 	?>
-	<?php
-	} ?>
 
 	<h2>
         <a href="/book/editBook/<?php echo $bookId; ?>/">

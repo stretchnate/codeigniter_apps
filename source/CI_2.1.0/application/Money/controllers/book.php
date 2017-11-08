@@ -7,6 +7,7 @@ class Book extends N8_Controller {
 
 	function getBookInfo($id){
 		$this->auth->restrict();//make sure user is logged in.
+		$category_dm = new Budget_DataModel_CategoryDM($id);
 
 		$this->load->model("accounts", "ACCT", TRUE);
 		$this->load->model('funds_operations','Fops',TRUE);
@@ -35,6 +36,7 @@ class Book extends N8_Controller {
 		$notes['notes'] = $this->NM->getAllNotes($this->session->userdata('user_id'), $id);
 		$notes['bookId'] = $id;
 
+		$data->due_date = $category_dm->getNextDueDate();
 		$this->load->view('header',$props);
 		$this->load->view('CategoryDetail', $data);
 		$this->load->view('footer', $notes);
@@ -55,6 +57,7 @@ class Book extends N8_Controller {
 		$category_vw =  new Budget_Category_NewCategoryVW($CI);
 		$category_vw->setScripts($this->jsincludes->newBook());
 		$category_vw->setTitle("Add New Category");
+		$category_vw->setAction("/book/createCategory/");
 
 		$accounts = $this->ACCT->getAccounts($this->session->userdata("user_id"));
 		$category_vw->setAccounts($accounts);
@@ -73,19 +76,22 @@ class Book extends N8_Controller {
 	 */
 	public function editBook($id, $message = null){
 		$this->auth->restrict();
+		$this->load->model("accounts", "ACCT", TRUE);
 
 		$category_dm = new Budget_DataModel_CategoryDM($id);
 
-		$this->load->view('budget/category/editCategoryVW');
+		$this->load->view('budget/category/newCategoryVW');
 
 		$CI =& get_instance();
-		$category_vw = new Budget_Category_EditCategoryVW($CI);
+		$category_vw = new Budget_Category_NewCategoryVW($CI);
 		$category_vw->setScripts($this->jsincludes->editBook());
 		$category_vw->setTitle("Edit ".$category_dm->getCategoryName());
+		$category_vw->setAction("/book/saveChange/{$category_dm->getCategoryId()}/");
 		$category_vw->setErrors($message);
 		$category_vw->setCategoryDM($category_dm);
-		$category_vw->renderView();
+		$category_vw->setAccounts($this->ACCT->getAccounts($this->session->userdata("user_id")));
 
+		$category_vw->renderView();
 	}
 
 	function checkName() {
@@ -196,7 +202,7 @@ class Book extends N8_Controller {
 	 */
 	private function calculateDueMonths($due_date, $bill_schedule) {
 		$result = array();
-		$date = new DateTime($due_date);
+		$date = $due_date ? new DateTime($due_date) : new DateTime();
 		switch($bill_schedule) {
 			case 'quarterly':
 				$limit = 4;
@@ -241,13 +247,19 @@ class Book extends N8_Controller {
 
 	function saveChange($id) {
 		$this->auth->restrict();
-dbo_arr('post', $this->input->post());
 		$category_dm = new Budget_DataModel_CategoryDM($id);
 
+		$category_dm->setParentAccountId($this->input->post('account'));
 		$category_dm->setCategoryName($this->input->post('name'));
-		$category_dm->setAmountNecessary($this->input->post('amtNec'));
+		$category_dm->setAmountNecessary($this->input->post('nec'));
 		$category_dm->setDueDay($this->input->post('dueDay'));
-		$category_dm->setDueMonths($this->input->post('due_months'));
+		$category_dm->setPriority($this->input->post('priority'));
+		$category_dm->setDueMonths(
+			$this->calculateDueMonths(
+				$this->input->post('dueDay'),
+				$this->input->post('bill_schedule')
+			)
+		);
 
 		if($category_dm->saveCategory() !== false) {
 			header('Location:/book/getBookInfo/'.$id.'/');

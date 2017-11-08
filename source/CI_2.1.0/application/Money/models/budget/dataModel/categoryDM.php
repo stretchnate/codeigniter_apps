@@ -89,7 +89,7 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 		$sets["priority"]        = $this->priority;
 		$sets["active"]          = $this->active;
 		$sets["due_day"]         = $this->due_day;
-		$sets["due_months"]      = implode('|', array_keys($this->due_months));
+		$sets["due_months"]      = implode('|', $this->due_months);
 		$sets["account_id"]      = $this->parent_account_id;
 		$sets["InterestBearing"] = $this->interest_bearing;
 
@@ -193,9 +193,10 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 	 * @since  04.28.2013
 	 */
 	private function calculateNextDueDate() {
-		$due_date = null;
+		$due_date = new DateTime();
 		$today    = new DateTime();
 		$months   = $this->due_months;
+		$day       = (strpos($this->due_day, '/') === false) ? $this->due_day : date('d', strtotime($this->due_day));
 
 		//if it's an every check category the due date is set to tomorrow
 		if($this->due_day == 0) {
@@ -207,7 +208,7 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 			if($this->due_day >= $today->format('j')) {
 				foreach($months as $month) {
 					if($month == date('n')) {
-						$due_date = new DateTime( date('Y') . '-' . $month . '-' . $this->due_day);
+						$due_date->setDate(date('Y'), $month, $day);
 						break;
 					}
 				}
@@ -219,15 +220,21 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 			foreach($months as $month) {
 				if($today->format('n') < $month) {
 					$year = $today->format("Y");
-					$due_date = new DateTime( $year . '-' . $month . '-' . $this->due_day );
+					$due_date->setDate($year, $month, $day);
 					break;
 				}
 			}
 		}
 
-		if(is_null($due_date)) {
+		if($due_date == $today) {
 			//must be the first due date of the next year.
-			$due_date = new DateTime( date('Y', strtotime('+1 year')) . '-' . $months[0] . '-' . $this->due_day);
+			try {
+				$due_date = new DateTime($this->due_day);
+				$due_date->setDate(date('Y'), $months[0], $due_date->format('d'));
+				$due_date->add(new DateInterval('P1Y'));
+			} catch (Exception $ex) {
+				$due_date = new DateTime( date('Y', strtotime('+1 year')) . '-' . $months[0] . '-' . $this->due_day);
+			}
 		}
 
 		$this->next_due_date = $due_date;
