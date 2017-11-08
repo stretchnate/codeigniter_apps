@@ -400,10 +400,12 @@ class TransactionsGrid extends N8_Error {
 						$checked = "checked='checked' ";
 					}
 
-					if($this->transaction_parent->getID() == $transaction->to_category || $this->transaction_parent->getID() == $transaction->to_account) {
-						$add_subtract = "add";
-					} else if($this->transaction_parent->getID() == $transaction->from_category || $this->transaction_parent->getID() == $transaction->from_account) {
-						$add_subtract = "subtract";
+					if($this->transaction_parent) {
+						if($this->transaction_parent->getID() == $transaction->to_category || $this->transaction_parent->getID() == $transaction->to_account) {
+							$add_subtract = "add";
+						} else if($this->transaction_parent->getID() == $transaction->from_category || $this->transaction_parent->getID() == $transaction->from_account) {
+							$add_subtract = "subtract";
+						}
 					}
 
 					$html .= "<div class='row transaction'>";

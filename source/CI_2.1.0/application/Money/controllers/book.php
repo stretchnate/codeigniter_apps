@@ -103,24 +103,22 @@ class Book extends N8_Controller {
 		echo json_encode($response);
 	}
 
+	/**
+	 * create a new category
+	 */
 	function createCategory(){
 		$response['success'] = false;
 		$response['message'] = "";
-		$interest     = $this->input->post("interest");
 		$start_amount = $this->input->post("startAmt");
 
 		$rules = array();
-		$rules["name"]       = array("field" => "name", "label" => "Category Name", "rules" => "trim|required");
-		$rules["account"]    = array("field" => "account", "label" => "Into Account", "rules" => "required");
-		$rules["nec"]        = array("field" => "nec", "label" => "Amount Necessary", "rules" => "trim|required|numeric");
-		$rules["startAmt"]   = array("field" => "startAmt", "label" => "Starting Amount", "rules" => "trim|required|numeric");
-		$rules["dueDay"]     = array("field" => "dueDay", "label" => "Due Day", "rules" => "trim|required|numeric");
-		$rules["due_months"] = array("field" => "due_months[]", "label" => "Due Months", "rules" => "trim|required");
-
-		if(isset($interest) && $interest == "yes") {
-			$rules['rate']      = array("field" => "rate", "label" => "Interest Rate", "rules" => "trim|required|numeric");
-			$rules['rateType']  = array("field" => "rateType", "label" => "Rate Type", "rules" => "required");
-			$rules['totalOwed'] = array("field" => "totalOwed", "label" => "Current Balance", "rules" => "required|numeric");
+		$rules["name"]          = array("field" => "name", "label" => "Category Name", "rules" => "trim|required");
+		$rules["account"]       = array("field" => "account", "label" => "Into Account", "rules" => "required");
+		$rules["nec"]           = array("field" => "nec", "label" => "Amount Necessary", "rules" => "trim|required|numeric");
+		$rules["startAmt"]      = array("field" => "startAmt", "label" => "Starting Amount", "rules" => "trim|required|numeric");
+		$rules["bill_schedule"] = array("field" => "bill_schedule", "label" => "Fill Category", "rules" => "trim|required");
+		if($this->input->post('bill_schedule') != 'per_check') {
+			$rules["dueDay"]    = array("field" => "dueDay", "label" => "Next Due Date", "rules" => "trim|required");
 		}
 
 		if($this->validate($rules)){
@@ -155,18 +153,11 @@ class Book extends N8_Controller {
 					$category_dm->setDueDay($this->input->post('dueDay'));
 					$category_dm->setActive(1);
 
-					$category_dm->setDueMonths($this->input->post('due_months'));
+					$category_dm->setDueMonths($this->calculateDueMonths(
+						$this->input->post('dueDay'),
+						$this->input->post('bill_schedule'))
+					);
 					$category_dm->saveCategory();
-
-					//add interest data if necessary
-					if($interest == 1) {
-						//interest bearing account. add to db
-						$query = $this->BI->setInterest($data['newId'],$this->input->post('rate'),$this->input->post('rateType'),$this->input->post('totalOwed'));
-						if($query == 0) {
-							$response['message'] .= "Failed to set the interest info! please notify the web admin. ";
-							$e++;
-						}
-					}
 
 					if($start_amount > 0) {
 						//add the transaction
@@ -194,6 +185,46 @@ class Book extends N8_Controller {
 		}
 
 		echo json_encode($response);
+	}
+
+	/**
+	 * calculate the due months of a category
+	 *
+	 * @param string $due_date
+	 * @param string $bill_schedule
+	 * @return array
+	 */
+	private function calculateDueMonths($due_date, $bill_schedule) {
+		$result = array();
+		$date = new DateTime($due_date);
+		switch($bill_schedule) {
+			case 'quarterly':
+				$limit = 4;
+				$interval = new DateInterval('P3M');
+				break;
+			case 'semi_annual':
+				$limit = 2;
+				$interval = new DateInterval('P6M');
+				break;
+			case 'annual':
+				$result = array($date->format('n'));
+				break;
+			case 'per_check':
+			case 'monthly':
+			default:
+				$limit = 12;
+				$interval = new DateInterval('P1M');
+				break;
+		}
+
+		if(isset($limit)) {
+			for($i = 1; $i <= $limit; $i++) {
+				$result[] = $date->add($interval)->format('n');
+			}
+		}
+
+		sort($result);
+		return $result;
 	}
 
 	function enableBook($id){
@@ -245,5 +276,3 @@ dbo_arr('post', $this->input->post());
 		echo json_encode($response);
 	}
 }
-
-?>

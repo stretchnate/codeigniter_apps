@@ -27,9 +27,6 @@
 				<h2>Edit <?php echo $this->category_dm->getCategoryName(); ?></h2>
 				<div id="book-summary">
 					<form class="inline" name="editBookForm" action="/book/saveChange/<?php echo $this->category_dm->getCategoryId(); ?>/" method="post">
-						<?php
-							$dif = bcsub($this->category_dm->getAmountNecessary(), $this->category_dm->getCurrentAmount());
-						?>
 						<div class="form-group">
 							<input type="text" class="form-control required" name="name" id="name" value="<?= $this->category_dm->getCategoryName() ? $this->category_dm->getCategoryName() : 'Name'; ?>" />
 						</div>

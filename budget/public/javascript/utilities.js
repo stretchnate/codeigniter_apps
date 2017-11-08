@@ -56,6 +56,12 @@ function clearDefaults(form_selector) {
     });
 }
 
+function clearForm(selector) {
+    $(selector).find(':input').each(function() {
+        $(this).val('').blur();
+    });
+}
+
 /**
  * convert a password field to a text field
  * @param {type} element

@@ -12,16 +12,16 @@
 				</div>
 			</div>
 			<div class='form-group'>
-				<input type="text" class="required form-control" name="source" id="source" value="Source" />
+				<input type="text" class="form-control" name="source" id="source" value="Source" required>
 			</div>
 			<div class='form-group'>
-				<input type="text" class="required number money form-control" name="gross" id="gross_amount" value="Gross Amount" />
+				<input type="text" class="money form-control" name="gross" id="gross_amount" value="Gross Amount" required>
 			</div>
 			<div class='form-group'>
-				<input type="text" name="net" id="net_amount" class="number money form-control" value="Net Amount" />
+				<input type="text" name="net" id="net_amount" class="money form-control" value="Net Amount" required>
 			</div>
 			<div class='form-group'>
-				<select name="account" class="required form-control">
+				<select name="account" class="form-control" required>
 					<option value="">- - Select Account - -</option>
 					<?
 					foreach($accounts as $account) {
@@ -33,7 +33,7 @@
 			</div>
 			<div class='form-check'>
 				<label class='form-check-label'>
-					<input type="checkbox" name="manual" id="manual" class='form-check-input' /> Manually distribute to Categories
+					<input type="checkbox" name="manual" id="manual" class='form-check-input'> Manually distribute to Categories
 				</label>
 			</div>
 			<input type="submit" value="Submit" class="btn btn-primary" />

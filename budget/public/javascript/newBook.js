@@ -1,8 +1,8 @@
 $(document).ready(function () {
     $("#submit_category").click(function () {
         clearDefaults("#newBookForm input[type=text]");
-//        $("#ajax-load").show();
-//        $("#result-message").html('');
+        $("#ajax-load").show();
+        $("#result-message").html('');
         $("#newBookForm").validate();
         if ($("#newBookForm").valid()) {
             $.post($("#newBookForm").attr('action'), $("#newBookForm").serialize(), function(response) {
@@ -11,10 +11,12 @@ $(document).ready(function () {
                 if(!response.success) {
                     new_class = 'text-danger';
                     old_class = 'text-info';
+                } else {
+                    clearForm("#newBookForm");
                 }
                 $('#result-message').removeClass(old_class).addClass(new_class).html(response.message);
-            });
-//            $("#ajax-load").hide();
+            }, 'json');
+            $("#ajax-load").hide();
         }
         return false;
     });

@@ -38,31 +38,35 @@
 					</div>
 					<div class='form-group'>
 						<input type="text" name="name" id="name" class='form-control' value='Name' required>
-					</div>
-					<div class='form-group'>
 						<div class="ajaxResult result"></div>
-						<input type="text" class="money form-control" name="nec" id="amount_due" value="Amount Due" required>
 					</div>
 					<div class='form-group'>
-						<input type="text" class="money form-control" name="startAmt" id="starting_amount" value="Starting Amount" required>
+						<div class="input-group">
+							<input type="text" class="money form-control" name="nec" id="amount_due" value="Amount Due" required>
+							<div class="input-group-addon">
+								<span class="glyphicon glyphicon-usd"></span>
+							</div>
+						</div>
 					</div>
 					<div class='form-group'>
-						<input type="text" class="number form-control" name="dueDay" id="due_date" value="Due Date" required>
+						<div class="input-group">
+							<input type="text" class="money form-control" name="startAmt" id="starting_amount" value="Starting Amount" required>
+							<div class="input-group-addon">
+								<span class="glyphicon glyphicon-usd"></span>
+							</div>
+						</div>
 					</div>
-					<div class='form-group-label'>
-
-					</div>
-					<?php
-						$bill_schedule = array(
-							'' => ' -- Bill Schedule -- ',
-							'per_check' => "Every Paycheck",
-							'monthly' => "Monthly",
-							'quarterly' => "Quarterly",
-							'semi_annual' => "Every 6 Months",
-							'annual' => "Yearly"
-						);
-					?>
 					<div class='form-group'>
+						<?php
+							$bill_schedule = array(
+								'' => ' -- Fill this category -- ',
+								'per_check' => "Every Paycheck",
+								'monthly' => "Monthly",
+								'quarterly' => "Quarterly",
+								'semi_annual' => "Every 6 Months",
+								'annual' => "Yearly"
+							);
+						?>
 						<select name='bill_schedule' class='form-control' required>
 							<?php
 							foreach($bill_schedule as $index => $schedule) {
@@ -71,10 +75,21 @@
 							?>
 						</select>
 					</div>
-					<div class='form-group'>
-						<input type="text" name="totalOwed" class='form-control' value='Current Balance' id="current_balance" required>
+					<div class="form-group">
+						<div class="input-group date" data-provide='datepicker'>
+							<input type="text" class="form-control" name="dueDay" id="next_due_date" value="Next Due Date">
+							<!--<input type="text" class="form-control" name="dueDay">-->
+							<div class="input-group-addon">
+								<span class="glyphicon glyphicon-calendar"></span>
+							</div>
+						</div>
+<!--						<div class="form-check form-check-inline">
+							<label class="form-check-label">
+								<input id='due_date_checkbox' type="checkbox" class="form-check-input" name="dueDay">
+								No Due Date
+							</label>
+						</div>-->
 					</div>
-
 					<div class='form-group'>
 						<select name="priority" id='priority' class='form-control' required>
 							<option value=''>Priority</option>
