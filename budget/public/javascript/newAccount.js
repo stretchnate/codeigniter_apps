@@ -2,7 +2,7 @@ $(document).ready(function() {
     $("#add_account").click(function() {
         clearDefaults("#newAccountForm input[type=text]");
         $("#ajax-load").toggle();
-        $("#result-message").html('');
+        $("#result-message").text('');
         $("#newAccountForm").validate();
         if($("#newAccountForm").valid()) {
             $.post($("#newAccountForm").attr('action'), $("#newAccountForm").serialize(), function(data) {
@@ -12,8 +12,9 @@ $(document).ready(function() {
                     new_class = 'text-info';
                     old_class = 'text-danger';
                 }
-                $('#result-message').html(data.message).removeClass(old_class).addClass(new_class);
-            });
+
+                $('#result-message').removeClass(old_class).addClass(new_class).text(data.message);
+            }, 'json');
         }
         $("#ajax-load").toggle();
         return false;

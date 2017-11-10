@@ -38,33 +38,49 @@ class AccountCTL extends N8_Controller {
 	}
 
 	/**
+	 * edit an account
+	 * @param int $account_id
+	 */
+	public function editAccount($account_id) {
+		$this->auth->restrict();
+		$account_dm = new Budget_DataModel_AccountDM($account_id);
+
+		$data['scripts'] = $this->jsincludes->newAccount();
+		$data['youAreHere'] = "Edit Account ".$account_dm->getAccountName();
+		$data['title'] = "Edit Account ".$account_dm->getAccountName();
+		$data['logged_user'] = $this->session->userdata('logged_user');
+
+		$this->load->view('header',$data);
+		$this->load->view('/account/newAccountVW', array('account_dm' => $account_dm));
+		$this->load->view('footer');
+	}
+
+	/**
 	 * creates a new account
 	 */
-	function createNewAccount() {
+	function saveAccount() {
 		$this->auth->restrict();
+		$account_dm = new Budget_DataModel_AccountDM();
+		if($this->input->post('account_id')) {
+			$account_dm->loadAccount($this->input->post('account_id'));
+		}
 
 		$this->load->model("Book_info");
-		$this->load->model("accounts", "ACCT", TRUE);
 
-		$response = array('success' => false, 'message' => "there was a problem adding your account");
+		$response = array('success' => false, 'message' => "there was a problem saving your account");
 
-		$account_name = $this->input->post("name");
-		$pay_schedule = $this->input->post("pay_schedule");
-		$owner        = $this->session->userdata("user_id");
+		$account_dm->setAccountName($this->input->post("name"));
+		$account_dm->setPayScheduleCode($this->input->post("pay_schedule"));
 
-		$data = $this->ACCT->createNewAccount($account_name, $pay_schedule, $owner);
+		if(!$account_dm->getID()) {
+			$account_dm->setOwnerId($this->session->userdata("user_id"));
+		}
 
-		if($data) {
-			if($data["num_rows"] > 1) {
-				$response["message"] = "Duplicate account detected, please use a different name";
-			} else if($data["new_account_id"] > 1) {
-				$response["success"] = true;
-				$response["message"] = "Account successfully created";
-			}
+		if($account_dm->saveAccount()) {
+			$response["success"] = true;
+			$response["message"] = "Account successfully saved";
 		}
 
 		echo json_encode($response);
 	}
 }
-
-?>

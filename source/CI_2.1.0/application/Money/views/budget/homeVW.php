@@ -91,6 +91,9 @@
 										echo ($this->last_transaction) ? "Last Transaction: ".$this->last_transaction : '';
 										?>
 									</div>
+									<div>
+										<a href='/accountCTL/editAccount/<?= $account_dm->getAccountId(); ?>'>Edit <?= $account_dm->getAccountName(); ?></a>
+									</div>
 								</div>
 
 								<?php

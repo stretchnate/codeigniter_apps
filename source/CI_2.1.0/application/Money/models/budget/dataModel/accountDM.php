@@ -236,6 +236,6 @@ class Budget_DataModel_AccountDM extends N8_Model {
 	}
 
 	public function getID() {
-		return $this->account_id;
+		return $this->getAccountId();
 	}
 }
