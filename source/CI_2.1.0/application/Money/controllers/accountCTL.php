@@ -59,26 +59,32 @@ class AccountCTL extends N8_Controller {
 	 * creates a new account
 	 */
 	function saveAccount() {
-		$this->auth->restrict();
-		$account_dm = new Budget_DataModel_AccountDM();
-		if($this->input->post('account_id')) {
-			$account_dm->loadAccount($this->input->post('account_id'));
-		}
+		try {
+			$this->auth->restrict();
+			$account_dm = new Budget_DataModel_AccountDM();
+			if($this->input->post('account_id')) {
+				$account_dm->loadAccount($this->input->post('account_id'));
+			}
 
-		$this->load->model("Book_info");
+			$this->load->model("Book_info");
 
-		$response = array('success' => false, 'message' => "there was a problem saving your account");
+			$response = array('success' => false, 'message' => "there was a problem saving your account");
 
-		$account_dm->setAccountName($this->input->post("name"));
-		$account_dm->setPayScheduleCode($this->input->post("pay_schedule"));
+			$account_dm->setAccountName($this->input->post("name"));
+			$account_dm->setPayScheduleCode($this->input->post("pay_schedule"));
 
-		if(!$account_dm->getID()) {
-			$account_dm->setOwnerId($this->session->userdata("user_id"));
-		}
+			if(!$account_dm->getID()) {
+				$account_dm->setOwnerId($this->session->userdata("user_id"));
+			}
 
-		if($account_dm->saveAccount()) {
-			$response["success"] = true;
-			$response["message"] = "Account successfully saved";
+			if($account_dm->saveAccount()) {
+				$response["success"] = true;
+				$response["message"] = "Account successfully saved";
+			}
+		} catch(Exception $e) {
+			$response["success"] = false;
+			$response["message"] = "There was a problem saving the account.";
+			log_message($e->getCode(), $e->getMessage());
 		}
 
 		echo json_encode($response);

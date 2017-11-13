@@ -17,17 +17,25 @@ class Budget_DataModel_AccountDM extends N8_Model {
 		}
 	}
 
+	/**
+	 * @param type $account_id
+	 * @throws Exception
+	 */
 	public function loadAccount($account_id) {
-		$query = $this->db->get_where("accounts", array("account_id" => $account_id));
+		$query = $this->db->get_where("accounts", array("account_id" => $account_id, 'owner_id' => $this->session->userdata("user_id")));
 
-		$account_columns = $query->result();
+		if($query->num_rows() < 1) {
+			throw new Exception("Invalid Account ID [$account_id] for owner [".$this->session->user_data('user_id')."] (".__METHOD__.":".__LINE__.")", 'info');
+		} else {
+			$account_columns = $query->result();
 
-		if( is_array($account_columns) && count($account_columns) > 0 ) {
-			$account_columns = $account_columns[0];
+			if( is_array($account_columns) && count($account_columns) > 0 ) {
+				$account_columns = $account_columns[0];
 
-			foreach($account_columns as $column => $value) {
-				if(property_exists($this, $column)) {
-					$this->$column = $value;
+				foreach($account_columns as $column => $value) {
+					if(property_exists($this, $column)) {
+						$this->$column = $value;
+					}
 				}
 			}
 		}
@@ -35,7 +43,7 @@ class Budget_DataModel_AccountDM extends N8_Model {
 
 	public function saveAccount() {
 		if($this->account_id > 0) {
-            $result = $this->updateAccount();
+			$result = $this->updateAccount();
 			if($result === false) {
 				$this->setError("There was a problem updating the account ".$this->account_name);
 			}
@@ -50,16 +58,20 @@ class Budget_DataModel_AccountDM extends N8_Model {
 
 	private function updateAccount() {
         $result = false;
-		$sets   = array();
+		if($this->owner_id == $this->session->user_data('user_id')) {
+			$sets   = array();
 
-		$sets["account_name"]     = $this->account_name;
-		$sets["account_amount"]   = $this->dbNumberFormat($this->account_amount);
-		$sets["payschedule_code"] = $this->payschedule_code;
-		$sets["active"]           = $this->active;
+			$sets["account_name"]     = $this->account_name;
+			$sets["account_amount"]   = $this->dbNumberFormat($this->account_amount);
+			$sets["payschedule_code"] = $this->payschedule_code;
+			$sets["active"]           = $this->active;
 
-		$this->db->where("account_id", $this->account_id);
-		if($this->db->update("accounts", $sets)) {
-			$result = true;
+			$this->db->where("account_id", $this->account_id);
+			if($this->db->update("accounts", $sets)) {
+				$result = true;
+			}
+		} else {
+			$this->setError("You are not authorized to edit this account.");
 		}
 
         return $result;
