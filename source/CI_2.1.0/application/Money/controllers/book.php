@@ -7,7 +7,7 @@ class Book extends N8_Controller {
 
 	function getBookInfo($id){
 		$this->auth->restrict();//make sure user is logged in.
-		$category_dm = new Budget_DataModel_CategoryDM($id);
+		$category_dm = new Budget_DataModel_CategoryDM($id, $this->session->userdata('user_id'));
 
 		$this->load->model("accounts", "ACCT", TRUE);
 		$this->load->model('funds_operations','Fops',TRUE);
@@ -78,7 +78,7 @@ class Book extends N8_Controller {
 		$this->auth->restrict();
 		$this->load->model("accounts", "ACCT", TRUE);
 
-		$category_dm = new Budget_DataModel_CategoryDM($id);
+		$category_dm = new Budget_DataModel_CategoryDM($id, $this->session->userdata('user_id'));
 
 		$this->load->view('budget/category/newCategoryVW');
 
@@ -247,7 +247,7 @@ class Book extends N8_Controller {
 
 	function saveChange($id) {
 		$this->auth->restrict();
-		$category_dm = new Budget_DataModel_CategoryDM($id);
+		$category_dm = new Budget_DataModel_CategoryDM($id, $this->session->userdata('user_id'));
 
 		$category_dm->setParentAccountId($this->input->post('account'));
 		$category_dm->setCategoryName($this->input->post('name'));

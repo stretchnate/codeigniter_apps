@@ -26,16 +26,16 @@ class Budget_DataModel_AccountDM extends N8_Model {
 
 		if($query->num_rows() < 1) {
 			throw new Exception("Invalid Account ID [$account_id] for owner [".$owner_id."] (".__METHOD__.":".__LINE__.")");
-		} else {
-			$account_columns = $query->result();
+		}
 
-			if( is_array($account_columns) && count($account_columns) > 0 ) {
-				$account_columns = $account_columns[0];
+		$account_columns = $query->result();
 
-				foreach($account_columns as $column => $value) {
-					if(property_exists($this, $column)) {
-						$this->$column = $value;
-					}
+		if( is_array($account_columns) && count($account_columns) > 0 ) {
+			$account_columns = $account_columns[0];
+
+			foreach($account_columns as $column => $value) {
+				if(property_exists($this, $column)) {
+					$this->$column = $value;
 				}
 			}
 		}
@@ -89,21 +89,31 @@ class Budget_DataModel_AccountDM extends N8_Model {
 		return $this->db->insert("accounts", $values);
 	}
 
+	/**
+	 * load categories in account
+	 */
 	public function loadCategories() {
 		$category_ids = $this->getCategoryIds();
 
 		if( is_array($category_ids) ) {
 			foreach($category_ids as $category_id) {
-				$this->categories[] = new Budget_DataModel_CategoryDM($category_id->bookId);
+				$this->categories[] = new Budget_DataModel_CategoryDM($category_id->bookId, $this->owner_id);
 			}
 		}
 	}
 
+	/**
+	 * @return array
+	 * @throws Exception
+	 */
 	protected function getCategoryIds() {
+		if(!$this->owner_id) {
+			throw new Exception('Unable to load categories without owner id');
+		}
 		$this->db->select('bookId');
 		$this->db->order_by('due_day');
 		$this->db->order_by('priority');
-		$query = $this->db->get_where('booksummary',array('account_id' => $this->account_id, 'active' => 1));
+		$query = $this->db->get_where('booksummary',array('account_id' => $this->account_id, 'ownerId' => $this->owner_id, 'active' => 1));
 
 		return $query->result();
 	}

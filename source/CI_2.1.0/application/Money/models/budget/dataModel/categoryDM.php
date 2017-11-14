@@ -16,11 +16,11 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 	private $days_until_due;
 	private $next_due_date;
 
-	function __construct($category_id = null){
+	function __construct($category_id = null, $owner_id = null){
 		parent::__construct();
 
-		if($category_id) {
-			$this->loadCategory($category_id);
+		if($category_id && $owner_id) {
+			$this->loadCategory($category_id, $owner_id);
 		}
 	}
 
@@ -29,10 +29,13 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 	 *
 	 * @param category_id int
 	 */
-	function loadCategory($category_id) {
-		$query = $this->db->get_where("booksummary", array("bookId" => $category_id));
-		$category = $query->result();
-		$category = $category[0];
+	function loadCategory($category_id, $owner_id) {
+		$query = $this->db->get_where("booksummary", array("bookId" => $category_id, 'ownerId' => $owner_id));
+		if($query->num_rows() < 1) {
+			throw new Exception("Invalid Category ID [$category_id] for owner [".$owner_id."] (".__METHOD__.":".__LINE__.")");
+		}
+
+		$category = $query->row();
 
 		foreach($category as $column => $value) {
 			$value = trim($value);

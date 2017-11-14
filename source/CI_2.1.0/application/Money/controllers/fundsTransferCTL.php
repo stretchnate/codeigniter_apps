@@ -71,8 +71,8 @@ class fundsTransferCTL extends N8_Controller {
 
 		$errors = array();
 
-		$from   = new Budget_DataModel_CategoryDM($this->input->post('from'));
-		$to     = new Budget_DataModel_CategoryDM($this->input->post('to'));
+		$from   = new Budget_DataModel_CategoryDM($this->input->post('from'), $this->session->userdata('user_id'));
+		$to     = new Budget_DataModel_CategoryDM($this->input->post('to'), $this->session->userdata('user_id'));
 
 		$amount = (float)$this->input->post('amount');
 

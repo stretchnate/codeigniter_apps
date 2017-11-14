@@ -244,7 +244,7 @@ class Funds extends N8_Controller {
 		$this->load->model("accounts", "ACCT", TRUE);
 
 		$parent_account = new Budget_DataModel_AccountDM($this->input->post("parent_account"), $this->session->userdata('user_id'));
-		$category       = new Budget_DataModel_CategoryDM($this->input->post('id'));
+		$category       = new Budget_DataModel_CategoryDM($this->input->post('id'), $this->session->userdata('user_id'));
 
 		$requested_amount = $this->input->post('amount');
 
@@ -371,7 +371,7 @@ class Funds extends N8_Controller {
      * @return type
      */
     private function removeFundsFromCategory(Budget_DataModel_TransactionDM $transaction) {
-        $category     = new Budget_DataModel_CategoryDM($transaction->getToCategory());
+        $category     = new Budget_DataModel_CategoryDM($transaction->getToCategory(), $this->session->userdata('user_id'));
         $new_cat_amt  = bcsub($category->getCurrentAmount(), $transaction->getTransactionAmount(), 2);
         $category->setCurrentAmount($new_cat_amt);
         return $category->saveCategory();
@@ -383,7 +383,7 @@ class Funds extends N8_Controller {
      * @param Budget_DataModel_TransactionDM $transaction
      */
     private function returnFundsToCategory(Budget_DataModel_TransactionDM $transaction) {
-        $category = new Budget_DataModel_CategoryDM($transaction->getFromCategory());
+        $category = new Budget_DataModel_CategoryDM($transaction->getFromCategory(), $this->session->userdata('user_id'));
         $new_amt  = bcadd($category->getCurrentAmount(), $transaction->getTransactionAmount(), 2);
         $category->setCurrentAmount($new_amt);
         return $category->saveCategory();

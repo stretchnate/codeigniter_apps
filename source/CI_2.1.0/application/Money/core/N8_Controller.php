@@ -38,14 +38,14 @@ class N8_Controller extends CI_Controller {
 		$transaction = new Budget_DataModel_TransactionDM($transactions[$specified_transaction]->transaction_id);
 
 		if ($transaction->getToCategory()) {
-			$to_category = new Budget_DataModel_CategoryDM($transaction->getToCategory());
+			$to_category = new Budget_DataModel_CategoryDM($transaction->getToCategory(), $this->session->userdata('user_id'));
 
 			$transaction_details->setToCategory($to_category->getCategoryId());
 			$transaction_details->setToCategoryName($to_category->getCategoryName());
 		}
 
 		if ($transaction->getFromCategory()) {
-			$from_category = new Budget_DataModel_CategoryDM($transaction->getFromCategory());
+			$from_category = new Budget_DataModel_CategoryDM($transaction->getFromCategory(), $this->session->userdata('user_id'));
 
 			$transaction_details->setFromCategory($from_category->getCategoryId());
 			$transaction_details->setFromCategoryName($from_category->getCategoryName());

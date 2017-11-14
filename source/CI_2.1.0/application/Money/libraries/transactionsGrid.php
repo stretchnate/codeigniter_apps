@@ -88,7 +88,7 @@ class TransactionsGrid extends N8_Error {
 					break;
 				case "category":
 				default:
-					$this->transaction_parent    = new Budget_DataModel_CategoryDM($transaction_parent);
+					$this->transaction_parent    = new Budget_DataModel_CategoryDM($transaction_parent, $this->CI->session->userdata('user_id'));
 					break;
 			}
 		}
