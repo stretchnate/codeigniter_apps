@@ -135,7 +135,7 @@ class Book extends N8_Controller {
 			if($check < 1) {
 				//subtract from account if necessary
 				if($start_amount > 0) {
-					$account_dm = new Budget_DataModel_AccountDM($this->input->post('account'));
+					$account_dm = new Budget_DataModel_AccountDM($this->input->post('account'), $this->session->userdata('user_id'));
 
 					if($start_amount > $account_dm->getAccountAmount()) {
 						$start_amount = $account_dm->getAccountAmount();

@@ -52,14 +52,14 @@ class N8_Controller extends CI_Controller {
 		}
 
 		if ($transaction->getToAccount()) {
-			$to_account = new Budget_DataModel_AccountDM($transaction->getToAccount());
+			$to_account = new Budget_DataModel_AccountDM($transaction->getToAccount(), $this->session->userdata('user_id'));
 
 			$transaction_details->setToAccount($to_account->getAccountId());
 			$transaction_details->setToAccountName($to_account->getAccountName());
 		}
 
 		if ($transaction->getFromAccount()) {
-			$from_account = new Budget_DataModel_AccountDM($transaction->getFromAccount());
+			$from_account = new Budget_DataModel_AccountDM($transaction->getFromAccount(), $this->session->userdata('user_id'));
 
 			$transaction_details->setFromAccount($from_account->getAccountId());
 			$transaction_details->setFromAccountName($from_account->getAccountName());

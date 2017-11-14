@@ -14,11 +14,11 @@
 		 * @param int $owner_id
 		 */
 		public function loadAccounts($owner_id) {
-			// $query = $this->db->get_where('accounts',array('owner_id' => $id, 'active' => 1));
+			$CI =& get_instance();
 			$account_ids = $this->fetchAccountIds($owner_id);
 
 			foreach($account_ids as $account) {
-				$account_dm = new Budget_DataModel_AccountDM($account->account_id);
+				$account_dm = new Budget_DataModel_AccountDM($account->account_id, $CI->session->userdata('user_id'));
 				$account_dm->loadCategories();
 
 				$this->accounts[] = $account_dm;

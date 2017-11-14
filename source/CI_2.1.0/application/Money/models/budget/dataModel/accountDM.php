@@ -9,11 +9,11 @@ class Budget_DataModel_AccountDM extends N8_Model {
 	private $active;
 	private $categories = array();
 
-	function __construct($account_id = null){
+	function __construct($account_id = null, $owner_id = null){
 		parent::__construct();
 
-		if($account_id) {
-			$this->loadAccount($account_id);
+		if($account_id && $owner_id) {
+			$this->loadAccount($account_id, $owner_id);
 		}
 	}
 
@@ -21,11 +21,11 @@ class Budget_DataModel_AccountDM extends N8_Model {
 	 * @param type $account_id
 	 * @throws Exception
 	 */
-	public function loadAccount($account_id) {
-		$query = $this->db->get_where("accounts", array("account_id" => $account_id, 'owner_id' => $this->session->userdata("user_id")));
+	public function loadAccount($account_id, $owner_id) {
+		$query = $this->db->get_where("accounts", array("account_id" => $account_id, 'owner_id' => $owner_id));
 
 		if($query->num_rows() < 1) {
-			throw new Exception("Invalid Account ID [$account_id] for owner [".$this->session->user_data('user_id')."] (".__METHOD__.":".__LINE__.")", 'info');
+			throw new Exception("Invalid Account ID [$account_id] for owner [".$owner_id."] (".__METHOD__.":".__LINE__.")");
 		} else {
 			$account_columns = $query->result();
 

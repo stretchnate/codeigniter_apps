@@ -43,27 +43,33 @@ class AccountCTL extends N8_Controller {
 	 */
 	public function editAccount($account_id) {
 		$this->auth->restrict();
-		$account_dm = new Budget_DataModel_AccountDM($account_id);
+		try {
+			$account_dm = new Budget_DataModel_AccountDM($account_id, $this->session->userdata('user_id'));
 
-		$data['scripts'] = $this->jsincludes->newAccount();
-		$data['youAreHere'] = "Edit Account ".$account_dm->getAccountName();
-		$data['title'] = "Edit Account ".$account_dm->getAccountName();
-		$data['logged_user'] = $this->session->userdata('logged_user');
+			$data['scripts'] = $this->jsincludes->newAccount();
+			$data['youAreHere'] = "Edit Account ".$account_dm->getAccountName();
+			$data['title'] = "Edit Account ".$account_dm->getAccountName();
+			$data['logged_user'] = $this->session->userdata('logged_user');
 
-		$this->load->view('header',$data);
-		$this->load->view('/account/newAccountVW', array('account_dm' => $account_dm));
-		$this->load->view('footer');
+			$this->load->view('header',$data);
+			$this->load->view('/account/newAccountVW', array('account_dm' => $account_dm));
+			$this->load->view('footer');
+		} catch(Exception $e) {
+			show_error('We were unable to load this account.', 500);
+			log_message($e->getMessage(), 'info');
+		}
+
 	}
 
 	/**
 	 * creates a new account
 	 */
 	function saveAccount() {
+		$this->auth->restrict();
 		try {
-			$this->auth->restrict();
 			$account_dm = new Budget_DataModel_AccountDM();
 			if($this->input->post('account_id')) {
-				$account_dm->loadAccount($this->input->post('account_id'));
+				$account_dm->loadAccount($this->input->post('account_id'), $this->session->userdata("user_id"));
 			}
 
 			$this->load->model("Book_info");
@@ -84,7 +90,7 @@ class AccountCTL extends N8_Controller {
 		} catch(Exception $e) {
 			$response["success"] = false;
 			$response["message"] = "There was a problem saving the account.";
-			log_message($e->getCode(), $e->getMessage());
+			log_message($e->getMessage(), 'info');
 		}
 
 		echo json_encode($response);

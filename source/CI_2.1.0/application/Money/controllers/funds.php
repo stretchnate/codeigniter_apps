@@ -71,7 +71,7 @@ class Funds extends N8_Controller {
 	function automaticallyDistributeFunds() {
 		$this->auth->restrict();
 
-		$account_dm = new Budget_DataModel_AccountDM($this->input->post("account"));
+		$account_dm = new Budget_DataModel_AccountDM($this->input->post("account"), $this->session->userdata('user_id'));
 		$total      = 0;
 		$errors     = array();
 		$date       = date("Y-m-d H:i:s");
@@ -243,7 +243,7 @@ class Funds extends N8_Controller {
 		$this->load->model('Funds_operations', 'Fops',TRUE);
 		$this->load->model("accounts", "ACCT", TRUE);
 
-		$parent_account = new Budget_DataModel_AccountDM($this->input->post("parent_account"));
+		$parent_account = new Budget_DataModel_AccountDM($this->input->post("parent_account"), $this->session->userdata('user_id'));
 		$category       = new Budget_DataModel_CategoryDM($this->input->post('id'));
 
 		$requested_amount = $this->input->post('amount');
@@ -395,7 +395,7 @@ class Funds extends N8_Controller {
      * @param Budget_DataModel_TransactionDM $transaction
      */
     private function returnFundsToAccount(Budget_DataModel_TransactionDM $transaction) {
-        $account      = new Budget_DataModel_AccountDM($transaction->getFromAccount());
+        $account      = new Budget_DataModel_AccountDM($transaction->getFromAccount(), $this->session->userdata('user_id'));
         $new_acct_amt = bcadd($account->getAccountAmount(), $transaction->getTransactionAmount(), 2);
         $account->setAccountAmount($new_acct_amt);
         return $account->saveAccount();

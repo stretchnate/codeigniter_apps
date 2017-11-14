@@ -25,7 +25,7 @@ class Deposits extends N8_Model {
 				AND nf.date BETWEEN '".$start_date."' AND '".$end_date."'";
 		$query = $this->db->select("a.account_name, nf.*", false)
 							->from('new_funds nf')
-							->join('accounts a', 'nf.account_id = a.account_id')
+							->join('accounts a', 'nf.account_id = a.account_id AND nf.ownerId = a.owner_id')
 							->where($where)
 							->order_by('date', 'desc')
 							->limit($rowsPerPage, $offset)
