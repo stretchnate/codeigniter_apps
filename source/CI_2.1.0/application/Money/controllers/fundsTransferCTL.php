@@ -69,49 +69,54 @@ class fundsTransferCTL extends N8_Controller {
 	function transferCategories() {
 		$this->auth->restrict();
 
-		$errors = array();
+		try {
+			$errors = array();
 
-		$from   = new Budget_DataModel_CategoryDM($this->input->post('from'), $this->session->userdata('user_id'));
-		$to     = new Budget_DataModel_CategoryDM($this->input->post('to'), $this->session->userdata('user_id'));
+			$from   = new Budget_DataModel_CategoryDM($this->input->post('from'), $this->session->userdata('user_id'));
+			$to     = new Budget_DataModel_CategoryDM($this->input->post('to'), $this->session->userdata('user_id'));
 
-		$amount = (float)$this->input->post('amount');
+			$amount = (float)$this->input->post('amount');
 
-		if($amount > $from->getCurrentAmount()) {
-			$amount = $from->getCurrentAmount();
-			$errors[] = "Unable to transfer total requested amount, insufficient funds in {$from->getCategoryName()}";
-		}
+			if($amount > $from->getCurrentAmount()) {
+				$amount = $from->getCurrentAmount();
+				$errors[] = "Unable to transfer total requested amount, insufficient funds in {$from->getCategoryName()}";
+			}
 
-		if( count($errors) < 1 ) {
-			$from->transactionStart();
+			if( count($errors) < 1 ) {
+				$from->transactionStart();
 
-			$from->setCurrentAmount($from->getCurrentAmount() - $amount);
-			$from->saveCategory();
-			if( count($from->getErrors()) < 1 ) {
-				$to->setCurrentAmount($to->getCurrentAmount() + $amount);
-				$to->saveCategory();
-				if( count($to->getErrors()) < 1 ) {
-					//add the transaction
-					$transaction = new Budget_DataModel_TransactionDM();
-					$transaction->setToCategory($to->getCategoryId());
-					$transaction->setFromCategory($from->getCategoryId());
-					$transaction->setOwnerId($this->session->userdata("user_id"));
-					$transaction->setTransactionAmount($amount);
-					$transaction->setTransactionDate( date("Y-m-d H:i:s") );
-					$transaction->setTransactionInfo("Transfer from ".$from->getCategoryName()." to ".$to->getCategoryName());
-					$transaction->saveTransaction();
+				$from->setCurrentAmount($from->getCurrentAmount() - $amount);
+				$from->saveCategory();
+				if( count($from->getErrors()) < 1 ) {
+					$to->setCurrentAmount($to->getCurrentAmount() + $amount);
+					$to->saveCategory();
+					if( count($to->getErrors()) < 1 ) {
+						//add the transaction
+						$transaction = new Budget_DataModel_TransactionDM();
+						$transaction->setToCategory($to->getCategoryId());
+						$transaction->setFromCategory($from->getCategoryId());
+						$transaction->setOwnerId($this->session->userdata("user_id"));
+						$transaction->setTransactionAmount($amount);
+						$transaction->setTransactionDate( date("Y-m-d H:i:s") );
+						$transaction->setTransactionInfo("Transfer from ".$from->getCategoryName()." to ".$to->getCategoryName());
+						$transaction->saveTransaction();
 
-					if( count($transaction->getErrors()) > 0 ) {
-						$errors[] = "Transaction failed, unable to store record";
+						if( count($transaction->getErrors()) > 0 ) {
+							$errors[] = "Transaction failed, unable to store record";
+						}
+					} else {
+						$errors[] = "woops, unable to add funds to {$to->getCategoryName()}...aborting";
 					}
 				} else {
-					$errors[] = "woops, unable to add funds to {$to->getCategoryName()}...aborting";
+					$errors[] = "woops, unable to extract funds from {$from->getCategoryName()}...aborting.";
 				}
-			} else {
-				$errors[] = "woops, unable to extract funds from {$from->getCategoryName()}...aborting.";
+				$from->transactionEnd();
 			}
-			$from->transactionEnd();
+			$this->transferFundsView($errors);
+		} catch(Exception $e) {
+			show_error("There was a problem preforming this action.", 500);
+			log_error('error', $e->getMessage());
 		}
-		$this->transferFundsView($errors);
 	}
 
 	function transferFundsView($errors = array()) {

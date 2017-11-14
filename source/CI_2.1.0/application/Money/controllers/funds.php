@@ -240,92 +240,97 @@ class Funds extends N8_Controller {
 	public function updateAccountFunds() {
 		$this->auth->restrict();
 
-		$this->load->model('Funds_operations', 'Fops',TRUE);
-		$this->load->model("accounts", "ACCT", TRUE);
+		try {
+			$this->load->model('Funds_operations', 'Fops',TRUE);
+			$this->load->model("accounts", "ACCT", TRUE);
 
-		$parent_account = new Budget_DataModel_AccountDM($this->input->post("parent_account"), $this->session->userdata('user_id'));
-		$category       = new Budget_DataModel_CategoryDM($this->input->post('id'), $this->session->userdata('user_id'));
+			$parent_account = new Budget_DataModel_AccountDM($this->input->post("parent_account"), $this->session->userdata('user_id'));
+			$category       = new Budget_DataModel_CategoryDM($this->input->post('id'), $this->session->userdata('user_id'));
 
-		$requested_amount = $this->input->post('amount');
+			$requested_amount = $this->input->post('amount');
 
-		$date = date("Y-m-d H:i:s");
-		if($this->input->post('date')) {
-			$date = $this->input->post('date')." ".date("G:i:s");
-			$date = date("Y-m-d H:i:s", strtotime($date));
+			$date = date("Y-m-d H:i:s");
+			if($this->input->post('date')) {
+				$date = $this->input->post('date')." ".date("G:i:s");
+				$date = date("Y-m-d H:i:s", strtotime($date));
+			}
+
+			switch($_POST['operation']) {
+				case 'addFromBucket':
+					$type = 'a';
+					$from = null;
+					$to = $this->input->post('id');
+					$refund = null;
+
+					if($parent_account->getAccountAmount() < $requested_amount) {
+						$requested_amount = $parent_account->getAccountAmount();
+					}
+
+					$parent_account->transactionStart();
+					$parent_account->setAccountAmount($parent_account->getAccountAmount() - $requested_amount);
+
+					$category->setCurrentAmount($category->getCurrentAmount() + $requested_amount);
+
+					$parent_account->saveAccount();
+					$category->saveCategory();
+
+					if( $parent_account->isErrors() === false && $category->isErrors() === false ) {
+						$transaction = new Budget_DataModel_TransactionDM();
+						$transaction->setToCategory($category->getCategoryId());
+						$transaction->setFromAccount($parent_account->getAccountId());
+						$transaction->setOwnerId($this->session->userdata("user_id"));
+						$transaction->setTransactionAmount($requested_amount);
+						$transaction->setTransactionDate($date);
+						$transaction->setTransactionInfo("Funds distributed from ".$parent_account->getAccountName()." account to ".$category->getCategoryName());
+						$transaction->saveTransaction();
+					}
+
+					$parent_account->transactionEnd();
+					break;
+
+				case 'refund':
+					$transaction_info = ($this->input->post('refundId')) ? "Refund on transaction id: ".$this->input->post('refundId') : "Refund";
+					$category->setCurrentAmount($category->getCurrentAmount() + $requested_amount);
+
+					$category->saveCategory();
+
+					if( $category->isErrors() === false ) {
+						$transaction = new Budget_DataModel_TransactionDM();
+						$transaction->setToCategory($category->getCategoryId());
+						$transaction->setOwnerId($this->session->userdata("user_id"));
+						$transaction->setTransactionAmount($requested_amount);
+						$transaction->setTransactionDate($date);
+						$transaction->setTransactionInfo($transaction_info);
+						$transaction->saveTransaction();
+					}
+					break;
+
+				case 'deduction':
+				default:
+					$category->transactionStart();
+					$transaction_info = ($this->input->post("description")) ? $this->input->post("description") : "Deduction";
+					$category->setCurrentAmount($category->getCurrentAmount() - $requested_amount);
+
+					$category->saveCategory();
+
+					if( $category->isErrors() === false ) {
+						$transaction = new Budget_DataModel_TransactionDM();
+						$transaction->setFromCategory($category->getCategoryId());
+						$transaction->setOwnerId($this->session->userdata("user_id"));
+						$transaction->setTransactionAmount($requested_amount);
+						$transaction->setTransactionDate($date);
+						$transaction->setTransactionInfo($transaction_info);
+						$transaction->saveTransaction();
+					}
+					$category->transactionEnd();
+					break;
+			}
+
+			redirect("/book/getBookInfo/".$this->input->post('id'));
+		} catch(Exception $e) {
+			show_error("There was a problem saving the change.", 500);
+			log_error('error', $e->getMessage());
 		}
-
-		switch($_POST['operation']) {
-			case 'addFromBucket':
-				$type = 'a';
-				$from = null;
-				$to = $this->input->post('id');
-				$refund = null;
-
-				if($parent_account->getAccountAmount() < $requested_amount) {
-					$requested_amount = $parent_account->getAccountAmount();
-				}
-
-				$parent_account->transactionStart();
-				$parent_account->setAccountAmount($parent_account->getAccountAmount() - $requested_amount);
-
-				$category->setCurrentAmount($category->getCurrentAmount() + $requested_amount);
-
-				$parent_account->saveAccount();
-				$category->saveCategory();
-
-				if( $parent_account->isErrors() === false && $category->isErrors() === false ) {
-					$transaction = new Budget_DataModel_TransactionDM();
-					$transaction->setToCategory($category->getCategoryId());
-					$transaction->setFromAccount($parent_account->getAccountId());
-					$transaction->setOwnerId($this->session->userdata("user_id"));
-					$transaction->setTransactionAmount($requested_amount);
-					$transaction->setTransactionDate($date);
-					$transaction->setTransactionInfo("Funds distributed from ".$parent_account->getAccountName()." account to ".$category->getCategoryName());
-					$transaction->saveTransaction();
-				}
-
-				$parent_account->transactionEnd();
-				break;
-
-			case 'refund':
-				$transaction_info = ($this->input->post('refundId')) ? "Refund on transaction id: ".$this->input->post('refundId') : "Refund";
-				$category->setCurrentAmount($category->getCurrentAmount() + $requested_amount);
-
-				$category->saveCategory();
-
-				if( $category->isErrors() === false ) {
-					$transaction = new Budget_DataModel_TransactionDM();
-					$transaction->setToCategory($category->getCategoryId());
-					$transaction->setOwnerId($this->session->userdata("user_id"));
-					$transaction->setTransactionAmount($requested_amount);
-					$transaction->setTransactionDate($date);
-					$transaction->setTransactionInfo($transaction_info);
-					$transaction->saveTransaction();
-				}
-				break;
-
-            case 'deduction':
-			default:
-				$category->transactionStart();
-				$transaction_info = ($this->input->post("description")) ? $this->input->post("description") : "Deduction";
-				$category->setCurrentAmount($category->getCurrentAmount() - $requested_amount);
-
-				$category->saveCategory();
-
-				if( $category->isErrors() === false ) {
-					$transaction = new Budget_DataModel_TransactionDM();
-					$transaction->setFromCategory($category->getCategoryId());
-					$transaction->setOwnerId($this->session->userdata("user_id"));
-					$transaction->setTransactionAmount($requested_amount);
-					$transaction->setTransactionDate($date);
-					$transaction->setTransactionInfo($transaction_info);
-					$transaction->saveTransaction();
-				}
-				$category->transactionEnd();
-				break;
-		}
-
-		redirect("/book/getBookInfo/".$this->input->post('id'));
 	}
 
     /**
@@ -371,10 +376,11 @@ class Funds extends N8_Controller {
      * @return type
      */
     private function removeFundsFromCategory(Budget_DataModel_TransactionDM $transaction) {
-        $category     = new Budget_DataModel_CategoryDM($transaction->getToCategory(), $this->session->userdata('user_id'));
-        $new_cat_amt  = bcsub($category->getCurrentAmount(), $transaction->getTransactionAmount(), 2);
-        $category->setCurrentAmount($new_cat_amt);
-        return $category->saveCategory();
+		$category     = new Budget_DataModel_CategoryDM($transaction->getToCategory(), $this->session->userdata('user_id'));
+		$new_cat_amt  = bcsub($category->getCurrentAmount(), $transaction->getTransactionAmount(), 2);
+		$category->setCurrentAmount($new_cat_amt);
+
+		return $category->saveCategory();
     }
 
     /**

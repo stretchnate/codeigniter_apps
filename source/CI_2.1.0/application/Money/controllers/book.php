@@ -7,39 +7,44 @@ class Book extends N8_Controller {
 
 	function getBookInfo($id){
 		$this->auth->restrict();//make sure user is logged in.
-		$category_dm = new Budget_DataModel_CategoryDM($id, $this->session->userdata('user_id'));
+		try {
+			$category_dm = new Budget_DataModel_CategoryDM($id, $this->session->userdata('user_id'));
 
-		$this->load->model("accounts", "ACCT", TRUE);
-		$this->load->model('funds_operations','Fops',TRUE);
-		$this->load->model('notes_model', 'NM', TRUE);
+			$this->load->model("accounts", "ACCT", TRUE);
+			$this->load->model('funds_operations','Fops',TRUE);
+			$this->load->model('notes_model', 'NM', TRUE);
 
-		$data = $this->ACCT->getAccountData($id);
+			$data = $this->ACCT->getAccountData($id);
 
-		$data->parentAccount = $this->ACCT->getAccount($data->account_id);
+			$data->parentAccount = $this->ACCT->getAccount($data->account_id);
 
-		$home = new Budget_BusinessModel_Home();
-		$home->loadAccounts($this->session->userdata('user_id'));
-		$props['accounts'] = $home->getAccounts();
-		$data->accounts = $this->ACCT->getAccountsAndDistributableCategories($this->session->userdata('user_id'));
+			$home = new Budget_BusinessModel_Home();
+			$home->loadAccounts($this->session->userdata('user_id'));
+			$props['accounts'] = $home->getAccounts();
+			$data->accounts = $this->ACCT->getAccountsAndDistributableCategories($this->session->userdata('user_id'));
 
-		$t_grid = new TransactionsGrid($id, "category");
-		$t_grid->run();
+			$t_grid = new TransactionsGrid($id, "category");
+			$t_grid->run();
 
-		$data->transactions = $t_grid->getTransactionsGrid();
+			$data->transactions = $t_grid->getTransactionsGrid();
 
-		$props['youAreHere'] = $data->bookName;
-		$props['scripts'] = $this->jsincludes->books();
-		$props['title'] = $data->bookName;
-		$props['links'] = $this->utilities->createLinks('main_nav');
-		$props['logged_user'] = $this->session->userdata('logged_user');
+			$props['youAreHere'] = $data->bookName;
+			$props['scripts'] = $this->jsincludes->books();
+			$props['title'] = $data->bookName;
+			$props['links'] = $this->utilities->createLinks('main_nav');
+			$props['logged_user'] = $this->session->userdata('logged_user');
 
-		$notes['notes'] = $this->NM->getAllNotes($this->session->userdata('user_id'), $id);
-		$notes['bookId'] = $id;
+			$notes['notes'] = $this->NM->getAllNotes($this->session->userdata('user_id'), $id);
+			$notes['bookId'] = $id;
 
-		$data->due_date = $category_dm->getNextDueDate();
-		$this->load->view('header',$props);
-		$this->load->view('CategoryDetail', $data);
-		$this->load->view('footer', $notes);
+			$data->due_date = $category_dm->getNextDueDate();
+			$this->load->view('header',$props);
+			$this->load->view('CategoryDetail', $data);
+			$this->load->view('footer', $notes);
+		} catch(Exception $e) {
+			show_error("we were unable to load this page", 500);
+			log_error('error', $e->getMessage());
+		}
 	}
 
 	/*
@@ -74,24 +79,29 @@ class Book extends N8_Controller {
 	 * @return void
 	 * @access public
 	 */
-	public function editBook($id, $message = null){
+	public function editBook($id, $message = null) {
 		$this->auth->restrict();
-		$this->load->model("accounts", "ACCT", TRUE);
+		try {
+			$this->load->model("accounts", "ACCT", TRUE);
 
-		$category_dm = new Budget_DataModel_CategoryDM($id, $this->session->userdata('user_id'));
+			$category_dm = new Budget_DataModel_CategoryDM($id, $this->session->userdata('user_id'));
 
-		$this->load->view('budget/category/newCategoryVW');
+			$this->load->view('budget/category/newCategoryVW');
 
-		$CI =& get_instance();
-		$category_vw = new Budget_Category_NewCategoryVW($CI);
-		$category_vw->setScripts($this->jsincludes->editBook());
-		$category_vw->setTitle("Edit ".$category_dm->getCategoryName());
-		$category_vw->setAction("/book/saveChange/{$category_dm->getCategoryId()}/");
-		$category_vw->setErrors($message);
-		$category_vw->setCategoryDM($category_dm);
-		$category_vw->setAccounts($this->ACCT->getAccounts($this->session->userdata("user_id")));
+			$CI =& get_instance();
+			$category_vw = new Budget_Category_NewCategoryVW($CI);
+			$category_vw->setScripts($this->jsincludes->editBook());
+			$category_vw->setTitle("Edit ".$category_dm->getCategoryName());
+			$category_vw->setAction("/book/saveChange/{$category_dm->getCategoryId()}/");
+			$category_vw->setErrors($message);
+			$category_vw->setCategoryDM($category_dm);
+			$category_vw->setAccounts($this->ACCT->getAccounts($this->session->userdata("user_id")));
 
-		$category_vw->renderView();
+			$category_vw->renderView();
+		} catch(Exception $e) {
+			show_error("we were unable to load this page", 500);
+			log_error('error', $e->getMessage());
+		}
 	}
 
 	function checkName() {
@@ -247,35 +257,40 @@ class Book extends N8_Controller {
 
 	function saveChange($id) {
 		$this->auth->restrict();
-		$category_dm = new Budget_DataModel_CategoryDM($id, $this->session->userdata('user_id'));
+		try {
+			$category_dm = new Budget_DataModel_CategoryDM($id, $this->session->userdata('user_id'));
 
-		$category_dm->setParentAccountId($this->input->post('account'));
-		$category_dm->setCategoryName($this->input->post('name'));
-		$category_dm->setAmountNecessary($this->input->post('nec'));
-		$category_dm->setDueDay($this->input->post('dueDay'));
-		$category_dm->setPriority($this->input->post('priority'));
-		$category_dm->setDueMonths(
-			$this->calculateDueMonths(
-				$this->input->post('dueDay'),
-				$this->input->post('bill_schedule')
-			)
-		);
+			$category_dm->setParentAccountId($this->input->post('account'));
+			$category_dm->setCategoryName($this->input->post('name'));
+			$category_dm->setAmountNecessary($this->input->post('nec'));
+			$category_dm->setDueDay($this->input->post('dueDay'));
+			$category_dm->setPriority($this->input->post('priority'));
+			$category_dm->setDueMonths(
+				$this->calculateDueMonths(
+					$this->input->post('dueDay'),
+					$this->input->post('bill_schedule')
+				)
+			);
 
-		if($category_dm->saveCategory() !== false) {
-			header('Location:/book/getBookInfo/'.$id.'/');
-			// $this->getBookInfo($id);
-		} else {
-			//@todo  once a cache module is added need to update this method to use cash for $message
-			$message = '';
-			foreach($category_dm->getErrors() as $error) {
-				// $this->setError($error);
-				$message .= $error;
+			if($category_dm->saveCategory() !== false) {
+				header('Location:/book/getBookInfo/'.$id.'/');
+				// $this->getBookInfo($id);
+			} else {
+				//@todo  once a cache module is added need to update this method to use cash for $message
+				$message = '';
+				foreach($category_dm->getErrors() as $error) {
+					// $this->setError($error);
+					$message .= $error;
+				}
+
+				// $this->editBook($id);
+				header('location:/book/editBook/'.$id.'/'.$message.'/');
 			}
-
-			// $this->editBook($id);
-			header('location:/book/editBook/'.$id.'/'.$message.'/');
+			exit;
+		} catch(Exception $e) {
+			show_error("There was a problem saving the change.", 500);
+			log_error('error', $e->getMessage());
 		}
-		exit;
 	}
 
 	function transactionCleared() {
