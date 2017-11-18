@@ -101,9 +101,9 @@
 				<div class="form-group">
 					<select class="required form-control" name="operation">
 						<option value="0">-- Select Operation --</option>
-						<option value="addFromBucket">Credit</option>
-						<option value="deduction" selected="selected">Debit</option>
-						<option value="refund">Refund</option>
+						<option value="deduction" selected="selected">Debit (-)</option>
+						<option value="addFromBucket">Credit (+)</option>
+						<option value="refund">Refund (+)</option>
 					</select>
 				</div>
 				<div class="form-group">

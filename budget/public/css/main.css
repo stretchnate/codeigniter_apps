@@ -47,3 +47,19 @@
     display:block;
     color:dimgray;
 }
+
+.add {
+    color: #3c763d;
+}
+
+.add::before {
+    content: "+";
+}
+
+.subtract {
+    color: #a94442;
+}
+
+.subtract::before {
+    content: "-";
+}

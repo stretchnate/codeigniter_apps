@@ -56,22 +56,21 @@ class Budget_DataModel_AccountDM extends N8_Model {
         return $result;
 	}
 
+	/**
+	 * @return boolean
+	 */
 	private function updateAccount() {
         $result = false;
-		if($this->owner_id == $this->session->user_data('user_id')) {
-			$sets   = array();
+		$sets   = array();
 
-			$sets["account_name"]     = $this->account_name;
-			$sets["account_amount"]   = $this->dbNumberFormat($this->account_amount);
-			$sets["payschedule_code"] = $this->payschedule_code;
-			$sets["active"]           = $this->active;
+		$sets["account_name"]     = $this->account_name;
+		$sets["account_amount"]   = $this->dbNumberFormat($this->account_amount);
+		$sets["payschedule_code"] = $this->payschedule_code;
+		$sets["active"]           = $this->active;
 
-			$this->db->where("account_id", $this->account_id);
-			if($this->db->update("accounts", $sets)) {
-				$result = true;
-			}
-		} else {
-			$this->setError("You are not authorized to edit this account.");
+		$this->db->where("account_id", $this->account_id);
+		if($this->db->update("accounts", $sets)) {
+			$result = true;
 		}
 
         return $result;
