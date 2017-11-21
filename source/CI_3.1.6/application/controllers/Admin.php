@@ -2,15 +2,15 @@
 
 class Admin extends N8_Controller {
 
-	function Admin() {
+	public function Admin() {
 		parent::__construct();
 	}
 
-	function index() {
+	public function index() {
 
 	}
 
-	function profile() {
+	public function profile() {
 		$this->auth->restrict();
 		$header_data['links'] = $this->utilities->createLinks('main_nav');
 
@@ -19,7 +19,7 @@ class Admin extends N8_Controller {
 		$this->load->view('footer');
 	}
 
-	function login() {
+	public function login() {
 		if (!$this->auth->isSiteActive()) {
 			redirect("/inactive/");
 		}
@@ -39,19 +39,19 @@ class Admin extends N8_Controller {
 		$this->load->view('login', $data);
 	}
 
-	function logout() {
+	public function logout() {
 		if ($this->auth->logout())
 			redirect('/admin/login');
 	}
 
-	function register() {
+	public function register() {
 		$this->load->view('registerView');
 	}
 
 	/**
 	 * This function sets up new user accounts
 	 */
-	function registerUser() {
+	public function registerUser() {
 		$data['error'] = "Unable to add user, please try again.";
 		$rules = array(
 			array(
@@ -106,7 +106,7 @@ class Admin extends N8_Controller {
 		}
 	}
 
-	function checkName() {
+	public function checkName() {
 		$response['success'] = false;
 		$response['message'] = "Enter a valid username";
 		if (!empty($_POST['username'])) {

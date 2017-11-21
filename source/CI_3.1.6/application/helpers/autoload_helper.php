@@ -2,8 +2,8 @@
 
 function __autoload($classname) {
 	$dirs = array(
-	    APPPATH."/models/",
-	    APPPATH."/libraries/",
+	    APPPATH."models/",
+	    APPPATH."libraries/",
 	);
 
 	$result = false;
@@ -39,7 +39,7 @@ function underscoreLoadMethod($classname, $directories) {
 		}
 
 		for ($j = 0; $j < count($directories); $j++) {
-			$directories[$j] .= lcfirst($piece);
+			$directories[$j] .= $piece;
 			$directories[$j] .= (strpos($piece, ".php") === false) ? "/" : "";
 		}
 		$i++;
