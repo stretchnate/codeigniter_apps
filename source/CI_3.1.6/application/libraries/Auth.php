@@ -7,7 +7,7 @@ class Auth {
 	var $login_redirect	= '/admin/login';
 	var $inactive_site  = "/inactive/";
 
-	function Auth($props = array()) {
+	public function Auth($props = array()) {
 		$this->CI =& get_instance();
 		// Load additional libraries, helpers, etc.
 		$this->CI->load->library('session');
@@ -18,7 +18,7 @@ class Auth {
 		}
 	}
 
-	function process_login($login = NULL) {
+	public function process_login($login = NULL) {
 		// A few safety checks
 		// Our array has to be set
 		if(!isset($login))
@@ -68,7 +68,7 @@ class Auth {
 	/**
 	* Returns last update date
 	*/
-	function getLastUpdate($id) {
+	public function getLastUpdate($id) {
 		$this->CI->db->select("*");
 		$this->CI->db->from('login_history');
 		$this->CI->db->where('UserId', $id);
@@ -84,7 +84,7 @@ class Auth {
 	* @param $id
 	* @author dnate
 	*/
-	function insertLoginHistory($id) {
+	public function insertLoginHistory($id) {
 		$array = array('UserId' => $id);
 		$this->CI->db->insert('login_history', $array);
 	}
@@ -95,7 +95,7 @@ class Auth {
 	* @param $logout
 	* @author dnate
 	*/
-	function updateLoginHistory($update = FALSE, $logout = FALSE) {
+	public function updateLoginHistory($update = FALSE, $logout = FALSE) {
 		$data = array();
 		if($update === TRUE) {
 			$data['LastUpdate'] = date('Y-m-d H:i:s');
@@ -111,7 +111,7 @@ class Auth {
 		}
 	}
 
-	function redirect() {
+	public function redirect() {
 		if ($this->CI->session->userdata('redirected_from') == FALSE) {
 			redirect($this->index_redirect);
 		} else {
@@ -126,7 +126,7 @@ class Auth {
 	 * @param	array
 	 * @return	void
 	 */
-	function initialize($props = array()) {
+	public function initialize($props = array()) {
 		if (count($props) > 0) {
 			foreach ($props as $key => $val) {
 				$this->$key = $val;
@@ -143,7 +143,7 @@ class Auth {
 	 * @param	boolean	wether the page is viewable when logged in
 	 * @return	void
 	 */
-	function restrict($logged_out = FALSE) {
+	public function restrict($logged_out = FALSE) {
 		//make sure the site is active
 		$active = $this->isSiteActive();
 		if( !$active ) {
@@ -163,7 +163,7 @@ class Auth {
 		// redirect him to the login page!
 		if ( ! $logged_out && ! $this->logged_in()) {
 			$this->CI->session->set_userdata('redirected_from', $this->CI->uri->uri_string()); // We'll use this in our redirect method.
-			redirect($this->login_redirect);
+			redirect($this->login_redirect, 'location');
 		}
 	}
 
@@ -174,7 +174,7 @@ class Auth {
 	 * @access	public
 	 * @return	boolean
 	 */
-	function logged_in() {
+	public function logged_in() {
 		if ($this->CI->session->userdata('logged_user') == FALSE) {
 			return FALSE;
 		} else {
@@ -182,13 +182,13 @@ class Auth {
 		}
 	}
 
-	function logout() {
+	public function logout() {
 		$this->updateLoginHistory(FALSE, TRUE);
 		$this->CI->session->sess_destroy();
 		return TRUE;
 	}
 
-	function isSiteActive() {
+	public function isSiteActive() {
 		$where = array("rule_name" => "IS_SITE_ACTIVE");
 		$results = $this->CI->db->get_where("rules", $where);
 		$rule = $results->row();

@@ -407,5 +407,3 @@ class Funds extends N8_Controller {
         return $account->saveAccount();
     }
 }
-
-?>

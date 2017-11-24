@@ -37,6 +37,8 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+require_once($application_folder."/libraries/N8_Error.php");
+
 /**
  * Application Controller Class
  *
@@ -49,7 +51,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/user_guide/general/controllers.html
  */
-class CI_Controller {
+class CI_Controller extends N8_Error {
 
 	/**
 	 * Reference to the CI singleton

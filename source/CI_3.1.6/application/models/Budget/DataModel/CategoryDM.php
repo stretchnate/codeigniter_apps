@@ -198,45 +198,56 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 	private function calculateNextDueDate() {
 		$due_date = new DateTime();
 		$today    = new DateTime();
-		$months   = $this->due_months;
-		$day       = (strpos($this->due_day, '/') === false) ? $this->due_day : date('d', strtotime($this->due_day));
+		$due_months_total = count($this->due_months);
 
 		//if it's an every check category the due date is set to tomorrow
 		if($this->due_day == 0) {
 			$due_date = new DateTime(date('Y-m-d', strtotime('+1 day')));
-		}
+		} else {
+			if(strpos($this->due_day, '/') === false) {
+				$this->due_day = date('Y').'-'.date('m').'-'.$this->due_day;
+			}
+			$due_day = new DateTime($this->due_day);
+			switch($due_months_total) {
+				case 1: //annually
+					$due_date = $due_day;
+					break;
 
-		//is category due this month?
-		if(is_null($due_date) && in_array($today->format('n'), $months)) {
-			if($this->due_day >= $today->format('j')) {
-				foreach($months as $month) {
-					if($month == date('n')) {
-						$due_date->setDate(date('Y'), $month, $day);
-						break;
+				case 2: //semi-annually
+					$increment = 6;
+					break;
+
+				case 4: //quarterly
+					$increment = 3;
+					break;
+
+				case 12://monthly
+				default:
+					$increment = 1;
+					break;
+			}
+
+			if(isset($increment)) {
+				foreach($this->due_months as $due_month) {
+					if($due_month == $today->format('n')) {
+						if($due_day->format('j') >= $today->format('j')) {
+							$i = '6';
+						}
+
+						$i = $due_month - $today->format('n');
+					} elseif($due_month > $today->format('n')) {
+						$i = $due_month - $today->format('n');
+					}
+
+					if(isset($i)) {
+						$format = new DateInterval("P{$i}M");
 					}
 				}
 			}
-		}
 
-		if(is_null($due_date)) {
-			//find next due date
-			foreach($months as $month) {
-				if($today->format('n') < $month) {
-					$year = $today->format("Y");
-					$due_date->setDate($year, $month, $day);
-					break;
-				}
-			}
-		}
-
-		if($due_date == $today) {
-			//must be the first due date of the next year.
-			try {
-				$due_date = new DateTime($this->due_day);
-				$due_date->setDate(date('Y'), $months[0], $due_date->format('d'));
-				$due_date->add(new DateInterval('P1Y'));
-			} catch (Exception $ex) {
-				$due_date = new DateTime( date('Y', strtotime('+1 year')) . '-' . $months[0] . '-' . $this->due_day);
+			if(isset($format)) {
+				$today->add($format);
+				$due_date->setDate($today->format('Y'), $today->format('n'), $due_day->format('j'));
 			}
 		}
 
