@@ -30,10 +30,9 @@ function showAd($ad_type) {
 <body>
 	<div class="container-fluid">
 		<div id="header" class="border">
-			<h1><a href="/"><?= COMPANY_NAME; ?></a></h1>
+			<h1><img id="logo" class="navbar-brand" src="/images/logo_transparent_background.png" alt="<?= COMPANY_NAME; ?>" /></h1>
 		</div>
 
-		<h2>Please log in</h2>
 		<?php
 		if(isset($error)) {
 			echo "<p>$error</p>";

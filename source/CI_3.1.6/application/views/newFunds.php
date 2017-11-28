@@ -1,11 +1,11 @@
-	<h2>Add Funds Form</h2>
+	<h2>Add Funds</h2>
 	<div id="new-book">
 	<?php if(isset($error)) echo $error; ?>
 		<form name="newFundsForm" id="newFundsForm" action="" method="post">
 			<input type="hidden" name="job" />
 			<div class="form-group">
 				<div class='input-group date' data-provide="datepicker">
-					<input type="text" class="form-control" name="date">
+					<input type="text" class="form-control" name="date" autocomplete="off">
 					<div class="input-group-addon">
 						<span class="glyphicon glyphicon-calendar"></span>
 					</div>

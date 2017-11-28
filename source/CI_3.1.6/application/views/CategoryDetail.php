@@ -76,7 +76,7 @@
 					<input type="hidden" name="id" value="<?php echo $bookId; ?>" />
 					<input type="hidden" name="parent_account" value="<?php echo $parentAccount->account_id;?>" />
 					<div class="input-group date" data-provide="datepicker">
-						<input type="text" class="form-control" name='date' id="date" value="Date">
+						<input type="text" class="form-control" name='date' id="date" value="Date" autocomplete="off">
 						<div class="input-group-addon">
 							<span class="glyphicon glyphicon-calendar"></span>
 						</div>

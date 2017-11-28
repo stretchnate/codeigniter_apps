@@ -30,7 +30,6 @@
 				<span id="result-message">&nbsp;</span>
 			</div>
 			<div id="new-book">
-				<!--<form name="newBookForm" id="newBookForm" action="/book/createCategory/" method="post">-->
 				<form name="newBookForm" id="newBookForm" action="<?= $this->action; ?>" method="post">
 					<div class='form-group'>
 						<select name="account" id='account' class="form-control" required>
@@ -116,7 +115,7 @@
 					</div>
 					<div class="form-group">
 						<div class="input-group date" data-provide='datepicker'>
-							<input type="text" class="form-control" name="dueDay" id="next_due_date" value="<?= $this->category_dm ? $this->category_dm->getDueDay() : 'Next Due Date'; ?>">
+							<input type="text" class="form-control" name="dueDay" id="next_due_date" value="<?= $this->category_dm ? $this->category_dm->getDueDay() : 'Next Due Date'; ?>" autocomplete="off">
 							<div class="input-group-addon">
 								<span class="glyphicon glyphicon-calendar"></span>
 							</div>

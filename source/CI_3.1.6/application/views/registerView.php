@@ -26,7 +26,12 @@ header("Pragma: no-cache");
 </head>
 <body>
 	<div class="container-fluid">
-		<h1>User Registration</h1>
+		<div id="header">
+			<h1>
+				<a href="/"><img id="logo" class="navbar-brand" src="/images/logo_transparent_background.png" alt="<?= COMPANY_NAME; ?>" /></a>
+			</h1>
+		</div>
+		<h2>Register Here</h2>
 		<?php
 			//echo validation_errors();
 			if(isset($error))

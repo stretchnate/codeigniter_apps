@@ -1,4 +1,4 @@
-    <h2>Account Form</h2>
+    <h2>Add a new Account</h2>
 	<div class="formResult result">
 		<span id="ajax-load"><img src='<?php echo IMG_PATH; ?>ajax-loader.gif' alt='loading...' /></span>
 		<span id="result-message">&nbsp;</span>
