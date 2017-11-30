@@ -41,16 +41,5 @@
 			}
 
 			echo json_encode($response);
-//			$c = base64_decode($ciphertext);
-//			$ivlen = openssl_cipher_iv_length($cipher="AES-128-CBC");
-//			$iv = substr($c, 0, $ivlen);
-//			$hmac = substr($c, $ivlen, $sha2len=32);
-//			$ciphertext_raw = substr($c, $ivlen+$sha2len);
-//			$calcmac = hash_hmac('sha256', $ciphertext_raw, $key, true);
-//
-//			if(hash_equals($hmac, $calcmac)) {
-//				$original_plaintext = openssl_decrypt($ciphertext_raw, $cipher, $key, $options=OPENSSL_RAW_DATA, $iv);
-//				echo $original_plaintext."\n";
-//			}
 		}
 	}

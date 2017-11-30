@@ -95,13 +95,13 @@ class Funds extends N8_Controller {
 			$account_dm->saveAccount();
 
 			$deposit_id = $this->addDepositToAccount(
-														$account_dm->getAccountId(),
-														$this->session->userdata('user_id'),
-														$date,
-														$net,
-														$this->input->post('gross'),
-														$this->input->post('source')
-													);
+				$account_dm->getAccountId(),
+				$this->session->userdata('user_id'),
+				$date,
+				$net,
+				$this->input->post('gross'),
+				$this->input->post('source')
+			);
 
 			//add the transaction
 			$transaction = new Budget_DataModel_TransactionDM();
@@ -115,7 +115,7 @@ class Funds extends N8_Controller {
 
 			$account_dm->loadCategories();
 
-			bcscale(2);
+//			bcscale(2);
 
 			$divider = 1;
 			$category_dm_array = $account_dm->orderCategoriesByDueFirst($date);
@@ -222,7 +222,7 @@ class Funds extends N8_Controller {
      * @param string $source
      * @return boolean
      */
-	function addDepositToAccount($account, &$owner_id, &$date, &$net, &$gross, &$source) {
+	function addDepositToAccount($account, $owner_id, $date, $net, $gross, $source) {
 		$this->load->model('Funds_operations', 'Fops',TRUE);
 		$data = array('ownerId' => $owner_id,
 						'date' => $date,

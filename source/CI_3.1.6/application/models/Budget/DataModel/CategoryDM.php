@@ -204,7 +204,7 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 		if($this->due_day == 0) {
 			$due_date = new DateTime(date('Y-m-d', strtotime('+1 day')));
 		} else {
-			if(strpos($this->due_day, '/') === false) {
+			if(!preg_match('/[-\/]+/', $this->due_day)) {
 				$this->due_day = date('Y').'-'.date('m').'-'.$this->due_day;
 			}
 			$due_day = new DateTime($this->due_day);
