@@ -89,7 +89,7 @@ switch (ENVIRONMENT)
 		exit(1); // EXIT_ERROR
 }
 
-define('COMPANY_NAME', 'Smart Budget'); //Quantum
+define('COMPANY_NAME', 'Quantum'); //Quantum
 
 /*
  *---------------------------------------------------------------

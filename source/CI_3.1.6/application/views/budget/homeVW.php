@@ -63,7 +63,7 @@
 							<div class="account-container" id="<?php echo $acct_id;?>"<?php echo $style;?>>
 								<div class='well'>
 									<div class="category-container">
-										<label>Distributable Amount:</label>
+										<label>Amount to distribute:</label>
 										<div class="inline-block align-right">$<?php echo number_format($account_dm->getAccountAmount(),2, '.', ',') ?></div>
 									</div>
 									<div class="category-container">
@@ -124,11 +124,11 @@
 												<div class="category-container">
 													<label>Difference:</label>
 													<?php
-														$dif = bcsub($category_dm->getAmountNecessary(), $category_dm->getCurrentAmount());
+														$dif = subtract($category_dm->getAmountNecessary(), $category_dm->getCurrentAmount(), 2);
 														if($category_dm->getAmountNecessary() > $category_dm->getCurrentAmount()){
 															echo '<div class="red inline-block align-right">-$'.number_format($dif, 2, '.', ',').'</div>';
 														} else if ($category_dm->getAmountNecessary() < $category_dm->getCurrentAmount()){
-															$dif = bcsub($category_dm->getCurrentAmount(), $category_dm->getAmountNecessary());
+															$dif = subtract($category_dm->getCurrentAmount(), $category_dm->getAmountNecessary(), 2);
 															echo '<div class="bold inline-block align-right">+$'.number_format($dif, 2, '.', ',').'</div>';
 														} else {
 															echo '<div class="align-right inline-block">$'.number_format($dif, 2, '.', ',').'</div>';

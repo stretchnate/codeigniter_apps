@@ -63,3 +63,9 @@
 .subtract::before {
     content: "-";
 }
+
+.quantum {
+    line-height: 20px;
+    font-size: 80%;
+    color: #3D5B9E;
+}

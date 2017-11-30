@@ -55,7 +55,7 @@ function showAd($ad_type) {
 			</div>
 			<div id="copy">
 				&copy;2010-<?php $year = date('Y'); echo $year;?> <?=COMPANY_NAME;?>
-				<!--<span class="version">v3.2</span>-->
+				<div class="quantum">Powered by <img src="/images/logo_transparent_background.png" height="20px" /></div>
 			</div>
 		</div>
 		<?= showAd(AdFactory::AD_AUTO); ?>

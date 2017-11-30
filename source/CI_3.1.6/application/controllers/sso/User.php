@@ -6,18 +6,19 @@
 	 */
 
 	/**
-	 * Description of SSO
+	 * Description of User
 	 *
 	 * @author stretch
 	 */
-	class SSO extends N8_Controller {
-		public function __construct() {
-			parent::__construct();
-		}
+	class User extends N8_SingleSignOn {
 
 		public function getToken() {
 			$data = array('success' => true, 'token' => md5(time()));
 
 			echo json_encode($data);
+		}
+
+		public function getCookie($access_token) {
+
 		}
 	}

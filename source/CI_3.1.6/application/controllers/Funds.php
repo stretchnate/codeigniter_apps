@@ -134,23 +134,23 @@ class Funds extends N8_Controller {
 							if( ($category->getDaysUntilDue($date) <= $account_dm->getPayFrequency())
 								|| ((( round($category->getAmountNecessary() / $divider, 2) ) + $category->getCurrentAmount()) > $category->getAmountNecessary()) ) {
 
-								$depositAmount = bcsub($category->getAmountNecessary(), $category->getCurrentAmount());
+								$depositAmount = subtract($category->getAmountNecessary(), $category->getCurrentAmount(),2);
 							} else {
-								$depositAmount = bcdiv($category->getAmountNecessary(), $divider);
+								$depositAmount = divide($category->getAmountNecessary(), $divider,2);
 							}
 
 							if($depositAmount > $total) {
 								$depositAmount = $total;
 							}
 
-							$new_category_amount = bcadd($depositAmount, $category->getCurrentAmount());
+							$new_category_amount = add($depositAmount, $category->getCurrentAmount(),2);
 
 							$category->setCurrentAmount($new_category_amount);
 							$category->saveCategory();
 
 							if($category->isErrors() === false) {
 								// $total = $total - $depositAmount;
-								$total = bcsub($total, $depositAmount);
+								$total = subtract($total, $depositAmount,2);
 								$account_dm->setAccountAmount($total);
 								$account_dm->saveAccount();
 
@@ -170,12 +170,12 @@ class Funds extends N8_Controller {
 								} else {
 									//rollback
 									// $rollback = $category->getCurrentAmount() - $depositAmount;
-									$rollback = bcsub($category->getCurrentAmount(), $depositAmount);
+									$rollback = subtract($category->getCurrentAmount(), $depositAmount,2);
 									$category->setCurrentAmount($rollback);
 									$category->saveCategory();
 
 									// $total = $total + $depositAmount;
-									$total = bcadd($total, $depositAmount);
+									$total = add($total, $depositAmount,2);
 
 									$errors = $account_dm->getErrors();
 								}
@@ -377,7 +377,7 @@ class Funds extends N8_Controller {
      */
     private function removeFundsFromCategory(Budget_DataModel_TransactionDM $transaction) {
 		$category     = new Budget_DataModel_CategoryDM($transaction->getToCategory(), $this->session->userdata('user_id'));
-		$new_cat_amt  = bcsub($category->getCurrentAmount(), $transaction->getTransactionAmount(), 2);
+		$new_cat_amt  = subtract($category->getCurrentAmount(), $transaction->getTransactionAmount(), 2);
 		$category->setCurrentAmount($new_cat_amt);
 
 		return $category->saveCategory();
@@ -390,7 +390,7 @@ class Funds extends N8_Controller {
      */
     private function returnFundsToCategory(Budget_DataModel_TransactionDM $transaction) {
         $category = new Budget_DataModel_CategoryDM($transaction->getFromCategory(), $this->session->userdata('user_id'));
-        $new_amt  = bcadd($category->getCurrentAmount(), $transaction->getTransactionAmount(), 2);
+        $new_amt  = add($category->getCurrentAmount(), $transaction->getTransactionAmount(), 2);
         $category->setCurrentAmount($new_amt);
         return $category->saveCategory();
     }
@@ -402,7 +402,7 @@ class Funds extends N8_Controller {
      */
     private function returnFundsToAccount(Budget_DataModel_TransactionDM $transaction) {
         $account      = new Budget_DataModel_AccountDM($transaction->getFromAccount(), $this->session->userdata('user_id'));
-        $new_acct_amt = bcadd($account->getAccountAmount(), $transaction->getTransactionAmount(), 2);
+        $new_acct_amt = add($account->getAccountAmount(), $transaction->getTransactionAmount(), 2);
         $account->setAccountAmount($new_acct_amt);
         return $account->saveAccount();
     }

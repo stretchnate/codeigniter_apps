@@ -95,7 +95,7 @@
 
 				<div id="content">
 					<div class="error">
-						<?
+						<?php
 						if(isset($this->errors) && is_array($this->errors)) {
 							foreach($this->errors as $error) {
 								echo urldecode($error)."<br />";
@@ -125,8 +125,7 @@
                 </div>
                 <div id="copy">
                     &copy;2010-<?php $year = date('Y'); echo $year;?> <?=COMPANY_NAME;?>
-                    <!--<span class="version">v3.2</span>-->
-                    <!--<a href="/blackjack/blackjack/" target="_blank">Play Blackjack</a>-->
+					<div class="quantum">Powered by <img src="/images/logo_transparent_background.png" height="20px" /></div>
                 </div>
             </div>
             <?= $this->showAd(AdFactory::AD_AUTO); ?>

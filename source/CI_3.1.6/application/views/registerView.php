@@ -81,6 +81,7 @@ header("Pragma: no-cache");
 	<div id="footer">
 		<div id="copy">
 			&copy;2010-<?php $year = date('Y'); echo $year;?> <?=COMPANY_NAME;?>
+			<div class="quantum">Powered by <img src="/images/logo_transparent_background.png" height="20px" /></div>
 		</div>
 	</div>
 </body>

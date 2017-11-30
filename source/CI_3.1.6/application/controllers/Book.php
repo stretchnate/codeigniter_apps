@@ -151,13 +151,12 @@ class Book extends N8_Controller {
 						$start_amount = $account_dm->getAccountAmount();
 					}
 
-					$account_amount = bcsub($account_dm->getAccountAmount(), $start_amount);
+					$account_amount = subtract($account_dm->getAccountAmount(), $start_amount, 2);
 					$account_dm->setAccountAmount($account_amount);
 					$account_dm->saveAccount();
 				}
 				if($e < 1) {
 					//add category to account
-					// $data = $this->BI->addCategory($this->session->userdata('user_id'), $this->input->post("account")); // if not existing add account to the db
 					$category_dm = new Budget_DataModel_CategoryDM();
 					$category_dm->setParentAccountId($this->input->post("account"));
 					$category_dm->setCategoryName($this->input->post('name'));

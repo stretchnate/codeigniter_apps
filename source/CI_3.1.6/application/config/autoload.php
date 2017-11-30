@@ -89,7 +89,7 @@ $autoload['drivers'] = array();
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array('N8_date_helper', 'html', 'error', 'autoload', 'is_live');
+$autoload['helper'] = array('N8_date_helper', 'html', 'error', 'autoload', 'is_live', 'math', 'url');
 
 /*
 | -------------------------------------------------------------------
