@@ -8,14 +8,12 @@ class UserCTL extends N8_Controller {
 		parent::__construct();
 		$this->load->helper('form');
 
-		$this->user_dm = new UserDM();
-		$this->user_dm->setUserId( $this->session->userdata('user_id') );
-		$this->user_dm->loadUserProfile();
+		$this->user_dm = new Budget_DataModel_UserDM(['ID' => $this->session->userdata('user_id')]);
 	}
-	
+
 	function index() {
 		$this->auth->restrict();
-		
+
 		$user_profile_vw = $this->buildUserProfileView();
 		$user_profile_vw->renderView();
 	}
@@ -44,7 +42,7 @@ class UserCTL extends N8_Controller {
 
 		if($this->validate($rules) === true) {
 			//update the changes to the db
-			if($this->user_dm->getPassword() != md5($this->input->post('new_password'))) {
+			if($this->user_dm->getPassword() != password_hash($this->input->post('new_password'))) {
 				$this->user_dm->setPassword($this->input->post('new_password'));
 			}
 
@@ -62,13 +60,13 @@ class UserCTL extends N8_Controller {
 		$props['title'] = "User Profile";
 		$props['scripts'] = Jsincludes::getUserProfileJS();
 		$props['links'] = $this->utilities->createLinks('main_nav');
-		
+
 		$this->load->view('budget/userProfile/userProfileVW');
-		
+
 		$CI =& get_instance();
 		$user_profile_vw = new Budget_UserProfile_UserProfileVW($CI);
 		$user_profile_vw->setUserDM($this->user_dm);
-		
+
 		$user_profile_vw->setTitle($props['title']);//these 3 are in baseVW.php
 		$user_profile_vw->setScripts($props['scripts']);
 

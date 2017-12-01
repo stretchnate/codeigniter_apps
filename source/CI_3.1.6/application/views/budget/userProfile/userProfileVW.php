@@ -3,6 +3,9 @@
 
 	class Budget_UserProfile_UserProfileVW extends Budget_BaseVW {
 
+		/**
+		 * @var \Budget_DataModel_UserDM
+		 */
 		private $user_dm;
 
 		public function __construct(&$CI) {
@@ -43,7 +46,7 @@
 			<?
 		}
 
-		public function setUserDM( $user_dm ) {
+		public function setUserDM(Budget_DataModel_UserDM $user_dm) {
 			$this->user_dm = $user_dm;
 		}
 	}

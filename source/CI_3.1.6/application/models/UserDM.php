@@ -5,6 +5,7 @@
 	 *
 	 * @author dnate
 	 * @since 2013.02.02
+	 * @deprecated
 	 */
 	class UserDM extends N8_Model {
 
@@ -13,7 +14,7 @@
 		protected $email;
 
 		private   $password;
-			
+
 		function __construct(){
 			parent::__construct();
 		}
@@ -77,7 +78,7 @@
 		}
 
 		public function setPassword($password) {
-			$this->password = md5($password);
+			$this->password = password_hash($password);
 		}
 
 		public function getPassword() {

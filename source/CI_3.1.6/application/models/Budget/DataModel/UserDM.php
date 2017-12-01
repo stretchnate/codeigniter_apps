@@ -12,6 +12,8 @@
 	 */
 	class Budget_DataModel_UserDM extends CI_Model {
 
+		const TABLE_NAME = 'users';
+
 		/**
 		 * @var int
 		 */
@@ -105,6 +107,79 @@
 		}
 
 		/**
+		 * @return boolean
+		 */
+		public function save() {
+			if($this->id && $this->rowExists()) {
+				return $this->update();
+			} else {
+				return $this->insert();
+			}
+		}
+
+		/**
+		 * @return boolean
+		 * @throws Exception
+		 */
+		private function insert() {
+			$set = $this->buildSet();
+			if($this->id) {
+				$set->ID = $this->id;
+			}
+			if(!$this->db->insert(self::TABLE_NAME, $set)) {
+				$error = $this->db->error();
+				throw new Exception($error['message']);
+			}
+
+			return true;
+		}
+
+		/**
+		 * @return boolean
+		 * @throws Exception
+		 */
+		private function update() {
+			$set = $this->buildSet();
+			if($this->id) {
+				$set->ID = $this->id;
+			}
+			if(!$this->db->update(self::TABLE_NAME, $set)) {
+				$error = $this->db->error();
+				throw new Exception($error['message']);
+			}
+
+			return true;
+		}
+
+		/**
+		 * @return \stdClass
+		 */
+		private function buildSet() {
+			$set = new stdClass();
+			$set->Username = $this->username;
+			$set->Password = password_hash($this->password);
+			($this->temp_pass) ? $set->Temp_pass = password_hash($this->temp_pass) : null;
+			($this->temp_pass_active) ? $set->Temp_pass_active = $this->temp_pass_active : null;
+			$set->Email = $this->email;
+			($this->date_added) ? $set->dateAdded = $this->date_added->format('Y-m-d H:i:s') : null;
+			$set->Active = $this->active;
+			$set->Level_access = 2;
+			($this->random_key) ? $set->Random_key = $this->random_key : null;
+			$set->agree_to_terms = $this->agree_to_terms;
+
+			return $set;
+		}
+
+		/**
+		 * @return boolean
+		 */
+		private function rowExists() {
+			$query = $this->get_where(self::TABLE_NAME, ['ID' => $this->id]);
+
+			return ($query->num_rows() > 0);
+		}
+		
+		/**
 		 * @return int
 		 */
 		public function getId() {
@@ -179,5 +254,95 @@
 		 */
 		public function getAgreeToTerms() {
 			return $this->agree_to_terms;
+		}
+
+		/**
+		 * @param string $value
+		 * @return \Budget_DataModel_UserDM
+		 */
+		public function setUsername($value) {
+			$this->username = $value;
+			return $this;
+		}
+
+		/**
+		 * @param string $value
+		 * @return \Budget_DataModel_UserDM
+		 */
+		public function setPassword($value) {
+			$this->password = $value;
+			return $this;
+		}
+
+		/**
+		 * @param string $value
+		 * @return \Budget_DataModel_UserDM
+		 */
+		public function setTempPass($value) {
+			$this->temp_pass = $value;
+			return $this;
+		}
+
+		/**
+		 * @param bool $value
+		 * @return \Budget_DataModel_UserDM
+		 */
+		public function setTempPassActive($value) {
+			$this->temp_pass_active = $value;
+			return $this;
+		}
+
+		/**
+		 * @param string $value
+		 * @return \Budget_DataModel_UserDM
+		 */
+		public function setEmail($value) {
+			$this->email = $value;
+			return $this;
+		}
+
+		/**
+		 * @param DateTime $value
+		 * @return \Budget_DataModel_UserDM
+		 */
+		public function setDateAdded($value) {
+			$this->date_added = $value;
+			return $this;
+		}
+
+		/**
+		 * @param bool $value
+		 * @return \Budget_DataModel_UserDM
+		 */
+		public function setActive($value) {
+			$this->active = $value;
+			return $this;
+		}
+
+		/**
+		 * @param int $value
+		 * @return \Budget_DataModel_UserDM
+		 */
+		public function setLevelAccess($value) {
+			$this->level_access = $value;
+			return $this;
+		}
+
+		/**
+		 * @param string $value
+		 * @return \Budget_DataModel_UserDM
+		 */
+		public function setRandomKey($value) {
+			$this->random_key = $value;
+			return $this;
+		}
+
+		/**
+		 * @param DateTime $value
+		 * @return \Budget_DataModel_UserDM
+		 */
+		public function setAgreeToTerms(DateTime $value) {
+			$this->agree_to_terms = $value;
+			return $this;
 		}
 	}

@@ -30,7 +30,7 @@ class Auth {
 			return false;
 
 		$username = $login[0];
-		$password = md5($login[1]);
+		$password = password_hash($login[1]);
 
 		// Query time
 		$this->CI->db->select('u.*, lh.*');
