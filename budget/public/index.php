@@ -89,7 +89,8 @@ switch (ENVIRONMENT)
 		exit(1); // EXIT_ERROR
 }
 
-define('COMPANY_NAME', 'Quantum'); //Quantum
+defined('COMPANY_NAME')            OR define('COMPANY_NAME', 'Quantum'); //Quantum
+defined('COMPANY_LOGOUT_REDIRECT') OR define('COMPANY_LOGOUT_REDIRECT', 'http://money.stretchnate.com/admin/login');//for mara just set this to http://whyibudget.com
 
 /*
  *---------------------------------------------------------------

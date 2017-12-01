@@ -5,52 +5,41 @@ class Admin_model extends N8_Model {
 			parent::__construct();
 	}
 
-	function checkExisting() {
+	public function checkExisting() {
 		$data = array('Username' => $this->input->post('username'));
 		$query = $this->db->get_where('users',$data);
 		$num = $query->num_rows();
 		return $num;
 	}
 
-	function undoUser($id = null,$date = null,$user = null) {
-		if($id != null) {
-			$this->db->delete('users',array('ID' => $id));
-		} elseif($date != null && $user != null) {
-			$user['dateAdded'] = $date;
-			$this->db->delete('users',$user);
-		}
-	}
-
 	/**
 	 * Creates a new user account upon registration
 	 *
 	 */
-	function createUser() {
+	public function createUser($data) {
+		$result = false;
 		$date = date("Y-m-d H:i:s");
-		$user_info = array('Username' => $this->input->post('username'),
-							'Password' => md5($this->input->post('password')),
-							'Email' => $this->input->post('email'),
+		$user_info = array('Username' => $data['username'],
+							'Password' => password_hash($data['password']),
+							'Email' => $data['email'],
 							'agree_to_terms' => $date,
 							'dateAdded' => $date);
-		$this->db->insert('users',$user_info);
+		if($this->db->insert('users',$user_info)) {
+			$query = $this->db->get_where('users',$user_info);//get user id.
 
-		$query = $this->db->get_where('users',$user_info);//get user id.
-		$num_rows = $query->num_rows();
-		if($num_rows == 1){
-			$row = $query->row();
-				return $row->ID;
-		} elseif($num_rows > 1) {
-			$id = null;
-			try {
-				$this->undoUser($id,$date,$user_info);
-			} catch(Exception $e) {
-				//TODO log $e here
+			if(!$query || $query->num_rows() < 1) {
+				$error = $this->db->error();
+				throw new Exception('ERROR: '.$error['message']);
 			}
+
+			$row = $query->row();
+			$result = $row->ID;
 		}
-		return false;
+
+		return $result;
 	}
 
-	function createCharitableAcct($id) {
+	public function createCharitableAcct($id) {
 		$account_info = array('CA_ID' => $id);
 		if(!empty($_POST['caName']))
 			$account_info['CA_Name'] = $this->input->post('caName');
@@ -72,4 +61,3 @@ class Admin_model extends N8_Model {
 		return 1;
 	}
 }
-?>

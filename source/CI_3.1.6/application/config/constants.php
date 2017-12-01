@@ -90,3 +90,10 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 defined('HTTP_OK')                    OR define('HTTP_OK', 200);
 defined('HTTP_INTERNAL_SERVER_ERROR') OR define('HTTP_INTERNAL_SERVER_ERROR', 500);
 defined('HTTP_BAD_REQUEST')           OR define('HTTP_BAD_REQUEST', 400);
+
+/**
+ * ERROR LEVEL CONSTANTS
+ */
+defined('LOG_LEVEL_ERROR') OR define('LOG_LEVEL_ERROR', 'error');
+defined('LOG_LEVEL_DEBUG') OR define('LOG_LEVEL_DEBUG', 'debug');
+defined('LOG_LEVEL_INFO')  OR define('LOG_LEVEL_INFO', 'info');

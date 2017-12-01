@@ -41,7 +41,7 @@ class Admin extends N8_Controller {
 
 	public function logout() {
 		if ($this->auth->logout())
-			redirect('/admin/login');
+			redirect(COMPANY_LOGOUT_REDIRECT);
 	}
 
 	public function register() {
@@ -89,9 +89,9 @@ class Admin extends N8_Controller {
 		}
 
 		if($this->validate($rules)) {
-			$this->load->model('admin_model','Admin',TRUE);
-			$create_user = $this->Admin->createUser();//create our user login in the db
-			if($create_user > 0) {
+			$this->load->model('Admin_model','Admin',TRUE);
+			$create_user = $this->Admin->createUser($this->input->post());//create our user login in the db
+			if($create_user) {
 				$data['error'] = "Account Successfully Created.";
 				//account created, log user in.
 				$login = array($this->input->post('username'), $this->input->post('password'));
