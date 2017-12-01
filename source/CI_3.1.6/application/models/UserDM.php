@@ -78,7 +78,7 @@
 		}
 
 		public function setPassword($password) {
-			$this->password = password_hash($password);
+			$this->password = password_hash($password, PASSWORD_BCRYPT);
 		}
 
 		public function getPassword() {

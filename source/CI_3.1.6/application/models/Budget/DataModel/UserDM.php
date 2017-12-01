@@ -157,8 +157,8 @@
 		private function buildSet() {
 			$set = new stdClass();
 			$set->Username = $this->username;
-			$set->Password = password_hash($this->password);
-			($this->temp_pass) ? $set->Temp_pass = password_hash($this->temp_pass) : null;
+			$set->Password = $this->password;
+			($this->temp_pass) ? $set->Temp_pass = $this->temp_pass : null;
 			($this->temp_pass_active) ? $set->Temp_pass_active = $this->temp_pass_active : null;
 			$set->Email = $this->email;
 			($this->date_added) ? $set->dateAdded = $this->date_added->format('Y-m-d H:i:s') : null;
@@ -178,7 +178,7 @@
 
 			return ($query->num_rows() > 0);
 		}
-		
+
 		/**
 		 * @return int
 		 */
@@ -270,7 +270,7 @@
 		 * @return \Budget_DataModel_UserDM
 		 */
 		public function setPassword($value) {
-			$this->password = $value;
+			$this->password = password_hash($value, PASSWORD_BCRYPT);
 			return $this;
 		}
 
@@ -279,7 +279,7 @@
 		 * @return \Budget_DataModel_UserDM
 		 */
 		public function setTempPass($value) {
-			$this->temp_pass = $value;
+			$this->temp_pass = password_hash($value, PASSWORD_BCRYPT);
 			return $this;
 		}
 

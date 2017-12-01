@@ -42,7 +42,7 @@ class UserCTL extends N8_Controller {
 
 		if($this->validate($rules) === true) {
 			//update the changes to the db
-			if($this->user_dm->getPassword() != password_hash($this->input->post('new_password'))) {
+			if(!password_verify($this->input->post('new_password'), $this->user_dm->getPassword())) {
 				$this->user_dm->setPassword($this->input->post('new_password'));
 			}
 

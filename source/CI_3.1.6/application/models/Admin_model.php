@@ -20,7 +20,7 @@ class Admin_model extends N8_Model {
 		$result = false;
 		$date = date("Y-m-d H:i:s");
 		$user_info = array('Username' => $data['username'],
-							'Password' => password_hash($data['password']),
+							'Password' => password_hash($data['password'], PASSWORD_BCRYPT),
 							'Email' => $data['email'],
 							'agree_to_terms' => $date,
 							'dateAdded' => $date);
