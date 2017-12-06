@@ -23,30 +23,36 @@
 			$this->response->status = HTTP_BAD_REQUEST;
 		}
 
+		/**
+		 * authenticate the source of the request
+		 *
+		 * @return boolean
+		 */
 		protected function authenticateSource() {
+			$result = false;
 			try {
-				$key = file_get_contents('/path/to/key');
-				$res_prv = openssl_get_privatekey($key);
+				$key = file_get_contents('/var/private/money.stretchnate.com.key');
+				$res_prv = openssl_get_privatekey($key, 'Quantum1');
 
-				openssl_private_decrypt($this->input->post('token'), $decrypted, $res_prv);
+				if(!openssl_private_decrypt(base64_decode($this->input->post('token')), $decrypted, $res_prv)) {
+					$this->response->status = HTTP_INTERNAL_SERVER_ERROR;
+				} else {
+					$decrypted_parts = explode('.', base64_decode($decrypted));
 
-				$decrypted_parts = explode('.', $decrypted);
+					$this->vendor = $decrypted_parts[0];
 
-				$this->vendor = $decrypted_parts[0];
+					$where = ['name' => $this->vendor];
+					$client = new Budget_DataModel_ClientDM($where);
 
-				$where = ['name' => $this->vendor, 'token' => $decrypted_parts[1]];
-				$client = new Budget_DataModel_ClientDM($where);
-
-				if(!$client->getId()) {
-					echo json_encode($this->response);
-					return false;
+					$verified = password_verify($decrypted_parts[1], $client->getToken());
+					$result = ($client->getId() && $verified);
 				}
 			} catch(Exception $e) {
 				//log error and email
 				log_message(LOG_LEVEL_ERROR, $e->getMessage());
 				$this->response->status = HTTP_INTERNAL_SERVER_ERROR;
-				echo json_encode($this->response);
-				return false;
 			}
+
+			return $result;
 		}
 	}

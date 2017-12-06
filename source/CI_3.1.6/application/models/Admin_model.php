@@ -14,7 +14,7 @@ class Admin_model extends N8_Model {
 
 	/**
 	 * Creates a new user account upon registration
-	 *
+	 * @todo - deprecate this method in next release - use Budget_DataModel_UserDM instead
 	 */
 	public function createUser($data) {
 		$result = false;
@@ -24,21 +24,28 @@ class Admin_model extends N8_Model {
 							'Email' => $data['email'],
 							'agree_to_terms' => $date,
 							'dateAdded' => $date);
-		if($this->db->insert('users',$user_info)) {
-			$query = $this->db->get_where('users',$user_info);//get user id.
 
+		if($this->db->insert('users', $user_info)) {
+			$query = $this->db->get_where('users',$user_info);//get user id.
 			if(!$query || $query->num_rows() < 1) {
 				$error = $this->db->error();
 				throw new Exception('ERROR: '.$error['message']);
 			}
 
-			$row = $query->row();
-			$result = $row->ID;
+			$result = $query->row()->ID;
+		} else {
+			$error = $this->db->error();
+			throw new Exception("Unable to create user [{$error['message']}]", EXCEPTION_CODE_VALIDATION);
 		}
 
 		return $result;
 	}
 
+	/**
+	 * @deprecated since version 3.0
+	 * @param type $id
+	 * @return int
+	 */
 	public function createCharitableAcct($id) {
 		$account_info = array('CA_ID' => $id);
 		if(!empty($_POST['caName']))

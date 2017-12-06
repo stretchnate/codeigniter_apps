@@ -97,3 +97,6 @@ defined('HTTP_BAD_REQUEST')           OR define('HTTP_BAD_REQUEST', 400);
 defined('LOG_LEVEL_ERROR') OR define('LOG_LEVEL_ERROR', 'error');
 defined('LOG_LEVEL_DEBUG') OR define('LOG_LEVEL_DEBUG', 'debug');
 defined('LOG_LEVEL_INFO')  OR define('LOG_LEVEL_INFO', 'info');
+
+defined('EXCEPTION_CODE_VALIDATION') OR define('EXCEPTION_CODE_VALIDATION', 200);
+defined('EXCEPTION_CODE_ERROR') OR define('EXCEPTION_CODE_ERROR', 500);

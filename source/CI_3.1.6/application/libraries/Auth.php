@@ -18,7 +18,7 @@ class Auth {
 		}
 	}
 
-	public function process_login($login = NULL) {
+	public function process_login($login = NULL, $preverified = false) {
 		// A few safety checks
 		// Our array has to be set
 		if(!isset($login))
@@ -30,19 +30,21 @@ class Auth {
 			return false;
 
 		$username = $login[0];
-//		$password = password_hash($login[1], PASSWORD_BCRYPT);
 
 		// Query time
 		$this->CI->db->select('u.*, lh.*');
 		$this->CI->db->from('users u');
 		$this->CI->db->join('login_history lh', 'u.ID = lh.UserId', 'left');
 		$this->CI->db->where('username', $username);
-//		$this->CI->db->where('password', $password);
 		$this->CI->db->order_by('DateLoggedIn', 'desc');
 		$this->CI->db->limit(1);
 		$query = $this->CI->db->get();
 
-		if ($query->num_rows() == 1 && password_verify($login[1], $query->row()->Password)) {
+		if($preverified !== true) {
+			$verified = password_verify($login[1], $query->row()->Password);
+		}
+
+		if ($query->num_rows() == 1 && $verified) {
 			// Our user exists, set session.
 			$this->CI->session->set_userdata('logged_user', $username);
 			$row = $query->row();

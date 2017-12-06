@@ -84,7 +84,7 @@
 		 * @throws Exception
 		 */
 		public function load($where) {
-			$query = $this->db->get_where($where);
+			$query = $this->db->get_where(self::TABLE_NAME, $where);
 
 			if(!$query) {
 				$error = $this->db->error();
@@ -93,17 +93,19 @@
 				throw new Exception('Too many users to load.');
 			}
 
-			$this->id = $query->row()->ID;
-			$this->username = $query->row()->Username;
-			$this->password = $query->row()->Password;
-			$this->temp_pass = $query->row()->Temp_pass;
-			$this->temp_pass_active = $query->row()->Temp_pass_active;
-			$this->email = $query->row()->Email;
-			$this->date_added = new DateTime($query->row()->dateAdded);
-			$this->active = $query->row()->Active;
-			$this->level_access = $query->row()->Level_access;
-			$this->random_key = $query->row()->Random_key;
-			$this->agree_to_terms = new DateTime($query->row()->agree_to_terms);
+			if($query->num_rows() == 1) {
+				$this->id = $query->row()->ID;
+				$this->username = $query->row()->Username;
+				$this->password = $query->row()->Password;
+				$this->temp_pass = $query->row()->Temp_pass;
+				$this->temp_pass_active = $query->row()->Temp_pass_active;
+				$this->email = $query->row()->Email;
+				$this->date_added = new DateTime($query->row()->dateAdded);
+				$this->active = $query->row()->Active;
+				$this->level_access = $query->row()->Level_access;
+				$this->random_key = $query->row()->Random_key;
+				$this->agree_to_terms = new DateTime($query->row()->agree_to_terms);
+			}
 		}
 
 		/**
