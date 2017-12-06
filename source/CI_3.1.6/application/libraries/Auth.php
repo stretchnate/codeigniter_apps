@@ -40,9 +40,7 @@ class Auth {
 		$this->CI->db->limit(1);
 		$query = $this->CI->db->get();
 
-		if($preverified !== true) {
-			$verified = password_verify($login[1], $query->row()->Password);
-		}
+		$verified = $preverified === true ? $preverified : password_verify($login[1], $query->row()->Password);
 
 		if ($query->num_rows() == 1 && $verified) {
 			// Our user exists, set session.
