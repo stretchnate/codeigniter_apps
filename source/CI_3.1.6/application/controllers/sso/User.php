@@ -15,7 +15,7 @@
 
 		public function __construct() {
 			parent::__construct();
-			$this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'dummy'));
+			$this->load->driver('cache', array('adapter' => 'memcached', 'backup' => 'dummy'));
 		}
 
 		/**
@@ -29,7 +29,8 @@
 						$this->response->status = HTTP_OK;
 						$access_token = crypt(microtime(), $this->vendor);
 						$this->cache->save($access_token, $this->input->post('email', true), 180);//cache token for 3 min.
-						$this->response->iframe_url = base_url('/sso/User/getCookie/'.$access_token);
+						$this->response->url = base_url('/sso/User/getCookie/');
+						$this->response->access_token = $access_token;
 
 						if(!$user->getActive()) {
 							$user->setActive(true);
@@ -48,45 +49,27 @@
 		}
 
 		/**
-		 * set a cookie on the users browser for future login (requires an iframe from the client)
+		 * set a cookie on the users browser for future login
 		 * @param string $access_token
 		 */
-		public function getCookie($access_token) {
+		public function getCookie() {
 			try {
+				$access_token = $this->input->post('access_token');
 				$data = $this->cache->get($access_token);
 				if($this->input->post('email') == $data) {
 					$cookie_val = crypt(microtime(), $this->vendor);
 					$this->cache->save($cookie_val, $this->input->post('email'), 180);//cache token for 3 min.
-					header("Access-Control-Allow-Methods: POST");
-					header("Access-Control-Allow-Origin: http://ciguide.local/");
-					setcookie('token', $cookie_val, (time()+180), '/'.__CLASS__, base_url(), true, true);
-					setcookie('user', $this->input->post('email'), (time()+180), '/'.__CLASS__, base_url(), true, true);
-//					setcookie($access_token, 'yes', (time()+180), '/'.__CLASS__, base_url(), true, true);
+					header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+					header("Access-Control-Allow-Credentials: true");
+					header("Access-Control-Allow-Origin: http://ciguide.local");
+					header("Access-Control-Allow-Headers: Content-Type, *");
+
+					setcookie('token', base64_encode($cookie_val), (time()+60), '/', 'money.stretchnate.com', false, true);
+					setcookie('useremail', $this->input->post('email'), (time()+60), '/', 'money.stretchnate.com', false, true);
+
 					$this->response->status = HTTP_OK;
 
 					$this->cache->delete($access_token);
-				}
-			} catch (Exception $e) {
-				$this->response->status = HTTP_INTERNAL_SERVER_ERROR;
-				log_message(LOG_LEVEL_ERROR, $e->getMessage());
-			}
-
-			echo json_encode($this->response);
-		}
-
-		/**
-		 * check to see if an auth cookie has been set, this may not be needed as once the iframe loads (document is ready)
-		 * the cookies should be set
-		 */
-		public function checkCookie() {
-			if($this->authenticateSource() !== true) {
-				die(json_encode($this->response));
-			}
-
-			try {
-				$this->response->status = 0;
-				if($this->input->cookie($this->input->post('access_token', true), true)) {
-					$this->response->status = HTTP_OK;
 				}
 			} catch (Exception $e) {
 				$this->response->status = HTTP_INTERNAL_SERVER_ERROR;
@@ -101,14 +84,14 @@
 		 */
 		public function ssoLogin() {
 			try {
-				$email = $this->cache->get($this->input->cookie('token'));
-				if($email && $email == $this->input->cookie('user')) {
+				$email = $this->cache->get(base64_decode($this->input->cookie('token')));
+				if($email && $email == $this->input->cookie('useremail')) {
 					//load user data
 					$user = new Budget_DataModel_UserDM(['Email' => $email]);
 					if(!$user->getId()) {
 						redirect(COMPANY_LOGOUT_REDIRECT);
 					}
-					$login_array = ['Username' => $user->getUsername(), 'Password' => $user->getPassword()];
+					$login_array = [$user->getUsername(), $user->getPassword()];
 
 					$this->auth->process_login($login_array, true);
 					$this->auth->redirect();
@@ -117,8 +100,11 @@
 				}
 			} catch (Exception $e) {
 				$this->response->status = HTTP_INTERNAL_SERVER_ERROR;
+				$this->response->message = 'There was a problem authorizing you with the budget.';
 				log_message(LOG_LEVEL_ERROR, $e->getMessage());
 			}
+
+			echo json_encode($this->response);
 		}
 
 		/**

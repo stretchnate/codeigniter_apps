@@ -10,6 +10,8 @@
 //upon receiving token client opens iframe to http://<budgeturl>/sso/User/getCookie/<access_token>
 //if needed - check for cookie set by posting [access_token => <access_token>] to http://<budgeturl>/sso/User/checkCookie until a 200 status_code is received
 //after cookie is set, client redirects user to http://<budgeturl>/sso/User/ssoLogin
+//setcookie('chocolatechip', 'woot!', (time()+180), '/', 'stretchnate.com', false, true);
+die("hello world");
 	$qc = new QuantumConnect();
 
 	$qc->userLogin();
@@ -32,7 +34,7 @@
 			$result = json_decode($this->send(self::BUDGET_URL.'userLogin', $post_fields));
 
 			if($result->status == 200) {
-				$this->getCookie($result->url, $result->access_token, $user_email);
+				$this->showIFrame($result->iframe_url, $result->access_token);
 			} else {
 				$this->showError();
 			}
@@ -55,7 +57,7 @@
 					</script>
 				</head>
 				<body>
-					<div>There was a problem fulfilling your request. You will be redirected back to the home page in a moment.</div>
+					<div>There was a problem fulfilling your request, you will be redirected back home shortly.</div>
 				</body>
 			</html>
 			<?php
@@ -66,7 +68,7 @@
 		 *
 		 * @param string $url
 		 */
-		private function getCookie($url, $access_token, $email) {
+		private function showIFrame($url, $access_token) {
 			$redirect = self::BUDGET_URL.'ssoLogin';
 			?>
 			<html>
@@ -74,10 +76,20 @@
 					<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 					<script type="text/javascript">
 						$(document).ready(function() {
+//							$.post('<?=$url;?>', {access_token:'<?=$access_token;?>'}, function(response) {
+//								if(response.status === 200) {
+//									window.location.replace("<?=$redirect;?>");
+//								}
+//							}, 'json');
+//							if($("#quantum-iframe").attr("src")) {
+//								window.setTimeout(function() {
+//									window.location.replace("<?=$redirect;?>");
+//								}, 5000);
+//							}
 							$.ajax({
 								url:'<?=$url;?>',
 								type: "POST",
-								data: {access_token:'<?=$access_token;?>', email:'<?=$email;?>'},
+								data: {access_token:'<?=$access_token;?>'},
 								dataType: 'json',
 								xhrFields: {
 									withCredentials: true
@@ -86,16 +98,6 @@
 								success: function(response) {
 									if(response.status === 200) {
 										window.location.replace("<?=$redirect;?>");
-									} else {
-										var message = 'There was a problem fulfilling your request.';
-										if(response.message) {
-											message = response.message;
-										}
-										message += ' You will be redirected back to the home page in a moment.';
-										$('body').append('<div>'+message+'</div>');
-										window.setTimeout(function() {
-											window.location.replace('/');
-										}, 8000);
 									}
 								}
 							});
@@ -103,6 +105,7 @@
 					</script>
 				</head>
 				<body>
+					<!--<iframe src="<?= $url; ?>" id="quantum-iframe"></iframe>-->
 				</body>
 			</html>
 			<?php
