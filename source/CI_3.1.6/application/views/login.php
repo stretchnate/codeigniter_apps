@@ -30,7 +30,7 @@ function showAd($ad_type) {
 <body>
 	<div class="container-fluid">
 		<div id="header" class="border">
-			<h1><img id="logo" class="navbar-brand" src="/images/logo_transparent_background.png" alt="<?= COMPANY_NAME; ?>" /></h1>
+			<h1><img id="logo" class="navbar-brand" src="/images/logo.png" alt="<?= COMPANY_NAME; ?>" /></h1>
 		</div>
 
 		<?php
@@ -55,7 +55,7 @@ function showAd($ad_type) {
 			</div>
 			<div id="copy">
 				&copy;2010-<?php $year = date('Y'); echo $year;?> <?=COMPANY_NAME;?>
-				<div class="quantum">Powered by <img src="/images/logo_transparent_background.png" height="20px" /></div>
+				<div class="quantum">Powered by <img src="/images/quantum_logo_transparent_bg.png" height="20px" /></div>
 			</div>
 		</div>
 		<?= showAd(AdFactory::AD_AUTO); ?>

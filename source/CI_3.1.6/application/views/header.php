@@ -38,7 +38,7 @@ header("Pragma: no-cache");
 		<div class="container">
 			<div id="header">
 				<h1>
-					<a href="/"><img id="logo" class="navbar-brand" src="/images/logo_transparent_background.png" alt="<?= COMPANY_NAME; ?>" /></a>
+					<a href="/"><img id="logo" class="navbar-brand" src="/images/logo.png" alt="<?= COMPANY_NAME; ?>" /></a>
 				</h1>
 			</div>
 			<div class="navbar-header">
