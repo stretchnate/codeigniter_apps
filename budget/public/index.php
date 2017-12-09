@@ -89,8 +89,8 @@ switch (ENVIRONMENT)
 		exit(1); // EXIT_ERROR
 }
 
-defined('COMPANY_NAME')            OR define('COMPANY_NAME', 'Quantum'); //Quantum
-defined('COMPANY_LOGOUT_REDIRECT') OR define('COMPANY_LOGOUT_REDIRECT', 'http://stretchnate.ddns.net');//for mara just set this to http://whyibudget.com
+defined('COMPANY_NAME')            OR define('COMPANY_NAME', 'WhyIBudget'); //Quantum
+defined('COMPANY_LOGOUT_REDIRECT') OR define('COMPANY_LOGOUT_REDIRECT', 'http://whyibudget.com');//for mara just set this to http://whyibudget.com
 
 /*
  *---------------------------------------------------------------

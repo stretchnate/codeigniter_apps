@@ -11,7 +11,7 @@
             ?>
         </div>
         <div id="copy">
-            &copy;2010-<?php $year = date('Y'); echo $year;?> <?=COMPANY_NAME;?>
+            &copy; <?php $year = date('Y'); echo $year;?> <?=strtolower(COMPANY_NAME);?>.com
 			<div class="quantum">Powered by <img src="/images/quantum_logo_transparent_bg.png" height="20px" /></div>
         </div>
 	</div>

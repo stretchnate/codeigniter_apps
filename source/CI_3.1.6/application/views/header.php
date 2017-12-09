@@ -35,8 +35,8 @@ header("Pragma: no-cache");
 	<script type="text/javascript" src="/javascript/nav.js"></script>
 </head>
 <body>
-	<nav class="navbar navbar-default">
-		<div class="container">
+	<div class="container-fluid">
+		<nav class="navbar navbar-default">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
 					<span class="sr-only">Toggle navigation</span>
@@ -44,7 +44,7 @@ header("Pragma: no-cache");
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="/" title="Quantum"><img id="logo" class="navbar-brand" src="/images/logo.png" alt="<?= COMPANY_NAME; ?>" /></a>
+				<a class="navbar-brand" href="/" title="<?= COMPANY_NAME; ?>"><img id="logo" class="navbar-brand" src="/images/logo.jpg" alt="<?= COMPANY_NAME; ?>" /></a>
 			</div>
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav navbar-right">
@@ -63,9 +63,9 @@ header("Pragma: no-cache");
 					echo $nav->getUl();
 				?>
 			</div>
-		</div>
-	</nav>
-	<div class="container">
+		</nav>
+	</div>
+	<div class="container-fluid">
 		<div id="content">
 			<div class="error">
 				<?php
