@@ -34,11 +34,6 @@ header("Pragma: no-cache");
 <body>
 	<nav class="navbar navbar-default">
 		<div class="container">
-			<div id="header">
-				<h1>
-					<a href="/"><img id="logo" class="navbar-brand" src="/images/logo.png" alt="<?= COMPANY_NAME; ?>" /></a>
-				</h1>
-			</div>
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
 					<span class="sr-only">Toggle navigation</span>
@@ -46,13 +41,9 @@ header("Pragma: no-cache");
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#" title="Quantum">Q</a>
+				<a class="navbar-brand" href="/" title="Quantum"><img id="logo" class="navbar-brand" src="/images/logo.png" alt="<?= COMPANY_NAME; ?>" /></a>
 			</div>
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-				<?php
-					$nav = new NavigationUlLIB("main_nav", "nav navbar-nav");
-					echo $nav->getUl();
-				?>
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown">
 						<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -64,6 +55,10 @@ header("Pragma: no-cache");
 						</ul>
 					</li>
 				</ul>
+				<?php
+					$nav = new NavigationUlLIB("main_nav", "nav navbar-nav navbar-right");
+					echo $nav->getUl();
+				?>
 			</div>
 		</div>
 	</nav>

@@ -40,6 +40,10 @@ class Auth {
 		$this->CI->db->limit(1);
 		$query = $this->CI->db->get();
 
+		if(!$query->num_rows()) {
+			return false;
+		}
+
 		$verified = $preverified === true ? $preverified : password_verify($login[1], $query->row()->Password);
 
 		if ($query->num_rows() == 1 && $verified) {

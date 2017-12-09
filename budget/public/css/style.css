@@ -10,10 +10,56 @@
 }
 
 #logo {
-    height:150px;
-    float:none;
-    padding:0;
+    height:65px;
+/*    float:none;
+    padding:0;*/
 }
+
+.navbar-default {
+    /*background-color: #00A3EF;*/
+}
+
+.navbar-brand {
+    padding: 5px;
+    height: 75px;
+}
+
+.navbar-nav {
+    margin-top: 25px;
+}
+
+.navbar-default .navbar-nav li a {
+    /*color: #FFFFFF;*/
+}
+
+.navbar-default ul.dropdown-menu {
+    /*background-color: #00A3EF;*/
+}
+
+.dropdown-menu li a:focus, .dropdown-menu li a:hover {
+    /*color: #262626;*/
+}
+
+.nav.nav-tabs li a {
+    /*color: #00A3EF;*/
+    /*border: 1px solid #DDDDDD;*/
+    border-bottom: none;
+}
+
+.nav.nav-tabs li.active {
+    background-color: #FFFFFF !important;
+}
+
+.nav.nav-tabs li.active a, .nav.nav-tabs li a:hover {
+    /*color: #555555;*/
+    /*background-color: #DDDDDD;*/
+    border-radius: 4px 4px 0 0;
+}
+
+.no-margin {
+    margin: 0 !important;
+}
+
 
 .active {
     background-color:#c9c9c9 !important;
@@ -25,4 +71,25 @@
 
 .error {
     color: #a94442;
+}
+
+.btn-primary {
+    /*background-color: #269DD2;*/
+}
+
+.btn-info {
+    /*background-color: #ffffff;*/
+    /*color: #13497E;*/
+    /*border: solid 2px #13497E;*/
+}
+
+.btn-info.focus, .btn-info:focus, .btn-info:hover {
+    /*background-color: #ffffff;*/
+    /*color: #7BC6E6;*/
+    /*border-color: #7BC6E6;*/
+}
+
+#footer {
+    /*background-color: #9ED3FC;*/
+    margin-top: 10px;
 }
