@@ -14,13 +14,13 @@ function showAd($ad_type) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Quantum - Login</title>
+    <title><?= COMPANY_NAME; ?> - Login</title>
 	<meta charset='utf-8'>
 	<!-- ensure proper mobile rendering and touch zooming with the following tag -->
 	<meta name='viewport' content='width=device-width, initial-scale=1'>
 	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
 	<link rel="shortcut icon" href="<?php echo IMG_PATH; ?>favicon.ico"/>
-	<link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH; ?>main.css" />
+	<link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH; ?>style.css" />
 	<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js'></script>
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js'></script>
 	<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>

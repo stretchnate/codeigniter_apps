@@ -3,6 +3,8 @@
     Author     : stretch
 */
 
+@import 'main.css';
+
 #header {
     text-align:center;
 }
