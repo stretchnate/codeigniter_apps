@@ -210,7 +210,7 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 			$due_day = new DateTime($this->due_day);
 			switch($due_months_total) {
 				case 1: //annually
-					$due_date = $due_day;
+					$increment = 12;
 					break;
 
 				case 2: //semi-annually
@@ -228,13 +228,12 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 			}
 
 			if(isset($increment)) {
+				$i = 0;
 				foreach($this->due_months as $due_month) {
 					if($due_month == $today->format('n')) {
-						if($due_day->format('j') >= $today->format('j')) {
-							$i = '6';
+						if($due_day->format('j') < $today->format('j')) {
+							$i = $increment;
 						}
-
-						$i = $due_month - $today->format('n');
 					} elseif($due_month > $today->format('n')) {
 						$i = $due_month - $today->format('n');
 					}

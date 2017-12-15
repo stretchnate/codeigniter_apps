@@ -256,17 +256,22 @@ class Book extends N8_Controller {
 
 	function saveChange($id) {
 		$this->auth->restrict();
+
+		$due_date = null;
+		if(strpos($this->input->post('dueDay'), '/')) {
+			$due_date = $this->input->post('dueDay');
+		}
 		try {
 			$category_dm = new Budget_DataModel_CategoryDM($id, $this->session->userdata('user_id'));
 
 			$category_dm->setParentAccountId($this->input->post('account'));
 			$category_dm->setCategoryName($this->input->post('name'));
 			$category_dm->setAmountNecessary($this->input->post('nec'));
-			$category_dm->setDueDay($this->input->post('dueDay'));
+			$category_dm->setDueDay($due_date);
 			$category_dm->setPriority($this->input->post('priority'));
 			$category_dm->setDueMonths(
 				$this->calculateDueMonths(
-					$this->input->post('dueDay'),
+					$due_date,
 					$this->input->post('bill_schedule')
 				)
 			);
