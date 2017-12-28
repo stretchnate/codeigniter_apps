@@ -46,10 +46,8 @@
 					$i = 0;
 
 					if(!is_array($this->totals_array) || count($this->totals_array) < 1) {
-						echo "<h3>Please <a class='button border' href='/accountCTL/addNewAccount'>add a new Account</a></h3>";
-					}
-
-					if(is_array($this->totals_array)) {
+						echo $this->showAddAccount();
+					}else if(is_array($this->totals_array)) {
 						foreach($this->totals_array as $total) {
                             $account_dm = $total->getAccountDM();
 
@@ -140,7 +138,7 @@
 								<?php
 									}
 								} else {
-									echo "<h3>Please <a style='color:#6fa7d1' href='/book/newBookForm'>add categories</a> to this Account</h3>";
+									echo $this->showAddCategories();
 								}
 								?>
 							</div>
@@ -152,6 +150,31 @@
 				</div>
 			</div>
 <?php
+		}
+
+		private function showAddAccount() {
+			$content = "<h3>Please add an Account</h3>"
+					. "Now that you're registered you'll need to create an account to represent your bank account,"
+					. " piggy bank, mayonaise jar or whatever it is you use to store your cash. Don't worry,"
+					. " we don't ask for any financial or personal information, we are simply simulating your bank"
+					. " account so we can help you organize it. in fact all we ask for is a name for your account"
+					. " and how often you get paid. The name is so you know which account your working with and the pay"
+					. " schedule is so we can calculate the best way to organize your money.";
+			$content .= "<br><br><a class='btn btn-primary' href='/accountCTL/addNewAccount'>add a new Account</a>";
+
+			return $content;
+		}
+		private function showAddCategories() {
+			$content = "<h3>Please add Categories to this Account</h3>"
+					. "<p>Now that you have an account created you can begin adding categories. We ask for a little bit more"
+					. " information on these but we are still careful to not ask for any personal or financial details."
+					. " You can add as many categories as you would like, for example, you might want a category for"
+					. " rent/mortgage, and another for car payment, perhaps groceries and gas would be good to have."
+					. " you can be as broad or as detailed as you want, whatever helps you take control of your finances.</p>";
+
+			$content .= "<br><br><a class='btn btn-primary' href='/book/newBookForm'>add a category</a></h3>";
+
+			return $content;
 		}
 
 		public function setLastTransaction($last_transaction) {
