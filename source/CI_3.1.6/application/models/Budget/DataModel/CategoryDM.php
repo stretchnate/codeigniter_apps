@@ -232,14 +232,26 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 				foreach($this->due_months as $due_month) {
 					if($due_month == $today->format('n')) {
 						if($due_day->format('j') < $today->format('j')) {
+							//if our due months are equal but we've passed the due day increment months by whatever is set up above
 							$i = $increment;
+						} else {
+							//if our due months are equal but we haven't passed the due day yet set the proper due date to this month
+							$due_date->setDate($today->format('Y'), $today->format('n'), $due_day->format('j'));
+							break;
 						}
 					} elseif($due_month > $today->format('n')) {
-						$i = $due_month - $today->format('n');
+//						if($due_day->format('j') < $today->format('j')) {
+							//if our due month is greater than this month but the due day is less than todays day increment months by whatever is set up above
+							$i = $due_month - $today->format('n');
+//						} else {
+//							$due_date->setDate($today->format('Y'), $due_day->format('n'), $due_day->format('j'));
+//							break;
+//						}
 					}
 
-					if(isset($i)) {
+					if($i > 0) {
 						$format = new DateInterval("P{$i}M");
+						break;
 					}
 				}
 			}
