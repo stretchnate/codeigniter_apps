@@ -46,17 +46,17 @@ header("Pragma: no-cache");
 		<div>
 			<form name="registerForm" id="registerForm" action="/admin/registerUser/" method="post">
 				<div class='form-group'>
-					<input type="text" id="username" class="form-control" name="username" size="32" value="<?= isset($_POST['username']) ? $_POST['username'] : 'Username'; ?>" required>
+					<input type="text" placeholder="Username" id="username" class="form-control" name="username" size="32" value="<?= isset($_POST['username']) ? $_POST['username'] : ''; ?>" required>
 					<span class="ajaxResult result">&nbsp;</span>
 				</div>
 				<div class='form-group'>
-					<input type="password" id="password" class="form-control" name="password" size="32" value="Password" required>
+					<input type="password" placeholder="Password" id="password" class="form-control" name="password" size="32" value="" required>
 				</div>
 				<div class='form-group'>
-					<input type="password" id="confirm_password" class="form-control" name="confirm_password" size="32" value="Confirm Password" required>
+					<input type="password" placeholder="Confirm Password" id="confirm_password" class="form-control" name="confirm_password" size="32" value="" required>
 				</div>
 				<div class='form-group'>
-					<input type="text" id="email" class="email form-control" name="email" size="32" value="<?= isset($_POST['email']) ? $_POST['email'] : 'Email'; ?>" required>
+					<input type="text" placeholder="Email" id="email" class="email form-control" name="email" size="32" value="<?= isset($_POST['email']) ? $_POST['email'] : ''; ?>" required>
 					<input type="hidden" name="charitable" value="0" />
 				</div>
 

@@ -80,7 +80,7 @@
 			</div>
 		</div>
 		<div class='form-group'>
-			<input type="text" class="required money form-control" name="amount" id="amount" value="Amount" />
+			<input type="number" step="0.01" placeholder="Amount" class="required money form-control" name="amount" id="amount" value="" />
 		</div>
 		<input type="submit" value="Transfer" class="btn btn-primary" />
 	</form>

@@ -22,30 +22,6 @@ $(function() {
         var new_val = $(this).val().replace(/[\D]/g, '');
         $(this).val(new_val);
     });
-
-    /**
-     * remove default value
-     */
-    $('.form-control').focus(function() {
-        var check_val = getCheckVal($(this));
-        if($(this).val() === check_val) {
-            $(this).val('');
-        }
-        textToPassword($(this));
-    });
-
-    /**
-     * add default value
-     */
-    $('.form-control').blur(function() {
-        if(!$(this).val()) {
-            var check_val = getCheckVal($(this));
-            $(this).val(check_val);
-            passwordToText($(this));
-        }
-    });
-
-    $('.form-control[name=password], .form-control[name=confirm_password], .form-control[name=confirm_new_password], .form-control[name=new_password]').attr('type', 'text');
 });
 
 function clearDefaults(form_selector) {

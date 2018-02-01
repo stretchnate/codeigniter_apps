@@ -75,8 +75,8 @@
 				<div class="form-group">
 					<input type="hidden" name="id" value="<?php echo $bookId; ?>" />
 					<input type="hidden" name="parent_account" value="<?php echo $parentAccount->account_id;?>" />
-					<div class="input-group date" data-provide="datepicker">
-						<input type="text" class="form-control" name='date' id="date" value="Date" autocomplete="off">
+					<div class="input-group date">
+						<input type="date" class="form-control" name='date' id="date" value="" placeholder="Date" autocomplete="off">
 						<div class="input-group-addon">
 							<span class="glyphicon glyphicon-calendar"></span>
 						</div>
@@ -84,7 +84,7 @@
 				</div>
 				<div class="form-group">
 					<div class="input-group">
-						<input type="text" name="description" class="form-control" id='description' value="Description" autocomplete="off" />
+						<input type="text" name="description" class="form-control" id='description' placeholder="Description" value="" autocomplete="off" />
 						<div class="input-group-addon">
 							<span class="glyphicon glyphicon-pencil"></span>
 						</div>
@@ -92,7 +92,7 @@
 				</div>
 				<div class="form-group">
 					<div class="input-group">
-						<input type="text" class="required number money form-control" name="amount" id='amount' value="Amount" autocomplete="off" />
+						<input type="number" class="required number money form-control" name="amount" id='amount' placeholder="Amount" step="0.01" autocomplete="off" />
 						<div class="input-group-addon">
 							<span class="glyphicon glyphicon-usd"></span>
 						</div>

@@ -48,12 +48,12 @@
 						</select>
 					</div>
 					<div class='form-group'>
-						<input type="text" name="name" id="name" class='form-control' value="<?= $this->category_dm ? $this->category_dm->getCategoryName() : 'Name'; ?>" required>
+						<input type="text" name="name" placeholder="Name" id="name" class='form-control' value="<?= $this->category_dm ? $this->category_dm->getCategoryName() : ''; ?>" required>
 						<div class="ajaxResult result"></div>
 					</div>
 					<div class='form-group'>
 						<div class="input-group">
-							<input type="text" class="money form-control" name="nec" id="amount_due" value="<?= $this->category_dm ? $this->category_dm->getAmountNecessary() : 'Amount Due';?>" required>
+							<input type="number" step="0.01" class="money form-control" name="nec" placeholder="Amount Due" id="amount_due" value="<?= $this->category_dm ? $this->category_dm->getAmountNecessary() : '';?>" required>
 							<div class="input-group-addon">
 								<span class="glyphicon glyphicon-usd"></span>
 							</div>
@@ -63,7 +63,7 @@
 					if(!isset($this->category_dm)) {?>
 					<div class='form-group'>
 						<div class="input-group">
-							<input type="text" class="money form-control" name="startAmt" id="starting_amount" value="Starting Amount" required>
+							<input type="number" step="0.01" placeholder="Starting Amount" class="money form-control" name="startAmt" id="starting_amount" value="" required>
 							<div class="input-group-addon">
 								<span class="glyphicon glyphicon-usd"></span>
 							</div>
@@ -114,8 +114,11 @@
 						</select>
 					</div>
 					<div class="form-group">
-						<div class="input-group date" data-provide='datepicker'>
-							<input type="text" class="form-control" name="dueDay" id="next_due_date" value="<?= $this->category_dm ? $this->category_dm->getDueDay() : 'Next Due Date'; ?>" autocomplete="off">
+						<div class="input-group date">
+<?php
+	dbo($this->category_dm->getDueDay());
+	?>
+							<input type="date" class="form-control" name="dueDay" id="next_due_date" value="<?= $this->category_dm ? $this->category_dm->getDueDay() : ''; ?>" autocomplete="off">
 							<div class="input-group-addon">
 								<span class="glyphicon glyphicon-calendar"></span>
 							</div>

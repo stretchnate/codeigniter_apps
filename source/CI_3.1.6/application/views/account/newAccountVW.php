@@ -7,7 +7,7 @@
 		<form name="newAccountForm" id="newAccountForm" action="/accountCTL/saveAccount/" method="post">
 			<div class="form-group">
 				<input type="hidden" name="account_id" value='<?= isset($account_dm) ? $account_dm->getAccountId() : null; ?>'>
-				<input type="text" name="name" id="name" value='<?= isset($account_dm) ? $account_dm->getAccountName() : "Name"; ?>' class='form-control' required>
+				<input type="text" name="name" id="name" placeholder="Name" value='<?= isset($account_dm) ? $account_dm->getAccountName() : ""; ?>' class='form-control' required>
 			</div>
 			<div class="form-group">
 			<?php

@@ -258,7 +258,7 @@ class Book extends N8_Controller {
 		$this->auth->restrict();
 
 		$due_date = null;
-		if(strpos($this->input->post('dueDay'), '/')) {
+		if(preg_match('/(\/|-)/', $this->input->post('dueDay'))) {
 			$due_date = $this->input->post('dueDay');
 		}
 		try {

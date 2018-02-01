@@ -48,10 +48,10 @@ function showAd($ad_type) {
 		?>
 		<form name="loginForm" action="/admin/login" method="post">
 			<div class="form-group">
-				<input type="text" class="form-control required" name="username" value="Username" id="username" />
+				<input type="text" placeholder="Username" class="form-control required" name="username" value="" id="username" />
 			</div>
 			<div class="form-group">
-				<input type="password" class="form-control required" name="password" value="Password" id="password" />
+				<input type="password" placeholder="Password" class="form-control required" name="password" value="" id="password" />
 			</div>
 			<input type="submit" class="btn btn-primary" name="submLogin" value="Log In" />
 			<a href="/admin/register/" id="register" class="btn btn-info">Register</a>
