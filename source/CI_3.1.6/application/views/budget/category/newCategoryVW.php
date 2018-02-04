@@ -115,9 +115,6 @@
 					</div>
 					<div class="form-group">
 						<div class="input-group date">
-<?php
-	dbo($this->category_dm->getDueDay());
-	?>
 							<input type="date" class="form-control" name="dueDay" id="next_due_date" value="<?= $this->category_dm ? $this->category_dm->getDueDay() : ''; ?>" autocomplete="off">
 							<div class="input-group-addon">
 								<span class="glyphicon glyphicon-calendar"></span>
