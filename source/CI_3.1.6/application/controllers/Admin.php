@@ -40,8 +40,8 @@ class Admin extends N8_Controller {
 	}
 
 	public function logout() {
-		if ($this->auth->logout())
-			redirect(COMPANY_LOGOUT_REDIRECT);
+		$this->auth->logout();
+		redirect(COMPANY_LOGOUT_REDIRECT);
 	}
 
 	public function register() {

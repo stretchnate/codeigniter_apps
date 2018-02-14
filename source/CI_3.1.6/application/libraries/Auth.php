@@ -188,6 +188,8 @@ class Auth {
 
 	public function logout() {
 		$this->updateLoginHistory(FALSE, TRUE);
+		$this->CI->session->unset_userdata('logged_user');
+		$this->CI->session->unset_userdata('user_id');
 		$this->CI->session->sess_destroy();
 		return TRUE;
 	}
