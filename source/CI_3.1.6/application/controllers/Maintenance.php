@@ -4,7 +4,7 @@ class Maintenance extends N8_Controller {
 
 	private $transaction_map = array();
 
-	function Maintenance() {
+	function __construct() {
 		parent::__construct();
 	}
 

@@ -7,7 +7,7 @@ class Auth {
 	var $login_redirect	= '/admin/login';
 	var $inactive_site  = "/inactive/";
 
-	public function Auth($props = array()) {
+	public function __construct($props = array()) {
 		$this->CI =& get_instance();
 		// Load additional libraries, helpers, etc.
 		$this->CI->load->library('session');

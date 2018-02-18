@@ -1,7 +1,7 @@
 <?php
 class AccountCTL extends N8_Controller {
 
-	function AccountCTL() {
+	function __construct() {
 		parent::__construct();
 	}
 

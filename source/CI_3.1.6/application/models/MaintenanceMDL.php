@@ -1,8 +1,8 @@
 <?php
 class MaintenanceMDL extends N8_Model {
 		
-	function MaintenanceMDL(){
-		parent::__construct();
+	function __construct(){
+            parent::__construct();
 	}
 
 	function getTransactions() {

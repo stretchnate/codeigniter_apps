@@ -2,7 +2,7 @@
 
 class Inactive extends N8_Controller {
 
-	function Inactive() {
+	function __construct() {
 		parent::__construct();
 	}
 

@@ -2,7 +2,7 @@
 
 class Admin extends N8_Controller {
 
-	public function Admin() {
+	public function __construct() {
 		parent::__construct();
 	}
 

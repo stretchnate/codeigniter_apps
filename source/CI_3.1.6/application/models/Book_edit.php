@@ -1,8 +1,8 @@
 <?php
 class Book_edit extends N8_Model {
 		
-	function Book_edit(){
-			parent::__construct();
+	function __construct(){
+            parent::__construct();
 	}
 	
 	function bookOffOn($id){

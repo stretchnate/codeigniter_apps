@@ -2,7 +2,7 @@
 
 class Utilities {
 
-	function Utilities() {
+	function __construct() {
 		$this->CI =& get_instance();
 		$this->CI->load->database();
 		$this->CI->load->model('Utils', 'UTIL', TRUE);

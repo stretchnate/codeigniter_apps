@@ -1,7 +1,7 @@
 <?php
 class Utils extends N8_Model {
 
-	function Utils(){
+	function __construct(){
 		parent::__construct();
 	}
 

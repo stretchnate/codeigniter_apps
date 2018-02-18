@@ -1,8 +1,8 @@
 <?php
 class Admin_model extends N8_Model {
 
-	function Admin_model(){
-			parent::__construct();
+	function __construct(){
+            parent::__construct();
 	}
 
 	public function checkExisting() {

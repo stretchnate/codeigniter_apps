@@ -2,8 +2,8 @@
 //to be replaced by budget/TransactionDM
 class Transactions extends N8_Model {
 		
-	function Transactions(){
-		parent::__construct();
+	function __construct(){
+            parent::__construct();
 	}
 
 	function transactionClearedBank($id) {

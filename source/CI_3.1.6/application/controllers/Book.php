@@ -1,7 +1,7 @@
 <?php
 class Book extends N8_Controller {
 
-	function Book() {
+	function __construct() {
 		parent::__construct();
 	}
 

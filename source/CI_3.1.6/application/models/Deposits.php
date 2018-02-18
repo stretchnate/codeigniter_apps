@@ -1,8 +1,8 @@
 <?php
 class Deposits extends N8_Model {
 
-	function Deposits(){
-		parent::__construct();
+	function __construct(){
+            parent::__construct();
 	}
 
 	function getDeposits($user_id, $account_id, $start_date, $end_date = null, $offset = 0, $rowsPerPage = 100) {

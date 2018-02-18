@@ -2,7 +2,7 @@
 
 class Report extends N8_Controller {
 
-	function Report() {
+	function __construct() {
 		parent::__construct();
 		$this->load->helper('html');
 		$this->load->library('utilities');

@@ -2,7 +2,7 @@
 
 class CategoryCTL extends Controller {
 
-	function CategoryCTL() {
+	function __construct() {
 		parent::__construct();
 	}
 

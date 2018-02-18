@@ -1,8 +1,8 @@
 <?php
 class Notes_model extends N8_Model {
 		
-	function Notes_model(){
-		parent::__construct();
+	function __construct(){
+            parent::__construct();
 	}
 
 	function getAllNotes($user_id, $account_id = 0) { //@TODO integrate adsense into the results before returning them.

@@ -1,8 +1,8 @@
 <?php
 class Funds_operations extends N8_Model {
 
-	function Funds_operations(){
-			parent::__construct();
+	function __construct(){
+            parent::__construct();
 	}
 
 	function insertMain($id,$data){

@@ -1,7 +1,7 @@
-<?
+<?php
 class Notes extends N8_Controller {
 
-	function Welcome() {
+	function __construct() {
 		parent::__construct();
 		$this->load->library('utilities');
 		$this->load->helper('html');

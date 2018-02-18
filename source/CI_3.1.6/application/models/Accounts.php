@@ -1,7 +1,7 @@
 <?php
 class Accounts extends Book_info {
 
-	function Accounts(){
+	function __construct(){
 		parent::__construct();
 	}
 

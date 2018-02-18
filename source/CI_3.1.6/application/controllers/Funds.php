@@ -4,7 +4,7 @@ class Funds extends N8_Controller {
     /**
      * constructor
      */
-	function Funds() {
+	function __construct() {
 		parent::__construct();
 		$this->load->library('account');
 		$this->load->model("Book_info");

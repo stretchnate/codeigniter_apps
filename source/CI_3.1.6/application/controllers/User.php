@@ -2,7 +2,7 @@
 
 class User extends N8_Controller {
 
-	function User() {
+	function __construct() {
 		parent::__construct();
 	}
 

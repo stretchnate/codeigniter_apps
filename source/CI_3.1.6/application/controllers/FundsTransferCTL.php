@@ -1,7 +1,7 @@
 <?php
 class fundsTransferCTL extends N8_Controller {
 
-	function fundsTransferCTL() {
+	function __construct() {
 		parent::__construct();
 		$this->load->library('account');
 	}

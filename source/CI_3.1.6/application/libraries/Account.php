@@ -5,7 +5,7 @@
  */
 class Account {
 
-	function Account() {
+	function __construct() {
 		$this->CI =& get_instance();
 		$this->CI->load->database();
 	}

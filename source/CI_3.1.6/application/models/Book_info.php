@@ -1,7 +1,7 @@
 <?php
 class Book_info extends N8_Model {
 
-	function Book_info(){
+	function __construct(){
 		parent::__construct();
 	}
 
