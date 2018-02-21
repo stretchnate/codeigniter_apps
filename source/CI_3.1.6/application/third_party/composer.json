@@ -1,0 +1,12 @@
+{
+    "name": "stretch/quantum",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Stretch",
+            "email": "stretchnate@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
