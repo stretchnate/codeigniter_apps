@@ -10,11 +10,11 @@ namespace Plaid\IdentityResponse\Identity;
 
 
 /**
- * Class Email
+ * Class Phone
  *
  * @package Plaid\IdentityResponse\Identity
  */
-class Email {
+class Phone {
 
     /**
      * @var string
@@ -37,7 +37,7 @@ class Email {
     private $raw_response;
 
     /**
-     * Email constructor.
+     * Phone constructor.
      *
      * @param \stdClass $raw_response
      */
@@ -57,7 +57,7 @@ class Email {
 
     /**
      * @param string $data
-     * @return Email
+     * @return Phone
      */
     public function setData($data) {
         $this->data = $data;
@@ -74,7 +74,7 @@ class Email {
 
     /**
      * @param bool $primary
-     * @return Email
+     * @return Phone
      */
     public function setPrimary($primary) {
         $this->primary = $primary;
@@ -91,7 +91,7 @@ class Email {
 
     /**
      * @param string $type
-     * @return Email
+     * @return Phone
      */
     public function setType($type) {
         $this->type = $type;
