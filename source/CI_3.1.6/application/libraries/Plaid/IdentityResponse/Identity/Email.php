@@ -7,6 +7,7 @@
  */
 
 namespace Plaid\IdentityResponse\Identity;
+use Plaid\Plaid;
 
 
 /**
@@ -14,7 +15,7 @@ namespace Plaid\IdentityResponse\Identity;
  *
  * @package Plaid\IdentityResponse\Identity
  */
-class Email {
+class Email extends Plaid {
 
     /**
      * @var string
@@ -32,20 +33,15 @@ class Email {
     private $type;
 
     /**
-     * @var \stdClass
-     */
-    private $raw_response;
-
-    /**
      * Email constructor.
      *
      * @param \stdClass $raw_response
      */
     public function __construct(\stdClass $raw_response) {
-        $this->raw_response = $raw_response;
-        $this->setData($this->raw_response->data);
-        $this->setPrimary($this->raw_response->primary);
-        $this->setType($this->raw_response->type);
+        parent::__construct($raw_response);
+        $this->setData($this->getRawResponse()->data);
+        $this->setPrimary($this->getRawResponse()->primary);
+        $this->setType($this->getRawResponse()->type);
     }
 
     /**
@@ -56,30 +52,10 @@ class Email {
     }
 
     /**
-     * @param string $data
-     * @return Email
-     */
-    public function setData($data) {
-        $this->data = $data;
-
-        return $this;
-    }
-
-    /**
      * @return bool
      */
     public function isPrimary() {
         return $this->primary;
-    }
-
-    /**
-     * @param bool $primary
-     * @return Email
-     */
-    public function setPrimary($primary) {
-        $this->primary = $primary;
-
-        return $this;
     }
 
     /**
@@ -88,22 +64,4 @@ class Email {
     public function getType() {
         return $this->type;
     }
-
-    /**
-     * @param string $type
-     * @return Email
-     */
-    public function setType($type) {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * @return \stdClass
-     */
-    public function getRawResponse() {
-        return $this->raw_response;
-    }
-
 }

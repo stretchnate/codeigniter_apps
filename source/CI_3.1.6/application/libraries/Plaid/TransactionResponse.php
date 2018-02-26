@@ -17,7 +17,9 @@ use Plaid\TransactionResponse\Transaction;
  *
  * @package Plaid
  */
-class TransactionResponse {
+class TransactionResponse extends Plaid {
+
+    use RequestId, Item;
 
     /**
      * @var Account[]
@@ -30,24 +32,9 @@ class TransactionResponse {
     private $transactions;
 
     /**
-     * @var object
-     */
-    private $item;
-
-    /**
      * @var int
      */
     private $total_transactions;
-
-    /**
-     * @var string
-     */
-    private $request_id;
-
-    /**
-     * @var \stdClass
-     */
-    private $raw_response;
 
     /**
      * TransactionResponse constructor.
@@ -55,14 +42,14 @@ class TransactionResponse {
      * @param \stdClass $raw_response
      */
     public function __construct(\stdClass $raw_response) {
-        $this->raw_response = $raw_response;
+        parent::__construct($raw_response);
 
-        $this->loadAccounts($this->raw_response->accounts);
-        $this->loadTransactions($this->raw_response->transactions);
+        $this->loadAccounts($this->getRawResponse()->accounts);
+        $this->loadTransactions($this->getRawResponse()->transactions);
 
-        $this->item = $this->raw_response->item;
-        $this->total_transactions = $this->raw_response->total_transactions;
-        $this->request_id = $this->raw_response->request_id;
+        $this->total_transactions = $this->getRawResponse()->total_transactions;
+        $this->setRequestId($this->getRawResponse()->request_id);
+        $this->setItem($this->getRawResponse()->item);
     }
 
     /**
@@ -92,47 +79,10 @@ class TransactionResponse {
     }
 
     /**
-     * @param Account[] $accounts
-     * @return TransactionResponse
-     */
-    public function setAccounts($accounts) {
-        $this->accounts = $accounts;
-
-        return $this;
-    }
-
-    /**
      * @return Transaction[]
      */
     public function getTransactions() {
         return $this->transactions;
-    }
-
-    /**
-     * @param Transaction[] $transactions
-     * @return TransactionResponse
-     */
-    public function setTransactions($transactions) {
-        $this->transactions = $transactions;
-
-        return $this;
-    }
-
-    /**
-     * @return object
-     */
-    public function getItem() {
-        return $this->item;
-    }
-
-    /**
-     * @param object $item
-     * @return TransactionResponse
-     */
-    public function setItem($item) {
-        $this->item = $item;
-
-        return $this;
     }
 
     /**
@@ -141,39 +91,4 @@ class TransactionResponse {
     public function getTotalTransactions() {
         return $this->total_transactions;
     }
-
-    /**
-     * @param int $total_transactions
-     * @return TransactionResponse
-     */
-    public function setTotalTransactions($total_transactions) {
-        $this->total_transactions = $total_transactions;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRequestId() {
-        return $this->request_id;
-    }
-
-    /**
-     * @param string $request_id
-     * @return TransactionResponse
-     */
-    public function setRequestId($request_id) {
-        $this->request_id = $request_id;
-
-        return $this;
-    }
-
-    /**
-     * @return \stdClass
-     */
-    public function getRawResponse() {
-        return $this->raw_response;
-    }
-
 }

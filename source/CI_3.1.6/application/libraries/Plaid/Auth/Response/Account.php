@@ -9,12 +9,13 @@
 namespace Plaid\Auth\Response;
 
 use Plaid\Auth\Response\Account\Balances;
+use Plaid\Plaid;
 
 /**
  * Class Account
  * @package Plaid\Response
  */
-class Account {
+class Account extends Plaid {
 
     /**
      * @var int
@@ -52,29 +53,24 @@ class Account {
     private $type;
 
     /**
-     * @var \stdClass
-     */
-    private $raw_response;
-
-    /**
      * Account constructor.
      * @param $raw_response
      */
     public function __construct($raw_response) {
-        $this->raw_response = $raw_response;
-        $this->setAccountId($this->raw_response->account_id);
-        $this->parseBalances($this->raw_response->balances);
-        $this->setMask($this->raw_response->mask);
-        $this->setName($this->raw_response->name);
-        $this->setOfficialName($this->raw_response->official_name);
-        $this->setSubtype($this->raw_response->subtype);
-        $this->setType($this->raw_response->type);
+        parent::__construct($raw_response);
+        $this->account_id = $this->getRawResponse()->account_id;
+        $this->loadBalances($this->getRawResponse()->balances);
+        $this->mask = $this->getRawResponse()->mask;
+        $this->name = $this->getRawResponse()->name;
+        $this->official_name = $this->getRawResponse()->official_name;
+        $this->subtype = $this->getRawResponse()->subtype;
+        $this->type = $this->getRawResponse()->type;
     }
 
     /**
      * @param $balances
      */
-    private function parseBalances($balances) {
+    private function loadBalances($balances) {
         foreach($balances as $balance) {
             $this->balances[] = new Balances($balance);
         }
@@ -88,28 +84,10 @@ class Account {
     }
 
     /**
-     * @param int $account_id
-     * @return Account
-     */
-    public function setAccountId($account_id) {
-        $this->account_id = $account_id;
-        return $this;
-    }
-
-    /**
      * @return Balances[]
      */
     public function getBalances() {
         return $this->balances;
-    }
-
-    /**
-     * @param Balances[] $balances
-     * @return Account
-     */
-    public function setBalances($balances) {
-        $this->balances = $balances;
-        return $this;
     }
 
     /**
@@ -120,28 +98,10 @@ class Account {
     }
 
     /**
-     * @param string $mask
-     * @return Account
-     */
-    public function setMask($mask) {
-        $this->mask = $mask;
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getName() {
         return $this->name;
-    }
-
-    /**
-     * @param string $name
-     * @return Account
-     */
-    public function setName($name) {
-        $this->name = $name;
-        return $this;
     }
 
     /**
@@ -152,28 +112,10 @@ class Account {
     }
 
     /**
-     * @param string $official_name
-     * @return Account
-     */
-    public function setOfficialName($official_name) {
-        $this->official_name = $official_name;
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getSubtype() {
         return $this->subtype;
-    }
-
-    /**
-     * @param string $subtype
-     * @return Account
-     */
-    public function setSubtype($subtype) {
-        $this->subtype = $subtype;
-        return $this;
     }
 
     /**
@@ -182,21 +124,4 @@ class Account {
     public function getType() {
         return $this->type;
     }
-
-    /**
-     * @param string $type
-     * @return Account
-     */
-    public function setType($type) {
-        $this->type = $type;
-        return $this;
-    }
-
-    /**
-     * @return \stdClass
-     */
-    public function getRawResponse() {
-        return $this->raw_response;
-    }
-
 }
