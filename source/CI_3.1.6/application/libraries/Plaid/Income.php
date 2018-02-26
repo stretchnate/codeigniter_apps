@@ -16,38 +16,23 @@ namespace Plaid;
  */
 class Income extends Plaid {
 
-    /**
-     * @var object
-     */
-    private $item;
+    use RequestId, Item;
 
     /**
      * @var \Plaid\Income\Response\Income
      */
     private $income;
 
-    /**
-     * @var string
-     */
-    private $request_id;
-
-    /**
+   /**
      * Income constructor.
      *
      * @param $raw_response
      */
     public function __construct($raw_response) {
         parent::__construct($raw_response);
-        $this->item = $this->raw_response->item;
-        $this->income = new Income\Response\Income($this->raw_response->income);
-        $this->request_id = $this->raw_response->request_id;
-    }
-
-    /**
-     * @return object
-     */
-    public function getItem() {
-        return $this->item;
+        $this->income = new Income\Response\Income($this->getRawResponse()->income);
+        $this->setRequestId($this->getRawResponse()->request_id);
+        $this->setItem($this->getRawResponse()->item);
     }
 
     /**
@@ -55,12 +40,5 @@ class Income extends Plaid {
      */
     public function getIncome() {
         return $this->income;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRequestId() {
-        return $this->request_id;
     }
 }
