@@ -19,7 +19,7 @@ abstract class Plaid {
     /**
      * @var \stdClass
      */
-    protected $raw_response;
+    private $raw_response;
 
     /**
      * Plaid constructor.
@@ -28,6 +28,8 @@ abstract class Plaid {
      */
     public function __construct(\stdClass $raw_response) {
         $this->raw_response = $raw_response;
+        $this->item = isset($raw_response->item) ? $raw_response->item : null;
+        $this->request_id = isset($raw_response->request_id) ? $raw_response->request_id : null;
     }
 
     /**
@@ -36,5 +38,4 @@ abstract class Plaid {
     public function getRawResponse() {
         return $this->raw_response;
     }
-
 }

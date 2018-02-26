@@ -17,7 +17,9 @@ use Plaid\IdentityResponse\Identity;
  *
  * @package Plaid
  */
-class IdentityResponse {
+class IdentityResponse extends Plaid {
+
+    use RequestId, Item;
 
     /**
      * @var Account[]
@@ -30,31 +32,16 @@ class IdentityResponse {
     private $identity;
 
     /**
-     * @var object
-     */
-    private $item;
-
-    /**
-     * @var string
-     */
-    private $request_id;
-
-    /**
-     * @var \stdClass
-     */
-    private $raw_response;
-
-    /**
      * IdentityResponse constructor.
      *
      * @param \stdClass $raw_response
      */
     public function __construct(\stdClass $raw_response) {
-        $this->raw_response = $raw_response;
-        $this->loadAccounts($this->raw_response->accounts);
-        $this->setIdentity(new IdentityResponse\Identity($this->raw_response->identity));
-        $this->setItem($this->raw_response->item);
-        $this->setRequestId($this->raw_response->request_id);
+        parent::__construct($raw_response);
+        $this->loadAccounts($this->getRawResponse()->accounts);
+        $this->identity = new IdentityResponse\Identity($this->getRawResponse()->identity);
+        $this->setItem($this->getRawResponse()->item);
+        $this->setRequestId($this->getRawResponse()->request_id);
     }
 
     /**
@@ -74,70 +61,9 @@ class IdentityResponse {
     }
 
     /**
-     * @param Account[] $accounts
-     * @return IdentityResponse
-     */
-    public function setAccounts($accounts) {
-        $this->accounts = $accounts;
-
-        return $this;
-    }
-
-    /**
      * @return Identity
      */
     public function getIdentity() {
         return $this->identity;
-    }
-
-    /**
-     * @param Identity $identity
-     * @return IdentityResponse
-     */
-    public function setIdentity($identity) {
-        $this->identity = $identity;
-
-        return $this;
-    }
-
-    /**
-     * @return object
-     */
-    public function getItem() {
-        return $this->item;
-    }
-
-    /**
-     * @param object $item
-     * @return IdentityResponse
-     */
-    public function setItem($item) {
-        $this->item = $item;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRequestId() {
-        return $this->request_id;
-    }
-
-    /**
-     * @param string $request_id
-     * @return IdentityResponse
-     */
-    public function setRequestId($request_id) {
-        $this->request_id = $request_id;
-
-        return $this;
-    }
-
-    /**
-     * @return \stdClass
-     */
-    public function getRawResponse() {
-        return $this->raw_response;
     }
 }

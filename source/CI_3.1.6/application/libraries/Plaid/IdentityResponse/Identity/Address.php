@@ -10,8 +10,9 @@ namespace Plaid\IdentityResponse\Identity;
 
 
 use Plaid\Location;
+use Plaid\Plaid;
 
-class Address {
+class Address extends Plaid {
 
     /**
      * @var array
@@ -28,15 +29,31 @@ class Address {
      */
     private $primary;
 
-    /**
-     * @var \stdClass
-     */
-    private $raw_response;
-
     public function __construct($raw_response) {
-        $this->raw_response = $raw_response;
-        $this->accounts = $this->raw_response->accounts;
-        $this->data = new Location($this->raw_response->data);
-        $this->primary = $this->raw_response->primary;
+        parent::__construct($raw_response);
+        $this->accounts = $this->getRawResponse()->accounts;
+        $this->data = new Location($this->getRawResponse()->data);
+        $this->primary = $this->getRawResponse()->primary;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAccounts() {
+        return $this->accounts;
+    }
+
+    /**
+     * @return Location
+     */
+    public function getData() {
+        return $this->data;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPrimary() {
+        return $this->primary;
     }
 }
