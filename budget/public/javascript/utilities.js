@@ -22,6 +22,10 @@ $(function() {
         var new_val = $(this).val().replace(/[\D]/g, '');
         $(this).val(new_val);
     });
+
+    $('input[type=submit]').click(function() {
+        $(this).attr('disabled', 'disabled');
+    });
 });
 
 function clearDefaults(form_selector) {

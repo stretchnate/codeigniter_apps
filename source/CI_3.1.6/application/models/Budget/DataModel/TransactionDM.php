@@ -214,7 +214,7 @@ class Budget_DataModel_TransactionDM extends N8_Model {
 	//account to category deposits
 	protected function isAccountToCategoryDeposit() {
 		if($this->getFromAccount() && $this->getToCategory()) {
-			if( !$this->getToAccount() && !$this->getFromCategory() && !$this->getDepositId() ) {
+			if(!$this->getToAccount() && !$this->getFromCategory()) {
 				return true;
 			}
 		}

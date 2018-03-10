@@ -62,7 +62,14 @@
 								<div class='well'>
 									<div class="category-container">
 										<label>Amount to distribute:</label>
-										<div class="inline-block align-right">$<?php echo number_format($account_dm->getAccountAmount(),2, '.', ',') ?></div>
+										<div class="inline-block align-right" id="distribute_<?php echo $account_dm->getAccountId();?>">
+											$<?php echo number_format($account_dm->getAccountAmount(),2, '.', ',') ?>
+											<?php
+												if($account_dm->getAccountAmount() > 0) { ?>
+											<sup><a href="javascript:void(0)" onclick="clearAccount(<?php echo $account_dm->getAccountId();?>)">Clear</a></sup>
+											<?php
+												} ?>
+										</div>
 									</div>
 									<div class="category-container">
 										<label>Account Balance:</label>

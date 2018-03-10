@@ -160,6 +160,7 @@ class Funds extends N8_Controller {
 									$transaction = new Budget_DataModel_TransactionDM();
 									$transaction->setToCategory($category->getCategoryId());
 									$transaction->setFromAccount($account_dm->getAccountId());
+									$transaction->setDepositId($deposit_id);
 									$transaction->setOwnerId($this->session->userdata("user_id"));
 									$transaction->setTransactionAmount($depositAmount);
 									$transaction->setTransactionDate($date);
@@ -331,6 +332,24 @@ class Funds extends N8_Controller {
 			show_error("There was a problem saving the change.", 500);
 			log_error('error', $e->getMessage());
 		}
+	}
+
+	/**
+	 * set account amount to 0 (does not distribute any funds)
+	 */
+	public function ajaxClearAccount() {
+		$result = new stdClass();
+		$result->success = true;
+		try {
+			$account = new Budget_DataModel_AccountDM($this->input->post('account_id', true), $this->session->userdata('user_id'));
+			$account->setAccountAmount(0);
+			$account->saveAccount();
+		} catch(Exception $e) {
+			$result->success = false;
+			log_error('error', $e->getMessage());
+		}
+
+		echo json_encode($result);
 	}
 
     /**
