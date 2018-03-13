@@ -1,23 +1,55 @@
 <?php
 
+namespace API;
+
+/**
+ * Class REST
+ *
+ * @package API
+ */
 abstract class REST {
-  protected $ch;
-  
-  protected $vendor_data;
-  
-  public $debug = false;
-  
-  public $debug_prefix = 'CURL_DEBG_';
-  
-  abstract protected function startCURL();
-  
-  abstract protected function parseResponse($response, $key);
-  
-  public function __construct($vendor_name) {
-    $this->vendor_data = new APIVendor();//new model and db table
-  }
-  
-  /**
+
+    /**
+     * @var resource
+     */
+    protected $ch;
+
+    /**
+     * @var APIVendor
+     */
+    protected $vendor_data;
+
+    /**
+     * @var bool
+     */
+    public $debug = false;
+
+    /**
+     * @var string
+     */
+    public $debug_prefix = 'CURL_DEBG_';
+
+    /**
+     * @return mixed
+     */
+    abstract protected function start();
+
+    /**
+     * @param $response
+     * @return mixed
+     */
+    abstract protected function formatResponse($response);
+
+    /**
+     * REST constructor.
+     *
+     * @param $vendor_name
+     */
+    public function __construct($vendor_name) {
+        $this->vendor_data = new APIVendor();//new model and db table
+    }
+
+    /**
      * set common curl opts
      *
      * @param int $timeout
@@ -45,7 +77,7 @@ abstract class REST {
      * @return mixed
      */
     protected function executeCurlPUT($uri, $file) {
-        
+
     }
 
     /**
@@ -53,6 +85,7 @@ abstract class REST {
      *
      * @param string $uri
      * @return mixed
+     * @throws Exception
      */
     protected function executeCurlGET($uri) {
         $this->startCURL();
@@ -68,9 +101,10 @@ abstract class REST {
     /**
      * send a curl post request
      *
-     * @param string $uri
+     * @param strin g$uri
      * @param mixed $postfields
-     * @return mixed
+     * @return mixed mixed
+     * @throws Exception
      */
     protected function executeCurlPOST($uri, $postfields) {
         $this->startCURL();
@@ -125,20 +159,5 @@ abstract class REST {
         }
 
         return $body;
-    }
-
-    /**
-     * get a vendor specific rest object
-     *
-     * @param string $vendor
-     * @return \REST_VoApps
-     */
-    public static function getVendorRESTObject($vendor) {
-        switch($vendor) {
-            case 'plaid':
-                $rest_client = new REST_Plaid();
-        }
-
-        return $rest_client;
     }
 }
