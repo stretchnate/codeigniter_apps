@@ -24,8 +24,8 @@ class Admin extends N8_Controller {
 			redirect("/inactive/");
 		}
 
-		if ($this->input->post('submLogin') != FALSE) {
-			$login = array($this->input->post('username'), $this->input->post('password'));
+		if ($this->input->post('username')) {
+			$login = array($this->input->post('username', true), $this->input->post('password', true));
 			if ($this->auth->process_login($login)) {
 				// Login successful, let's redirect.
 				$this->auth->redirect();
