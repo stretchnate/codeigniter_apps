@@ -11,10 +11,22 @@ namespace API\REST\Plaid;
 
 use API\REST\Plaid;
 
+/**
+ * Class Auth
+ *
+ * @package API\REST\Plaid
+ */
 class Auth extends Plaid {
 
+    /**
+     * @var string
+     */
     private $target = '/auth/get';
 
+    /**
+     * @return mixed|\Plaid\Auth
+     * @throws \API\Exception
+     */
     public function get() {
         $this->start();
 
@@ -28,6 +40,10 @@ class Auth extends Plaid {
         return $this->formatResponse($this->executeCurlPOST($this->target));
     }
 
+    /**
+     * @param $response
+     * @return mixed|\Plaid\Auth
+     */
     public function formatResponse($response) {
         return new \Plaid\Auth($response);
     }
