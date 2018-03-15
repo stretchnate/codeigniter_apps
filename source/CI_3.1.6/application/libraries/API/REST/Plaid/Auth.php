@@ -18,15 +18,8 @@ use API\REST\Plaid;
  */
 class Auth extends Plaid {
 
-    /**
-     * @var string
-     */
     private $target = '/auth/get';
 
-    /**
-     * @return mixed|\Plaid\Auth
-     * @throws \API\Exception
-     */
     public function get() {
         $this->start();
 

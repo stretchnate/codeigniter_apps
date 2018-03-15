@@ -15,7 +15,7 @@ abstract class REST {
     protected $ch;
 
     /**
-     * @var \API\Vendor
+     * @var APIVendor
      */
     protected $vendor_data;
 
