@@ -36,6 +36,7 @@ class Vendor extends \CI_Model {
     public function __construct(Values $values = null) {
         if($values) {
             $this->values = $values;
+            $this->load($values);
         }
     }
 
