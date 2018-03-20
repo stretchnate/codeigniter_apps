@@ -15,14 +15,17 @@ class Transactions extends Plaid {
 
     private $target = '/transactions/get';
 
+    /**
+     * @return \Plaid\TransactionResponse
+     * @throws \Exception
+     */
     public function get() {
         $this->start();
 
-        $postfields = [];
-        return $this->formatResponse($this->executeCurlPOST($this->target, $postfields));
-    }
+        $postfields = $this->dataArray($this->vendor_data->getCredentials()->token);
 
-    public function formatResponse($response) {
-        return new \Plaid\Auth($response);
+        $response = $this->post($this->target, json_encode($postfields));
+
+        return new \Plaid\TransactionResponse($this->parseResponse($response));
     }
 }

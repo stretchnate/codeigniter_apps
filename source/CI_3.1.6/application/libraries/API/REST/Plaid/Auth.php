@@ -20,24 +20,28 @@ class Auth extends Plaid {
 
     private $target = '/auth/get';
 
+    /**
+     * @return \Plaid\Auth
+     * @throws \Exception
+     */
     public function get() {
         $this->start();
 
-        $postfields = [
-            'client_id' => $this->vendor_data->getClientId(),
-            'secret' => $this->vendor_data->getSecret(),
-            'access_token' => $this->vendor_data->getAccessToken(),
-            'options' => null,
-            'account_ids' => null
-        ];
-        return $this->formatResponse($this->executeCurlPOST($this->target));
+        $postfields = $this->dataArray($this->vendor_data->getCredentials()->token);
+
+        $response = $this->post($this->target, json_encode($postfields));
+
+        return new \Plaid\Auth($this->parseResponse($response));
     }
 
     /**
-     * @param $response
+     * @param $public_token
      * @return mixed|\Plaid\Auth
+     * @throws \Exception
      */
-    public function formatResponse($response) {
-        return new \Plaid\Auth($response);
+    public function exchangeToken($public_token) {
+        $response = $this->post('item/public_token/exchange', json_encode($this->dataArray($public_token, 'public_token')));
+
+        return $this->parseResponse($response);
     }
 }

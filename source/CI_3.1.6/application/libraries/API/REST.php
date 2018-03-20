@@ -25,11 +25,6 @@ abstract class REST {
     public $debug = false;
 
     /**
-     * @var string
-     */
-    public $debug_prefix = 'CURL_DEBG_';
-
-    /**
      * @return mixed
      */
     abstract protected function start();
@@ -38,7 +33,7 @@ abstract class REST {
      * @param $response
      * @return mixed
      */
-    abstract protected function formatResponse($response);
+    abstract protected function parseResponse($response);
 
     /**
      * REST constructor.
@@ -76,7 +71,7 @@ abstract class REST {
      * @param resource $file
      * @return mixed
      */
-    protected function executeCurlPUT($uri, $file) {
+    protected function put($uri, $file) {
 
     }
 
@@ -85,9 +80,9 @@ abstract class REST {
      *
      * @param string $uri
      * @return mixed
-     * @throws Exception
+     * @throws \Exception
      */
-    protected function executeCurlGET($uri) {
+    protected function get($uri) {
         $this->startCURL();
 
         $url = $this->vendor_data->url . $uri;
@@ -95,7 +90,7 @@ abstract class REST {
         curl_setopt($this->ch, CURLOPT_URL, $url);
         curl_setopt($this->ch, CURLOPT_FORBID_REUSE, true);
 
-        return $this->sendCurl();
+        return $this->send();
     }
 
     /**
@@ -104,9 +99,9 @@ abstract class REST {
      * @param strin g$uri
      * @param mixed $postfields
      * @return mixed mixed
-     * @throws Exception
+     * @throws \Exception
      */
-    protected function executeCurlPOST($uri, $postfields) {
+    protected function post($uri, $postfields) {
         $this->startCURL();
 
         $url = $this->vendor_data->url . $uri;
@@ -115,16 +110,17 @@ abstract class REST {
         curl_setopt($this->ch, CURLOPT_POST, true);
         curl_setopt($this->ch, CURLOPT_POSTFIELDS, $postfields);
 
-        return $this->sendCurl(600);
+        return $this->send(600);
     }
 
     /**
      * send a curl request
      *
+     * @param int $timeout
      * @return mixed
-     * @throws Exception
+     * @throws \Exception
      */
-    protected function sendCurl($timeout = 90) {
+    protected function send($timeout = 90) {
         $this->setCommonOpts($timeout);
 
         if($this->debug === true) {
@@ -143,19 +139,17 @@ abstract class REST {
             $body = substr($curl_result, $header_size);
 
             $debug_info = curl_getinfo($this->ch);
-            if(class_exists('Business_Log', false)) {
-                Business_Log::logDebug($debug_info, $this->debug_prefix);
-            }
+            log_message('error', $debug_info);
         }
 
         curl_close($this->ch);
 
         if($errno) {
-            throw new Exception("Unable to process request [$errno: $error]");
+            throw new \Exception("Unable to process request [$errno: $error]");
         }
 
         if($this->debug === true && !preg_match('/200 OK/', $header)) {
-            throw new Exception("Unable to process request [".$header."]");
+            throw new \Exception("Unable to process request [".$header."]");
         }
 
         return $body;

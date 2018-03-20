@@ -14,14 +14,17 @@ class Income extends Plaid {
 
     private $target = '/income/get';
 
+    /**
+     * @return \Plaid\Income
+     * @throws \Exception
+     */
     public function get() {
         $this->start();
 
-        $postfields = [];
-        return $this->formatResponse($this->executeCurlPOST($this->target, $postfields));
-    }
+        $postfields = $this->dataArray($this->vendor_data->getCredentials()->token);
 
-    public function formatResponse($response) {
-        return new \Plaid\Auth($response);
+        $response = $this->post($this->target, json_encode($postfields));
+
+        return new \Plaid\Income($this->parseResponse($response));
     }
 }
