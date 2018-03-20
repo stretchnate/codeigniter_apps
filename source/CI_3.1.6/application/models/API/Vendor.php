@@ -8,7 +8,6 @@
 
 namespace API;
 
-
 use API\Vendor\Values;
 
 /**
@@ -32,19 +31,40 @@ class Vendor extends \CI_Model {
      * Vendor constructor.
      *
      * @param Values|null $values
+     * @throws \Exception
      */
     public function __construct(Values $values = null) {
         if($values) {
-            $this->values = $values;
             $this->load($values);
         }
     }
 
     /**
      * @param Values $values
+     * @return $this
+     * @throws \Exception
      */
     public function load(Values $values) {
+        $this->values = $values;
 
+        $query = $this->db->get_where(self::TABLE, $this->buildWhere());
+
+        if(!$query) {
+            $error = $this->db->error();
+            throw new \Exception("Error: ". $error['message']);
+        }
+
+        $this->values->setId($query->row()->id);
+        $this->values->setName($query->row()->name);
+        $this->values->setUsername($query->row()->username);
+        $this->values->setPassword($query->row()->password);
+        $this->values->setCredentials($query->row()->credentials);
+        $this->values->setAddedDate(new DateTime($query->row()->added_date));
+        if($query->row()->disabled_date) {
+            $this->values->setDisabledDate(new DateTime($query->row()->disabled_date));
+        }
+
+        return $this;
     }
 
     /**
@@ -76,6 +96,33 @@ class Vendor extends \CI_Model {
      */
     private function insert() {
         return $this->db->insert(self::TABLE, $this->set());
+    }
+
+    /**
+     * @return \stdClass
+     */
+    private function buildWhere() {
+        $obj = new \stdClass();
+        if($this->values->getName()) {
+            $obj->name = $this->values->getName();
+        }
+        if($this->values->getUsername()) {
+            $obj->username = $this->values->getUsername();
+        }
+        if($this->values->getPassword()) {
+            $obj->password = $this->values->getPassword();
+        }
+        if($this->values->getCredentials()) {
+            $obj->credentials = $this->values->getCredentials();
+        }
+        if($this->values->getAddedDate()) {
+            $obj->added_date = $this->values->getAddedDate()->format('Y-m-d');
+        }
+        if($this->values->getDisabledDate()) {
+            $obj->disabled_date = $this->values->getDisabledDate()->format('Y-m-d');
+        }
+
+        return $obj;
     }
 
     /**
@@ -127,5 +174,4 @@ class Vendor extends \CI_Model {
 
         return $this;
     }
-
 }
