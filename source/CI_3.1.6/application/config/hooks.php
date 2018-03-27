@@ -11,3 +11,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |	https://codeigniter.com/user_guide/general/hooks.html
 |
 */
+//for phpunit
+$hook['display_override'] = array(
+    'class' => 'DisplayHook',
+    'function' => 'captureOutput',
+    'filename' => 'DisplayHook.php',
+    'filepath' => 'hooks'
+);
