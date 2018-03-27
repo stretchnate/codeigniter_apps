@@ -1,16 +1,28 @@
 <?php
 
+/**
+ * Class Admin
+ */
 class Admin extends N8_Controller {
 
-	public function __construct() {
+    /**
+     * Admin constructor.
+     */
+    public function __construct() {
 		parent::__construct();
 	}
 
-	public function index() {
+    /**
+     *
+     */
+    public function index() {
 
 	}
 
-	public function profile() {
+    /**
+     *
+     */
+    public function profile() {
 		$this->auth->restrict();
 		$header_data['links'] = $this->utilities->createLinks('main_nav');
 
@@ -19,7 +31,10 @@ class Admin extends N8_Controller {
 		$this->load->view('footer');
 	}
 
-	public function login() {
+    /**
+     *
+     */
+    public function login() {
 		if (!$this->auth->isSiteActive()) {
 			redirect("/inactive/");
 		}
@@ -39,12 +54,18 @@ class Admin extends N8_Controller {
 		$this->load->view('login', $data);
 	}
 
-	public function logout() {
+    /**
+     *
+     */
+    public function logout() {
 		$this->auth->logout();
 		redirect(COMPANY_LOGOUT_REDIRECT);
 	}
 
-	public function register() {
+    /**
+     *
+     */
+    public function register() {
 		$this->load->view('registerView');
 	}
 
@@ -106,7 +127,10 @@ class Admin extends N8_Controller {
 		}
 	}
 
-	public function checkName() {
+    /**
+     *
+     */
+    public function checkName() {
 		$response['success'] = false;
 		$response['message'] = "Enter a valid username";
 		if (!empty($_POST['username'])) {

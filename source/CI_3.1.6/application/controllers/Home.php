@@ -8,11 +8,26 @@ class Home extends N8_Controller {
 		$this->load->helper('html');
 	}
 
+	public function index() {
+		$this->auth->restrict();
+		
+		$where = new stdClass();
+		$where->owner_id = $this->session->userdata("user_id");
+		$account_iterator = new \Budget\AccountIterator($where);
+		if($account_iterator->count() < 1) {
+			// $this->linkAccount();
+			//need to come up with a way to link accounts per account. probably need to have a new field in the accounts table
+			//to indicate whether or not the account has been linked.
+		} else {
+			$this->showHome();
+		}
+
+		$this->showHome();
+	}
     /**
      * displays the home page
      */
-	function index() {
-		$this->auth->restrict();
+	private function showHome() {
 		$this->load->model('notes_model', 'NM', TRUE);
 		$this->load->view('budget/homeVW');
 

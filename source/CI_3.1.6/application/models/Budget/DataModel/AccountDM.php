@@ -1,6 +1,8 @@
 <?php
 class Budget_DataModel_AccountDM extends N8_Model {
 
+	const TABLE = 'accounts';
+	
 	private $account_id;
 	private $account_name;
 	private $account_amount;
