@@ -196,73 +196,127 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 	 * @since  04.28.2013
 	 */
 	private function calculateNextDueDate() {
-		$due_date = new DateTime();
-		$today    = new DateTime();
-		$due_months_total = count($this->due_months);
-
 		//if it's an every check category the due date is set to tomorrow
 		if($this->due_day == 0) {
-			$due_date = new DateTime(date('Y-m-d', strtotime('+1 day')));
+			$this->next_due_date = new DateTime(date('Y-m-d', strtotime('+1 day')));
 		} else {
-			if(!preg_match('/[-\/]+/', $this->due_day)) {
-				$this->due_day = date('Y').'-'.date('m').'-'.$this->due_day;
-			}
-			$due_day = new DateTime($this->due_day);
-			switch($due_months_total) {
+			switch(count($this->due_months)) {
 				case 1: //annually
-					$increment = 12;
+					$this->next_due_date = $this->calculateAnnualDueDate();
 					break;
 
 				case 2: //semi-annually
-					$increment = 6;
+					$this->next_due_date = $this->calculateSemiAnnualDueDate();
 					break;
 
 				case 4: //quarterly
-					$increment = 3;
+					$this->next_due_date = $this->calculateQuarterlyDueDate();
 					break;
 
 				case 12://monthly
 				default:
-					$increment = 1;
+					$this->next_due_date = $this->calculateMonthlyDueDate();
 					break;
 			}
+		}
+	}
 
-			if(isset($increment)) {
-				$i = 0;
-				foreach($this->due_months as $due_month) {
-					if($due_month == $today->format('n')) {
-						if($due_day->format('j') < $today->format('j')) {
-							//if our due months are equal but we've passed the due day increment months by whatever is set up above
-							$i = $increment;
-						} else {
-							//if our due months are equal but we haven't passed the due day yet set the proper due date to this month
-							$due_date->setDate($today->format('Y'), $today->format('n'), $due_day->format('j'));
-							break;
-						}
-					} elseif($due_month > $today->format('n')) {
-						//if our due month is greater than this month but the due day is less than todays day increment months by whatever is set up above
-						$i = $due_month - $today->format('n');
-					} else {
-						//if our due month is in the past simply add a year to it
-						$due_date->setDate($today->format('Y') + 1, $due_month, $due_day->format('j'));
-						break;
-					}
+	/**
+	 * @return \DateTime
+	 */
+	private function calculateAnnualDueDate() {
+		$today = new \DateTime();
+		$due_day = is_object($this->due_day) ? $this->due_day : new \DateTime($this->due_day);
+		$due_date = new \DateTime(date('Y').'-'.$this->due_months[0].'-'.$due_day->format('j'));
 
-					if($i > 0) {
-						$format = new DateInterval("P{$i}M");
-						break;
-					}
-				}
-			}
-
-			if(isset($format)) {
-				$today->add($format);
-				$due_date->setDate($today->format('Y'), $today->format('n'), $due_day->format('j'));
+		if($today->format('n') > $this->due_months[0]) {
+			$due_date->add(new \DateInterval("P1Y"));
+		} elseif($today->format('n') == $this->due_months[0]) {
+			if($today->format('j') > $due_day->format('j')) {
+				$due_date->add(new \DateInterval("P1Y"));
 			}
 		}
 
-		$this->next_due_date = $due_date;
+		return $due_date;
 	}
+
+	/**
+	 * @return \DateTime
+	 */
+	private function calculateSemiAnnualDueDate() {
+		sort($this->due_months);
+		$today = new \DateTime();
+		$found = array_search($today->format('n'), $this->due_months);
+
+		$due_day = is_object($this->due_day) ? $this->due_day : new \DateTime($this->due_day);
+		$due_date = new \DateTime(date('Y').'-'.$this->due_months[$found].'-'.$due_day->format('j'));
+
+		if($found === false) {
+			$this_month = $today->format('n');
+			$due_date = new \DateTime(date('Y').'-'.$this->due_months[0].'-'.$due_day->format('j'));
+			if($this_month > $this->due_months[0] && $this_month > $this->due_months[1]) {
+				$due_date->add(new \DateInterval("P1Y"));
+			} elseif($this_month > $this->due_months[0] && $this_month < $this->due_months[1]) {
+				$due_date->add(new \DateInterval("P6M"));
+			}
+		} elseif($today->format('j') > $due_date->format('j')) {
+			$due_date->add(new \DateInterval("P6M"));
+		}
+
+		return $due_date;
+	}
+
+	/**
+	 * @return \DateTime
+	 */
+	private function calculateQuarterlyDueDate() {
+		$today = new \DateTime();
+		$due_date = new \DateTime($this->due_day);
+		$due_date->setDate($today->format('Y'), $due_date->format('n'), $due_date->format('j'));
+
+		$diff = $today->diff($due_date);
+		$remainder = $diff->format('n') % 3;
+		switch($remainder) {
+			case 2:
+				$i = 1;
+				break;
+			case 1:
+				$i = 2;
+				break;
+			case 0:
+			default:
+				$i = 0;
+		}
+
+		if($today->format('n') > $due_date->format('n')) {
+			$i += $diff;
+			$due_date->add(new DateInterval("P{$i}M"));
+		} elseif($today->format('n') < $due_date->format('n')) {
+			$due_date->setDate($today->format('Y'), $today->format('n')+$i, $due_date->format('j'));
+		} elseif($today->format('j') > $due_date->format('j')) {
+			$due_date->add(new \DateInterval("P3M"));
+		}
+
+		return $due_date;
+	}
+
+	/**
+	 * @return \DateTime
+	 */
+	private function calculateMonthlyDueDate() {
+		$today = new \DateTime();
+		$due_date = new \DateTime($this->due_day);
+		if($today->format('d') > $due_date->format('d')) {
+			$due_date->setDate($today->format('Y'), $today->format('n')+1, $due_date->format('j'));
+		} elseif($today->format('d') < $due_date->format('d')) {
+			$due_date->setDate($today->format('Y'), $today->format('n'), $due_date->format('j'));
+		} else {
+			$due_date = $today;
+		}
+
+		return $due_date;
+	}
+
 
 	/**
 	 * determines how many days until due
