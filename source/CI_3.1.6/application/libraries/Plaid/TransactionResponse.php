@@ -9,7 +9,7 @@
 namespace Plaid;
 
 
-use Plaid\Auth\Response\Account;
+use Plaid\Auth\Account;
 use Plaid\TransactionResponse\Transaction;
 
 /**

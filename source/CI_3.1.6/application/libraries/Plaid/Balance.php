@@ -7,7 +7,7 @@
  */
 
 namespace Plaid;
-use Plaid\Auth\Response\Account;
+use Plaid\Auth\Account;
 
 
 /**
@@ -32,6 +32,8 @@ class Balance extends Plaid {
     public function __construct(\stdClass $raw_response) {
         parent::__construct($raw_response);
         $this->loadAccounts($this->getRawResponse()->accounts);
+		$this->setItem($this->getRawResponse()->item);
+		$this->setRequestId($this->getRawResponse()->request_id);
     }
 
     /**
