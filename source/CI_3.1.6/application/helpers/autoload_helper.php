@@ -8,7 +8,7 @@ function __autoload($classname) {
 
     $result = false;
 
-    if (strpos($classname, "_") !== false) {
+    if (strpos($classname, "_") !== false || strpos($classname, '\\') !== false) {
         $result = underscoreLoadMethod($classname, $dirs);
     }
 
@@ -72,3 +72,5 @@ function iterate($directory, array $files) {
 
     return $result;
 }
+
+spl_autoload_register('__autoload', true);

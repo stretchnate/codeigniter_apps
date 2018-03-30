@@ -53,8 +53,7 @@
  *
  * NOTE: If you change these, also change the error_reporting() code below
  */
-//	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
-define('ENVIRONMENT', 'development');
+	define('ENVIRONMENT', 'testing');
 
 /*
  *---------------------------------------------------------------
@@ -72,6 +71,7 @@ switch (ENVIRONMENT)
 	break;
 
 	case 'testing':
+	break;
 	case 'production':
 		ini_set('display_errors', 0);
 		if (version_compare(PHP_VERSION, '5.3', '>='))
@@ -101,7 +101,7 @@ defined('COMPANY_LOGOUT_REDIRECT') OR define('COMPANY_LOGOUT_REDIRECT', 'http://
  * This variable must contain the name of your "system" directory.
  * Set the path if it is not in the same directory as this file.
  */
-	$system_path = '../../source/CI_3.1.6/system';
+	$system_path = '/var/www/html/source/CI_3.1.6/system';
 
 /*
  *---------------------------------------------------------------
@@ -118,7 +118,7 @@ defined('COMPANY_LOGOUT_REDIRECT') OR define('COMPANY_LOGOUT_REDIRECT', 'http://
  *
  * NO TRAILING SLASH!
  */
-	$application_folder = '../../source/CI_3.1.6/application';
+	$application_folder = '/var/www/html/source/CI_3.1.6/application';
 
 /*
  *---------------------------------------------------------------

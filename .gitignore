@@ -29,3 +29,6 @@ apc
 #composer
 composer.phar
 source/CI_3.1.6/application/third_party/vendor/
+
+#vs code
+.vscode/
