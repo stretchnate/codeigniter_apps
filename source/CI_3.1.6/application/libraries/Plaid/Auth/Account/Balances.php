@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace Plaid\Auth\Response\Account;
+namespace Plaid\Auth\Account;
 use Plaid\Plaid;
 
 /**

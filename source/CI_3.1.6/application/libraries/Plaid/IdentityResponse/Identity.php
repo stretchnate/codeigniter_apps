@@ -50,32 +50,32 @@ class Identity extends Plaid {
         parent::__construct($raw_response);
         $this->loadAddresses($this->getRawResponse()->addresses);
         $this->loadEmails($this->getRawResponse()->emails);
-        $this->setNames($this->getRawResponse()->names);
+        $this->names = $this->getRawResponse()->names;
         $this->loadPhoneNumbers($this->getRawResponse()->phone_numbers);
     }
 
     /**
-     * @param \stdClass $raw_addresses
+     * @param array $raw_addresses
      */
-    public function loadAddresses(\stdClass $raw_addresses) {
+    public function loadAddresses(array $raw_addresses) {
         foreach($raw_addresses as $address) {
             $this->addresses[] = new Address($address);
         }
     }
 
     /**
-     * @param \stdClass $raw_emails
+     * @param array $raw_emails
      */
-    public function loadEmails(\stdClass $raw_emails) {
+    public function loadEmails(array $raw_emails) {
         foreach($raw_emails as $email) {
             $this->emails[] = new Email($email);
         }
     }
 
     /**
-     * @param \stdClass $raw_phones
+     * @param array $raw_phones
      */
-    public function loadPhoneNumbers(\stdClass $raw_phones) {
+    public function loadPhoneNumbers(array $raw_phones) {
         foreach($raw_phones as $phone) {
             $this->phone_numbers[] = new Phone($phone);
         }

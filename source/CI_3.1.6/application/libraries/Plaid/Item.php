@@ -14,7 +14,7 @@ trait Item {
     /**
      * @var object
      */
-    private $item;
+    protected $item;
 
     /**
      * @return object

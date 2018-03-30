@@ -6,9 +6,9 @@
  * and open the template in the editor.
  */
 
-namespace Plaid\Auth\Response;
+namespace Plaid\Auth;
 
-use Plaid\Auth\Response\Account\Balances;
+use Plaid\Auth\Account\Balances;
 use Plaid\Plaid;
 
 /**
@@ -71,9 +71,7 @@ class Account extends Plaid {
      * @param $balances
      */
     private function loadBalances($balances) {
-        foreach($balances as $balance) {
-            $this->balances[] = new Balances($balance);
-        }
+        $this->balances = new Balances($balances);
     }
 
     /**

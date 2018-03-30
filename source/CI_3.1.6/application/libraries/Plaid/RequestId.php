@@ -14,7 +14,7 @@ trait RequestId {
     /**
      * @var string
      */
-    private $request_id;
+    protected $request_id;
 
     /**
      * @return string
