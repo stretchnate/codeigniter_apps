@@ -9,7 +9,7 @@
 namespace Plaid;
 
 
-use Plaid\Auth\Response\Account;
+use Plaid\Auth\Account;
 use Plaid\IdentityResponse\Identity;
 
 /**
@@ -45,9 +45,9 @@ class IdentityResponse extends Plaid {
     }
 
     /**
-     * @param \stdClass $raw_accounts
+     * @param array $raw_accounts
      */
-    public function loadAccounts(\stdClass $raw_accounts) {
+    public function loadAccounts( $raw_accounts) {
         foreach($raw_accounts as $account) {
             $this->accounts[] = new Account($account);
         }

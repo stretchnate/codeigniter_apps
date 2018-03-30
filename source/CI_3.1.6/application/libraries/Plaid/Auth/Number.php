@@ -6,7 +6,7 @@
  * Time: 6:54 PM
  */
 
-namespace Plaid\Auth\Response;
+namespace Plaid\Auth;
 use Plaid\Plaid;
 
 

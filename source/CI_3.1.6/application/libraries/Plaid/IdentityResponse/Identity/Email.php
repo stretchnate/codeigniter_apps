@@ -39,9 +39,9 @@ class Email extends Plaid {
      */
     public function __construct(\stdClass $raw_response) {
         parent::__construct($raw_response);
-        $this->setData($this->getRawResponse()->data);
-        $this->setPrimary($this->getRawResponse()->primary);
-        $this->setType($this->getRawResponse()->type);
+        $this->data = $this->getRawResponse()->data;
+        $this->primary = $this->getRawResponse()->primary;
+        $this->type = $this->getRawResponse()->type;
     }
 
     /**

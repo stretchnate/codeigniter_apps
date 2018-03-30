@@ -14,14 +14,13 @@
     verbose="false"
     bootstrap="Bootstrap.php">
     <testsuites>
-        <testsuite name="CITools Test Suite">
-            <!-- <directory>./tests/</directory> -->
-            <directory>.</directory>
+        <testsuite name="Plaid">
+            <directory>libraries/Plaid</directory>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist>
-            <directory>./system/</directory>
+            <directory>../../system/</directory>
         </whitelist>
     </filter>
 </phpunit>

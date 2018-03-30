@@ -63,8 +63,12 @@ class Location {
         $this->setCity($this->raw_response->city);
         $this->setState($this->raw_response->state);
         $this->setZip($this->raw_response->zip);
-        $this->setLat($this->raw_response->lat);
-        $this->setLon($this->raw_response->lon);
+        if(isset($this->raw_response->lat)) {
+            $this->setLat($this->raw_response->lat);
+        }
+        if(isset($this->raw_response->lon)) {
+            $this->setLon($this->raw_response->lon);
+        }
     }
 
     /**

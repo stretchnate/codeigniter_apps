@@ -4,6 +4,7 @@ function __autoload($classname) {
     $dirs = array(
         APPPATH."models/",
         APPPATH."libraries/",
+        APPPATH."tests/",
     );
 
     $result = false;
