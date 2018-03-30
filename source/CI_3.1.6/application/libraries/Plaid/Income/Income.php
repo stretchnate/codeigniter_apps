@@ -6,10 +6,10 @@
  * Time: 6:32 PM
  */
 
-namespace Plaid\Income\Response;
+namespace Plaid\Income;
 
 
-use Plaid\Income\Response\Income\Stream;
+use Plaid\Income\Income\Stream;
 use Plaid\Plaid;
 
 /**
@@ -61,13 +61,13 @@ class Income extends Plaid {
      */
     public function __construct(\stdClass $raw_response) {
         parent::__construct($raw_response);
-        $this->loadIncomeStreams($this->raw_response->income_streams);
-        $this->last_year_income = $this->raw_response->last_year_income;
-        $this->last_year_income_before_tax = $this->raw_response->last_year_income_before_tax;
-        $this->projected_yearly_income = $this->raw_response->projected_yearly_income;
-        $this->projected_yearly_income_before_tax = $this->raw_response->projected_yearly_income_before_tax;
-        $this->max_number_of_overlapping_income_streams = $this->raw_response->max_number_of_overlapping_income_streams;
-        $this->number_of_income_streams = $this->raw_response->number_of_income_streams;
+        $this->loadIncomeStreams($this->getRawResponse()->income_streams);
+        $this->last_year_income = $this->getRawResponse()->last_year_income;
+        $this->last_year_income_before_tax = $this->getRawResponse()->last_year_income_before_tax;
+        $this->projected_yearly_income = $this->getRawResponse()->projected_yearly_income;
+        $this->projected_yearly_income_before_tax = $this->getRawResponse()->projected_yearly_income_before_tax;
+        $this->max_number_of_overlapping_income_streams = $this->getRawResponse()->max_number_of_overlapping_income_streams;
+        $this->number_of_income_streams = $this->getRawResponse()->number_of_income_streams;
     }
 
     /**

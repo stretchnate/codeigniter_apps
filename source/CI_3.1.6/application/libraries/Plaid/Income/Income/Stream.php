@@ -6,7 +6,7 @@
  * Time: 6:35 PM
  */
 
-namespace Plaid\Income\Response\Income;
+namespace Plaid\Income\Income;
 
 
 use Plaid\Plaid;
@@ -45,10 +45,10 @@ class Stream extends Plaid {
      */
     public function __construct($raw_response) {
         parent::__construct($raw_response);
-        $this->confidence = $this->raw_response->confidence;
-        $this->days = $this->raw_response->days;
-        $this->monthly_income = $this->raw_response->monthly_income;
-        $this->name = $this->raw_response->name;
+        $this->confidence = $this->getRawResponse()->confidence;
+        $this->days = $this->getRawResponse()->days;
+        $this->monthly_income = $this->getRawResponse()->monthly_income;
+        $this->name = $this->getRawResponse()->name;
     }
 
     /**

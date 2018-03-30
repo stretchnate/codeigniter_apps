@@ -30,7 +30,7 @@ class Income extends Plaid {
      */
     public function __construct($raw_response) {
         parent::__construct($raw_response);
-        $this->income = new Income\Response\Income($this->getRawResponse()->income);
+        $this->income = new Income\Income($this->getRawResponse()->income);
         $this->setRequestId($this->getRawResponse()->request_id);
         $this->setItem($this->getRawResponse()->item);
     }
