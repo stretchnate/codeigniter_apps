@@ -264,17 +264,9 @@
 			}
 		}
 		if( is_object($array) ) {
-			$version = phpversion();
-			// dbo("php version is $version");
-			if(preg_match("/^5\.3\.[\d]+/", $version) ) {
-				// dbo("using version 5 object parser");
-				$txt .= dbo_obj($array, 'a', false, $indent . "\t\t");
-				// dbo($array);
-			} else {
-				dbo("using version 4 object parser");
-				$array = get_object_vars($array);
-				$txt = str_replace("Array", "Object", $txt);
-			}
+		    ob_start();
+            $txt .= print_r($array, true);
+            ob_end_clean();
 		}
 		if(is_array($array)) {
 			foreach($array as $k => $v) {

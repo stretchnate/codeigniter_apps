@@ -8,26 +8,31 @@ class Home extends N8_Controller {
 		$this->load->helper('html');
 	}
 
+    /**
+     * @throws Exception
+     */
 	public function index() {
 		$this->auth->restrict();
-		
-		$where = new stdClass();
-		$where->owner_id = $this->session->userdata("user_id");
+        $link = null;
+
+        $where = ['owner_id' => $this->session->userdata("user_id")];
 		$account_iterator = new \Budget\AccountIterator($where);
-		if($account_iterator->count() < 1) {
-			// $this->linkAccount();
-			//need to come up with a way to link accounts per account. probably need to have a new field in the accounts table
-			//to indicate whether or not the account has been linked.
-		} else {
-			$this->showHome();
+
+        $values = new \API\Vendor\Values();
+        $values->setName('Plaid');
+        $plaid = new \API\Vendor($values);
+
+		if($account_iterator->count() < 1 && $plaid->getValues()->getId()) {
+            $link = new \Plaid\Link($plaid);
 		}
 
-		$this->showHome();
+        $this->homeView($link);
 	}
+
     /**
      * displays the home page
      */
-	private function showHome() {
+	private function homeView(\Plaid\Link $link = null) {
 		$this->load->model('notes_model', 'NM', TRUE);
 		$this->load->view('budget/homeVW');
 
@@ -35,6 +40,7 @@ class Home extends N8_Controller {
 		$home_vw = new Budget_HomeVW($CI);
 		$home_vw->setTitle("Your Accounts");
 		$home_vw->setScripts($this->jsincludes->home());
+		$home_vw->setLink($link);
 
 		//get the accounts
 		$home_model = new Budget_BusinessModel_Home();

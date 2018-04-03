@@ -34,6 +34,7 @@ class Vendor extends \CI_Model {
      * @throws \Exception
      */
     public function __construct(Values $values = null) {
+		$this->values = new Values();
         if($values) {
             $this->load($values);
         }
@@ -59,9 +60,9 @@ class Vendor extends \CI_Model {
         $this->values->setUsername($query->row()->username);
         $this->values->setPassword($query->row()->password);
         $this->values->setCredentials($query->row()->credentials);
-        $this->values->setAddedDate(new DateTime($query->row()->added_date));
+        $this->values->setAddedDate(new \DateTime($query->row()->added_date));
         if($query->row()->disabled_date) {
-            $this->values->setDisabledDate(new DateTime($query->row()->disabled_date));
+            $this->values->setDisabledDate(new \DateTime($query->row()->disabled_date));
         }
 
         return $this;
@@ -69,6 +70,7 @@ class Vendor extends \CI_Model {
 
     /**
      * @throws \Exception
+	 * @return bool
      */
     public function save() {
         if($this->rowExists()) {
@@ -81,6 +83,8 @@ class Vendor extends \CI_Model {
             $error = $this->db->error();
             throw new \Exception('Unable to save '.self::TABLE.': '.$error['message']);
         }
+		
+		return $result;
     }
 
     /**
@@ -95,34 +99,42 @@ class Vendor extends \CI_Model {
      * @return mixed
      */
     private function insert() {
-        return $this->db->insert(self::TABLE, $this->set());
+		$set = $this->set();
+		if($this->getValues()->getId()) {
+			$set->id = $this->getValues()->getId();
+		}
+
+        return $this->db->insert(self::TABLE, $set);
     }
 
     /**
      * @return \stdClass
      */
     private function buildWhere() {
-        $obj = new \stdClass();
-        if($this->values->getName()) {
-            $obj->name = $this->values->getName();
+        $where = [];
+		if($this->getValues()->getId()) {
+			$where['id'] = $this->getValues()->getId();
+		}
+        if($this->getValues()->getName()) {
+            $where['name'] = $this->getValues()->getName();
         }
-        if($this->values->getUsername()) {
-            $obj->username = $this->values->getUsername();
+        if($this->getValues()->getUsername()) {
+            $where['username'] = $this->getValues()->getUsername();
         }
-        if($this->values->getPassword()) {
-            $obj->password = $this->values->getPassword();
+        if($this->getValues()->getPassword()) {
+            $where['password'] = $this->getValues()->getPassword();
         }
-        if($this->values->getCredentials()) {
-            $obj->credentials = $this->values->getCredentials();
+        if($this->getValues()->getCredentials()) {
+            $where['credentials'] = $this->getValues()->getCredentials();
         }
-        if($this->values->getAddedDate()) {
-            $obj->added_date = $this->values->getAddedDate()->format('Y-m-d');
+        if($this->getValues()->getAddedDate()) {
+            $where['added_date'] = $this->getValues()->getAddedDate()->format('Y-m-d');
         }
-        if($this->values->getDisabledDate()) {
-            $obj->disabled_date = $this->values->getDisabledDate()->format('Y-m-d');
+        if($this->getValues()->getDisabledDate()) {
+            $where['disabled_date'] = $this->getValues()->getDisabledDate()->format('Y-m-d');
         }
 
-        return $obj;
+        return $where;
     }
 
     /**
@@ -138,7 +150,7 @@ class Vendor extends \CI_Model {
                 throw new \Exception('Unable to load user row: '.$error['message']);
             }
 
-            $result = $query->num_rows > 0;
+            $result = $query->num_rows() > 0;
         }
 
         return $result;
@@ -153,8 +165,10 @@ class Vendor extends \CI_Model {
         $set->username = $this->getValues()->getUsername();
         $set->password = $this->getValues()->getPassword();
         $set->credentials = $this->getValues()->getCredentials();
-        $set->added_date = $this->getValues()->getCredentials();
-        $set->disabled_date = $this->getValues()->getDisabledDate();
+        $set->added_date = $this->getValues()->getAddedDate()->format('Y-m-d H:i:s');
+		if($this->getValues()->getDisabledDate()) {
+			$set->disabled_date =$this->getValues()->getDisabledDate()->format('Y-m-d H:i:s');
+		}
 
         return $set;
     }
@@ -163,15 +177,5 @@ class Vendor extends \CI_Model {
      */
     public function getValues() {
         return $this->values;
-    }
-
-    /**
-     * @param Values $values
-     * @return Vendor
-     */
-    public function setValues($values) {
-        $this->values = $values;
-
-        return $this;
     }
 }

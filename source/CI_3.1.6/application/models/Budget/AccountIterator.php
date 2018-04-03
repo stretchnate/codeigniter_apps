@@ -2,7 +2,7 @@
 
 namespace Budget;
 
-class AccountIterator extends IteratorBase {
+class AccountIterator extends \IteratorBase {
 
     protected $items;
 
@@ -14,25 +14,25 @@ class AccountIterator extends IteratorBase {
     }
 
     /**
-     * @param \stdClass $where
-     * @return void
+     * @param array $where
+     * @throws \Exception
      */
-    public function load(stdClass $where) {
-        if(!$where->owner_id || $where->owner_id != $this->session->userdata("user_id")) {
-            $where->owner_id = $this->session->userdata("user_id");
+    public function load(array $where) {
+        if(!$where['owner_id'] || $where['owner_id'] != $this->session->userdata("user_id")) {
+            $where['owner_id'] = $this->session->userdata("user_id");
         }
 
         $this->db->select('account_id');
         $this->db->where($where);
-        $query = $this->db->get(Budget_DataModel_AccountDM::TABLE);
+        $query = $this->db->get(\Budget_DataModel_AccountDM::TABLE);
 
         if(!$query) {
-            throw new Exception('Unable to load account for '.$where->owner_id);
+            throw new \Exception('Unable to load account for '.$where->owner_id);
         }
 
         $this->items = [];
         foreach($query->result() as $row) {
-            $this->items[] = new Budget_DataModel_AccountDM($row->account_id);
+            $this->items[] = new \Budget_DataModel_AccountDM($row->account_id);
         }
     }
 
