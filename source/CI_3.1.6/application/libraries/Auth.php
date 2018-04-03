@@ -138,15 +138,12 @@ class Auth {
 		}
 	}
 
-	/**
-	 *
-	 * This function restricts users from certain pages.
-	 * use restrict(TRUE) if a user can't access a page when logged in
-	 *
-	 * @access	public
-	 * @param	boolean	wether the page is viewable when logged in
-	 * @return	void
-	 */
+    /**
+     * This function restricts users from certain pages. use restrict(TRUE) if a user can't access a page when logged in
+     *
+     * @param bool $logged_out
+     * @throws \Exception
+     */
 	public function restrict($logged_out = FALSE) {
 		if (ENVIRONMENT == 'testing') {
 			return;
@@ -190,6 +187,9 @@ class Auth {
 		}
 	}
 
+    /**
+     * @return bool
+     */
 	public function logout() {
 		$this->updateLoginHistory(FALSE, TRUE);
 		$this->CI->session->unset_userdata('logged_user');
@@ -198,6 +198,10 @@ class Auth {
 		return TRUE;
 	}
 
+    /**
+     * @return bool
+     * @throws Exception
+     */
 	public function isSiteActive() {
 		$where = array("rule_name" => "IS_SITE_ACTIVE");
 		$results = $this->CI->db->get_where("rules", $where);

@@ -1,14 +1,35 @@
 <?php
 	require_once('baseVW.php');
 
-	class Budget_HomeVW extends Budget_BaseVW {
+/**
+ * Class Budget_HomeVW
+ */
+class Budget_HomeVW extends Budget_BaseVW {
 
-		protected $last_transaction;
-		protected $last_update;
+    /**
+     * @var
+     */
+    protected $last_transaction;
+    /**
+     * @var
+     */
+    protected $last_update;
 
-        private   $totals_array = array();
+    /**
+     * @var array
+     */
+    private   $totals_array = array();
 
-		public function __construct(&$CI) {
+    /**
+     * @var \Plaid\Link
+     */
+    private $link;
+
+    /**
+     * Budget_HomeVW constructor.
+     *
+     * @param $CI
+     */public function __construct(&$CI) {
 			parent::__construct($CI);
 		}
 
@@ -159,8 +180,11 @@
 <?php
 		}
 
+        /**
+         * @return string
+         */
 		private function showAddAccount() {
-			$content = "<h3>Please add an Account</h3>"
+		    $content = "<h3>Please add an Account</h3>"
 					. "Now that you're registered you'll need to create an account to represent your bank account,"
 					. " piggy bank, mayonaise jar or whatever it is you use to store your cash. Don't worry,"
 					. " we don't ask for any financial or personal information, we are simply simulating your bank"
@@ -169,8 +193,17 @@
 					. " schedule is so we can calculate the best way to organize your money.";
 			$content .= "<br><br><a class='btn btn-primary' href='/accountCTL/addNewAccount'>add a new Account</a>";
 
-			return $content;
+            if($this->link) {
+                $content .= "<button id='link_button' class='btn btn-primary'>Link my Account</button>";
+                $content .= $this->link->getIntegrationJs();
+            }
+
+            return $content;
 		}
+
+        /**
+         * @return string
+         */
 		private function showAddCategories() {
 			$content = "<h3>Please add Categories to this Account</h3>"
 					. "<p>Now that you have an account created you can begin adding categories. We ask for a little bit more"
@@ -179,20 +212,39 @@
 					. " rent/mortgage, and another for car payment, perhaps groceries and gas would be good to have."
 					. " you can be as broad or as detailed as you want, whatever helps you take control of your finances.</p>";
 
-			$content .= "<br><br><a class='btn btn-primary' href='/book/newBookForm'>add a category</a></h3>";
+			$content .= "<br><br><a class='btn btn-primary' href='/book/newBookForm'>add a category</a>";
 
 			return $content;
 		}
 
-		public function setLastTransaction($last_transaction) {
+    /**
+     * @param $last_transaction
+     */
+    public function setLastTransaction($last_transaction) {
 			$this->last_transaction = $last_transaction;
 		}
 
-		public function setLastUpdate($last_update) {
+    /**
+     * @param $last_update
+     */
+    public function setLastUpdate($last_update) {
 			$this->last_update = $last_update;
 		}
 
-        public function setTotalsArray(array $totals) {
+    /**
+     * @param array $totals
+     */
+    public function setTotalsArray(array $totals) {
             $this->totals_array = $totals;
+        }
+
+        /**
+         * @param \Plaid\Link $link
+         * @return Budget_HomeVW
+         */
+        public function setLink(\Plaid\Link $link) {
+            $this->link = $link;
+
+            return $this;
         }
 	}

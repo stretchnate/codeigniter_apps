@@ -14,12 +14,12 @@ class AccountIterator extends \IteratorBase {
     }
 
     /**
-     * @param \stdClass $where
-     * @return void
+     * @param array $where
+     * @throws \Exception
      */
-    public function load(\stdClass $where) {
-        if(!$where->owner_id || $where->owner_id != $this->session->userdata("user_id")) {
-            $where->owner_id = $this->session->userdata("user_id");
+    public function load(array $where) {
+        if(!$where['owner_id'] || $where['owner_id'] != $this->session->userdata("user_id")) {
+            $where['owner_id'] = $this->session->userdata("user_id");
         }
 
         $this->db->select('account_id');

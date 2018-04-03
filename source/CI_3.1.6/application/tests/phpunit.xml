@@ -17,6 +17,9 @@
         <testsuite name="Plaid">
             <directory>libraries/Plaid</directory>
         </testsuite>
+        <testsuite name="API_Models">
+            <directory>models/API</directory>
+        </testsuite>
     </testsuites>
     <filter>
         <whitelist>

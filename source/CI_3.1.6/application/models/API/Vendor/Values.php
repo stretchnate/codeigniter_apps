@@ -11,18 +11,39 @@ namespace API\Vendor;
 
 class Values {
 
+	/**
+	 * @var int
+	 */
     private $id;
 
+	/**
+	 * @var string
+	 */
     private $name;
 
+	/**
+	 * @var string
+	 */
     private $username;
 
+	/**
+	 * @var string
+	 */
     private $password;
 
+	/**
+	 * @var string
+	 */
     private $credentials;
 
+	/**
+	 * @var \DateTime
+	 */
     private $added_date;
 
+	/**
+	 * @var \DateTime
+	 */
     private $disabled_date;
 
     public function __construct() {
@@ -114,34 +135,34 @@ class Values {
     }
 
     /**
-     * @return mixed
+     * @return \DateTime
      */
     public function getAddedDate() {
-        return $this->added_date;
+        return isset($this->added_date) ? clone $this->added_date : null;
     }
 
     /**
-     * @param mixed $added_date
+     * @param \DateTime $added_date
      * @return Values
      */
-    public function setAddedDate($added_date) {
+    public function setAddedDate(\DateTime $added_date) {
         $this->added_date = $added_date;
 
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return \DateTime
      */
     public function getDisabledDate() {
-        return $this->disabled_date;
+        return isset($this->disabled_date) ? clone $this->disabled_date : null;
     }
 
     /**
-     * @param mixed $disabled_date
+     * @param \DateTime $disabled_date
      * @return Values
      */
-    public function setDisabledDate($disabled_date) {
+    public function setDisabledDate(\DateTime $disabled_date) {
         $this->disabled_date = $disabled_date;
 
         return $this;
