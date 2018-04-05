@@ -34,7 +34,7 @@ class Link {
      * @param Vendor $vendor
      * @param array $products
      */
-    public function __construct(Vendor $vendor, $products = ['auth']) {
+    public function __construct(Vendor $vendor, $products = ['auth', 'transactions', 'identity']) {
         $this->vendor = $vendor;
         $this->integration_js = "
             <!--script src=\"https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js\"></script-->
@@ -42,8 +42,8 @@ class Link {
             <script type=\"text/javascript\">
             (function($) {
               var handler = Plaid.create({
-                clientName: 'Quantum Bank Account Link',
-                env: 'sandbox',
+                clientName: '".COMPANY_NAME." Bank Account Link',
+                env: '%s',
                 // Replace with your public_key from the Dashboard
                 key: '%s',
                 product: ['".implode("','", $products)."'],
@@ -100,6 +100,6 @@ class Link {
     public function getIntegrationJs() {
         $creds = json_decode($this->vendor->getValues()->getCredentials());
 
-        return sprintf($this->integration_js, $creds->public_key);
+        return sprintf($this->integration_js, $creds->outbound->env, $creds->public_key);
     }
 }

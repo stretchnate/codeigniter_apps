@@ -1,12 +1,12 @@
 <?php
 
-namespace Budget\Plaid;
+namespace Plaid;
 
-use Budget\Plaid\Transaction\Values;
+use Plaid\Response\Values;
 
-class Transaction extends CI_Model {
+class Response extends \CI_Model {
 
-    const TABLE = 'plaid_transaction';
+    const TABLE = 'plaid_response';
 
     /**
      * @var Values
@@ -35,6 +35,7 @@ class Transaction extends CI_Model {
 
         $this->getValues()->setId($query->row()->id);
         $this->getValues()->setRequestId($query->row()->id);
+        $this->getValues()->setProduct($query->row()->product);
         $this->getValues()->setData($query->row()->data);
         $this->getValues()->setAdded(new \DateTime($query->row()->added));
     }

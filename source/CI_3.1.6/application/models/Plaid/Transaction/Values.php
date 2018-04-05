@@ -1,8 +1,8 @@
 <?php
 
-namespace Budget\Plaid\Response;
+namespace Plaid\Transaction;
 
-class Values implements ValueInterface {
+class Values implements \ValueInterface {
 
     /**
      * @var int
@@ -13,11 +13,6 @@ class Values implements ValueInterface {
      * @var string
      */
     private $request_id;
-
-    /**
-     * @var string
-     */
-    private $product;
 
     /**
      * @var string
