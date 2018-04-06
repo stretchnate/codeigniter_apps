@@ -24,7 +24,7 @@ $(function() {
     });
 
     $('input[type=submit]').click(function() {
-        $(this).attr('disabled', 'disabled');
+        //$(this).attr('disabled', 'disabled');
     });
 });
 
