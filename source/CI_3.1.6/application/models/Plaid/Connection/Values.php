@@ -6,7 +6,7 @@
  * Time: 9:33 PM
  */
 
-namespace Plaid\Item;
+namespace Plaid\Connection;
 
 
 class Values extends \Validation implements \ValueInterface {
@@ -45,18 +45,23 @@ class Values extends \Validation implements \ValueInterface {
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getItemId() {
         return $this->item_id;
     }
 
     /**
-     * @param int $item_id
+     * @param string $item_id
      * @return Values
+     * @throws \Exception
      */
     public function setItemId($item_id) {
-        $this->item_id = $this->simple_validation->isInt($item_id);
+        if(isset($this->item_id)) {
+            throw new \Exception('Overwriting id is not allowed.', EXCEPTION_CODE_ERROR);
+        }
+
+        $this->item_id = $item_id;
 
         return $this;
     }
@@ -116,7 +121,7 @@ class Values extends \Validation implements \ValueInterface {
      * @return \DateTime
      */
     public function getDtAdded() {
-        return clone $this->dt_added;
+        return isset($this->dt_added) ? clone $this->dt_added : null;
     }
 
     /**
