@@ -19,7 +19,7 @@ class Income extends Plaid {
     use RequestId, Item;
 
     /**
-     * @var \Plaid\Income\Response\Income
+     * @var \Plaid\Income\Income
      */
     private $income;
 
@@ -36,7 +36,7 @@ class Income extends Plaid {
     }
 
     /**
-     * @return Income\Response\Income
+     * @return Income\Income
      */
     public function getIncome() {
         return $this->income;

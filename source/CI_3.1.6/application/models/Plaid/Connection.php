@@ -9,19 +9,19 @@
 namespace Plaid;
 
 
-use Plaid\Item\Values;
+use Plaid\Connection\Values;
 
 /**
  * Class Item
  *
  * @package Plaid
  */
-class Item extends \CI_Model {
+class Connection extends \CI_Model {
 
     /**
      *
      */
-    const TABLE = 'plaid_item';
+    const TABLE = 'plaid_connection';
 
     /**
      * @var Values
@@ -36,6 +36,7 @@ class Item extends \CI_Model {
      */
     public function __construct($values = null) {
         parent::__construct();
+        $this->values = new Values();
 
         if($values) {
             $this->load($values);
@@ -46,10 +47,8 @@ class Item extends \CI_Model {
      * @param Values $values
      * @throws \Exception
      */
-    public function load(Values $values) {
-        $this->values = $values;
-
-        $query = $this->db->get_where(self::TABLE, $this->buildWhere());
+    public function load($values) {
+        $query = $this->db->get_where(self::TABLE, $this->buildWhere($values));
 
         if($query === false) {
             $error = $this->db->error();
@@ -59,7 +58,7 @@ class Item extends \CI_Model {
         if($query->num_rows() > 0) {
             $row = $query->row();
             $this->getValues()->setItemId($row->item_id);
-            $this->getValues()->setAccountId($row->account_id);
+            $this->getValues()->setAccountId((int)$row->account_id);
             $this->getValues()->setAccessToken($row->access_token);
             $this->getValues()->setTransactionsReady($row->transactions_ready);
             $this->getValues()->setDtAdded(new \DateTime($row->dt_added));
@@ -128,24 +127,25 @@ class Item extends \CI_Model {
     }
 
     /**
+     * @param Values $values
      * @return array
      */
-    private function buildWhere() {
+    private function buildWhere(Values $values) {
         $where = [];
-        if($this->getValues()->getItemId()) {
-            $where['item_id'] = $this->getValues()->getItemId();
+        if($values->getItemId()) {
+            $where['item_id'] = $values->getItemId();
         }
-        if($this->getValues()->getAccountId()) {
-            $where['account_id'] = $this->getValues()->getAccountId();
+        if($values->getAccountId()) {
+            $where['account_id'] = $values->getAccountId();
         }
-        if($this->getValues()->getAccessToken()) {
-            $where['access_token'] = $this->getValues()->getAccessToken();
+        if($values->getAccessToken()) {
+            $where['access_token'] = $values->getAccessToken();
         }
-        if($this->getValues()->getTransactionsReady()) {
-            $where['transactions_ready'] = $this->getValues()->getTransactionsReady();
+        if($values->getTransactionsReady()) {
+            $where['transactions_ready'] = $values->getTransactionsReady();
         }
-        if($this->getValues()->getDtAdded()) {
-            $where['dt_added'] = $this->getValues()->getDtAdded()->format('Y-m-d h:i:s');
+        if($values->getDtAdded()) {
+            $where['dt_added'] = $values->getDtAdded()->format('Y-m-d h:i:s');
         }
 
         return $where;

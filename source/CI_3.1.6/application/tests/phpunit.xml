@@ -20,6 +20,9 @@
         <testsuite name="API_Models">
             <directory>models/API</directory>
         </testsuite>
+        <testsuite name="Plaid_Models">
+            <directory>models/Plaid</directory>
+        </testsuite>
     </testsuites>
     <filter>
         <whitelist>
