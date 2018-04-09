@@ -2,5 +2,5 @@
 
 interface ValueInterface {
 
-    public function toStdClass();
+    public function toArray();
 }

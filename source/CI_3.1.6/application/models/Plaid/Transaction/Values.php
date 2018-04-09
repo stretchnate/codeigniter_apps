@@ -2,7 +2,7 @@
 
 namespace Plaid\Transaction;
 
-class Values implements \ValueInterface {
+class Values extends \Validation implements \ValueInterface {
 
     /**
      * @var int
@@ -27,24 +27,21 @@ class Values implements \ValueInterface {
     /**
      * convert properties to stdClass object
      *
-     * @return \stdClass
+     * @return array
      */
-    public function toStdClass() {
-        $result = new stdClass();
+    public function toArray() {
+        $result = [];
         if($this->id) {
-            $result->id = $this->getId();
+            $result['id'] = $this->getId();
         }
         if($this->request_id) {
-            $result->request_id = $this->getRequestId();
-        }
-        if($this->product) {
-            $result->product = $this->getProduct();
+            $result['request_id'] = $this->getRequestId();
         }
         if($this->data) {
-            $result->data = $this->getData();
+            $result['data'] = $this->getData();
         }
         if($this->added) {
-            $result->added = $this->getAdded()->format('Y-m-d H:i:s');
+            $result['added'] = $this->getAdded()->format('Y-m-d H:i:s');
         }
 
         return $result;
@@ -53,16 +50,14 @@ class Values implements \ValueInterface {
     /**
      * @param int $value
      * @return $this
+     * @throws \Exception
      */
     public function setId($value) {
-        if(!is_int($value)) {
-            throw new InvalidArgumentException('Id must be an Integer');
-        }
         if($this->id) {
-            throw new Exception('Cannot overwrite primary key');
+            throw new \Exception('Cannot overwrite primary key');
         }
 
-        $this->id = $value;
+        $this->id = $this->simple_validation->isInt($value);
 
         return $this;
     }
@@ -89,23 +84,6 @@ class Values implements \ValueInterface {
      */
     public function getRequestId() {
         return $this->request_id;
-    }
-
-    /**
-     * @param string $value
-     * @return $this
-     */
-    public function setProduct($value) {
-        $this->product = $value;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getProduct() {
-        return $this->product;
     }
 
     /**

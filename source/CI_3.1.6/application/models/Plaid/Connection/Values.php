@@ -36,8 +36,28 @@ class Values extends \Validation implements \ValueInterface {
      */
     private $dt_added;
 
-    public function toStdClass() {
-        // TODO: Implement toStdClass() method.
+    /**
+     * @return array
+     */
+    public function toArray() {
+        $where = [];
+        if($this->getItemId()) {
+            $where['item_id'] = $this->getItemId();
+        }
+        if($this->getAccountId()) {
+            $where['account_id'] = $this->getAccountId();
+        }
+        if($this->getAccessToken()) {
+            $where['access_token'] = $this->getAccessToken();
+        }
+        if($this->getTransactionsReady()) {
+            $where['transactions_ready'] = $this->getTransactionsReady();
+        }
+        if($this->getDtAdded()) {
+            $where['dt_added'] = $this->getDtAdded()->format('Y-m-d h:i:s');
+        }
+
+        return $where;
     }
 
     public function __construct() {
