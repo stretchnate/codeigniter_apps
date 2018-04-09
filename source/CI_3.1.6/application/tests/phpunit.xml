@@ -14,12 +14,12 @@
     verbose="false"
     bootstrap="Bootstrap.php">
     <testsuites>
-        <!--<testsuite name="Plaid">-->
-            <!--<directory>libraries/Plaid</directory>-->
-        <!--</testsuite>-->
-        <!--<testsuite name="API_Models">-->
-            <!--<directory>models/API</directory>-->
-        <!--</testsuite>-->
+        <testsuite name="Plaid">
+            <directory>libraries/Plaid</directory>
+        </testsuite>
+        <testsuite name="API_Models">
+            <directory>models/API</directory>
+        </testsuite>
         <testsuite name="Plaid_Models">
             <directory>models/Plaid</directory>
         </testsuite>
