@@ -48,7 +48,7 @@ class Connection extends \CI_Model {
      * @throws \Exception
      */
     public function load($values) {
-        $query = $this->db->get_where(self::TABLE, $this->buildWhere($values));
+        $query = $this->db->get_where(self::TABLE, $values->toArray());
 
         if($query === false) {
             $error = $this->db->error();
@@ -124,31 +124,6 @@ class Connection extends \CI_Model {
         }
 
         return $result;
-    }
-
-    /**
-     * @param Values $values
-     * @return array
-     */
-    private function buildWhere(Values $values) {
-        $where = [];
-        if($values->getItemId()) {
-            $where['item_id'] = $values->getItemId();
-        }
-        if($values->getAccountId()) {
-            $where['account_id'] = $values->getAccountId();
-        }
-        if($values->getAccessToken()) {
-            $where['access_token'] = $values->getAccessToken();
-        }
-        if($values->getTransactionsReady()) {
-            $where['transactions_ready'] = $values->getTransactionsReady();
-        }
-        if($values->getDtAdded()) {
-            $where['dt_added'] = $values->getDtAdded()->format('Y-m-d h:i:s');
-        }
-
-        return $where;
     }
 
     /**

@@ -14,6 +14,9 @@ class Response extends \CI_Model {
     private $values;
 
     public function __construct($values = null) {
+        parent::__construct();
+        $this->values = new Values();
+
         if($values) {
             $this->load($values);
         }
@@ -26,15 +29,15 @@ class Response extends \CI_Model {
      * @return void
      */
     public function load(Values $values) {
-        $query = $this->db->get_where(self::TABLE, $values->toStdClass());
+        $query = $this->db->get_where(self::TABLE, $values->toArray());
 
         if(!$query) {
             $error = $this->db->error();
             throw new Exception($error['message']);
         }
 
-        $this->getValues()->setId($query->row()->id);
-        $this->getValues()->setRequestId($query->row()->id);
+        $this->getValues()->setId((int)$query->row()->id);
+        $this->getValues()->setRequestId($query->row()->request_id);
         $this->getValues()->setProduct($query->row()->product);
         $this->getValues()->setData($query->row()->data);
         $this->getValues()->setAdded(new \DateTime($query->row()->added));
@@ -44,6 +47,7 @@ class Response extends \CI_Model {
      * save the data to the db
      *
      * @return bool
+     * @throws \Exception
      */
     public function save() {
         if($this->rowExists()) {
@@ -82,7 +86,7 @@ class Response extends \CI_Model {
      * @return array
      */
     private function buildSet() {
-        $set = $values->toStdClass();
+        $set = $this->getValues()->toArray();
 
         return (array)$set;
     }
@@ -91,6 +95,7 @@ class Response extends \CI_Model {
      * check if row (primary key) already exists
      *
      * @return bool
+     * @throws \Exception
      */
     private function rowExists() {
         $query = $this->db->get_where(self::TABLE, ['id' => $this->getValues()->getId()]);
