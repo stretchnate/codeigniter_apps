@@ -9,7 +9,7 @@
 namespace API\Vendor;
 
 
-class Values {
+class Values extends \Validation implements \ValueInterface {
 
 	/**
 	 * @var int
@@ -47,6 +47,37 @@ class Values {
     private $disabled_date;
 
     public function __construct() {
+        parent::__construct();
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray() {
+        $where = [];
+        if($this->getId()) {
+            $where['id'] = $this->getId();
+        }
+        if($this->getName()) {
+            $where['name'] = $this->getName();
+        }
+        if($this->getUsername()) {
+            $where['username'] = $this->getUsername();
+        }
+        if($this->getPassword()) {
+            $where['password'] = $this->getPassword();
+        }
+        if($this->getCredentials()) {
+            $where['credentials'] = $this->getCredentials();
+        }
+        if($this->getAddedDate()) {
+            $where['added_date'] = $this->getAddedDate()->format('Y-m-d');
+        }
+        if($this->getDisabledDate()) {
+            $where['disabled_date'] = $this->getDisabledDate()->format('Y-m-d');
+        }
+
+        return $where;
     }
 
     /**

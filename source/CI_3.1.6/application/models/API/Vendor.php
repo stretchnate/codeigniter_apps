@@ -46,13 +46,15 @@ class Vendor extends \CI_Model {
      * @throws \Exception
      */
     public function load(Values $values) {
-        $this->values = $values;
-
-        $query = $this->db->get_where(self::TABLE, $this->buildWhere());
+        $query = $this->db->get_where(self::TABLE, $values->toArray());
 
         if(!$query) {
             $error = $this->db->error();
-            throw new \Exception("Error: ". $error['message']);
+            throw new \Exception("Error: ". $error['message'], EXCEPTION_CODE_ERROR);
+        }
+
+        if($query->num_rows() < 1) {
+            throw new \Exception('No record found.', EXCEPTION_CODE_VALIDATION);
         }
 
         $this->values->setId($query->row()->id);
@@ -61,7 +63,8 @@ class Vendor extends \CI_Model {
         $this->values->setPassword($query->row()->password);
         $this->values->setCredentials($query->row()->credentials);
         $this->values->setAddedDate(new \DateTime($query->row()->added_date));
-        if($query->row()->disabled_date) {
+
+        if ($query->row()->disabled_date) {
             $this->values->setDisabledDate(new \DateTime($query->row()->disabled_date));
         }
 
@@ -105,36 +108,6 @@ class Vendor extends \CI_Model {
 		}
 
         return $this->db->insert(self::TABLE, $set);
-    }
-
-    /**
-     * @return \stdClass
-     */
-    private function buildWhere() {
-        $where = [];
-		if($this->getValues()->getId()) {
-			$where['id'] = $this->getValues()->getId();
-		}
-        if($this->getValues()->getName()) {
-            $where['name'] = $this->getValues()->getName();
-        }
-        if($this->getValues()->getUsername()) {
-            $where['username'] = $this->getValues()->getUsername();
-        }
-        if($this->getValues()->getPassword()) {
-            $where['password'] = $this->getValues()->getPassword();
-        }
-        if($this->getValues()->getCredentials()) {
-            $where['credentials'] = $this->getValues()->getCredentials();
-        }
-        if($this->getValues()->getAddedDate()) {
-            $where['added_date'] = $this->getValues()->getAddedDate()->format('Y-m-d');
-        }
-        if($this->getValues()->getDisabledDate()) {
-            $where['disabled_date'] = $this->getValues()->getDisabledDate()->format('Y-m-d');
-        }
-
-        return $where;
     }
 
     /**

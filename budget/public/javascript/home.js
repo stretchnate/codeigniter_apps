@@ -1,8 +1,10 @@
 $(document).ready(function() {
     $('.account-container').hide();
 
-    var id = $('ul.nav-tabs li.active').children('a:first').attr('id').replace(/-tab/, '');
-    $('#'+id).show();
+    if($('ul.nav-tabs li.active').attr('class')) {
+        var id = $('ul.nav-tabs li.active').children('a:first').attr('id').replace(/-tab/, '');
+        $('#' + id).show();
+    }
 
     $('ul.nav-tabs li').click(function() {
         if(!$(this).hasClass('active')) {
