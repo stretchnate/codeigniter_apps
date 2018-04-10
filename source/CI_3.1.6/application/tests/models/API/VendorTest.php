@@ -22,7 +22,6 @@
 		 * @covers \API\Vendor::save
 		 * @covers \API\Vendor::insert
 		 * @uses \API\Vendor::set
-		 * @uses \API\Vendor::buildWhere
 		 */
 		public function testSave() {
 			$vendor = new Vendor();
@@ -58,7 +57,6 @@
 		 * @covers \API\Vendor::save
 		 * @covers \API\Vendor::update
 		 * @covers \API\Vendor::set
-		 * @covers \API\Vendor::buildWhere
 		 * @depends testLoad
 		 * @param \API\Vendor $vendor
 		 */

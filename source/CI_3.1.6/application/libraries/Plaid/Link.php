@@ -34,7 +34,7 @@ class Link {
      * @param Vendor $vendor
      * @param array $products
      */
-    public function __construct(Vendor $vendor, $products = ['auth', 'transactions', 'identity']) {
+    public function __construct(Vendor $vendor, $products = ['auth', 'transactions']) {
         $this->vendor = $vendor;
         $this->integration_js = "
             <!--script src=\"https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js\"></script-->
@@ -48,7 +48,7 @@ class Link {
                 key: '%s',
                 product: ['".implode("','", $products)."'],
                 // Optional, use webhooks to get transaction and error updates
-                webhook: 'https://requestb.in',
+                webhook: 'http://money.local/webhook/plaid/transactions',
                 onLoad: function() {
                   // Optional, called when Link loads
                 },
@@ -57,9 +57,7 @@ class Link {
                   // The metadata object contains info about the institution the
                   // user selected and the account ID, if the Account Select view
                   // is enabled.
-                  $.post('/get_access_token', {
-                    public_token: public_token,
-                  });
+                  Plaid.getAccessToken(public_token, metadata);
                 },
                 onExit: function(err, metadata) {
                   // The user exited the Link flow.
