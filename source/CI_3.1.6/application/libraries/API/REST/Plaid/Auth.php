@@ -24,7 +24,7 @@ class Auth extends Plaid {
      * @return \Plaid\Auth
      * @throws \Exception
      */
-    public function get() {
+    public function getAuth() {
         $this->start();
 
         $postfields = $this->dataArray($this->vendor_data->getCredentials()->token);

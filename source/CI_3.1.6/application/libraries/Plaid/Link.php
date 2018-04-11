@@ -57,7 +57,7 @@ class Link {
                   // The metadata object contains info about the institution the
                   // user selected and the account ID, if the Account Select view
                   // is enabled.
-                  Plaid.getAccessToken(public_token, metadata);
+                  plaid.getAccessToken(public_token, metadata);
                 },
                 onExit: function(err, metadata) {
                   // The user exited the Link flow.

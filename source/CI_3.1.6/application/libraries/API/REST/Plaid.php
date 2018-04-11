@@ -19,7 +19,7 @@ abstract class Plaid extends \API\REST {
      * Plaid constructor.
      */
     public function __construct() {
-        parent::__construct();
+        parent::__construct('Plaid');
     }
 
     /**
@@ -31,6 +31,7 @@ abstract class Plaid extends \API\REST {
         curl_setopt($this->ch,CURLOPT_FORBID_REUSE, true);
         curl_setopt($this->ch, CURLOPT_FRESH_CONNECT, true);
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($this->ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
     }
 
     /**
@@ -39,9 +40,10 @@ abstract class Plaid extends \API\REST {
      * @return array
      */
     protected function dataArray($token, $token_type = 'access_token') {
+        $creds = json_decode($this->vendor_data->getValues()->getCredentials());
         $data = [
-            'client_id' => $this->vendor_data->getClientId(),
-            'secret' => $this->vendor_data->getSecret(),
+            'client_id' => $creds->client_id,
+            'secret' => $creds->secret,
             $token_type => $token
         ];
 
@@ -57,7 +59,7 @@ abstract class Plaid extends \API\REST {
         $response = json_decode($response);
 
         if(isset($response->error_type)) {
-            throw new \Exception($response->error_message, $response->http_code);
+            throw new \Exception($response->error_message, EXCEPTION_CODE_ERROR);
         }
 
         return $response;

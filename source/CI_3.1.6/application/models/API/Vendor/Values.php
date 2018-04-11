@@ -36,6 +36,11 @@ class Values extends \Validation implements \ValueInterface {
 	 */
     private $credentials;
 
+    /**
+     * @var string
+     */
+    private $url;
+
 	/**
 	 * @var \DateTime
 	 */
@@ -69,6 +74,9 @@ class Values extends \Validation implements \ValueInterface {
         }
         if($this->getCredentials()) {
             $where['credentials'] = $this->getCredentials();
+        }
+        if($this->getUrl()) {
+            $where['url'] = $this->getUrl();
         }
         if($this->getAddedDate()) {
             $where['added_date'] = $this->getAddedDate()->format('Y-m-d');
@@ -164,6 +172,24 @@ class Values extends \Validation implements \ValueInterface {
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getUrl() {
+        return $this->url;
+    }
+
+    /**
+     * @param string $url
+     * @return Values
+     */
+    public function setUrl(string $url) {
+        $this->url = $url;
+
+        return $this;
+    }
+
 
     /**
      * @return \DateTime

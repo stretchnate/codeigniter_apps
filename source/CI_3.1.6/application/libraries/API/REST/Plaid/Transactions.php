@@ -19,7 +19,7 @@ class Transactions extends Plaid {
      * @return \Plaid\TransactionResponse
      * @throws \Exception
      */
-    public function get() {
+    public function getTransactions() {
         $this->start();
 
         $postfields = $this->dataArray($this->vendor_data->getCredentials()->token);

@@ -18,7 +18,7 @@ class Balance extends Plaid {
      * @return \Plaid\Balace
      * @throws \Exception
      */
-    public function get() {
+    public function getBalance() {
         $this->start();
 
         $postfields = $this->dataArray($this->vendor_data->getCredentials()->token);
