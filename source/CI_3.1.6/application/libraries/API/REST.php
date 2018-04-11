@@ -1,6 +1,7 @@
 <?php
 
 namespace API;
+use API\Vendor\Values;
 
 /**
  * Class REST
@@ -15,7 +16,7 @@ abstract class REST {
     protected $ch;
 
     /**
-     * @var APIVendor
+     * @var Vendor
      */
     protected $vendor_data;
 
@@ -38,10 +39,13 @@ abstract class REST {
     /**
      * REST constructor.
      *
-     * @param $vendor_name
+     * @param string $vendor_name
+     * @throws \Exception
      */
     public function __construct($vendor_name) {
-        $this->vendor_data = new APIVendor();//new model and db table
+        $values = new Values();
+        $values->setName($vendor_name);
+        $this->vendor_data = new Vendor($values);
     }
 
     /**
@@ -83,9 +87,9 @@ abstract class REST {
      * @throws \Exception
      */
     protected function get($uri) {
-        $this->startCURL();
+        $this->start();
 
-        $url = $this->vendor_data->url . $uri;
+        $url = $this->vendor_data->getValues()->getUrl() . $uri;
 
         curl_setopt($this->ch, CURLOPT_URL, $url);
         curl_setopt($this->ch, CURLOPT_FORBID_REUSE, true);
@@ -102,9 +106,9 @@ abstract class REST {
      * @throws \Exception
      */
     protected function post($uri, $postfields) {
-        $this->startCURL();
+        $this->start();
 
-        $url = $this->vendor_data->url . $uri;
+        $url = $this->vendor_data->getValues()->getUrl() . $uri;
 
         curl_setopt($this->ch, CURLOPT_URL, $url);
         curl_setopt($this->ch, CURLOPT_POST, true);

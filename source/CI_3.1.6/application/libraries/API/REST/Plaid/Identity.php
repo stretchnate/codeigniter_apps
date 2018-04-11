@@ -18,7 +18,7 @@ class Identity extends Plaid {
      * @return \Plaid\IdentityResponse
      * @throws \Exception
      */
-    public function get() {
+    public function getIdentity() {
         $this->start();
 
         $postfields = $this->dataArray($this->vendor_data->getCredentials()->token);

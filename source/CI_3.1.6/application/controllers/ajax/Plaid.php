@@ -19,6 +19,7 @@ class Plaid extends CI_Controller {
 
         try {
             $api = new \API\REST\Plaid\Auth();
+
             $response = $api->exchangeToken($this->input->post('public_token', true));
 
             if($response->access_token && $response->item_id) {
@@ -36,6 +37,7 @@ class Plaid extends CI_Controller {
                 $data->message = $e->getMessage();
             } else {
                 log_message('error', $e->getMessage());
+                log_message('error', $e->getTraceAsString());
             }
         }
 

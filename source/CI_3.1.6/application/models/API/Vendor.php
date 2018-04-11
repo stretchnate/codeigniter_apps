@@ -62,6 +62,7 @@ class Vendor extends \CI_Model {
         $this->values->setUsername($query->row()->username);
         $this->values->setPassword($query->row()->password);
         $this->values->setCredentials($query->row()->credentials);
+        $this->values->setUrl($query->row()->url);
         $this->values->setAddedDate(new \DateTime($query->row()->added_date));
 
         if ($query->row()->disabled_date) {

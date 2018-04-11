@@ -18,7 +18,7 @@ class Income extends Plaid {
      * @return \Plaid\Income
      * @throws \Exception
      */
-    public function get() {
+    public function getIncome() {
         $this->start();
 
         $postfields = $this->dataArray($this->vendor_data->getCredentials()->token);

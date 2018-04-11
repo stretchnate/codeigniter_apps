@@ -106,8 +106,12 @@ class Connection extends \CI_Model {
         $set = new \stdClass();
         $set->account_id = $this->getValues()->getAccountId();
         $set->access_token = $this->getValues()->getAccessToken();
-        $set->transactions_ready = $this->getValues()->getTransactionsReady();
-        $set->dt_added = $this->getValues()->getDtAdded()->format('Y-m-d H:i:s');
+        if($this->getValues()->getTransactionsReady()) {
+            $set->transactions_ready = $this->getValues()->getTransactionsReady();
+        }
+        if($this->getValues()->getDtAdded()) {
+            $set->dt_added = $this->getValues()->getDtAdded()->format('Y-m-d H:i:s');
+        }
 
         return $set;
     }
