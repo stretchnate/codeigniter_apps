@@ -7,7 +7,6 @@
  */
 
 namespace Plaid;
-use Plaid\Auth\Account;
 
 
 /**

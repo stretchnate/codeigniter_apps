@@ -1,7 +1,7 @@
 <?php
     namespace Plaid;
 
-    use Plaid\Auth\Response\Account;
+    use Plaid\Response\Account;
 
     class AuthTest extends \CITest {
 
@@ -33,12 +33,12 @@
         }
 
         /**
-         * @covers Plaid\Auth::__construct
-         * @covers Plaid\Auth::loadNumbers
-         * @covers Plaid\Auth::loadAccounts
-         * @covers Plaid\Auth::setRequestId
-         * @covers Plaid\Auth::setItem
-         * @return Plaid\Auth
+         * @covers \Plaid\Auth::__construct
+         * @covers \Plaid\Auth::loadNumbers
+         * @covers \Plaid\Auth::loadAccounts
+         * @covers \Plaid\Auth::setRequestId
+         * @covers \Plaid\Auth::setItem
+         * @return \Plaid\Auth
          */
         public function testLoad() {
             $auth = new Auth($this->data);
@@ -49,19 +49,19 @@
         }
 
         /**
-         * @covers Plaid\Auth::getAccounts
+         * @covers \Plaid\Auth::getAccounts
          * @depends testLoad
-         * @param Plaid\Auth $auth
+         * @param \Plaid\Auth $auth
          * @return void
          */
         public function testGetAccounts($auth) {
-            $this->assertInstanceOf('Plaid\Auth\Account', $auth->getAccounts()[0]);
+            $this->assertInstanceOf('Plaid\Account', $auth->getAccounts()[0]);
         }
 
         /**
-         * @covers Plaid\Auth::getNumbers
+         * @covers \Plaid\Auth::getNumbers
          * @depends testLoad
-         * @param Plaid\Auth $auth
+         * @param \Plaid\Auth $auth
          * @return void
          */
         public function testGetNumbers($auth) {
@@ -69,9 +69,9 @@
         }
 
         /**
-         * @covers Plaid\Auth::getRequestId
+         * @covers \Plaid\Auth::getRequestId
          * @depends testLoad
-         * @param Plaid\Auth $auth
+         * @param \Plaid\Auth $auth
          * @return void
          */
         public function testGetRequestId($auth) {
@@ -79,9 +79,9 @@
         }
 
         /**
-         * @covers Plaid\Auth::getItem
+         * @covers \Plaid\Auth::getItem
          * @depends testLoad
-         * @param Plaid\Auth $auth
+         * @param \Plaid\Auth $auth
          * @return void
          */
         public function testGetItem($auth) {

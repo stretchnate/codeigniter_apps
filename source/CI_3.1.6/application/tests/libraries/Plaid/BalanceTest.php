@@ -56,7 +56,7 @@
 		 * @param \Plaid\Balance $balance
 		 */
 		public function testGetAccounts($balance) {
-			$this->assertInstanceOf('Plaid\Auth\Account', $balance->getAccounts()[0]);
+			$this->assertInstanceOf('Plaid\Account', $balance->getAccounts()[0]);
 		}
 		
 		/**

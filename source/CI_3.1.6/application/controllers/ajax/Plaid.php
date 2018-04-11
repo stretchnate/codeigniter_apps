@@ -22,6 +22,8 @@ class Plaid extends CI_Controller {
 
             $response = $api->exchangeToken($this->input->post('public_token', true));
 
+            //TODO need to take the metadata object from post and save a plaid_connection entry for each account in
+            //the metadata
             if($response->access_token && $response->item_id) {
                 $connection = new \Plaid\Connection();
                 $connection->getValues()->setItemId($response->item_id)

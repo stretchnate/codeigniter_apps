@@ -8,7 +8,6 @@
 
 namespace Plaid;
 
-use Plaid\Auth\Account;
 use Plaid\Auth\Number;
 /**
  * Class Auth

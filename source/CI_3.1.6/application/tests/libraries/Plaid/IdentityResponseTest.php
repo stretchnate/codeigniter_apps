@@ -99,7 +99,7 @@
 		 * @param \Plaid\IdentityResponse $ir
 		 */
 		public function testGetAccounts($ir) {
-			$this->assertInstanceOf('Plaid\Auth\Account', $ir->getAccounts()[0]);
+			$this->assertInstanceOf('Plaid\Account', $ir->getAccounts()[0]);
 		}
 		
 		/**
