@@ -104,7 +104,7 @@
 		 * @param \Plaid\Transaction $transaction
 		 */
 		public function testGetAccounts($transaction) {
-			$this->assertInstanceOf('Plaid\Auth\Account', $transaction->getAccounts()[0]);
+			$this->assertInstanceOf('Plaid\Account', $transaction->getAccounts()[0]);
 		}
 		
 		/**

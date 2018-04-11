@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
     private $CI;
 
-    private $data;
+    protected $data;
 
     public function setUp() {
         // Load CI instance normally

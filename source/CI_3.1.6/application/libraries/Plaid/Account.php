@@ -6,10 +6,9 @@
  * and open the template in the editor.
  */
 
-namespace Plaid\Auth;
+namespace Plaid;
 
-use Plaid\Auth\Account\Balances;
-use Plaid\Plaid;
+use Plaid\Account\Balances;
 
 /**
  * Class Account
@@ -58,13 +57,25 @@ class Account extends Plaid {
      */
     public function __construct($raw_response) {
         parent::__construct($raw_response);
-        $this->account_id = $this->getRawResponse()->account_id;
-        $this->loadBalances($this->getRawResponse()->balances);
+        if(!empty($this->getRawResponse()->account_id)) {
+            $this->account_id = $this->getRawResponse()->account_id;
+        } elseif(!empty($this->getRawResponse()->id)) {
+            $this->account_id = $this->getRawResponse()->id;
+        }
+
         $this->mask = $this->getRawResponse()->mask;
         $this->name = $this->getRawResponse()->name;
-        $this->official_name = $this->getRawResponse()->official_name;
         $this->subtype = $this->getRawResponse()->subtype;
         $this->type = $this->getRawResponse()->type;
+
+        if(!empty($this->getRawResponse()->balances)) {
+            $this->loadBalances($this->getRawResponse()->balances);
+        }
+        if(!empty($this->getRawResponse()->official_name)) {
+            $this->official_name = $this->getRawResponse()->official_name;
+        }
+
+
     }
 
     /**

@@ -1,7 +1,5 @@
 <?php
-    namespace Plaid;
-
-    use Plaid\Auth\Account\Balances;
+    namespace Plaid\Account;
 
     class BalancesTest extends \CITest {
 
@@ -14,39 +12,39 @@
         }
 
         /**
-         * @covers Plaid\Auth\Account\Balances::__construct
-         * @return Plaid\Auth\Account\Balances
+         * @covers \Plaid\Account\Balances::__construct
+         * @return \Plaid\Account\Balances
          */
         public function testLoad() {
             $balances = new Balances($this->data);
 
-            $this->assertInstanceOf('Plaid\Auth\Account\Balances', $balances);
+            $this->assertInstanceOf('Plaid\Account\Balances', $balances);
 
             return $balances;
         }
 
         /**
-         * @covers Plaid\Auth\Account\Balances::getAvailable
+         * @covers \Plaid\Account\Balances::getAvailable
          * @depends testLoad
-         * @param Plaid\Auth\Account\Balances $balances
+         * @param \Plaid\Account\Balances $balances
          */
         public function testGetAvailable($balances) {
             $this->assertEquals($this->data->available, $balances->getAvailable());
         }
     
         /**
-         * @covers Plaid\Auth\Account\Balances::getAvailable
+         * @covers \Plaid\Account\Balances::getAvailable
          * @depends testLoad
-         * @param Plaid\Auth\Account\Balances $balances
+         * @param \Plaid\Account\Balances $balances
          */
         public function testGetCurrent($balances) {
             $this->assertEquals($this->data->current, $balances->getCurrent());
         }
     
         /**
-         * @covers Plaid\Auth\Account\Balances::getAvailable
+         * @covers \Plaid\Account\Balances::getAvailable
          * @depends testLoad
-         * @param Plaid\Auth\Account\Balances $balances
+         * @param \Plaid\Account\Balances $balances
          */
         public function testGetLimit($balances) {
             $this->assertEquals($this->data->limit, $balances->getLimit());
