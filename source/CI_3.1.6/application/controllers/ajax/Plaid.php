@@ -8,10 +8,16 @@
 
 class Plaid extends CI_Controller {
 
+    /**
+     * Plaid constructor.
+     */
     public function __construct() {
         parent::__construct();
     }
 
+    /**
+     * exchange the public token for an access token
+     */
     public function getAccessToken() {
         $data = new stdClass();
         $data->success = false;
@@ -20,16 +26,12 @@ class Plaid extends CI_Controller {
         try {
             $api = new \API\REST\Plaid\Auth();
 
+            $metadata = new \Plaid\Metadata($this->input->post('metadata', true));
             $response = $api->exchangeToken($this->input->post('public_token', true));
 
-            //TODO need to take the metadata object from post and save a plaid_connection entry for each account in
-            //the metadata
             if($response->access_token && $response->item_id) {
-                $connection = new \Plaid\Connection();
-                $connection->getValues()->setItemId($response->item_id)
-                    ->setAccessToken($response->access_token);
-
-                $connection->save();
+                $creator = new \Plaid\Account\Creator();
+                $creator->run($metadata, $response, $this->session->userdata('user_id'));
 
                 $data->success = true;
                 $data->message = '';

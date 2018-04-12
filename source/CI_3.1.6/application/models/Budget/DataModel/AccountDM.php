@@ -1,17 +1,51 @@
 <?php
+
+/**
+ * Class Budget_DataModel_AccountDM
+ */
 class Budget_DataModel_AccountDM extends N8_Model {
 
-	const TABLE = 'accounts';
-	
-	private $account_id;
-	private $account_name;
-	private $account_amount;
-	private $owner_id;
-	private $payschedule_code;
-	private $active;
-	private $categories = array();
+    /**
+     *
+     */
+    const TABLE = 'accounts';
 
-	function __construct($account_id = null, $owner_id = null){
+    /**
+     * @var
+     */
+    private $account_id;
+    /**
+     * @var
+     */
+    private $account_name;
+    /**
+     * @var
+     */
+    private $account_amount;
+    /**
+     * @var
+     */
+    private $owner_id;
+    /**
+     * @var
+     */
+    private $payschedule_code;
+    /**
+     * @var
+     */
+    private $active;
+    /**
+     * @var array
+     */
+    private $categories = array();
+
+    /**
+     * Budget_DataModel_AccountDM constructor.
+     *
+     * @param null $account_id
+     * @param null $owner_id
+     * @throws Exception
+     */function __construct($account_id = null, $owner_id = null){
 		parent::__construct();
 
 		if($account_id && $owner_id) {
@@ -43,16 +77,22 @@ class Budget_DataModel_AccountDM extends N8_Model {
 		}
 	}
 
-	public function saveAccount() {
+    /**
+     * @return bool
+     * @throws \Exception
+     */
+    public function saveAccount() {
 		if($this->account_id > 0) {
 			$result = $this->updateAccount();
 			if($result === false) {
 				$this->setError("There was a problem updating the account ".$this->account_name);
 			}
 		} else {
-			$this->insertAccount();
-			$this->insert_id = $this->db->insert_id();
-			$result = $this->insert_id;
+			if(!$this->insertAccount()) {
+			    $error = $this->db->error();
+			    throw new \Exception($error['message'], EXCEPTION_CODE_ERROR);
+            }
+            $result = $this->account_id = $this->db->insert_id();
 		}
 
         return $result;
@@ -78,7 +118,10 @@ class Budget_DataModel_AccountDM extends N8_Model {
         return $result;
 	}
 
-	private function insertAccount(){
+    /**
+     * @return mixed
+     */
+    private function insertAccount(){
 		$values = array();
 
 		$values["account_name"]     = $this->account_name;
@@ -210,55 +253,94 @@ class Budget_DataModel_AccountDM extends N8_Model {
 		return $num_days;
 	}
 
-	public function getAccountId() {
+    /**
+     * @return mixed
+     */
+    public function getAccountId() {
 		return $this->account_id;
 	}
 
-	public function getAccountName() {
+    /**
+     * @return mixed
+     */
+    public function getAccountName() {
 		return $this->account_name;
 	}
 
-	public function setAccountName($account_name) {
+    /**
+     * @param $account_name
+     */
+    public function setAccountName($account_name) {
 		$this->account_name = $account_name;
 	}
 
-	public function getAccountAmount() {
+    /**
+     * @return mixed
+     */
+    public function getAccountAmount() {
 		return $this->account_amount;
 	}
 
-	public function setAccountAmount($account_amount) {
+    /**
+     * @param $account_amount
+     */
+    public function setAccountAmount($account_amount) {
 		$this->account_amount = $account_amount;
 	}
 
-	public function getOwnerId() {
+    /**
+     * @return mixed
+     */
+    public function getOwnerId() {
 		return $this->owner_id;
 	}
 
-	public function setOwnerId($owner_id) {
+    /**
+     * @param $owner_id
+     */
+    public function setOwnerId($owner_id) {
 		$this->owner_id = $owner_id;
 	}
 
-	public function getPayScheduleCode() {
+    /**
+     * @return mixed
+     */
+    public function getPayScheduleCode() {
 		return $this->payschedule_code;
 	}
 
-	public function setPayScheduleCode($payschedule_code) {
+    /**
+     * @param $payschedule_code
+     */
+    public function setPayScheduleCode($payschedule_code) {
 		$this->payschedule_code = $payschedule_code;
 	}
 
-	public function getActive() {
+    /**
+     * @return mixed
+     */
+    public function getActive() {
 		return $this->active;
 	}
 
-	public function setActive($active) {
+    /**
+     * @param $active
+     */
+    public function setActive($active) {
 		$this->active = $active;
 	}
 
-	public function getCategories() {
+    /**
+     * @return array
+     */
+    public function getCategories() {
 		return $this->categories;
 	}
 
-	public function getID() {
+    /**
+     * @return mixed
+     */
+    public function getID() {
 		return $this->getAccountId();
 	}
 }

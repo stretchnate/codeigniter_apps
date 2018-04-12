@@ -39,6 +39,10 @@ class Metadata extends Plaid {
      * @param $raw_response
      */
     public function __construct($raw_response) {
+        if(is_array($raw_response)) {
+            $raw_response = json_decode(json_encode($raw_response));
+        }
+
         parent::__construct($raw_response);
         $this->link_session_id = $raw_response->link_session_id;
         $this->loadInstitution();
@@ -64,21 +68,21 @@ class Metadata extends Plaid {
     /**
      * @return string
      */
-    public function getLinkSessionId(): string {
+    public function getLinkSessionId() {
         return $this->link_session_id;
     }
 
     /**
      * @return Institution
      */
-    public function getInstitution(): Institution {
+    public function getInstitution() {
         return $this->institution;
     }
 
     /**
      * @return Account[]
      */
-    public function getAccounts(): array {
+    public function getAccounts() {
         return $this->accounts;
     }
 }

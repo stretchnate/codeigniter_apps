@@ -24,6 +24,11 @@ class Values extends \Validation implements \ValueInterface {
     /**
      * @var string
      */
+    private $plaid_account_id;
+
+    /**
+     * @var string
+     */
     private $access_token;
 
     /**
@@ -46,6 +51,9 @@ class Values extends \Validation implements \ValueInterface {
         }
         if($this->getAccountId()) {
             $where['account_id'] = $this->getAccountId();
+        }
+        if($this->getPlaidAccountId()) {
+            $where['plaid_account_id'] = $this->getPlaidAccountId();
         }
         if($this->getAccessToken()) {
             $where['access_token'] = $this->getAccessToken();
@@ -99,6 +107,23 @@ class Values extends \Validation implements \ValueInterface {
      */
     public function setAccountId($account_id) {
         $this->account_id = $this->simple_validation->isInt($account_id);
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPlaidAccountId() {
+        return $this->plaid_account_id;
+    }
+
+    /**
+     * @param string $plaid_account_id
+     * @return Values
+     */
+    public function setPlaidAccountId(string $plaid_account_id) {
+        $this->plaid_account_id = $plaid_account_id;
 
         return $this;
     }
