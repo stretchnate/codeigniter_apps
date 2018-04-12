@@ -24,15 +24,18 @@ class Home extends N8_Controller {
 
 		if($account_iterator->count() < 1 && $plaid->getValues()->getId()) {
             $link = new \Plaid\Link($plaid);
-		}
-
-        $this->homeView($link);
+            $this->homeView($link);
+		} else {
+		    $this->homeView();
+        }
 	}
 
     /**
      * displays the home page
+     *
+     * @param \Plaid\Link $link
      */
-	private function homeView(\Plaid\Link $link = null) {
+	private function homeView($link = null) {
 		$this->load->model('notes_model', 'NM', TRUE);
 		$this->load->view('budget/homeVW');
 
@@ -40,7 +43,9 @@ class Home extends N8_Controller {
 		$home_vw = new Budget_HomeVW($CI);
 		$home_vw->setTitle("Your Accounts");
 		$home_vw->setScripts($this->jsincludes->home());
-		$home_vw->setLink($link);
+		if($link) {
+            $home_vw->setLink($link);
+        }
 
 		//get the accounts
 		$home_model = new Budget_BusinessModel_Home();
@@ -69,7 +74,7 @@ class Home extends N8_Controller {
      * creates an array of monthlyNeed objects
      *
      * @param array $accounts
-     * @return \monthlyNeed
+     * @return \monthlyNeed[]
      */
     private function getTotalsArray($accounts) {
         $totals_array = array();

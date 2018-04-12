@@ -59,6 +59,7 @@ class Connection extends \CI_Model {
             $row = $query->row();
             $this->getValues()->setItemId($row->item_id);
             $this->getValues()->setAccountId((int)$row->account_id);
+            $this->getValues()->setPlaidAccountId($row->plaid_account_id);
             $this->getValues()->setAccessToken($row->access_token);
             $this->getValues()->setTransactionsReady($row->transactions_ready);
             $this->getValues()->setDtAdded(new \DateTime($row->dt_added));
@@ -66,7 +67,7 @@ class Connection extends \CI_Model {
     }
 
     /**
-     * @return mixed
+     * @throws \Exception
      */
     public function save() {
         if($this->rowExists()) {
@@ -75,11 +76,14 @@ class Connection extends \CI_Model {
             $result = $this->insert();
         }
 
-        return $result;
+        if($result === false) {
+            $error = $this->db->error();
+            throw new \Exception($error['message'], EXCEPTION_CODE_ERROR);
+        }
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
     private function insert() {
         $set = $this->set();
@@ -91,7 +95,7 @@ class Connection extends \CI_Model {
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
     private function update() {
         $this->db->where(['item_id' => $this->getValues()->getItemId()]);
@@ -106,6 +110,9 @@ class Connection extends \CI_Model {
         $set = new \stdClass();
         $set->account_id = $this->getValues()->getAccountId();
         $set->access_token = $this->getValues()->getAccessToken();
+        if($this->getValues()->getPlaidAccountId()) {
+            $set->plaid_account_id = $this->getValues()->getPlaidAccountId();
+        }
         if($this->getValues()->getTransactionsReady()) {
             $set->transactions_ready = $this->getValues()->getTransactionsReady();
         }
@@ -122,7 +129,13 @@ class Connection extends \CI_Model {
     private function rowExists() {
         $result = false;
         if($this->getValues()->getItemId()) {
-            $query = $this->db->get_where(self::TABLE, ['item_id' => $this->getValues()->getItemId()]);
+            $where = [
+                'item_id' => $this->getValues()->getItemId(),
+                'plaid_account_id' => $this->getValues()->getPlaidAccountId(),
+                'account_id' => $this->getValues()->getAccountId()
+            ];
+
+            $query = $this->db->get_where(self::TABLE, $where);
 
             $result = ($query->num_rows() > 0);
         }

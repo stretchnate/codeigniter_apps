@@ -57,17 +57,19 @@ class Account extends Plaid {
      */
     public function __construct($raw_response) {
         parent::__construct($raw_response);
+        $this->mask = $this->getRawResponse()->mask;
+        $this->name = $this->getRawResponse()->name;
+        $this->type = $this->getRawResponse()->type;
+
         if(!empty($this->getRawResponse()->account_id)) {
             $this->account_id = $this->getRawResponse()->account_id;
         } elseif(!empty($this->getRawResponse()->id)) {
             $this->account_id = $this->getRawResponse()->id;
         }
 
-        $this->mask = $this->getRawResponse()->mask;
-        $this->name = $this->getRawResponse()->name;
-        $this->subtype = $this->getRawResponse()->subtype;
-        $this->type = $this->getRawResponse()->type;
-
+        if(!empty($this->getRawResponse()->subtype)) {
+            $this->subtype = $this->getRawResponse()->subtype;
+        }
         if(!empty($this->getRawResponse()->balances)) {
             $this->loadBalances($this->getRawResponse()->balances);
         }
