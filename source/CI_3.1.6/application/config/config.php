@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://money.stretchnate.com';
+$config['base_url'] = 'http://stretchnate.ddns.net';
 //$config['base_url'] = 'http://money.local';
 
 /*
