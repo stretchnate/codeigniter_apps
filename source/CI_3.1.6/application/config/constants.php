@@ -100,3 +100,6 @@ defined('LOG_LEVEL_INFO')  OR define('LOG_LEVEL_INFO', 'info');
 
 defined('EXCEPTION_CODE_VALIDATION') OR define('EXCEPTION_CODE_VALIDATION', 200);
 defined('EXCEPTION_CODE_ERROR') OR define('EXCEPTION_CODE_ERROR', 500);
+
+defined('COMPANY_NAME')            OR define('COMPANY_NAME', 'Quantum'); //Quantum
+defined('COMPANY_LOGOUT_REDIRECT') OR define('COMPANY_LOGOUT_REDIRECT', 'http://stretchnate.ddns.net/admin/login');//for mara just set this to http://whyibudget.com

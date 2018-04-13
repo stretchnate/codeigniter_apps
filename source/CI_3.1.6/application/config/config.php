@@ -402,7 +402,7 @@ $config['sess_regenerate_destroy'] = FALSE;
 |
 */
 $config['cookie_prefix']	= '';
-$config['cookie_domain']	= '.stretchnate.com';
+$config['cookie_domain']	= preg_replace('~(http|https)://~', '', $config['base_url']);
 $config['cookie_path']		= '/';
 $config['cookie_secure']	= FALSE;
 $config['cookie_httponly'] 	= FALSE;
