@@ -1,10 +1,15 @@
-var plaid = {};
+var plaid = {probe:null};
 
-//for some reason this isn't being found
+/**
+ * exchange the public token for the access token
+ *
+ * @param public_token
+ * @param metadata
+ */
 plaid.getAccessToken = function(public_token, metadata) {
     $.post('/ajax/plaid/getAccessToken', {public_token: public_token, metadata : metadata}, function(response) {
         if(response.success) {
-            plaid.transactionsProbe();
+            plaid.probe = window.setInterval(plaid.transactionsProbe, 5000, metadata['account_id']);
         } else {
             //show an error message.
             alert(response.message);
@@ -12,6 +17,32 @@ plaid.getAccessToken = function(public_token, metadata) {
     }, 'json');
 };
 
-plaid.transactionsProbe = function() {
-    //probe the server every so often to see if transactions are ready
-}
+/**
+ * check to see if transactions are ready
+ */
+plaid.transactionsProbe = function(account_id) {
+        $.post('/ajax/plaid/areTransactionsReady', {plaid_account_id:account_id}, function(response) {
+            if(response.success) {
+                if(response.message == 'yes') {
+                    clearInterval(plaid.probe);
+                    plaid.handleTransactions(account_id);
+                }
+            } else {
+                clearInterval(probe);
+                alert('there was a problem linking your account(s).');
+            }
+        }, 'json');
+};
+
+plaid.handleTransactions = function(account_id) {
+    var date = new Date();
+    var month = date.getMonth() == 0 ? 12 : date.getMonth();
+    var start_date = date.getFullYear()+'-'+month+'-'+date.getDate();
+    $.post('/ajax/plaid/handleTransactions', {plaid_account_id:account_id, start_date:start_date}, function(response) {
+        if(response.success) {
+            // location.reload();
+        } else {
+            alert('there was a problem linking your account(s)');
+        }
+    }, 'json');
+};

@@ -21,13 +21,14 @@ class Auth extends Plaid {
     private $target = '/auth/get';
 
     /**
+     * @param $token
      * @return \Plaid\Auth
      * @throws \Exception
      */
-    public function getAuth() {
+    public function getAuth($token) {
         $this->start();
 
-        $postfields = $this->dataArray($this->vendor_data->getCredentials()->token);
+        $postfields = $this->dataArray($token);
 
         $response = $this->post($this->target, json_encode($postfields));
 

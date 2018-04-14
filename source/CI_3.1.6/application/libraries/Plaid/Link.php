@@ -48,7 +48,7 @@ class Link {
                 key: '%s',
                 product: ['".implode("','", $products)."'],
                 // Optional, use webhooks to get transaction and error updates
-                webhook: 'http://money.local/webhook/plaid/transactions',
+                webhook: '".site_url()."/webhook/plaid/transactions',
                 onLoad: function() {
                   // Optional, called when Link loads
                 },
