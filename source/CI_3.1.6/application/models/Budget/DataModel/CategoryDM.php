@@ -12,6 +12,7 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 	private $due_day;
 	private $due_months;
 	private $parent_account_id; //maps to account_id
+    private $plaid_category_id;
 	private $interest_bearing;
 	private $days_until_due;
 	private $next_due_date;
@@ -24,39 +25,34 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 		}
 	}
 
-	/**
-	 * loads the category data into the class properties.
-	 *
-	 * @param category_id int
-	 */
+    /**
+     * loads the category data into the class properties.
+     *
+     * @param $category_id
+     * @param $owner_id
+     * @throws Exception
+     */
 	function loadCategory($category_id, $owner_id) {
-		$query = $this->db->get_where("booksummary", array("bookId" => $category_id, 'ownerId' => $owner_id));
-		if($query->num_rows() < 1) {
-			throw new Exception("Invalid Category ID [$category_id] for owner [".$owner_id."] (".__METHOD__.":".__LINE__.")");
-		}
-
-		$category = $query->row();
-
-		foreach($category as $column => $value) {
-			$value = trim($value);
-			switch($column) {
-                case "bookId":          $this->category_id             = $value; break;
-                case "bookName":        $this->category_name           = $value; break;
-                case "bookAmtNec":      (float)$this->amount_necessary = $value; break;
-                case "bookAmtCurrent":  (float)$this->current_amount   = $value; break;
-                case "ownerId":         $this->owner_id                = $value; break;
-                case "account_id":      $this->parent_account_id       = $value; break;
-				case "InterestBearing": $this->interest_bearing        = Utilities::getBoolean($value); break;
-                case "due_months":      $this->due_months              = explode('|', $value); break;
-				default:
-					$this->$column = $value;
-			}
-		}
+		$this->loadBy(array("bookId" => $category_id, 'ownerId' => $owner_id));
 	}
 
-	function checkExisitingCategory(&$category_name, &$user_id) {
+    /**
+     * loads the category based on array provided
+     *
+     * @param array $where
+     * @throws Exception
+     */
+	public function loadBy($where = []) {
+	    if(empty($where['ownerId'])) {
+	        throw new Exception("Owner not authorized to view this category.", EXCEPTION_CODE_ERROR);
+        }
 
-	}
+        $query = $this->db->get_where("booksummary", $where);
+
+        if($query->num_rows() > 0) {
+            $this->load($query->row());
+        }
+    }
 
     /**
      * saves the category to the database
@@ -76,6 +72,29 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 	}
 
     /**
+     * loads the data into the category
+     *
+     * @param $category
+     */
+	private function load($category) {
+        foreach($category as $column => $value) {
+            $value = trim($value);
+            switch($column) {
+                case "bookId":          $this->category_id             = $value; break;
+                case "bookName":        $this->category_name           = $value; break;
+                case "bookAmtNec":      (float)$this->amount_necessary = $value; break;
+                case "bookAmtCurrent":  (float)$this->current_amount   = $value; break;
+                case "ownerId":         $this->owner_id                = $value; break;
+                case "account_id":      $this->parent_account_id       = $value; break;
+                case "InterestBearing": $this->interest_bearing        = Utilities::getBoolean($value); break;
+                case "due_months":      $this->due_months              = explode('|', $value); break;
+                default:
+                    $this->$column = $value;
+            }
+        }
+    }
+
+    /**
      * updates an existing category
      *
      * @return boolean
@@ -84,17 +103,18 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 		$result = false;
 
 		$sets = array();
-		$sets["bookId"]          = $this->category_id;
-		$sets["bookName"]        = $this->category_name;
-		$sets["bookAmtNec"]      = $this->dbNumberFormat($this->amount_necessary);
-		$sets["bookAmtCurrent"]  = $this->dbNumberFormat($this->current_amount);
-		$sets["ownerId"]         = $this->owner_id;
-		$sets["priority"]        = $this->priority;
-		$sets["active"]          = $this->active;
-		$sets["due_day"]         = $this->due_day;
-		$sets["due_months"]      = implode('|', $this->due_months);
-		$sets["account_id"]      = $this->parent_account_id;
-		$sets["InterestBearing"] = $this->interest_bearing;
+		$sets["bookId"]            = $this->category_id;
+		$sets["bookName"]          = $this->category_name;
+		$sets["bookAmtNec"]        = $this->dbNumberFormat($this->amount_necessary);
+		$sets["bookAmtCurrent"]    = $this->dbNumberFormat($this->current_amount);
+		$sets["ownerId"]           = $this->owner_id;
+		$sets["priority"]          = $this->priority;
+		$sets["active"]            = $this->active;
+		$sets["due_day"]           = $this->due_day;
+		$sets["due_months"]        = implode('|', $this->due_months);
+		$sets["account_id"]        = $this->parent_account_id;
+		$sets["InterestBearing"]   = $this->interest_bearing;
+		$sets["plaid_category_id"] = $this->plaid_category_id;
 
 		if($this->db->where("bookId", $this->category_id)->update("booksummary", $sets)) {
 			$result = true;
@@ -124,6 +144,7 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 		$values["due_months"]      = implode('|', $this->due_months);
 		$values["account_id"]      = $this->parent_account_id;
 		$values["InterestBearing"] = $this->interest_bearing;
+		$values['plaid_category_id'] = $this->plaid_category_id;
 
 		return $this->db->insert("booksummary", $values);
 	}
@@ -350,6 +371,8 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 
 	public function setCategoryName($category_name) {
 		$this->category_name = $category_name;
+
+		return $this;
 	}
 
 	public function getAmountNecessary() {
@@ -358,6 +381,8 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 
 	public function setAmountNecessary($amount_necessary) {
 		$this->amount_necessary = (float)$amount_necessary;
+
+        return $this;
 	}
 
 	public function getCurrentAmount() {
@@ -366,6 +391,8 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 
 	public function setCurrentAmount($current_amount) {
 		$this->current_amount = (float)$current_amount;
+
+        return $this;
 	}
 
 	public function getOwnerId() {
@@ -378,6 +405,8 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 		} else {
 			$this->owner_id = $this->session->userdata("user_id");
 		}
+
+        return $this;
 	}
 
 	public function getPriority() {
@@ -386,6 +415,8 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 
 	public function setPriority($priority) {
 		$this->priority = $priority;
+
+        return $this;
 	}
 
 	public function getActive() {
@@ -394,6 +425,8 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 
 	public function setActive($active) {
 		$this->active = $active;
+
+        return $this;
 	}
 
 	public function getDueDay() {
@@ -402,6 +435,8 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 
 	public function setDueDay($due_day) {
 		$this->due_day = $due_day;
+
+        return $this;
 	}
 
 	public function getDueMonths() {
@@ -419,10 +454,14 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 
 	public function setParentAccountId($parent_account_id) {
 		$this->parent_account_id = $parent_account_id;
+
+        return $this;
 	}
 
 	public function setInterestBearing($interest_bearing) {
 		$this->interest_bearing = Utilities::getBoolean($interest_bearing);
+
+        return $this;
 	}
 
 	public function getInterestBearing() {
@@ -444,6 +483,24 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 
 		return $this->next_due_date;
 	}
+
+    /**
+     * @return mixed
+     */
+    public function getPlaidCategoryId() {
+        return $this->plaid_category_id;
+    }
+
+    /**
+     * @param mixed $plaid_category_id
+     * @return Budget_DataModel_CategoryDM
+     */
+    public function setPlaidCategoryId($plaid_category_id) {
+        $this->plaid_category_id = $plaid_category_id;
+
+        return $this;
+    }
+
 
 	public function getID() {
 		return $this->category_id;

@@ -17,7 +17,7 @@ abstract class IteratorBase extends \CI_Model implements \Iterator {
     /**
      * return count of items array
      *
-     * @return void
+     * @return int
      */
     public function count() {
         return count($this->items);

@@ -58,24 +58,26 @@ class Budget_DataModel_AccountDM extends N8_Model {
 	 * @throws Exception
 	 */
 	public function loadAccount($account_id, $owner_id) {
-		$query = $this->db->get_where("accounts", array("account_id" => $account_id, 'owner_id' => $owner_id));
-
-		if($query->num_rows() < 1) {
-			throw new Exception("Invalid Account ID [$account_id] for owner [".$owner_id."] (".__METHOD__.":".__LINE__.")");
-		}
-
-		$account_columns = $query->result();
-
-		if( is_array($account_columns) && count($account_columns) > 0 ) {
-			$account_columns = $account_columns[0];
-
-			foreach($account_columns as $column => $value) {
-				if(property_exists($this, $column)) {
-					$this->$column = $value;
-				}
-			}
-		}
+        $this->loadBy(['account_id' => $account_id, 'owner_id' => $owner_id]);
 	}
+
+    /**
+     * @param array $where
+     * @throws Exception
+     */
+	public function loadBy($where = []) {
+        if(empty($where['owner_id'])) {
+            throw new Exception("Owner not authorized to view this category.", EXCEPTION_CODE_ERROR);
+        }
+
+        $query = $this->db->get_where("accounts", $where);
+
+        if(!$query || $query->num_rows() < 1) {
+            throw new Exception("Invalid Account for owner [".$where['owner_id']."] (".__METHOD__.":".__LINE__.")", EXCEPTION_CODE_ERROR);
+        }
+
+        $this->load($query->result());
+    }
 
     /**
      * @return bool
@@ -97,6 +99,16 @@ class Budget_DataModel_AccountDM extends N8_Model {
 
         return $result;
 	}
+
+	private function load($account_columns) {
+        $account_columns = $account_columns[0];
+
+        foreach($account_columns as $column => $value) {
+            if(property_exists($this, $column)) {
+                $this->$column = $value;
+            }
+        }
+    }
 
 	/**
 	 * @return boolean

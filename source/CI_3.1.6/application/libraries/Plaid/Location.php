@@ -58,7 +58,7 @@ class Location {
      */
     public function __construct(\stdClass $raw_response) {
         $this->raw_response = $raw_response;
-        $address = isset($this->raw_response->address) ? $this->raw_response->address : $this->raw_response->street;
+        $address = isset($this->raw_response->address) ? $this->raw_response->address : isset($this->raw_response->street) ? $this->raw_response->street : null;
         $this->setAddress($address);
         $this->setCity($this->raw_response->city);
         $this->setState($this->raw_response->state);

@@ -16,13 +16,32 @@ class Transactions extends Plaid {
     private $target = '/transactions/get';
 
     /**
+     * @param $access_token
+     * @param $account_id
+     * @param $start_date
+     * @param $end_date
+     * @param int $count
+     * @param int $offset
      * @return \Plaid\TransactionResponse
      * @throws \Exception
      */
-    public function getTransactions() {
+    public function getTransactions($access_token, $account_id, \DateTime $start_date, \DateTime $end_date = null, $count = 300, $offset = 0) {
         $this->start();
 
-        $postfields = $this->dataArray($this->vendor_data->getCredentials()->token);
+        if(!$end_date) {
+            $end_date = new \DateTime();
+        }
+
+        $postfields = $this->dataArray($access_token);
+        $postfields['start_date'] = $start_date->format('Y-m-d');
+        if($end_date) {
+            $postfields['end_date'] = $end_date->format('Y-m-d');
+        }
+        $postfields['options'] = [
+            'account_ids' => [$account_id],
+            'count' => $count,
+            'offset' => $offset
+        ];
 
         $response = $this->post($this->target, json_encode($postfields));
 
