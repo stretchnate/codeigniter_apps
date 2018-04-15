@@ -65,7 +65,7 @@ header("Pragma: no-cache");
 	<div class="container">
 		<div id="content">
 			<div class="error">
-				<?
+				<?php
 				if(isset($errors) && is_array($errors) && count($errors) > 0) {
 					foreach($errors as $error) {
 						echo urldecode($error)."<br />";

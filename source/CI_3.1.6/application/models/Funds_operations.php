@@ -25,17 +25,11 @@ class Funds_operations extends N8_Model {
 		return $schedule;
 	}
 
-	function setBucketAmount($bucket,$amount) {
-		//update bucket with new current amount
-		$data = array('amount' => $amount);
-		$this->db->where('bucketId',$bucket);
-		$query = $this->db->update('_buckets', $data);
-		if(!$query) {
-			return false;
-		}
-		return true;
-	}
-
+    /**
+     * @param $account
+     * @param $amount
+     * @return bool
+     */
 	function setAccountAmount($account,$amount) {
 		//update account with new current amount
 		$data = array('bookAmtCurrent' => $amount);
@@ -64,13 +58,10 @@ class Funds_operations extends N8_Model {
 		return true;
 	}
 
-	//TODO add some error checking to this and getAccountAmount()
-	function getBucketAmount($id) {
-		$query = $this->db->get_where('_buckets',array('bucketId' => $id));
-		$row = $query->row();
-		return $row->amount;
-	}
-
+    /**
+     * @param $id
+     * @return mixed
+     */
 	function getAccountAmount($id) {
 		$query = $this->db->get_where('booksummary',array('bookId' => $id));
 		$row = $query->row();

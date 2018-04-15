@@ -36,8 +36,7 @@ class Book extends N8_Controller {
 
 			$notes['notes'] = $this->NM->getAllNotes($this->session->userdata('user_id'), $id);
 			$notes['bookId'] = $id;
-clean();
-dbo_arr("data", $data);
+
 			$data->due_date = $category_dm->getNextDueDate();
 			$this->load->view('header',$props);
 			$this->load->view('CategoryDetail', $data);

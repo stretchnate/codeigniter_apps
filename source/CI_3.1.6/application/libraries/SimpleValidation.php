@@ -46,4 +46,19 @@ class SimpleValidation {
 
         return $value;
     }
+
+    /**
+     * @param $value
+     * @return bool
+     */
+    public function isValidDate($value) {
+        $result = true;
+        try{
+            new \DateTime($value);
+        } catch(Exception $e) {
+            $result = false;
+        }
+
+        return $result;
+    }
 }
