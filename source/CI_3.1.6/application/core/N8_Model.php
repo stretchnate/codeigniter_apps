@@ -17,6 +17,8 @@ class N8_Model extends CI_Model {
 
 	function transactionEnd() {
 		$this->db->trans_complete();
+
+		return $this->db->trans_status();
 	}
 
 	/**

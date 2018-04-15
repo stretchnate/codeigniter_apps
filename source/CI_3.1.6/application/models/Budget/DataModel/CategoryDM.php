@@ -12,7 +12,6 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 	private $due_day;
 	private $due_months;
 	private $parent_account_id; //maps to account_id
-    private $plaid_category_id;
 	private $interest_bearing;
 	private $days_until_due;
 	private $next_due_date;
@@ -114,7 +113,6 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 		$sets["due_months"]        = implode('|', $this->due_months);
 		$sets["account_id"]        = $this->parent_account_id;
 		$sets["InterestBearing"]   = $this->interest_bearing;
-		$sets["plaid_category_id"] = $this->plaid_category_id;
 
 		if($this->db->where("bookId", $this->category_id)->update("booksummary", $sets)) {
 			$result = true;
@@ -144,7 +142,6 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 		$values["due_months"]      = implode('|', $this->due_months);
 		$values["account_id"]      = $this->parent_account_id;
 		$values["InterestBearing"] = $this->interest_bearing;
-		$values['plaid_category_id'] = $this->plaid_category_id;
 
 		return $this->db->insert("booksummary", $values);
 	}
@@ -483,24 +480,6 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 
 		return $this->next_due_date;
 	}
-
-    /**
-     * @return mixed
-     */
-    public function getPlaidCategoryId() {
-        return $this->plaid_category_id;
-    }
-
-    /**
-     * @param mixed $plaid_category_id
-     * @return Budget_DataModel_CategoryDM
-     */
-    public function setPlaidCategoryId($plaid_category_id) {
-        $this->plaid_category_id = $plaid_category_id;
-
-        return $this;
-    }
-
 
 	public function getID() {
 		return $this->category_id;

@@ -13,7 +13,7 @@
 				<?php
 					foreach($accounts as $account) {?>
 					<optgroup label="<?php echo $account->account_name;?>">
-					<?
+					<?php
 						foreach($account->categories as $category) {
 							$selected = "";
 							if($category->bookId == $bookId) {
