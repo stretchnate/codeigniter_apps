@@ -275,7 +275,7 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 		$due_date->setDate($today->format('Y'), $due_date->format('n'), $due_date->format('j'));
 
 		$diff = $today->diff($due_date);
-		$remainder = $diff->format('n') % 3;
+		$remainder = $diff->m % 3;
 		switch($remainder) {
 			case 2:
 				$i = 1;
@@ -287,9 +287,8 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 			default:
 				$i = 0;
 		}
-
 		if($today->format('n') > $due_date->format('n')) {
-			$i += $diff;
+			$i += $diff->m;
 			$due_date->add(new DateInterval("P{$i}M"));
 		} elseif($today->format('n') < $due_date->format('n')) {
 			$due_date->setDate($today->format('Y'), $today->format('n')+$i, $due_date->format('j'));
