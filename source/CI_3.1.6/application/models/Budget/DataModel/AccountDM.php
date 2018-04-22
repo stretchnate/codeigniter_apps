@@ -149,13 +149,15 @@ class Budget_DataModel_AccountDM extends N8_Model {
 	 * load categories in account
 	 */
 	public function loadCategories() {
-		$category_ids = $this->getCategoryIds();
+	    if(empty($this->categories)) {
+            $category_ids = $this->getCategoryIds();
 
-		if( is_array($category_ids) ) {
-			foreach($category_ids as $category_id) {
-				$this->categories[] = new Budget_DataModel_CategoryDM($category_id->bookId, $this->owner_id);
-			}
-		}
+            if (is_array($category_ids)) {
+                foreach ($category_ids as $category_id) {
+                    $this->categories[] = new Budget_DataModel_CategoryDM($category_id->bookId, $this->owner_id);
+                }
+            }
+        }
 	}
 
 	/**

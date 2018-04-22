@@ -48,26 +48,28 @@ class Budget_DataModel_TransactionDM extends N8_Model {
 	/**
 	 * saves the properties into the transaction table
 	 *
-	 * @return void
+	 * @return bool
 	 */
 	public function saveTransaction() {
 
 		if($this->validateTransaction()) {
 
 			if($this->transaction_id > 0) {
-				$this->updateTransaction();
+				$result = $this->updateTransaction();
 			} else {
-				$insert = $this->insertTransaction();
+                $result = $this->insertTransaction();
 				$this->insert_id = $this->db->insert_id();
 			}
 			$this->auth->updateLoginHistory(TRUE);
+
+			return $result;
 		}
 	}
 
 	/**
 	 * updates and existing transaction
 	 *
-	 * @return Bool
+	 * @return bool
 	 */
 	private function updateTransaction() {
 		$sets = array();
@@ -104,7 +106,7 @@ class Budget_DataModel_TransactionDM extends N8_Model {
 	/**
 	 * inserts a new transaction
 	 *
-	 * @return Int
+	 * @return bool
 	 */
 	private function insertTransaction() {
 		$values = array();

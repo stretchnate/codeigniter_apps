@@ -145,7 +145,7 @@ class Values extends \Validation implements \ValueInterface {
     }
 
     /**
-     * @return string
+     * @return \DateTime
      */
     public function getDate() {
         return new \DateTime($this->date);
