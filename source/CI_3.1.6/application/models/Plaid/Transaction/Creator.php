@@ -9,6 +9,7 @@
 namespace Plaid\Transaction;
 
 
+use Funds\Distributor;
 use Plaid\Connection;
 use Plaid\TransactionResponse;
 
@@ -42,7 +43,8 @@ class Creator {
             $category_name = $transaction->getCategory()[0];
             $category = $this->categoryExists($category_name);
             if ($category === false) {
-                $category = $this->createCategory($transaction, $category_name);
+                $goal_amount = $this->calculateCategoryNeed($transactions->getTransactions(), $transaction);
+                $category = $this->createCategory($transaction, $category_name, $goal_amount);
             }
 
             if($category === false) {
@@ -69,25 +71,37 @@ class Creator {
     }
 
     /**
+     * @param TransactionResponse\Transaction[] $transactions
+     * @param TransactionResponse\Transaction $seed_transaction
+     * @return mixed
+     */
+    private function calculateCategoryNeed(array $transactions, TransactionResponse\Transaction $seed_transaction) {
+        $amount = 0;
+        foreach($transactions as $transaction) {
+            if($transaction->getCategory()[0] == $seed_transaction->getCategory()[0]
+                && $transaction->getAmount() > 0) {
+
+                $amount += $transaction->getAmount();
+            }
+        }
+
+        return $amount;
+    }
+
+    /**
      * @param TransactionResponse\Transaction $transaction
      * @param \Budget_DataModel_AccountDM $account
      * @throws \Exception
      */
     private function createDeposit(TransactionResponse\Transaction $transaction, \Budget_DataModel_AccountDM $account) {
         $amount = abs($transaction->getAmount());
-
-        //need to break this method up a bit
-        $deposit = new \Deposit();
-        $deposit->getValues()->setOwnerId((int)$this->user_id)
-            ->setAccountId((int)$account->getAccountId())
-            ->setSource($transaction->getName())
-            ->setGross($amount)
-            ->setNet($amount);
-        $deposit->save();
-
-        //need to create a deposit (new_funds) and get the id
+clean();
         $transaction_dm = new \Budget_DataModel_TransactionDM();
         $transaction_dm->transactionStart();
+
+        $deposit = $this->addDeposit($amount, (int)$account->getAccountId(), $transaction->getName());
+
+        //need to create a deposit (new_funds) and get the id
         $transaction_dm->setOwnerId($this->user_id);
         $transaction_dm->setToAccount($account->getAccountId());
         $transaction_dm->setDepositId($deposit->getValues()->getId());
@@ -97,8 +111,11 @@ class Creator {
         if($transaction_dm->saveTransaction()) {
             $new_amount = add($account->getAccountAmount(), $amount, 2);
             $account->setAccountAmount($new_amount);
-            dbo("save account = ".$account->saveAccount());
+            $account->saveAccount();
         }
+
+        $distributor = new Distributor($deposit, $this->user_id);
+        $distributor->run();
 
         if(!$transaction_dm->transactionEnd()) {
             $db =& get_instance()->db;
@@ -106,6 +123,25 @@ class Creator {
             log_message('error', $error['message']);
             throw new \Exception("There was a problem processing your request.", EXCEPTION_CODE_VALIDATION);
         }
+    }
+
+    /**
+     * @param $amount
+     * @param $account_id
+     * @param $source
+     * @return \Deposit
+     * @throws \Exception
+     */
+    private function addDeposit($amount, $account_id, $source) {
+        $deposit = new \Deposit();
+        $deposit->getValues()->setOwnerId((int)$this->user_id)
+            ->setAccountId($account_id)
+            ->setSource($source)
+            ->setGross($amount)
+            ->setNet($amount);
+        $deposit->save();
+
+        return $deposit;
     }
 
     /**
@@ -138,10 +174,11 @@ class Creator {
     /**
      * @param TransactionResponse\Transaction $transaction
      * @param string $category_name
+     * @param mixed $goal_amount
      * @throws \Exception
      * @return \Budget_DataModel_CategoryDM
      */
-    private function createCategory($transaction, $category_name) {
+    private function createCategory($transaction, $category_name, $goal_amount) {
         $cval = new Connection\Values();
         $cval->setPlaidAccountId($transaction->getAccountId());
         $connection = new Connection($cval);
@@ -153,7 +190,7 @@ class Creator {
         $category_dm = new \Budget_DataModel_CategoryDM();
         $category_dm->setOwnerId($this->user_id)
             ->setActive(1)
-            ->setAmountNecessary(0)// can this be calcualted?
+            ->setAmountNecessary((float)$goal_amount)
             ->setCategoryName($category_name)
             ->setCurrentAmount(0)
             ->setDueDay($transaction->getDate()->format('Y-m-d'))// how can we tell if this appears more than once?
