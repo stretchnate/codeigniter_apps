@@ -10,10 +10,10 @@
 
 		$error = var_export($var, true);
 		$error = $str_left . $error . $str_right . "\n";
-		error_log($error, 3 ,'/home/stretch/logs/dnate_errors.log');
+		error_log($error, 3 ,'/var/www/html/quantum/source/CI_3.1.6/application/logs/debug.log');
 	}
 
-	function clean($log = "/home/stretch/logs/dnate_dbo.log") {
+	function clean($log = "/var/www/html/quantum/source/CI_3.1.6/application/logs/debug.log") {
 		file_put_contents($log, "");
 	}
 	/**
@@ -27,10 +27,10 @@
 	 */
 	function debugOut($var, $mode = "a", $indent = "\n") {
 		if( is_array($var) || is_object($var) ) {
-			pre($var, $mode, "/home/stretch/logs/dnate_dbo.log", $indent);
+			pre($var, $mode, "/var/www/html/quantum/source/CI_3.1.6/application/logs/debug.log", $indent);
 		}
 		else {
-			writeToFile($var, $mode, '/home/stretch/logs/dnate_dbo.log', $indent);
+			writeToFile($var, $mode, '/var/www/html/quantum/source/CI_3.1.6/application/logs/debug.log', $indent);
 		}
 	}
 
@@ -118,7 +118,7 @@
 	 * @param $indent
 	 * @author dnate
 	 */
-	function pre(&$array, $mode = 'w', $filename = "/home/stretch/logs/dnate_arr.log", $indent = "\r\n") {
+	function pre(&$array, $mode = 'w', $filename = "/var/www/html/quantum/source/CI_3.1.6/application/logs/debug.log", $indent = "\r\n") {
 		if(is_array($array) || is_object($array)) {
 			if($mode == 'echo') {
 				preprint_r($array);
@@ -143,11 +143,11 @@
 	function label($label, $file = "dbo", $mode = 'a') {
 		switch($file) {
 			case "dump":
-				$file = '/home/stretch/logs/dnate_arr.log';
+				$file = '/var/www/html/quantum/source/CI_3.1.6/application/logs/debug.log';
 				break;
 
 			case "dbo":
-				$file = '/home/stretch/logs/dnate_dbo.log';
+				$file = '/var/www/html/quantum/source/CI_3.1.6/application/logs/debug.log';
 				break;
 		}
 
@@ -162,7 +162,7 @@
 	 * @param $file
 	 * @author dnate
 	 */
-	function errDump($var, $mode = 'w', $file = '/home/stretch/logs/dnate_arr.log') {
+	function errDump($var, $mode = 'w', $file = '/var/www/html/quantum/source/CI_3.1.6/application/logs/debug.log') {
 		ob_start();
 
 		var_dump($var);
@@ -208,10 +208,10 @@
 	 * @param $indent
 	 * @author dnate
 	 */
-	function writeToFile($string, $mode = 'a', $filename = '/home/stretch/logs/dnate_dbo.log', $indent = "\n") {
+	function writeToFile($string, $mode = 'a', $filename = '/var/www/html/quantum/source/CI_3.1.6/application/logs/debug.log', $indent = "\n") {
 		if(is_array($string)) {
-			if($filename == "/home/stretch/logs/dnate_dbo.log") {
-				$filename = "/home/stretch/logs/dnate_arr.log";
+			if($filename == "/var/www/html/quantum/source/CI_3.1.6/application/logs/debug.log") {
+				$filename = "/var/www/html/quantum/source/CI_3.1.6/application/logs/debug.log";
 			}
 			pre($string, $mode, $filename, $indent);
 		}
@@ -233,7 +233,7 @@
 	* @param $indent
 	* @author dnate
 	*/
-	function wtf($string, $mode = 'a', $filename = '/home/stretch/logs/dnate_dbo.log', $indent = "\n") {
+	function wtf($string, $mode = 'a', $filename = '/var/www/html/quantum/source/CI_3.1.6/application/logs/debug.log', $indent = "\n") {
 		writeToFile($string, $mode, $filename, $indent);
 	}
 

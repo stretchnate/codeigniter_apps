@@ -52,7 +52,7 @@ class SimpleValidation {
      * @return bool
      */
     public function isValidDate($value) {
-        $result = true;
+        $result = $value;
         try{
             new \DateTime($value);
         } catch(Exception $e) {

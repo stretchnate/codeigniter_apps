@@ -44,7 +44,7 @@ class Distributor extends \CI_Model {
      * @param $date
      * @throws \Exception
      */
-    public function distribute($account_dm, $date) {
+    private function distribute($account_dm, $date) {
         $divider = 1;
         $this->account_dm = $account_dm;
 
