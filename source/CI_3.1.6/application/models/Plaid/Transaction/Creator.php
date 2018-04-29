@@ -9,7 +9,7 @@
 namespace Plaid\Transaction;
 
 
-use Funds\Distributor;
+use Deposit\Handler;
 use Plaid\Connection;
 use Plaid\TransactionResponse;
 
@@ -58,6 +58,7 @@ class Creator {
         }
     }
 
+
     /**
      * @param $category_name
      * @return bool|\Budget_DataModel_CategoryDM
@@ -95,53 +96,10 @@ class Creator {
      */
     private function createDeposit(TransactionResponse\Transaction $transaction, \Budget_DataModel_AccountDM $account) {
         $amount = abs($transaction->getAmount());
-clean();
-        $transaction_dm = new \Budget_DataModel_TransactionDM();
-        $transaction_dm->transactionStart();
 
-        $deposit = $this->addDeposit($amount, (int)$account->getAccountId(), $transaction->getName());
-
-        //need to create a deposit (new_funds) and get the id
-        $transaction_dm->setOwnerId($this->user_id);
-        $transaction_dm->setToAccount($account->getAccountId());
-        $transaction_dm->setDepositId($deposit->getValues()->getId());
-        $transaction_dm->setTransactionAmount($amount);
-        $transaction_dm->setTransactionDate($transaction->getDate()->format('Y-m-d H:i:s'));
-        $transaction_dm->setTransactionInfo($transaction->getName());
-        if($transaction_dm->saveTransaction()) {
-            $new_amount = add($account->getAccountAmount(), $amount, 2);
-            $account->setAccountAmount($new_amount);
-            $account->saveAccount();
-        }
-
-        $distributor = new Distributor($deposit, $this->user_id);
-        $distributor->run();
-
-        if(!$transaction_dm->transactionEnd()) {
-            $db =& get_instance()->db;
-            $error = $db->error();
-            log_message('error', $error['message']);
-            throw new \Exception("There was a problem processing your request.", EXCEPTION_CODE_VALIDATION);
-        }
-    }
-
-    /**
-     * @param $amount
-     * @param $account_id
-     * @param $source
-     * @return \Deposit
-     * @throws \Exception
-     */
-    private function addDeposit($amount, $account_id, $source) {
-        $deposit = new \Deposit();
-        $deposit->getValues()->setOwnerId((int)$this->user_id)
-            ->setAccountId($account_id)
-            ->setSource($source)
-            ->setGross($amount)
-            ->setNet($amount);
-        $deposit->save();
-
-        return $deposit;
+        $handler = new Handler($this->user_id);
+dbo("transaction date = ".$transaction->getDate()->format('Y-m-d H:i:s'));
+        $handler->addDeposit($account, $amount, $transaction->getName(), $transaction->getDate()->format('Y-m-d H:i:s'));
     }
 
     /**

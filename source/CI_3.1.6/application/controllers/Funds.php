@@ -38,29 +38,18 @@ class Funds extends N8_Controller {
      */
 	function addFunds(){
 		$this->auth->restrict();
-		$this->load->model("accounts", "ACCT", TRUE);
+        try {
+            $account_dm = new \Budget_DataModel_AccountDM($this->input->post("account"), $this->session->userdata('user_id'));
+            $amount = $this->input->post('net') ? $this->input->post('net') : $this->input->post('gross');
 
-		$ownerId = $this->session->userdata('user_id');
-		$account_id = $this->input->post("account");
+            $handler = new \Deposit\Handler($this->session->userdata('user_id'));
+            $handler->addDeposit($account_dm, $amount, $this->input->post('source', true), $this->input->post('date', true), false);
 
-		$account_model = $this->ACCT->getAccount($account_id);
-
-		$date = date("Y-m-d H:i:s");
-		if($this->input->post('date')) {
-			$date = date("Y-m-d H:i:s", strtotime($this->input->post('date')));
-		}
-		if(empty($_POST['net'])) {
-			$net = $this->input->post('gross');
-		} else {
-			$net = $this->input->post('net');
-		}
-
-		$account_model->account_amount = (float)$account_model->account_amount + (float)$net;
-		if($this->ACCT->saveAccount($account_model)) {
-			$this->addDepositToAccount($account_id, $ownerId, $date, $net, $this->input->post('gross'), $this->input->post('source'));
-		}
-
-		header('location:/');
+            header("Location: /");
+        } catch(\Exception $e) {
+            log_message('error', $e->getMessage());
+            show_error('There was a problem processing your request.', 500);
+        }
 	}
 
 
@@ -68,148 +57,21 @@ class Funds extends N8_Controller {
 	 * Adds funds to each account automatically
 	 *
 	 */
-	function automaticallyDistributeFunds() {
+	public function automaticallyDistributeFunds() {
 		$this->auth->restrict();
 
-		$account_dm = new Budget_DataModel_AccountDM($this->input->post("account"), $this->session->userdata('user_id'));
-		$total      = 0;
-		$errors     = array();
-		$date       = date("Y-m-d H:i:s");
+		try {
+            $account_dm = new \Budget_DataModel_AccountDM($this->input->post("account"), $this->session->userdata('user_id'));
+            $amount = $this->input->post('net') ? $this->input->post('net') : $this->input->post('gross');
 
-		if($this->input->post('date')) {
-			$date = date("Y-m-d H:i:s", strtotime($this->input->post('date')));
-		}
+            $handler = new \Deposit\Handler($this->session->userdata('user_id'));
+            $handler->addDeposit($account_dm, $amount, $this->input->post('source', true), $this->input->post('date', true));
 
-		if(!$account_dm->getPayScheduleCode()){
-			$errors[] = "unable to get pay schedule, please try again.";
-		} else {
-			if(empty($_POST['net'])) {
-				$net = preg_replace("/[,]+/", "", $this->input->post('gross'));
-			} else {
-				$net = preg_replace("/[,]+/", "", $this->input->post('net'));
-			}
-
-			$total = ((float) $account_dm->getAccountAmount()) + ((float) $net);
-
-			$account_dm->setAccountAmount($total);
-			$account_dm->saveAccount();
-
-			$deposit_id = $this->addDepositToAccount(
-				$account_dm->getAccountId(),
-				$this->session->userdata('user_id'),
-				$date,
-				$net,
-				$this->input->post('gross'),
-				$this->input->post('source')
-			);
-
-			//add the transaction
-			$transaction = new Budget_DataModel_TransactionDM();
-			$transaction->setToAccount($account_dm->getAccountId());
-			$transaction->setDepositId($deposit_id);
-			$transaction->setOwnerId($this->session->userdata("user_id"));
-			$transaction->setTransactionAmount((float)$net);
-			$transaction->setTransactionDate($date);
-			$transaction->setTransactionInfo("Deposit ".$deposit_id." into ".$account_dm->getAccountName());
-			$transaction->saveTransaction();
-
-			$account_dm->loadCategories();
-
-//			bcscale(2);
-
-			$divider = 1;
-			$category_dm_array = $account_dm->orderCategoriesByDueFirst($date);
-
-			//loop through each category and update the current amount
-			foreach($category_dm_array as $category_dms) {
-				foreach($category_dms as $category) {
-					if(count($errors) > 0) {
-						break;
-					}
-
-					if($total > 0) {
-						if($category->getCurrentAmount() < $category->getAmountNecessary()) {
-
-							//determine if we need to use regular divider or simply top off the category
-							if( ($category->getDaysUntilDue($date) <= $account_dm->getPayFrequency())
-								|| ((( round($category->getAmountNecessary() / $divider, 2) ) + $category->getCurrentAmount()) > $category->getAmountNecessary()) ) {
-
-								$depositAmount = subtract($category->getAmountNecessary(), $category->getCurrentAmount(),2);
-							} else {
-								$depositAmount = divide($category->getAmountNecessary(), $divider,2);
-							}
-
-							if($depositAmount > $total) {
-								$depositAmount = $total;
-							}
-
-							$new_category_amount = add($depositAmount, $category->getCurrentAmount(),2);
-
-							$category->setCurrentAmount($new_category_amount);
-							$category->saveCategory();
-
-							if($category->isErrors() === false) {
-								// $total = $total - $depositAmount;
-								$total = subtract($total, $depositAmount,2);
-								$account_dm->setAccountAmount($total);
-								$account_dm->saveAccount();
-
-								if($account_dm->isErrors() === false) {
-
-									//add the transaction
-									$transaction = new Budget_DataModel_TransactionDM();
-									$transaction->setToCategory($category->getCategoryId());
-									$transaction->setFromAccount($account_dm->getAccountId());
-									$transaction->setDepositId($deposit_id);
-									$transaction->setOwnerId($this->session->userdata("user_id"));
-									$transaction->setTransactionAmount($depositAmount);
-									$transaction->setTransactionDate($date);
-									$transaction->setTransactionInfo("Automatically distributed funds from ".$account_dm->getAccountName()." account into ".$category->getCategoryName());
-									$transaction->saveTransaction();
-
-									$errors = $transaction->getErrors();
-								} else {
-									//rollback
-									// $rollback = $category->getCurrentAmount() - $depositAmount;
-									$rollback = subtract($category->getCurrentAmount(), $depositAmount,2);
-									$category->setCurrentAmount($rollback);
-									$category->saveCategory();
-
-									// $total = $total + $depositAmount;
-									$total = add($total, $depositAmount,2);
-
-									$errors = $account_dm->getErrors();
-								}
-							} else {
-								$errors = $category->getErrors();
-							}
-						}
-					} else {
-						break;
-					}
-				}
-				$divider++;
-			}
-
-			if( (float)$total != (float)$account_dm->getAccountAmount()){
-				$account_dm->setAccountAmount( (float)$total );
-				$account_dm->saveAccount();
-			}
-		}
-
-		if( count($errors) > 0 ) {
-			$data = array();
-			$data['error'] = implode("<br />", $errors);
-			$props['youAreHere'] = "Add New Funds";
-			$props['scripts'] = $this->jsincludes->newFunds();
-			$props['title'] = "Add New Funds";
-
-			$this->load->view('header',$props);
-			$this->load->view('newFunds',$data);
-			$this->load->view('footer');
-		} else {
-			header("Location: /");
-		}
+            header("Location: /");
+        } catch(\Exception $e) {
+            log_message('error', $e->getMessage());
+            show_error('There was a problem processing your request.', 500);
+        }
 	}
 
     /**

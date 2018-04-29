@@ -76,7 +76,7 @@ class Budget_DataModel_AccountDM extends N8_Model {
             throw new Exception("Invalid Account for owner [".$where['owner_id']."] (".__METHOD__.":".__LINE__.")", EXCEPTION_CODE_ERROR);
         }
 
-        $this->load($query->result());
+        $this->load($query->row());
     }
 
     /**
@@ -94,20 +94,19 @@ class Budget_DataModel_AccountDM extends N8_Model {
 			    $error = $this->db->error();
 			    throw new \Exception($error['message'], EXCEPTION_CODE_ERROR);
             }
-            $result = $this->account_id = $this->db->insert_id();
+            $result = $this->account_id = (int)$this->db->insert_id();
 		}
 
         return $result;
 	}
 
-	private function load($account_columns) {
-        $account_columns = $account_columns[0];
-
-        foreach($account_columns as $column => $value) {
-            if(property_exists($this, $column)) {
-                $this->$column = $value;
-            }
-        }
+	private function load($row) {
+        $this->account_id = (int)$row->account_id;
+        $this->account_name = $row->account_name;
+        $this->account_amount = $row->account_amount;
+        $this->owner_id = (int)$row->owner_id;
+        $this->payschedule_code = $row->payschedule_code;
+        $this->active = $row->active;
     }
 
 	/**

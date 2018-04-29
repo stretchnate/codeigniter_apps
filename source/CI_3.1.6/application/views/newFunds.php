@@ -23,11 +23,11 @@
 			<div class='form-group'>
 				<select name="account" class="form-control" required>
 					<option value="">- - Select Account - -</option>
-					<?
+					<?php
 					foreach($accounts as $account) {
 					?>
 					<option value="<?php echo $account->account_id;?>"><?php echo $account->account_name;?></option>
-					<?
+					<?php
 					} ?>
 				</select>
 			</div>
