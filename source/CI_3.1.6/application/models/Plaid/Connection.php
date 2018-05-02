@@ -63,6 +63,9 @@ class Connection extends \CI_Model {
             $this->getValues()->setAccessToken($row->access_token);
             $this->getValues()->setTransactionsReady($row->transactions_ready);
             $this->getValues()->setDtAdded(new \DateTime($row->dt_added));
+            if($row->transactions_updated) {
+                $this->getValues()->setTransactionsUpdated(new \DateTime($row->transactions_updated));
+            }
         }
     }
 
@@ -116,6 +119,9 @@ class Connection extends \CI_Model {
         if($this->getValues()->getTransactionsReady()) {
             $set->transactions_ready = $this->getValues()->getTransactionsReady();
         }
+        if($this->getValues()->getTransactionsUpdated()) {
+            $set->transactions_updated = $this->getValues()->getTransactionsUpdated()->format('Y-m-d H:i:s');
+        }
         if($this->getValues()->getDtAdded()) {
             $set->dt_added = $this->getValues()->getDtAdded()->format('Y-m-d H:i:s');
         }
@@ -149,6 +155,4 @@ class Connection extends \CI_Model {
     public function getValues() {
         return $this->values;
     }
-
-
 }
