@@ -36,6 +36,8 @@ class Values extends \Validation implements \ValueInterface {
      */
     private $transactions_ready;
 
+    private $transactions_updated;
+
     /**
      * @var \DateTime
      */
@@ -61,8 +63,11 @@ class Values extends \Validation implements \ValueInterface {
         if($this->getTransactionsReady()) {
             $where['transactions_ready'] = $this->getTransactionsReady();
         }
+        if($this->getTransactionsUpdated()) {
+            $where['transactions_updated'] = $this->getTransactionsUpdated()->format('Y-m-d H:i:s');
+        }
         if($this->getDtAdded()) {
-            $where['dt_added'] = $this->getDtAdded()->format('Y-m-d h:i:s');
+            $where['dt_added'] = $this->getDtAdded()->format('Y-m-d H:i:s');
         }
 
         return $where;
@@ -158,6 +163,23 @@ class Values extends \Validation implements \ValueInterface {
      */
     public function setTransactionsReady($transactions_ready) {
         $this->transactions_ready = $this->simple_validation->isString($transactions_ready);
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getTransactionsUpdated() {
+        return isset($this->transactions_updated) ? clone $this->transactions_updated : null;
+    }
+
+    /**
+     * @param \DateTime $transactions_updated
+     * @return Values
+     */
+    public function setTransactionsUpdated(\DateTime $transactions_updated) {
+        $this->transactions_updated = $transactions_updated;
 
         return $this;
     }

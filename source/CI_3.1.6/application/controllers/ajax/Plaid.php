@@ -100,6 +100,9 @@ class Plaid extends _AjaxResponse {
 
                 $success = true;
             }
+
+            $handler = new \Plaid\Connection\Handler();
+            $handler->setTransactionsUpdatedDate($item_id, $this->input->post('plaid_account_id', true), new \DateTime());
         } catch(Exception $e) {
             $error = $e->getMessage() . "\n" . $e->getTraceAsString();
             log_message('error', $error);
