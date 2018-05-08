@@ -44,11 +44,11 @@ class Connection extends \CI_Model {
     }
 
     /**
-     * @param Values $values
+     * @param Values $where
      * @throws \Exception
      */
-    public function load($values) {
-        $query = $this->db->get_where(self::TABLE, $values->toArray());
+    public function load(Values $where) {
+        $query = $this->db->get_where(self::TABLE, $where->toArray());
 
         if($query === false) {
             $error = $this->db->error();
@@ -63,6 +63,7 @@ class Connection extends \CI_Model {
             $this->getValues()->setAccessToken($row->access_token);
             $this->getValues()->setTransactionsReady($row->transactions_ready);
             $this->getValues()->setDtAdded(new \DateTime($row->dt_added));
+            $this->getValues()->setActive($row->active);
             if($row->transactions_updated) {
                 $this->getValues()->setTransactionsUpdated(new \DateTime($row->transactions_updated));
             }
@@ -83,6 +84,8 @@ class Connection extends \CI_Model {
             $error = $this->db->error();
             throw new \Exception($error['message'], EXCEPTION_CODE_ERROR);
         }
+
+        return $result;
     }
 
     /**
@@ -124,6 +127,9 @@ class Connection extends \CI_Model {
         }
         if($this->getValues()->getDtAdded()) {
             $set->dt_added = $this->getValues()->getDtAdded()->format('Y-m-d H:i:s');
+        }
+        if($this->getValues()->isActive()) {
+            $set->active = $this->getValues()->isActive();
         }
 
         return $set;
