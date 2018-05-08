@@ -30,6 +30,7 @@ class ConnectionTest extends \CITest {
         $connection = new Connection();
         $connection->getValues()->setItemId(ValuesTest::TEST_ITEM_ID)
             ->setAccountId(ValuesTest::TEST_ACCOUNT_ID)
+            ->setPlaidAccountId('testPlaidAccount')
             ->setAccessToken(ValuesTest::TEST_ACCESS_TOKEN)
             ->setTransactionsReady(ValuesTest::TEST_TRANSACTIONS_READY)
             ->setDtAdded(new \DateTime(ValuesTest::TEST_DT_ADDED));
@@ -61,9 +62,10 @@ class ConnectionTest extends \CITest {
      * @covers Connection::getValues
      * @depends testLoad
      * @param Connection $connection
+     * @throws \Exception
      */
     public function testSaveUpdate($connection) {
-        $connection->getValues()->setAccountId(2);
+        $connection->getValues()->setAccountId(ValuesTest::TEST_ACCOUNT_ID);
 
         $this->assertTrue($connection->save());
     }

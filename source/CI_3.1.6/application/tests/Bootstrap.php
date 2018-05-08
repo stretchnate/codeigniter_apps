@@ -101,7 +101,7 @@ defined('COMPANY_LOGOUT_REDIRECT') OR define('COMPANY_LOGOUT_REDIRECT', 'http://
  * This variable must contain the name of your "system" directory.
  * Set the path if it is not in the same directory as this file.
  */
-	$system_path = '/var/www/html/source/CI_3.1.6/system';
+	$system_path = '/var/www/html/quantum/source/CI_3.1.6/system';
 
 /*
  *---------------------------------------------------------------
@@ -118,7 +118,7 @@ defined('COMPANY_LOGOUT_REDIRECT') OR define('COMPANY_LOGOUT_REDIRECT', 'http://
  *
  * NO TRAILING SLASH!
  */
-	$application_folder = '/var/www/html/source/CI_3.1.6/application';
+	$application_folder = '/var/www/html/quantum/source/CI_3.1.6/application';
 
 /*
  *---------------------------------------------------------------

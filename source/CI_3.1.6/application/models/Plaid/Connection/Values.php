@@ -36,12 +36,24 @@ class Values extends \Validation implements \ValueInterface {
      */
     private $transactions_ready;
 
+    /**
+     * @var \DateTime
+     */
     private $transactions_updated;
 
     /**
      * @var \DateTime
      */
     private $dt_added;
+
+    /**
+     * @var bool
+     */
+    private $active;
+
+    public function __construct() {
+        parent::__construct();
+    }
 
     /**
      * @return array
@@ -69,12 +81,11 @@ class Values extends \Validation implements \ValueInterface {
         if($this->getDtAdded()) {
             $where['dt_added'] = $this->getDtAdded()->format('Y-m-d H:i:s');
         }
+        if($this->isActive()) {
+            $where['active'] = $this->isActive();
+        }
 
         return $where;
-    }
-
-    public function __construct() {
-        parent::__construct();
     }
 
     /**
@@ -200,4 +211,22 @@ class Values extends \Validation implements \ValueInterface {
 
         return $this;
     }
+
+    /**
+     * @return bool
+     */
+    public function isActive() {
+        return $this->active;
+    }
+
+    /**
+     * @param bool $active
+     * @return Values
+     */
+    public function setActive($active) {
+        $this->active = $active;
+        return $this;
+    }
+
+
 }
