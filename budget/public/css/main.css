@@ -71,3 +71,23 @@
 #link_button {
     margin-left:5px;
 }
+
+.overlay {
+    width: 100%;
+    opacity: .80;
+    background-color: #ffffff;
+    display:none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+}
+
+.overlay #loader {
+    margin: 15% auto 0 auto;
+    display:block;
+}
+
+.overlay #message {
+    padding: 5px 10px;
+    text-align: center;
+}

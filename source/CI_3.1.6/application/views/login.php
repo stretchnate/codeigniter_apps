@@ -6,10 +6,6 @@ header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 
-function showAd($ad_type) {
-    $ad = AdFactory::getAdService('adsense');
-    $ad->displayAd(AdFactory::AD_AUTO);
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,8 +20,9 @@ function showAd($ad_type) {
 	<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js'></script>
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js'></script>
 	<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
-	<script type="text/javascript" src="<?php echo JS_PATH; ?>login.js"></script>
-	<script type="text/javascript" src="<?php echo JS_PATH; ?>utilities.js"></script>
+    <script type="text/javascript" src="<?php echo JS_PATH.'jq_plugins.js'; ?>"></script>
+	<script type="text/javascript" src="<?php echo JS_PATH.'login.js'; ?>"></script>
+	<script type="text/javascript" src="<?php echo JS_PATH.'utilities.js'; ?>"></script>
 </head>
 <body>
 	<div class="container-fluid">
@@ -66,7 +63,6 @@ function showAd($ad_type) {
 				<div class="quantum">Powered by <img src="/images/quantum_logo_transparent_bg.png" height="20px" /></div>
 			</div>
 		</div>
-		<?= showAd(AdFactory::AD_AUTO); ?>
 	</div>
 </body>
 </html>

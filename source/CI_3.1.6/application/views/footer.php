@@ -15,14 +15,6 @@
 			<div class="quantum">Powered by <img src="/images/quantum_logo_transparent_bg.png" height="20px" /></div>
         </div>
 	</div>
-    <?= showAd(AdFactory::AD_AUTO); ?>
     </div><!-- end div container -->
 </body>
 </html>
-
-<?php
-    function showAd($ad_type) {
-        $ad = AdFactory::getAdService();
-        $ad->displayAd($ad_type);
-    }
-?>
