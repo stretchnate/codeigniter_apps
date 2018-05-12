@@ -104,7 +104,11 @@ class Connection extends \CI_Model {
      * @return bool
      */
     private function update() {
-        $this->db->where(['item_id' => $this->getValues()->getItemId()]);
+        $this->db->where([
+            'item_id' => $this->getValues()->getItemId(),
+            'plaid_account_id' => $this->getValues()->getPlaidAccountId(),
+            'account_id' => $this->getValues()->getAccountId()
+        ]);
 
         return $this->db->update(self::TABLE, $this->set());
     }

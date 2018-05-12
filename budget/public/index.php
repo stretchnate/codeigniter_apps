@@ -89,6 +89,9 @@ switch (ENVIRONMENT)
 		exit(1); // EXIT_ERROR
 }
 
+defined('COMPANY_NAME')            OR define('COMPANY_NAME', 'Quantum'); //Quantum
+defined('COMPANY_LOGOUT_REDIRECT') OR define('COMPANY_LOGOUT_REDIRECT', 'http://quantum.local');//for mara just set this to http://whyibudget.com
+
 /*
  *---------------------------------------------------------------
  * SYSTEM DIRECTORY NAME

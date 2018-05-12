@@ -57,6 +57,7 @@ class Link {
                   // The metadata object contains info about the institution the
                   // user selected and the account ID, if the Account Select view
                   // is enabled.
+                  $('body').overlay('message', 'Gathering Account Information');
                   plaid.getAccessToken(public_token, metadata);
                 },
                 onExit: function(err, metadata) {

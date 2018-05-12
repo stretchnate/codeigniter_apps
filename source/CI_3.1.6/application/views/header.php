@@ -23,7 +23,8 @@ header("Pragma: no-cache");
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js'></script>
 	<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
-	<?php
+    <script type="text/javascript" src="<?php echo JS_PATH.'jq_plugins.js'; ?>"></script>
+    <?php
 	if(isset($scripts) && is_array($scripts)) {
 		foreach($scripts as $script)
 			echo $script."\n\t";
