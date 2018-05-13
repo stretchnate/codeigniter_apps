@@ -53,20 +53,18 @@ class Vendor extends \CI_Model {
             throw new \Exception("Error: ". $error['message'], EXCEPTION_CODE_ERROR);
         }
 
-        if($query->num_rows() < 1) {
-            throw new \Exception('No record found.', EXCEPTION_CODE_VALIDATION);
-        }
+        if($query->row()) {
+            $this->values->setId($query->row()->id);
+            $this->values->setName($query->row()->name);
+            $this->values->setUsername($query->row()->username);
+            $this->values->setPassword($query->row()->password);
+            $this->values->setCredentials($query->row()->credentials);
+            $this->values->setUrl($query->row()->url);
+            $this->values->setAddedDate(new \DateTime($query->row()->added_date));
 
-        $this->values->setId($query->row()->id);
-        $this->values->setName($query->row()->name);
-        $this->values->setUsername($query->row()->username);
-        $this->values->setPassword($query->row()->password);
-        $this->values->setCredentials($query->row()->credentials);
-        $this->values->setUrl($query->row()->url);
-        $this->values->setAddedDate(new \DateTime($query->row()->added_date));
-
-        if ($query->row()->disabled_date) {
-            $this->values->setDisabledDate(new \DateTime($query->row()->disabled_date));
+            if($query->row()->disabled_date) {
+                $this->values->setDisabledDate(new \DateTime($query->row()->disabled_date));
+            }
         }
 
         return $this;
