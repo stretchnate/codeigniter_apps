@@ -145,6 +145,10 @@ class Auth {
      * @throws \Exception
      */
 	public function restrict($logged_out = FALSE) {
+		if (ENVIRONMENT == 'testing') {
+			return;
+		}
+
 		//make sure the site is active
 		$active = $this->isSiteActive();
 		if( !$active ) {
@@ -202,6 +206,10 @@ class Auth {
 		$where = array("rule_name" => "IS_SITE_ACTIVE");
 		$results = $this->CI->db->get_where("rules", $where);
 		$rule = $results->row();
+
+		if(!$rule) {
+			throw new Exception('Unable to determine if site is active.');
+		}
 
 		if($rule->rule_value == "0") {
 			return FALSE;

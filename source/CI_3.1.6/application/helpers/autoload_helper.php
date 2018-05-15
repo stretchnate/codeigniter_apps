@@ -73,3 +73,5 @@ function iterate($directory, array $files) {
 
     return $result;
 }
+
+spl_autoload_register('__autoload', true);
