@@ -9,7 +9,7 @@ function __autoload($classname) {
 
     $result = false;
 
-    if (strpos($classname, "_") !== false) {
+    if (strpos($classname, "_") !== false || strpos($classname, '\\') !== false) {
         $result = underscoreLoadMethod($classname, $dirs);
     }
 

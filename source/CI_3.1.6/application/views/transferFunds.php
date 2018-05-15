@@ -22,7 +22,7 @@
 				foreach($accounts as $account){
 				?>
 					<optgroup label="<?php echo $account->account_name;?>">
-				<?
+				<?php
 					foreach($account->categories as $category) {
 						if(!empty($category->bookName)){
 							echo "<option value='{$category->bookId}'>{$category->bookName} (has $".number_format($category->bookAmtCurrent,2).")</option>\n";
@@ -39,8 +39,7 @@
 					foreach($accounts as $account){
 					?>
 						<option value="<?php echo $account->account_id;?>"><?php echo $account->account_name." (has $".number_format($account->account_amount,2).")";?></option>
-					<?
-
+					<?php
 					}
 					?>
 				</select>
@@ -54,7 +53,7 @@
 				foreach($accounts as $account){
 				?>
 					<optgroup label="<?php echo $account->account_name;?>">
-				<?
+				<?php
 					foreach($account->categories as $category) {
 						if(!empty($category->bookName)){
 							$need = $category->bookAmtNec - $category->bookAmtCurrent;
@@ -72,8 +71,7 @@
 					foreach($accounts as $account){
 					?>
 						<option value="<?php echo $account->account_id;?>"><?php echo $account->account_name;?></option>
-					<?
-
+					<?php
 					}
 					?>
 				</select>
