@@ -149,19 +149,17 @@ class Book_info extends N8_Model {
 		return $result;
 	}
 
-	function checkExisting($ownerId, $account_id, $category_name) {
+	function checkExisting($ownerId, $account_id, $category_name, $plaid_category = null) {
 		$data = array('bookName' => trim($category_name),'ownerId' => $ownerId, 'account_id' => $account_id);
+		if($plaid_category) {
+			$data['plaid_category'] = $plaid_category;
+		}
 		$query = $this->db->get_where('booksummary',$data);
 		$num = $query->num_rows();
 		return $num;
 	}
 
-	function delete_record($table,$id) {//the CI delete can accept an array of tables
-		/**  EXAMPLE
-		 * $tables = array('table1', 'table2', 'table3');
-		 * $this->db->where('id', '5');
-		 * $this->db->delete($tables);
-		 */
+	function delete_record($table,$id) {
 		$this->db->where($id);
 		$this->db->delete($table);
 	}

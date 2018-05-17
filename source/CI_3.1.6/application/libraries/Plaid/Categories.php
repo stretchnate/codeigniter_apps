@@ -12,6 +12,8 @@ use Plaid\Categories\Category;
 
 class Categories extends Plaid {
 
+    use RequestId;
+
     /**
      * @var Category[]
      */

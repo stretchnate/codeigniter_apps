@@ -22,8 +22,7 @@ class Categories extends Plaid {
     public function getCategories() {
         $this->start();
 
-        $data = json_encode([]);
-        $response = $this->post($this->target, $data);
+        $response = $this->post($this->target, '{}');
 
         return new \Plaid\Categories($this->parseResponse($response));
     }

@@ -59,7 +59,10 @@ class Book extends N8_Controller {
 		$this->load->view('budget/category/newCategoryVW');
 
 		$CI          =& get_instance();
-		$category_vw =  new Budget_Category_NewCategoryVW($CI);
+		$helper = new \Plaid\Categories\Helper();
+		$category_api = new \API\REST\Plaid\Categories();
+		$categories = $helper->createCategoriesOptions($category_api->getCategories());
+		$category_vw =  new Budget_Category_NewCategoryVW($CI, $categories);
 		$category_vw->setScripts($this->jsincludes->newBook());
 		$category_vw->setTitle("Add New Category");
 		$category_vw->setAction("/book/createCategory/");
@@ -141,7 +144,8 @@ class Book extends N8_Controller {
 			$e = 0;
 			$this->load->model('Book_info', 'BI',TRUE);
 			//check for existing category...I think
-			$check = $this->BI->checkExisting($this->session->userdata('user_id'), $this->input->post('account'), $this->input->post('name')); // check for exisiting category
+            $category_type = $this->input->post('category_type') ? $this->input->post('category_type') : null;
+			$check = $this->BI->checkExisting($this->session->userdata('user_id'), $this->input->post('account'), $this->input->post('name'), $category_type); // check for exisiting category
 			if($check < 1) {
 				//subtract from account if necessary
 				if($start_amount > 0) {
@@ -166,6 +170,7 @@ class Book extends N8_Controller {
 					$category_dm->setPriority($this->input->post('priority'));
 					$category_dm->setOwnerId($this->session->userdata('user_id'));
 					$category_dm->setDueDay($this->input->post('dueDay'));
+					$category_dm->setPlaidCategory($this->input->post('category_type'));
 					$category_dm->setActive(1);
 
 					$category_dm->setDueMonths($this->calculateDueMonths(

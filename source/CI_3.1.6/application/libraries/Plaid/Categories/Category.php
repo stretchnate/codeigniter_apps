@@ -12,8 +12,6 @@ use Plaid\Plaid;
 
 class Category extends Plaid {
 
-    use RequestId;
-
     /**
      * @var string
      */

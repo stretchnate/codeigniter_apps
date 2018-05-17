@@ -12,8 +12,11 @@
 
 		private $action;
 
-		public function __construct(&$CI) {
+		private $categories;
+
+		public function __construct(&$CI, $categories) {
 			parent::__construct($CI);
+			$this->categories = $categories;
 		}
 
 		/**
@@ -30,11 +33,11 @@
 				<span id="result-message">&nbsp;</span>
 			</div>
 			<div id="new-book">
-				<form name="newBookForm" id="newBookForm" action="<?= $this->action; ?>" method="post">
+                <?= form_open($this->action, ['id'=>'newBookForm', 'name'=>'newBookForm']); ?>
 					<div class='form-group'>
 						<select name="account" id='account' class="form-control" required>
 							<option value="">- - Select Account - -</option>
-						<?
+						<?php
 						if( is_array($this->accounts) ) {
 							foreach($this->accounts as $account) {
 								$selected = null;
@@ -51,6 +54,16 @@
 						<input type="text" name="name" placeholder="Name" id="name" class='form-control' value="<?= $this->category_dm ? $this->category_dm->getCategoryName() : ''; ?>" required>
 						<div class="ajaxResult result"></div>
 					</div>
+                    <div class="form-group">
+                        <select name="category_type" id='category_type' class="form-control" required>
+                            <option value="">- - Select Category Type - -</option>
+                        <?php
+                        foreach($this->categories as $category) {
+                            echo $category;
+                        }
+                        ?>
+                        </select>
+                    </div>
 					<div class='form-group'>
 						<div class="input-group">
 							<input type="number" step="0.01" class="money form-control" name="nec" placeholder="Amount Due" id="amount_due" value="<?= $this->category_dm ? $this->category_dm->getAmountNecessary() : '';?>" required>

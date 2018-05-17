@@ -15,6 +15,7 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 	private $interest_bearing;
 	private $days_until_due;
 	private $next_due_date;
+	private $plaid_category;
 
 	function __construct($category_id = null, $owner_id = null){
 		parent::__construct();
@@ -87,6 +88,7 @@ class Budget_DataModel_CategoryDM extends N8_Model {
                 case "account_id":      $this->parent_account_id       = $value; break;
                 case "InterestBearing": $this->interest_bearing        = Utilities::getBoolean($value); break;
                 case "due_months":      $this->due_months              = explode('|', $value); break;
+                case "plaid_category":  $this->plaid_category          = $value; break;
                 default:
                     $this->$column = $value;
             }
@@ -113,6 +115,7 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 		$sets["due_months"]        = implode('|', $this->due_months);
 		$sets["account_id"]        = $this->parent_account_id;
 		$sets["InterestBearing"]   = $this->interest_bearing;
+		$sets["plaid_category"]    = $this->plaid_category;
 
 		if($this->db->where("bookId", $this->category_id)->update("booksummary", $sets)) {
 			$result = true;
@@ -142,6 +145,7 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 		$values["due_months"]      = implode('|', $this->due_months);
 		$values["account_id"]      = $this->parent_account_id;
 		$values["InterestBearing"] = $this->interest_bearing;
+		$values["plaid_category"]  = $this->plaid_category;
 
 		return $this->db->insert("booksummary", $values);
 	}
@@ -484,4 +488,20 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 	public function getID() {
 		return $this->category_id;
 	}
+
+    /**
+     * @return mixed
+     */
+    public function getPlaidCategory() {
+        return $this->plaid_category;
+    }
+
+    /**
+     * @param mixed $plaid_category
+     * @return Budget_DataModel_CategoryDM
+     */
+    public function setPlaidCategory($plaid_category) {
+        $this->plaid_category = $plaid_category;
+        return $this;
+    }
 }

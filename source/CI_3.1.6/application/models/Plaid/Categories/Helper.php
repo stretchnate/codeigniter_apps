@@ -21,7 +21,7 @@ class Helper extends \CI_Model {
      * @param Categories $categories
      * @return array
      */
-    public function createCategoriesArray(Categories $categories) {
+    public function createCategoriesOptions(Categories $categories) {
         $top_level_array = [];
         foreach($categories->getCategories() as $category) {
             $key = substr($category->getCategoryId(), 0, 5);
@@ -29,12 +29,16 @@ class Helper extends \CI_Model {
                 continue;
             }
 
-            $category = isset($category->getHierarchy()[1])
-                ? $category->getHierarchy()[1] . $category->getHierarchy()[0]
-                : $category->getHierarchy()[0];
-
-            $top_level_array[$key] = $category;
+            if(empty($category->getHierarchy()[1])) {
+                $okey = ($key - 1) . '.1';
+                $top_level_array[$okey] = "</optgroup><optgroup label='".$category->getHierarchy()[0]."'>";
+                $top_level_array[$key] = "<option value='$key'>".$category->getHierarchy()[0]."</option>";
+            } else {
+                $top_level_array[$key] = "<option value='$key'>".$category->getHierarchy()[1]."</option>";
+            }
         }
+
+        $top_level_array[$key + 1] = "</optgroup>";
 
         return $top_level_array;
     }
