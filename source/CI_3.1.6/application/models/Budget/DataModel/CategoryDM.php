@@ -115,7 +115,7 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 		$sets["due_months"]        = implode('|', $this->due_months);
 		$sets["account_id"]        = $this->parent_account_id;
 		$sets["InterestBearing"]   = $this->interest_bearing;
-		$sets["plaid_category"]    = $this->plaid_category;
+		!empty($this->plaid_category) ? $sets["plaid_category"] = $this->plaid_category : null;
 
 		if($this->db->where("bookId", $this->category_id)->update("booksummary", $sets)) {
 			$result = true;
@@ -145,7 +145,7 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 		$values["due_months"]      = implode('|', $this->due_months);
 		$values["account_id"]      = $this->parent_account_id;
 		$values["InterestBearing"] = $this->interest_bearing;
-		$values["plaid_category"]  = $this->plaid_category;
+		!empty($this->plaid_category) ? $values["plaid_category"] = $this->plaid_category : null;
 
 		return $this->db->insert("booksummary", $values);
 	}

@@ -40,17 +40,16 @@ class Creator {
      */
     public function convertTransactionsToCategories(TransactionResponse $transactions) {
         foreach($transactions->getTransactions() as $transaction) {
-            $category_name = $transaction->getCategory()[0];
-            $category = $this->categoryExists($category_name);
-            if ($category === false) {
+            $account = $this->fetchAccount($transaction);
+            $category = $this->fetchCategory($transaction, $account);
+            if (!$category instanceof \Budget_DataModel_CategoryDM) {
+                $category_name = $transaction->getCategory()[0];
                 $goal_amount = $this->calculateCategoryNeed($transactions->getTransactions(), $transaction);
-                $category = $this->createCategory($transaction, $category_name, $goal_amount);
+                $category = $this->createCategory($transaction, $category_name, $category, $goal_amount);
             }
-
             if($category === false) {
                 log_message('debug', 'Unable to create category for plaid transaction '.$transaction->getTransactionId());
             } elseif($transaction->getAmount() < 0) {
-                $account = new \Budget_DataModel_AccountDM($category->getParentAccountId(), $this->user_id);
                 $this->createDeposit($transaction, $account);
             } else {
                 $this->createTransaction($transaction, $category);
@@ -58,17 +57,49 @@ class Creator {
         }
     }
 
-
     /**
-     * @param $category_name
+     * @param $plaid_category_id
+     * @param $account_id
      * @return bool|\Budget_DataModel_CategoryDM
      * @throws \Exception
      */
-    public function categoryExists($category_name) {//need to use account id here too
+    public function categoryExists($plaid_category_id, $account_id) {//need to use account id here too
         $category_dm = new \Budget_DataModel_CategoryDM();
-        $category_dm->loadBy(['bookName' => $category_name, 'ownerId' => $this->user_id]);
+        $category_dm->loadBy(['plaid_category' => $plaid_category_id, 'account_id' => $account_id, 'ownerId' => $this->user_id]);
 
         return ($category_dm->getCategoryId() > 0) ? $category_dm : false;
+    }
+
+    /**
+     * @param $transaction
+     * @return \Budget_DataModel_AccountDM
+     * @throws \Exception
+     */
+    public function fetchAccount(TransactionResponse\Transaction $transaction) {
+        $values = new Connection\Values();
+        $values->setPlaidAccountId($transaction->getAccountId());
+        $values->setActive(true);
+        $connection = new Connection($values);
+        $account = new \Budget_DataModel_AccountDM($connection->getValues()->getAccountId(), $this->user_id);
+
+        return $account;
+    }
+
+    /**
+     * @param $transaction
+     * @param $account
+     * @return bool|\Budget_DataModel_CategoryDM|float|int|string
+     * @throws \Exception
+     */
+    public function fetchCategory(TransactionResponse\Transaction $transaction, \Budget_DataModel_AccountDM $account) {
+        $plaid_category = substr($transaction->getCategoryId(), 0, 5);
+        $category = $this->categoryExists($plaid_category, $account->getAccountId());
+        if($category === false) {
+            $plaid_category = substr($plaid_category, 0, 2) * 1000;
+            $category = $this->categoryExists($plaid_category, $account->getAccountId());
+        }
+
+        return $category ? $category : $plaid_category;
     }
 
     /**
@@ -98,7 +129,6 @@ class Creator {
         $amount = abs($transaction->getAmount());
 
         $handler = new Handler($this->user_id);
-dbo("transaction date = ".$transaction->getDate()->format('Y-m-d H:i:s'));
         $handler->addDeposit($account, $amount, $transaction->getName(), $transaction->getDate()->format('Y-m-d H:i:s'));
     }
 
@@ -136,7 +166,7 @@ dbo("transaction date = ".$transaction->getDate()->format('Y-m-d H:i:s'));
      * @throws \Exception
      * @return \Budget_DataModel_CategoryDM
      */
-    private function createCategory($transaction, $category_name, $goal_amount) {
+    private function createCategory($transaction, $category_name, $plaid_category, $goal_amount) {
         $cval = new Connection\Values();
         $cval->setPlaidAccountId($transaction->getAccountId());
         $connection = new Connection($cval);
@@ -155,7 +185,8 @@ dbo("transaction date = ".$transaction->getDate()->format('Y-m-d H:i:s'));
             ->setDueMonths([1,2,3,4,5,6,7,8,9,10,11,12])// can this be determined?
             ->setInterestBearing(0)
             ->setParentAccountId($connection->getValues()->getAccountId())
-            ->setPriority(1);
+            ->setPriority(1)
+            ->setPlaidCategory($plaid_category);
 
         return $category_dm->saveCategory() ? $category_dm : false;
     }

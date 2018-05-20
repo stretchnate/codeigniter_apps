@@ -13,7 +13,7 @@ use API\REST\Plaid;
 
 class Transactions extends Plaid {
 
-    private $target = '/transactions/get';
+    private $target = 'transactions/get';
 
     /**
      * @param $access_token
