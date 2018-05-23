@@ -33,6 +33,9 @@ class Plaid extends _AjaxResponse {
                 $creator = new \Plaid\Account\Creator();
                 $creator->run($metadata, $response, $this->session->userdata('user_id'), $this->input->post('existing_account'));
 
+                $helper = new \Plaid\Response\Helper();
+                $helper->saveResponse($response, 'TokenExchange');
+
                 $success = true;
                 $message = '';
             }
@@ -93,6 +96,9 @@ class Plaid extends _AjaxResponse {
                     if ($transaction_response instanceof \Plaid\TransactionResponse) {
                         $creator = new \Plaid\Transaction\Creator($this->session->userdata('user_id'));
                         $creator->convertTransactionsToCategories($transaction_response);
+
+                        $helper = new \Plaid\Response\Helper();
+                        $helper->saveTransactionResponse($transaction_response);
                     }
 
                     $iterator->next();

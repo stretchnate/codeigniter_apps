@@ -11,29 +11,40 @@ class Budget_DataModel_AccountDM extends N8_Model {
     const TABLE = 'accounts';
 
     /**
-     * @var
+     * @var int
      */
     private $account_id;
+
     /**
-     * @var
+     * @var string
      */
     private $account_name;
+
     /**
-     * @var
+     * @var string
+     */
+    private $account_type;
+
+    /**
+     * @var float
      */
     private $account_amount;
+
     /**
-     * @var
+     * @var int
      */
     private $owner_id;
+
     /**
-     * @var
+     * @var int
      */
     private $payschedule_code;
+
     /**
-     * @var
+     * @var bool
      */
     private $active;
+
     /**
      * @var array
      */
@@ -100,9 +111,13 @@ class Budget_DataModel_AccountDM extends N8_Model {
         return $result;
 	}
 
+    /**
+     * @param $row
+     */
 	private function load($row) {
         $this->account_id = (int)$row->account_id;
         $this->account_name = $row->account_name;
+        $this->account_type = $row->account_type;
         $this->account_amount = $row->account_amount;
         $this->owner_id = (int)$row->owner_id;
         $this->payschedule_code = $row->payschedule_code;
@@ -117,7 +132,8 @@ class Budget_DataModel_AccountDM extends N8_Model {
 		$sets   = array();
 
 		$sets["account_name"]     = $this->account_name;
-		$sets["account_amount"]   = $this->dbNumberFormat($this->account_amount);
+        $sets["account_type"]     = $this->account_type;
+        $sets["account_amount"]   = $this->dbNumberFormat($this->account_amount);
 		$sets["payschedule_code"] = $this->payschedule_code;
 		$sets["active"]           = $this->active;
 
@@ -136,7 +152,8 @@ class Budget_DataModel_AccountDM extends N8_Model {
 		$values = array();
 
 		$values["account_name"]     = $this->account_name;
-		$values["account_amount"]   = $this->dbNumberFormat($this->account_amount);
+        $values["account_type"]     = $this->account_type;
+        $values["account_amount"]   = $this->dbNumberFormat($this->account_amount);
 		$values["owner_id"]         = ($this->owner_id) ? $this->owner_id : $this->session->userdata("user_id");
 		$values["payschedule_code"] = $this->payschedule_code;
 		$values["active"]           = ($this->active) ? $this->active : 1;
@@ -286,6 +303,24 @@ class Budget_DataModel_AccountDM extends N8_Model {
     public function setAccountName($account_name) {
 		$this->account_name = $account_name;
 	}
+
+    /**
+     * @return string
+     */
+    public function getAccountType() {
+        return $this->account_type;
+    }
+
+    /**
+     * @param string $account_type
+     * @return Budget_DataModel_AccountDM
+     */
+    public function setAccountType($account_type) {
+        $this->account_type = $account_type;
+
+        return $this;
+    }
+
 
     /**
      * @return mixed

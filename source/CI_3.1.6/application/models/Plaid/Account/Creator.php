@@ -32,7 +32,8 @@ class Creator {
             } else {
                 $quantum_account = $this->createAccount(
                     $metadata->getInstitution()->getName() . ' ' . $account->getName(),
-                    $owner_id
+                    $owner_id,
+                    $account->getSubtype()
                 );
             }
 
@@ -65,12 +66,14 @@ class Creator {
     /**
      * @param $name
      * @param $owner_id
+     * @param $account_type
      * @return \Budget_DataModel_AccountDM
      * @throws \Exception
      */
-    private function createAccount($name, $owner_id) {
+    private function createAccount($name, $owner_id, $account_type = 'checking') {
         $quantum_account = new \Budget_DataModel_AccountDM();
         $quantum_account->setAccountName($name);
+        $quantum_account->setAccountType($account_type);
         $quantum_account->setAccountAmount(0);
         $quantum_account->setActive(1);
         $quantum_account->setOwnerId($owner_id);
