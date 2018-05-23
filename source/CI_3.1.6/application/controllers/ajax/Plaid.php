@@ -31,7 +31,7 @@ class Plaid extends _AjaxResponse {
 
             if($response->access_token && $response->item_id) {
                 $creator = new \Plaid\Account\Creator();
-                $creator->run($metadata, $response, $this->session->userdata('user_id'));
+                $creator->run($metadata, $response, $this->session->userdata('user_id'), $this->input->post('existing_account'));
 
                 $success = true;
                 $message = '';

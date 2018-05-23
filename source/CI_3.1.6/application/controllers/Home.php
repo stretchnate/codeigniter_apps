@@ -22,18 +22,19 @@ class Home extends N8_Controller {
         $values->setName('Plaid');
         $plaid = new \API\Vendor($values);
 
-		if($account_iterator->count() < 1 && $plaid->getValues()->getId()) {
+        $link = null;
+		if($plaid->getValues()->getId()) {
             $link = new \Plaid\Link($plaid);
-            $this->homeView($link);
-		} else {
-		    $this->homeView();
         }
+
+        $this->homeView($link);
 	}
 
     /**
      * displays the home page
      *
      * @param \Plaid\Link $link
+     * @throws Exception
      */
 	private function homeView($link = null) {
 		$this->load->model('notes_model', 'NM', TRUE);
@@ -43,13 +44,15 @@ class Home extends N8_Controller {
 		$home_vw = new Budget_HomeVW($CI);
 		$home_vw->setTitle("Your Accounts");
 		$home_vw->setScripts($this->jsincludes->home());
-		if($link) {
-            $home_vw->setLink($link);
-        }
 
 		//get the accounts
 		$home_model = new Budget_BusinessModel_Home();
 		$home_model->loadAccounts($this->session->userdata('user_id'));
+
+        if($link) {
+            $home_vw->setLinkedAccounts($this->getLinkedAccounts($home_model->getAccounts()));
+            $home_vw->setLink($link);
+        }
 
         //get monthlyNeeds
         $home_vw->setTotalsArray($this->getTotalsArray($home_model->getAccounts()));
@@ -69,6 +72,27 @@ class Home extends N8_Controller {
 
 		$home_vw->renderView();
 	}
+
+    /**
+     * @param Budget_DataModel_AccountDM[] $accounts
+     * @return array
+     * @throws Exception
+     */
+	private function getLinkedAccounts(array $accounts) {
+        $linked_accounts = [];
+        foreach($accounts as $account) {
+            $values = new \Plaid\Connection\Values();
+            $values->setActive(true)
+                ->setAccountId($account->getAccountId());
+            $connection = new \Plaid\Connection($values);
+
+            if($connection->getValues()->getPlaidAccountId()) {
+                $linked_accounts[] = $account->getAccountId();
+            }
+        }
+
+        return $linked_accounts;
+    }
 
     /**
      * creates an array of monthlyNeed objects

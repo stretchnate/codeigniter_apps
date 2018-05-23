@@ -25,12 +25,16 @@ class Creator {
      * @param $owner_id
      * @throws \Exception
      */
-    public function run(Metadata $metadata, \stdClass $token_response, $owner_id) {
+    public function run(Metadata $metadata, \stdClass $token_response, $owner_id, $existing_account_id = null) {
         foreach($metadata->getAccounts() as $account) {
-            $quantum_account = $this->createAccount(
-                $metadata->getInstitution()->getName() . ' ' . $account->getName(),
-                $owner_id
-            );
+            if($existing_account_id) {
+                $quantum_account = new \Budget_DataModel_AccountDM($existing_account_id, $owner_id);
+            } else {
+                $quantum_account = $this->createAccount(
+                    $metadata->getInstitution()->getName() . ' ' . $account->getName(),
+                    $owner_id
+                );
+            }
 
             $this->createPlaidConnection(
                 $token_response->item_id,

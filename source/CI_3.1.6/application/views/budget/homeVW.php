@@ -26,6 +26,11 @@ class Budget_HomeVW extends Budget_BaseVW {
     private $link;
 
     /**
+     * @var array
+     */
+    private $linked_accounts;
+
+    /**
      * Budget_HomeVW constructor.
      *
      * @param $CI
@@ -69,6 +74,10 @@ class Budget_HomeVW extends Budget_BaseVW {
 					if(!is_array($this->totals_array) || count($this->totals_array) < 1) {
 						echo $this->showAddAccount();
 					}else if(is_array($this->totals_array)) {
+                        if($this->link) {
+                            echo $this->link->getIntegrationJs();
+                        }
+
 						foreach($this->totals_array as $total) {
                             $account_dm = $total->getAccountDM();
 
@@ -119,14 +128,22 @@ class Budget_HomeVW extends Budget_BaseVW {
 									</div>
 									<div>
 										<a href='/accountCTL/editAccount/<?= $account_dm->getAccountId(); ?>'>Edit <?= $account_dm->getAccountName(); ?></a>
+                                        <?php
+                                        if($this->link && !in_array($account_dm->getAccountId(), $this->linked_accounts)) {
+                                        ?>
+                                        &nbsp;&nbsp;
+                                        <a href='javascript:void(0)' onclick="plaid.linkExistingAccount(<?= $account_dm->getAccountId(); ?>)" id="link_button">Link This Account</a>
+                                        <?php
+                                        }
+                                        ?>
 									</div>
-								</div>
+                                </div>
 
 								<?php
 								if(is_array($account_dm->getCategories()) && count($account_dm->getCategories()) > 0) {
 									foreach($account_dm->getCategories() as $category_dm){
 									?>
-										<div class="well">
+                                        <div class="well">
 											<h3 class="border">
 												<a class='text' href="/book/getBookInfo/<?php echo $category_dm->getCategoryId(); ?>/"><?php echo $category_dm->getCategoryName(); ?></a>
 											</h3>
@@ -180,42 +197,42 @@ class Budget_HomeVW extends Budget_BaseVW {
 <?php
 		}
 
-        /**
-         * @return string
-         */
-		private function showAddAccount() {
-		    $content = "<h3>Please add an Account</h3>"
-					. "Now that you're registered you'll need to create an account to represent your bank account,"
-					. " piggy bank, mayonaise jar or whatever it is you use to store your cash. Don't worry,"
-					. " we don't ask for any financial or personal information, we are simply simulating your bank"
-					. " account so we can help you organize it. in fact all we ask for is a name for your account"
-					. " and how often you get paid. The name is so you know which account your working with and the pay"
-					. " schedule is so we can calculate the best way to organize your money.";
-			$content .= "<br><br><a class='btn btn-primary' href='/accountCTL/addNewAccount'>add a new Account</a>";
+    /**
+     * @return string
+     */
+    private function showAddAccount() {
+        $content = "<h3>Please add an Account</h3>"
+                . "Now that you're registered you'll need to create an account to represent your bank account,"
+                . " piggy bank, mayonaise jar or whatever it is you use to store your cash. Don't worry,"
+                . " we don't ask for any financial or personal information, we are simply simulating your bank"
+                . " account so we can help you organize it. in fact all we ask for is a name for your account"
+                . " and how often you get paid. The name is so you know which account your working with and the pay"
+                . " schedule is so we can calculate the best way to organize your money.";
+        $content .= "<br><br><a class='btn btn-primary' href='/accountCTL/addNewAccount'>add a new Account</a>";
 
-            if($this->link) {
-                $content .= "<button id='link_button' class='btn btn-primary'>Link my Account</button>";
-                $content .= $this->link->getIntegrationJs();
-            }
+        if($this->link) {
+            $content .= "<button id='link_button' class='btn btn-primary'>Link my Account</button>";
+            $content .= $this->link->getAutoLoadIntegrationJs();
+        }
 
-            return $content;
-		}
+        return $content;
+    }
 
-        /**
-         * @return string
-         */
-		private function showAddCategories() {
-			$content = "<h3>Please add Categories to this Account</h3>"
-					. "<p>Now that you have an account created you can begin adding categories. We ask for a little bit more"
-					. " information on these but we are still careful to not ask for any personal or financial details."
-					. " You can add as many categories as you would like, for example, you might want a category for"
-					. " rent/mortgage, and another for car payment, perhaps groceries and gas would be good to have."
-					. " you can be as broad or as detailed as you want, whatever helps you take control of your finances.</p>";
+    /**
+     * @return string
+     */
+    private function showAddCategories() {
+        $content = "<h3>Please add Categories to this Account</h3>"
+                . "<p>Now that you have an account created you can begin adding categories. We ask for a little bit more"
+                . " information on these but we are still careful to not ask for any personal or financial details."
+                . " You can add as many categories as you would like, for example, you might want a category for"
+                . " rent/mortgage, and another for car payment, perhaps groceries and gas would be good to have."
+                . " you can be as broad or as detailed as you want, whatever helps you take control of your finances.</p>";
 
-			$content .= "<br><br><a class='btn btn-primary' href='/book/newBookForm'>add a category</a>";
+        $content .= "<br><br><a class='btn btn-primary' href='/book/newBookForm'>add a category</a>";
 
-			return $content;
-		}
+        return $content;
+    }
 
     /**
      * @param $last_transaction
@@ -235,16 +252,26 @@ class Budget_HomeVW extends Budget_BaseVW {
      * @param array $totals
      */
     public function setTotalsArray(array $totals) {
-            $this->totals_array = $totals;
-        }
+        $this->totals_array = $totals;
+    }
 
-        /**
-         * @param \Plaid\Link $link
-         * @return Budget_HomeVW
-         */
-        public function setLink(\Plaid\Link $link) {
-            $this->link = $link;
+    /**
+     * @param \Plaid\Link $link
+     * @return Budget_HomeVW
+     */
+    public function setLink(\Plaid\Link $link) {
+        $this->link = $link;
 
-            return $this;
-        }
-	}
+        return $this;
+    }
+
+    /**
+     * @param array $account_ids
+     * @return $this
+     */
+    public function setLinkedAccounts(array $account_ids) {
+        $this->linked_accounts = $account_ids;
+
+        return $this;
+    }
+}
