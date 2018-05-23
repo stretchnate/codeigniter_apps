@@ -16,6 +16,8 @@ namespace Plaid;
  */
 abstract class Plaid {
 
+    use RequestId, Item;
+
     /**
      * @var \stdClass
      */

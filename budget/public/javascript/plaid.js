@@ -14,6 +14,7 @@ plaid.getAccessToken = function(public_token, metadata) {
             plaid.probe = window.setInterval(plaid.transactionsProbe, 5000, metadata['account_id']);
         } else {
             //show an error message.
+            $('body').overlay('remove');
             alert(response.message);
         }
     }, 'json');

@@ -29,7 +29,7 @@ class Plaid extends _AjaxResponse {
             $metadata = new \Plaid\Metadata($this->input->post('metadata', true));
             $response = $api->exchangeToken($this->input->post('public_token', true));
 
-            if($response->access_token && $response->item_id) {
+            if($response->getAccessToken() && $response->getItemId()) {
                 $creator = new \Plaid\Account\Creator();
                 $creator->run($metadata, $response, $this->session->userdata('user_id'), $this->input->post('existing_account'));
 

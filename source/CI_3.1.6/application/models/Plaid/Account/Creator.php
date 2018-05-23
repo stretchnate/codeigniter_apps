@@ -9,6 +9,7 @@
 namespace Plaid\Account;
 
 
+use Plaid\AccessToken;
 use Plaid\Connection;
 use Plaid\Metadata;
 
@@ -21,15 +22,20 @@ class Creator {
 
     /**
      * @param Metadata $metadata
-     * @param \stdClass $token_response
+     * @param AccessToken $token_response
      * @param $owner_id
      * @throws \Exception
      */
-    public function run(Metadata $metadata, \stdClass $token_response, $owner_id, $existing_account_id = null) {
+    public function run(Metadata $metadata, AccessToken $token_response, $owner_id, $existing_account_id = null) {
         foreach($metadata->getAccounts() as $account) {
             if($existing_account_id) {
                 $quantum_account = new \Budget_DataModel_AccountDM($existing_account_id, $owner_id);
-            } else {
+                if($quantum_account->getAccountType() != $account->getSubtype()) {
+                    throw new \Exception('tried linking account of '.$account->getSubtype().' to account type of '.$quantum_account->getAccountType(), EXCEPTION_CODE_VALIDATION);
+                }
+            }
+
+            if(!isset($quantum_account)) {
                 $quantum_account = $this->createAccount(
                     $metadata->getInstitution()->getName() . ' ' . $account->getName(),
                     $owner_id,
@@ -38,11 +44,13 @@ class Creator {
             }
 
             $this->createPlaidConnection(
-                $token_response->item_id,
-                $token_response->access_token,
+                $token_response->getItemId(),
+                $token_response->getAccessToken(),
                 $quantum_account->getAccountId(),
                 $account->getAccountId()
             );
+
+            unset($quantum_account);
         }
     }
 

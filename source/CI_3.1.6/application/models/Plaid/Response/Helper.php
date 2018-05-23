@@ -18,17 +18,17 @@ class Helper {
      * @param Plaid $plaid_response
      * @param string $product
      */
-    public function saveResponse($plaid_response, $product) {//todo - MAKE THIS WORK WITH PLAID OBJECTS (FIX TOKEN EXCHANGE)
+    public function saveResponse($plaid_response, $product) {
         try {
             $response = new Response();
             $response->getValues()->setProduct($product)
-                ->setData(json_encode($plaid_response))
-                ->setRequestId($plaid_response->request_id);
+                ->setData(json_encode($plaid_response->getRawResponse()))
+                ->setRequestId($plaid_response->getRequestId());
 
             $response->save();
         } catch(\Exception $e) {
             log_message('error', "unable to save plaid response");
-            log_message('error', json_encode($plaid_response));
+            log_message('error', json_encode($plaid_response->getRawResponse()));
         }
     }
 

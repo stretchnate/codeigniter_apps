@@ -10,6 +10,7 @@ namespace API\REST\Plaid;
 
 
 use API\REST\Plaid;
+use Plaid\AccessToken;
 
 /**
  * Class Auth
@@ -37,12 +38,12 @@ class Auth extends Plaid {
 
     /**
      * @param $public_token
-     * @return mixed|\Plaid\Auth
+     * @return \Plaid\AccessToken
      * @throws \Exception
      */
     public function exchangeToken($public_token) {
         $response = $this->post('item/public_token/exchange', json_encode($this->dataArray($public_token, 'public_token')));
 
-        return $this->parseResponse($response);
+        return new AccessToken($this->parseResponse($response));
     }
 }
