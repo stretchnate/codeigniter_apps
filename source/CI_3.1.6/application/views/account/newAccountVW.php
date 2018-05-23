@@ -9,6 +9,12 @@
 				<input type="hidden" name="account_id" value='<?= isset($account_dm) ? $account_dm->getAccountId() : null; ?>'>
 				<input type="text" name="name" id="name" placeholder="Name" value='<?= isset($account_dm) ? $account_dm->getAccountName() : ""; ?>' class='form-control' required>
 			</div>
+            <div class="form-group">
+                <select name="account_type" class="form-control" required>
+                    <option value="checking">Checking</option>
+                    <option value="savings">Savings</option>
+                </select>
+            </div>
 			<div class="form-group">
 			<?php
 				$options = array(
@@ -29,11 +35,6 @@
 					echo "<option value='$value'$selected>$text</option>";
 				}
 				?>
-
-<!--					<option value="1">Every two weeks</option>
-					<option value="2">Weekly</option>
-					<option value="3">Twice a Month</option>
-					<option value="4">Monthly</option>-->
 				</select>
 			</div>
 			<button id='add_account' class='btn btn-primary'>Save</button>

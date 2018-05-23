@@ -77,6 +77,7 @@ class AccountCTL extends N8_Controller {
 			$response = array('success' => false, 'message' => "there was a problem saving your account");
 
 			$account_dm->setAccountName($this->input->post("name"));
+			$account_dm->setAccountType($this->input->post('account_type'));
 			$account_dm->setPayScheduleCode($this->input->post("pay_schedule"));
 
 			if(!$account_dm->getID()) {
