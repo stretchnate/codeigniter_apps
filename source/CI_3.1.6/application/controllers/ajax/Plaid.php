@@ -84,7 +84,10 @@ class Plaid extends _AjaxResponse {
             $item_id = $this->fetchItemId($this->input->post('plaid_account_id', true));
             $iterator = new \Plaid\Connection\Iterator($item_id, ['item_id' => $item_id]);
             if($iterator->valid()) {
+                $transaction_helper = new \Transaction\Helper();
                 while ($iterator->valid()) {
+                    $last_transaction_date = $transaction_helper->getLastTransactionDate($iterator->current()->getValues()->getAccountId(), $this->session->userdata('user_id'));
+                    $start_date = $last_transaction_date ? $last_transaction_date->add(new \DateInterval('P1D')) : $start_date;
                     $transactions = new \API\REST\Plaid\Transactions();
                     $transaction_response = $transactions->getTransactions(
                         $iterator->current()->getValues()->getAccessToken(),

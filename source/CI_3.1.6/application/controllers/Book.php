@@ -92,7 +92,10 @@ class Book extends N8_Controller {
 			$this->load->view('budget/category/newCategoryVW');
 
 			$CI =& get_instance();
-			$category_vw = new Budget_Category_NewCategoryVW($CI);
+            $helper = new \Plaid\Categories\Helper();
+            $category_api = new \API\REST\Plaid\Categories();
+            $categories = $helper->createCategoriesOptions($category_api->getCategories());
+			$category_vw = new Budget_Category_NewCategoryVW($CI, $categories);
 			$category_vw->setScripts($this->jsincludes->editBook());
 			$category_vw->setTitle("Edit ".$category_dm->getCategoryName());
 			$category_vw->setAction("/book/saveChange/{$category_dm->getCategoryId()}/");
