@@ -55,7 +55,7 @@
 						<div class="ajaxResult result"></div>
 					</div>
                     <div class="form-group">
-                        <select name="category_type" id='category_type' class="form-control" required>
+                        <select name="category_type" id='category_type' class="form-control">
                             <option value="">- - Select Category Type - -</option>
                         <?php
                         foreach($this->categories as $category) {

@@ -46,6 +46,10 @@ abstract class REST {
         $values = new Values();
         $values->setName($vendor_name);
         $this->vendor_data = new Vendor($values);
+
+		if(!$this->vendor_data->getValues()->getId()) {
+			throw new \Exception("Vendor $vendor_name does not exist.");
+		}
     }
 
     /**

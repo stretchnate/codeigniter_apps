@@ -59,9 +59,13 @@ class Book extends N8_Controller {
 		$this->load->view('budget/category/newCategoryVW');
 
 		$CI          =& get_instance();
-		$helper = new \Plaid\Categories\Helper();
-		$category_api = new \API\REST\Plaid\Categories();
-		$categories = $helper->createCategoriesOptions($category_api->getCategories());
+		try {
+			$helper = new \Plaid\Categories\Helper();
+			$category_api = new \API\REST\Plaid\Categories();
+			$categories = $helper->createCategoriesOptions($category_api->getCategories());
+		} catch(Exception $e) {
+			$categories = [];
+		}
 		$category_vw =  new Budget_Category_NewCategoryVW($CI, $categories);
 		$category_vw->setScripts($this->jsincludes->newBook());
 		$category_vw->setTitle("Add New Category");
