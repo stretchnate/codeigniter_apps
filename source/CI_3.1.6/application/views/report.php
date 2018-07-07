@@ -8,7 +8,7 @@ require_once(APPPATH.'/views/budget/baseVW.php');
 class ReportView extends Budget_BaseVW {
 
     /**
-     * @var array
+     * @var \Budget\AccountIterator
      */
     private $accounts;
 
@@ -16,9 +16,9 @@ class ReportView extends Budget_BaseVW {
      * ReportView constructor.
      *
      * @param       $CI
-     * @param array $accounts
+     * @param \Budget\AccountIterator $accounts
      */
-    public function __construct(&$CI, array $accounts) {
+    public function __construct(&$CI, \Budget\AccountIterator $accounts) {
         parent::__construct($CI);
 
         $this->accounts = $accounts;
@@ -31,7 +31,9 @@ class ReportView extends Budget_BaseVW {
         $html = form_open('/', ['method' => 'POST', 'name' => 'report']);
         $html .= $this->buildReportTypeSelect();
         $html .= $this->buildAccountsSelect();
+        $html .= "<div id='categories-container'>";
         $html .= $this->buildCategoriesSelect();
+        $html .= "</div>";
         $html .= $this->buildDateFrom();
         $html .= $this->buildDateTo();
         $html .= form_submit('Submit', 'Run Report', 'class="btn btn-primary"');
@@ -41,10 +43,15 @@ class ReportView extends Budget_BaseVW {
     }
 
     /**
-     * @param array $categories
      * @return string
      */
-    public function buildCategoriesSelect(array $categories = []) {
+    public function buildCategoriesSelect(Budget_DataModel_AccountDM $account = null) {
+        $categories = [];
+        if($account) {
+            foreach($account->getCategories() as $category) {
+                $categories[$category->getCategoryId()] = $category->getCategoryName();
+            }
+        }
         $options = $this->buildOptions($categories);
         return "<div class='form-group'>
                     <select multiple name='categories' id='categories' class='form-control' required>
@@ -99,7 +106,13 @@ class ReportView extends Budget_BaseVW {
      * @return string
      */
     private function buildAccountsSelect() {
-        $options = $this->buildOptions($this->accounts);
+        $list = [];
+        while($this->accounts->valid()) {
+            $list[$this->accounts->current()->getAccountId()] = $this->accounts->current()->getAccountName();
+            $this->accounts->next();
+        }
+
+        $options = $this->buildOptions($list);
         return "<div class='form-group'>
                     <select name='account' id='account' class='form-control' required>
                         <option value=''>- - Account - -</option>
@@ -115,7 +128,15 @@ class ReportView extends Budget_BaseVW {
     private function buildOptions($list) {
         $options = [];
         foreach($list as $value => $text) {
-            $options[] = "<option value='$value'>$text</option>";
+            if(is_array($text)) {
+                $options[] = "<optgroup label='$value'>";
+                foreach($text as $id => $display) {
+                    $options[] = "<option value='$id'>$display</option>";
+                }
+                $options[] = "</optgroup>";
+            } else {
+                $options[] = "<option value='$value'>$text</option>";
+            }
         }
 
         return implode('', $options);

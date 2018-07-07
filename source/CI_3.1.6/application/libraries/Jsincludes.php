@@ -45,7 +45,7 @@ Class Jsincludes {
     }
 
     function report() {
-        $scripts = array();
+        $scripts[] = "<script type='text/javascript' src='".self::JS."report.js'></script>";
         return $scripts;
     }
 

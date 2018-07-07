@@ -56,7 +56,8 @@ class Budget_DataModel_AccountDM extends N8_Model {
      * @param null $account_id
      * @param null $owner_id
      * @throws Exception
-     */function __construct($account_id = null, $owner_id = null){
+     */
+    public function __construct($account_id = null, $owner_id = null){
 		parent::__construct();
 
 		if($account_id && $owner_id) {

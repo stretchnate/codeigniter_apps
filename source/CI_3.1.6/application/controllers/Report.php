@@ -18,9 +18,8 @@ class Report extends N8_Controller {
 	function index() {
 		$this->auth->restrict();
 
-		$header_data['title'] = "Reports";
-		$header_data['scripts'] = $this->jsincludes->report();
-		$header_data['logged_user'] = $this->session->userdata('logged_user');
+		$this->view->setTitle("Reports");
+		$this->view->setScripts($this->jsincludes->report());
 
 		$this->view->renderView();
 	}
@@ -33,13 +32,21 @@ class Report extends N8_Controller {
         $account_iterator = new \Budget\AccountIterator($this->session->userdata("user_id"));
         $account_iterator->load();
 
-        $list = [];
-        while($account_iterator->valid()) {
-            $list[$account_iterator->current()->getAccountId()] = $account_iterator->current()->getAccountName();
-            $account_iterator->next();
-        }
+        return $account_iterator;
+    }
 
-        return $list;
+    /**
+     * fetch the category dropdown
+     */
+    public function fetchCategoryDropdown() {
+	    try {
+	        $account = new Budget_DataModel_AccountDM($this->input->post('account_id'), $this->session->userdata['user_id']);
+	        $account->loadCategories();
+	        echo json_encode(['success' => true, 'data' => $this->view->buildCategoriesSelect($account), 'message' => '']);
+        } catch(Exception $e) {
+	        log_message('error', $e->getMessage());
+            echo json_encode(['success' => false, 'data' => null, 'message' => '']);
+        }
     }
 }
 
