@@ -8,48 +8,53 @@ Class Jsincludes {
     const JQUERY_UI  = "<script type='text/javascript' src='/javascript/jquery-ui-1.8.21.custom.min.js'></script>";
     const DATATABLES = "<script type='text/javascript' src='/javascript/datatables/jquery.dataTables_1.9.0.min.js'></script>";
 
-    function newBook() {
+    public function newBook() {
         $scripts[] = self::UTILITIES;
         $scripts[] = "<script type='text/javascript' src='".self::JS."newBook.js'></script>";
         return $scripts;
     }
 
-    function books() {
+    public function books() {
         $scripts[] = self::UTILITIES;
         $scripts[] = "<script type='text/javascript' src='".self::JS."books.js'></script>";
         return $scripts;
     }
 
-    function newFunds() {
+    public function newFunds() {
         $scripts[] = self::UTILITIES;
         $scripts[] = "<script type='text/javascript' src='".self::JS."newFunds.js'></script>";
         return $scripts;
     }
 
-    function transferFunds() {
+    public function transferFunds() {
         $scripts[] = self::UTILITIES;
         $scripts[] = "<script type='text/javascript' src='".self::JS."transferFunds.js'></script>";
         return $scripts;
     }
 
-    function editBook() {
+    public function editBook() {
         $scripts[] = self::UTILITIES;
         $scripts[] = "<script type='text/javascript' src='".self::JS."editBook.js'></script>";
         return $scripts;
     }
 
-    function home() {
+    public function home() {
         $scripts[] = "<script type='text/javascript' src='".self::JS."home.js'></script>";
         $scripts[] = "<script type='text/javascript' src='".self::JS."plaid.js'></script>";
         return $scripts;
     }
 
-    function report() {
-        $scripts[] = "<script type='text/javascript' src='".self::JS."report.js'></script>";
+    public function reports() {
+        $scripts[] = '<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>';
         return $scripts;
     }
 
-    function newAccount() {
+    public function reportForm() {
+        $scripts[] = "<script type='text/javascript' src='".self::JS."report_form.js'></script>";
+        return $scripts;
+    }
+
+    public function newAccount() {
         $scripts[] = self::UTILITIES;
         $scripts[] = "<script type='text/javascript' src='".self::JS."newAccount.js'></script>";
         return $scripts;
