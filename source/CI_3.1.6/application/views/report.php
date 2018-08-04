@@ -22,16 +22,16 @@ class ReportView extends Budget_BaseVW {
     }
 
     /**
-     * @return string
+     * render the reports section of the view
      */
     public function generateView() {
-        $contents = '<div id="report_container">
-            <div id="report_list">'.$this->reportList().'</div>
+        ?>
+        <div id="report_container">
+            <div id="report_list"><?= $this->reportList(); ?></div>
             <div id="chart"></div>
             <div id="report"></div>
-        </div>';
-
-        return $contents;
+        </div>
+        <?php
     }
 
     /**

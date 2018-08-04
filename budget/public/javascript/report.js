@@ -1,17 +1,19 @@
+google.charts.load('current', {'packages':['corechart']});
 var Report = {
     fetchSpent: function(id) {
         $.post('/ajax/Report/fetchSpent/', {account_id: id}, function(result) {
             if(result.success) {
-                google.charts.load('current', {'packages':['corechart']});
                 google.charts.setOnLoadCallback(Report.drawPie({
                     col1_type:'string',
                     col1_heading:'Category',
-                    col2_type:'float',
+                    col2_type:'string',
                     col2_heading:'Spent',
                     raw_data:result.data,
-                    options:{'title':'',
-                        'width':400,
-                        'height':300}
+                    options:{
+                        'title':'Money Spent per Category',
+                        'width':1800,
+                        'height':1600
+                    }
                 }));
             } else {
 
@@ -21,9 +23,6 @@ var Report = {
 
     drawPie: function(config) {
         // Create the data table.
-        var data = new google.visualization.DataTable();
-        data.addColumn(config.col1_type, config.col1_heading);
-        data.addColumn(config.col2_type, config.col2_heading);
         rows = [];
         for(i in config.raw_data) {
             rows[i] = [
@@ -31,7 +30,8 @@ var Report = {
                 config.raw_data[i]['amount']
             ];
         }
-        data.addRows(rows);
+        rows.unshift([config.col1_heading, config.col2_heading]);
+        var data = new google.visualization.arrayToDataTable(rows);
 
         // Set chart options
         var options = config.options;

@@ -46,6 +46,7 @@ Class Jsincludes {
 
     public function reports() {
         $scripts[] = '<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>';
+        $scripts[] = "<script type='text/javascript' src='".self::JS."report.js'></script>";
         return $scripts;
     }
 

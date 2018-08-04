@@ -19,7 +19,8 @@ class FetchSpent extends \CI_Model {
         $data = [];
         foreach($account->getCategories() as $category) {
             $data[] = [
-                'category' => $account->getAccountName() . ':' . $category->getCategoryName(),
+//                'category' => $account->getAccountName() . ':' . $category->getCategoryName(),
+                'category' => $category->getCategoryName(),
                 'amount' => $this->getAmountSpent($category->getCategoryId())
             ];
         }
@@ -34,7 +35,7 @@ class FetchSpent extends \CI_Model {
 
         $this->db->select('transaction_amount')
             ->from('transactions')
-            ->where('from_category = '.$category_id.' AND transaction_date BETWEEN '.$then->format('Y-m-d').' AND '.$now->format('Y-m-d'));
+            ->where('from_category = '.$category_id.' AND transaction_date BETWEEN "'.$then->format('Y-m-d').'" AND "'.$now->format('Y-m-d').'"');
 
         $query = $this->db->get();
 
