@@ -10,9 +10,7 @@ var Report = {
                     col2_heading:'Spent',
                     raw_data:result.data,
                     options:{
-                        'title':'Money Spent per Category',
-                        'width':1800,
-                        'height':1600
+                        'title':'Money Spent per Category'
                     }
                 }));
             } else {
@@ -27,7 +25,7 @@ var Report = {
         for(i in config.raw_data) {
             rows[i] = [
                 config.raw_data[i]['category'],
-                config.raw_data[i]['amount']
+                parseFloat(config.raw_data[i]['amount'])
             ];
         }
         rows.unshift([config.col1_heading, config.col2_heading]);
