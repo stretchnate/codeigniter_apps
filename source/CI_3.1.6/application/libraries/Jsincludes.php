@@ -6,7 +6,6 @@ Class Jsincludes {
     const JS         = "/javascript/";
     const UTILITIES  = "<script type='text/javascript' src='/javascript/utilities.js'></script>";
     const JQUERY_UI  = "<script type='text/javascript' src='/javascript/jquery-ui-1.8.21.custom.min.js'></script>";
-    const DATATABLES = "<script type='text/javascript' src='/javascript/datatables/jquery.dataTables_1.9.0.min.js'></script>";
 
     function newBook() {
         $scripts[] = self::UTILITIES;

@@ -15,7 +15,22 @@
 		 */
 		public function getPage() {
 			$this->auth->restrict();
-			$grid = new TransactionsGrid($this->input->post('transaction_parent'), $this->input->post('transaction_type'));
-			echo $grid->getPage($this->input->post('limit'), $this->input->post('offset'));
+
+			try {
+				$response = new stdClass();
+				$response->draw = (int)$this->input->post('draw');
+				$response->error = null;
+
+				$parent = $this->input->post('transaction_parent');
+				$helper = new \Transaction\Grid\Helper($this->session->user_id);
+				$response->data = $helper->getPage( $this->input->post('length'), $this->input->post('start'), $this->input->post('transaction_type'), $parent);
+				$response->records_total = $helper->getTotalRecords($this->input->post('transaction_type'), $parent)->total_records;
+				$response->records_filtered = $response->records_total;
+			} catch(Exception $e) {
+				$response->error = 'There was a problem fetching the page';
+				log_message('error', $e->getMessage());
+			}
+
+			echo json_encode($response);
 		}
 	}
