@@ -18,14 +18,13 @@
 
 			try {
 				$response = new stdClass();
-				$response->draw = (int)$this->input->post('draw');
-				$response->error = null;
+				$response->draw = $this->input->post('draw');
 
 				$parent = $this->input->post('transaction_parent');
 				$helper = new \Transaction\Grid\Helper($this->session->user_id);
 				$response->data = $helper->getPage( $this->input->post('length'), $this->input->post('start'), $this->input->post('transaction_type'), $parent);
-				$response->records_total = $helper->getTotalRecords($this->input->post('transaction_type'), $parent)->total_records;
-				$response->records_filtered = $response->records_total;
+				$response->recordsTotal = (int)$helper->getTotalRecords($this->input->post('transaction_type'), $parent)->total_records;
+				$response->recordsFiltered = $response->recordsTotal;
 			} catch(Exception $e) {
 				$response->error = 'There was a problem fetching the page';
 				log_message('error', $e->getMessage());
