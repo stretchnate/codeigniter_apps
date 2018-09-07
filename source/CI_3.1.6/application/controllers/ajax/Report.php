@@ -8,6 +8,9 @@
 
 class Report extends CI_Controller {
 
+    /**
+     * fetch report data
+     */
     public function fetchSpent() {
         try {
             $account_dm = new Budget_DataModel_AccountDM($this->input->post('account_id'), $this->session->user_id);

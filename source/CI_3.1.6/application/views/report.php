@@ -27,9 +27,12 @@ class ReportView extends Budget_BaseVW {
     public function generateView() {
         ?>
         <div id="report_container">
+            <h1>Reports</h1>
             <div id="report_list"><?= $this->reportList(); ?></div>
-            <div id="chart"></div>
-            <div id="report"></div>
+            <div id="reports">
+                <div id="chart"></div>
+                <div id="report"></div>
+            </div>
         </div>
         <?php
     }
@@ -38,11 +41,13 @@ class ReportView extends Budget_BaseVW {
      * @return string
      */
     private function reportList() {
-        $output = '<ul>';
+        $output = '<h4>Spent by Category</h4><ul class="no-list-style">';
         while($this->accounts_iterator->valid()) {
             $output .= '<li>';
-            $output .= '<a href="javascript:void(0)" onclick="Report.fetchSpent('.$this->accounts_iterator->current()->getAccountId().')">';
-            $output .= $this->accounts_iterator->current()->getAccountName().' Spent';
+            $output .= '<a href="javascript:void(0)" onclick="Report.fetchSpent(';
+            $output .= $this->accounts_iterator->current()->getAccountId();
+            $output .= ', \''.$this->accounts_iterator->current()->getAccountName().'\')">';
+            $output .= $this->accounts_iterator->current()->getAccountName();
             $output .= '</a></li>';
             $this->accounts_iterator->next();
         }
