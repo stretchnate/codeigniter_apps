@@ -23,6 +23,24 @@
     display:none;
 }
 
+#report_container {
+    position:relative;
+}
+
+#report_container ul.no-list-style {
+    list-style-type: none;
+}
+
+#report_list {
+    width:25%;
+    float: left;
+}
+
+#reports {
+    width:74%;
+    display:inline-block;
+}
+
 #footer {
     margin:0 auto;
     text-align:center;

@@ -15,9 +15,6 @@ class Home extends N8_Controller {
 		$this->auth->restrict();
         $link = null;
 
-		$account_iterator = new \Budget\AccountIterator($this->session->userdata("user_id"));
-		$account_iterator->load();
-
         $values = new \API\Vendor\Values();
         $values->setName('Plaid');
         $plaid = new \API\Vendor($values);
