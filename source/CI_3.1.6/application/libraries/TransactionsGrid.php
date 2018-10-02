@@ -99,7 +99,7 @@ class TransactionsGrid extends N8_Error {
 					});
 				}
 
-				$('#transactions_table').DataTable({
+				var table = $('#transactions_table').DataTable({
 					pagingType: 'full_numbers',
 					processing: true,
 					serverSide: true,
@@ -111,6 +111,19 @@ class TransactionsGrid extends N8_Error {
 						{data: 'transaction_date', type: 'date'},
 						{data: 'delete_transaction', type: 'html'}
 					]
+				});
+				
+				$(document).on('click', 'img.delete_transaction', function() {
+				    var id = $(this).attr('title').split(' ')[2];
+                    $.get('/funds/deleteTransaction/'+id, function(result) {
+                        if(result) {
+                            location.reload();
+                        } else {
+                            alert('There was a problem deleting the transaction.');
+                        }
+                    });
+                    
+                    return false;
 				});
 			});
 
