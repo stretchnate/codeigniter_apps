@@ -77,7 +77,6 @@ class Budget_HomeVW extends Budget_BaseVW {
                         if($this->link) {
                             echo $this->link->getIntegrationJs();
                         }
-
 						foreach($this->totals_array as $total) {
                             $account_dm = $total->getAccountDM();
 

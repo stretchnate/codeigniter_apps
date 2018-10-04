@@ -90,7 +90,7 @@ switch (ENVIRONMENT)
 }
 
 defined('COMPANY_NAME')            OR define('COMPANY_NAME', 'WhyIBudget'); //Quantum
-defined('COMPANY_LOGOUT_REDIRECT') OR define('COMPANY_LOGOUT_REDIRECT', 'http://whyibudget.com');//for mara just set this to http://whyibudget.com
+defined('COMPANY_LOGOUT_REDIRECT') OR define('COMPANY_LOGOUT_REDIRECT', 'https://courses.whyibudget.com');//for mara just set this to http://whyibudget.com
 
 /*
  *---------------------------------------------------------------

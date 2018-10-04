@@ -93,10 +93,11 @@ class Helper extends \CI_Model {
 			$date = date("m/d", strtotime($transaction->transaction_date));
 			$date .= "<span class='year'>".date("/Y", strtotime($transaction->transaction_date))."</span>";
 			$new_row->transaction_date = $date;
-			$new_row->delete_transaction = "<form method='post' action='/funds/deleteTransaction/".$transaction->transaction_id."' class='delete_transaction_form'>"
-								. "<input type='hidden' name='return_uri' value='".$this->uri->uri_string."' />"
-								. "<input type='image' src='/images/small_red_ex.png' alt='delete transaction {$transaction->transaction_id}' title='delete transaction {$transaction->transaction_id}' />"
-							. "</form>";
+			$new_row->delete_transaction = '';
+
+			if($transaction->to_category || $transaction->from_category) {
+                $new_row->delete_transaction = "<img src='/images/small_red_ex.png' alt='delete transaction {$transaction->transaction_id}' title='delete transaction {$transaction->transaction_id}' class='delete_transaction' />";
+            }
 
 			$filtered_results[] = $new_row;
 		}

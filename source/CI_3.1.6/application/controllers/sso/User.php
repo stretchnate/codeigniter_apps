@@ -37,7 +37,7 @@
 							$user->save();
 						}
 					} else {
-						$this->registerUser();
+						$this->registerUser($this->input->post(null, true));
 					}
 				} catch(Exception $e) {
 					$this->response->status = HTTP_INTERNAL_SERVER_ERROR;
@@ -61,11 +61,12 @@
 					$this->cache->save($cookie_val, $this->input->post('email'), 180);//cache token for 3 min.
 					header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 					header("Access-Control-Allow-Credentials: true");
-					header("Access-Control-Allow-Origin: http://ciguide.local");
+					header("Access-Control-Allow-Origin: https://whyibudget.com");
+                    header("Access-Control-Allow-Origin: https://courses.whyibudget.com");
 					header("Access-Control-Allow-Headers: Content-Type, *");
 
-					setcookie('token', base64_encode($cookie_val), (time()+60), '/', 'money.stretchnate.com', false, true);
-					setcookie('useremail', $this->input->post('email'), (time()+60), '/', 'money.stretchnate.com', false, true);
+					setcookie('token', base64_encode($cookie_val), (time()+60), '/', 'whyibudget.quantumfunds.net', false, true);
+					setcookie('useremail', $this->input->post('email'), (time()+60), '/', 'whyibudget.quantumfunds.net', false, true);
 
 					$this->response->status = HTTP_OK;
 
@@ -110,9 +111,9 @@
 		/**
 		 * register a user via SSO
 		 */
-		private function registerUser() {
+		private function registerUser($post) {
 			try {
-				$post = $this->input->post(null, true);
+				$post['username'] = $this->input->post('email');
 				$post['password'] = microtime();
 				$this->load->model('Admin_model','Admin',TRUE);
 				$create_user = $this->Admin->createUser($post);
@@ -121,7 +122,8 @@
 					$this->response->status = HTTP_OK;
 					$access_token = crypt(microtime(), $this->vendor);
 					$this->cache->save($access_token, $this->input->post('email', true), 300);//cache token for 5 min.
-					$this->response->iframe_url = base_url('/sso/User/getCookie/'.$access_token);
+					$this->response->url = base_url('/sso/User/getCookie/');
+					$this->response->access_token = $access_token;
 				}
 			} catch(Exception $e) {
 				if($e->getCode() == EXCEPTION_CODE_VALIDATION) {

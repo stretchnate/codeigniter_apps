@@ -1,40 +1,73 @@
 <?php
-//https://stackoverflow.com/questions/10916284/how-to-encrypt-decrypt-data-in-php
+/*
+Template Name: budgetsso
+*/
+//	wp_enqueue_script('jquery');
+	//client sends user data to http://<budgeturl>/sso/User/userLogin to create user and retrieve token
+	//upon receiving token browser sends post to http://<budgeturl>/sso/User/getCookie/<access_token>
+	//after cookie is set, client redirects user to http://<budgeturl>/sso/User/ssoLogin
 
+	//if user is not logged in send them to login page.
+//	if(function_exists('is_user_logged_in')) {
+//		if(!is_user_logged_in()) {
+//			header('Location: http://whyibudget.com/rm_login');
+//		}
+//	}
+//require_once('../../../plugins/memberium2/interface.php');
 
-//http://php.net/manual/en/function.openssl-encrypt.php
-//encrypt (client end)
+get_header(); ?>
 
-//need to change this to use openssl_public_encrypt
-//client sends user data to http://<budgeturl>/sso/User/userLogin to create user and retrieve token
-//upon receiving token client opens iframe to http://<budgeturl>/sso/User/getCookie/<access_token>
-//if needed - check for cookie set by posting [access_token => <access_token>] to http://<budgeturl>/sso/User/checkCookie until a 200 status_code is received
-//after cookie is set, client redirects user to http://<budgeturl>/sso/User/ssoLogin
-//setcookie('chocolatechip', 'woot!', (time()+180), '/', 'stretchnate.com', false, true);
-die("hello world");
-	$qc = new QuantumConnect();
+<div class="wrap">
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
 
-	$qc->userLogin();
+			<?php
+//if(function_exists('do_shortcode')) {
+//	echo "do_shortcode exists\n";
+//}
+//echo print_r(do_shortcode( '[memb_contact fields=Email]'), true);
+//die;
+				$email = do_shortcode('[memb_contact fields=Email]');
+//echo $email."\n";
+				if(empty($email)) {
+					header('Location: http://whyibudget.com/');
+				}
+			//	global $current_user;
+			//	get_currentuserinfo();
+
+				$qc = new QuantumConnect();
+
+			//	if(!$current_user->user_email) {
+			//		die("There was a problem authenticating you to the budget, please ensure you are logged in, with a valid email, to whyibudget.com");
+			//	}
+
+				$qc->userLogin($email);
+			?>
+
+		</main><!-- #main -->
+	</div><!-- #primary -->
+</div><!-- .wrap -->
+
+<?php get_footer();
 
 	class QuantumConnect {
-		const BUDGET_URL = 'http://money.stretchnate.com/sso/user/';
+		const BUDGET_URL = 'https://whyibudget.quantumfunds.net/sso/user/';
+//		const BUDGET_URL = 'http://money.stretchnate.com/sso/user/';
 
 		/**
 		 * attempt to log the user in to the budget application
 		 *
 		 * @param string $user_email
 		 */
-		public function userLogin($user_email = 'test1@test.net') {
+		public function userLogin($user_email) {
 			$post_fields = [
 				'token' => base64_encode($this->fetchAuthToken()),
 				'email' => $user_email,
 				'username' => $user_email,
 				'agree_to_terms' => true];
-
 			$result = json_decode($this->send(self::BUDGET_URL.'userLogin', $post_fields));
-
 			if($result->status == 200) {
-				$this->showIFrame($result->iframe_url, $result->access_token);
+				$this->getCookie($result->url, $result->access_token, $user_email);
 			} else {
 				$this->showError();
 			}
@@ -45,21 +78,20 @@ die("hello world");
 		 */
 		private function showError() {
 			?>
-			<html>
+<!--			<html>
 				<head>
-					<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+					<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>-->
 					<script type="text/javascript">
-						$(document).ready(function() {
+						jQuery(document).ready(function() {
+							jQuery('body').append('<div>There was a problem fulfilling your request. You will be redirected back to the home page in a moment.</div>');
 							window.setTimeout(function() {
 								window.location.replace('/');
 							}, 8000);
 						});
 					</script>
-				</head>
-				<body>
-					<div>There was a problem fulfilling your request, you will be redirected back home shortly.</div>
-				</body>
-			</html>
+<!--				</head>
+				<body></body>
+			</html>-->
 			<?php
 		}
 
@@ -68,28 +100,18 @@ die("hello world");
 		 *
 		 * @param string $url
 		 */
-		private function showIFrame($url, $access_token) {
+		private function getCookie($url, $access_token, $email) {
 			$redirect = self::BUDGET_URL.'ssoLogin';
 			?>
-			<html>
+<!--			<html>
 				<head>
-					<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+					<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>-->
 					<script type="text/javascript">
-						$(document).ready(function() {
-//							$.post('<?=$url;?>', {access_token:'<?=$access_token;?>'}, function(response) {
-//								if(response.status === 200) {
-//									window.location.replace("<?=$redirect;?>");
-//								}
-//							}, 'json');
-//							if($("#quantum-iframe").attr("src")) {
-//								window.setTimeout(function() {
-//									window.location.replace("<?=$redirect;?>");
-//								}, 5000);
-//							}
-							$.ajax({
+						jQuery(document).ready(function() {
+							jQuery.ajax({
 								url:'<?=$url;?>',
 								type: "POST",
-								data: {access_token:'<?=$access_token;?>'},
+								data: {access_token:'<?=$access_token;?>', email:'<?=$email;?>'},
 								dataType: 'json',
 								xhrFields: {
 									withCredentials: true
@@ -98,16 +120,24 @@ die("hello world");
 								success: function(response) {
 									if(response.status === 200) {
 										window.location.replace("<?=$redirect;?>");
+									} else {
+										var message = 'There was a problem fulfilling your request.';
+										if(response.message) {
+											message = response.message;
+										}
+										message += ' You will be redirected back to the home page in a moment.';
+										jQuery('body').append('<div>'+message+'</div>');
+										window.setTimeout(function() {
+											window.location.replace('/');
+										}, 8000);
 									}
 								}
 							});
 						});
 					</script>
-				</head>
-				<body>
-					<!--<iframe src="<?= $url; ?>" id="quantum-iframe"></iframe>-->
-				</body>
-			</html>
+<!--				</head>
+				<body></body>
+			</html>-->
 			<?php
 		}
 
@@ -119,7 +149,7 @@ die("hello world");
 			$auth_token = 'Success20171209!';
 			$plaintext = "whyibudget.".$auth_token;//domain . auth_token
 
-			$key = file_get_contents('/var/private/public.pem');
+			$key = file_get_contents('/home2/whyibudg/public_html/wp-content/themes/oceanwp/templates/wib_public.pem');
 			$pubkey = openssl_get_publickey($key);
 
 			openssl_public_encrypt(base64_encode($plaintext), $crypted, $pubkey);
@@ -142,9 +172,11 @@ die("hello world");
 			curl_setopt($ch, CURLOPT_FORBID_REUSE, true);
 			curl_setopt($ch, CURLOPT_FRESH_CONNECT, true);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);//need to set to true once I figure out the ssl issue
+			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);//need to set to true once I figure out the ssl issue
 			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60);
 
 			return curl_exec($ch);
 		}
 	}
+

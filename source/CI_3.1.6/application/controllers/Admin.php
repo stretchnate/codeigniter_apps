@@ -31,10 +31,11 @@ class Admin extends N8_Controller {
 		$this->load->view('footer');
 	}
 
-    /**
-     *
-     */
-    public function login() {
+	public function login($override=null) {
+		//PREVENT visitors from logging in directly on this site
+		if(md5($override) !== 'd434fb3f34ed431b71fa753a9806f3b6') {
+			redirect(COMPANY_LOGOUT_REDIRECT);
+		}
 		if (!$this->auth->isSiteActive()) {
 			redirect("/inactive/");
 		}
@@ -66,6 +67,9 @@ class Admin extends N8_Controller {
      *
      */
     public function register() {
+		//prevent visitors from registering directly on this site.
+		redirect(COMPANY_LOGOUT_REDIRECT);
+
 		$this->load->view('registerView');
 	}
 

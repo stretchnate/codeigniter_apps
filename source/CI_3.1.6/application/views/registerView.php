@@ -26,12 +26,18 @@ header("Pragma: no-cache");
 </head>
 <body>
 	<div class="container-fluid">
-		<div id="header">
-			<h1>
-				<a href="/"><img id="logo" class="navbar-brand" src="/images/logo.jpg" alt="<?= COMPANY_NAME; ?>" /></a>
-			</h1>
-		</div>
-		<h2>Register Here</h2>
+		<nav class="navbar navbar-default">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/" title="<?= COMPANY_NAME; ?>"><img id="logo" class="navbar-brand" src="/images/logo.jpg" alt="<?= COMPANY_NAME; ?>" /></a>
+			</div>
+		</nav>
+		<h1>Register Here</h1>
 		<?php
 			//echo validation_errors();
 			if(isset($error))
@@ -58,20 +64,55 @@ header("Pragma: no-cache");
 					<div class='form-check'>
 						<label class='form-check-label'>
 							<input type="checkbox" id="agree_to_terms" class="form-check-input" name="agree_to_terms" required>
-							Terms and Conditions
+							I agree to the Terms and Conditions
 						</label>
 					</div>
-					<textarea id="terms" cols="80" rows="20" readonly class='form-control'><?php
-						?>This is a budget management website, it will not make you rich, good looking or popular. It simply allows you to track your spending, much like a checkbook register (if you are old enough to know what that is). We will not share your information, we simply ask for an email so we can contact you if there is a problem. as of 4/6/2014 we haven't had to use anyone's email for any reason, granted there have only been two people using this site in that time frame so things could change.
+					<div class="pre-scrollable well">
+					<p>Please read these terms of service ("terms", "terms of service") carefully before using whyibudget.quantumfunds.net website (the "service") operated by <?= COMPANY_NAME ?> ("us", 'we", "our").</p>
 
-<?php						?>You may use this site at your own risk. Just so you are aware what the risks are, the data for this site is backed up twice a week, in the event of a failure the data will be restored to the last good backup, which means you could lose some of your information, it will be up to you to re-insert said information. Also if the site gets a lot of traffic we could experience some heavy bandwidth usage which may result in slowness, if that happens we'll look into hosting the site on a better server/location. You may stop using the site at any time, we don't really care.
-
-<?php						?>We do not collect bank account information for any reason, in fact the only information we collect that could identify you is your email address, of which could be fake as far as we know, it makes no difference to us. The reason for this is so we don't have to concern ourselves with protecting your data, if someone hacks our system all they will get is a bunch of hypothetical account/category names and some numbers. They might get an idea of how much money you make but they won't know where you keep it unless your account/category names identify the bank/account which you keep it in. So we advise you to be smart about naming accounts/categories once your registration is complete.
-
-<?php						?>Now for the CYA stuff. <?= COMPANY_NAME; ?> and it's affiliates will not be held responsible for any loss or damage to you, your financial future or your current financial situation that results in using <?= COMPANY_NAME; ?>. As was previously stated, you may use this site at your own risk, we are not responsible for anything that happens as a result of you using <?= COMPANY_NAME; ?>
-
-<?php						?>By clicking the checkbox you are agreeing to these terms.
-					</textarea>
+					<strong>Conditions of Use</strong>
+					<p>
+					We will provide their services to you, which are subject to the conditions stated below in this document. Every time you visit this website, use its services or make a purchase, you accept the following conditions. This is why we urge you to read them carefully.
+					</p>
+					<strong>Privacy Policy</strong>
+					<p>
+					Before you continue using our website we advise you to read our privacy policy [link to privacy policy] regarding our user data collection. It will help you better understand our practices.
+					</p>
+					<strong>Copyright</strong>
+					<p>
+					Content published on this website (digital downloads, images, texts, graphics, logos) is the property of <?= COMPANY_NAME ?> and/or its content creators and protected by international copyright laws. The entire compilation of the content found on this website is the exclusive property of <?= COMPANY_NAME ?>, with copyright authorship for this compilation by <?= COMPANY_NAME ?>.
+					</p>
+					<strong>Communications</strong>
+					<p>
+					The entire communication with us is electronic. Every time you send us an email or visit our website, you are going to be communicating with us. You hereby consent to receive communications from us. If you subscribe to the news on our website, you are going to receive regular emails from us. We will continue to communicate with you by posting news and notices on our website and by sending you emails. You also agree that all notices, disclosures, agreements and other communications we provide to you electronically meet the legal requirements that such communications be in writing.
+					</p>
+					<strong>Applicable Law</strong>
+					<p>
+					By visiting this website, you agree that the laws of the state of Utah, without regard to principles of conflict laws, will govern these terms of service, or any dispute of any sort that might come between <?= COMPANY_NAME ?> and you, or its business partners and associates.
+					</p>
+					<strong>Disputes</strong>
+					<p>
+					Any dispute related in any way to your visit to this website or to products you purchase from us shall be arbitrated by state or federal court [your location] and you consent to exclusive jurisdiction and venue of such courts.
+					</p>
+					<strong>Comments, Reviews, and Emails</strong>
+					<p>
+					Visitors may post content as long as it is not obscene, illegal, defamatory, threatening, infringing of intellectual property rights, invasive of privacy or injurious in any other way to third parties. Content has to be free of software viruses, political campaign, and commercial solicitation.
+					</p>
+					<p>
+					We reserve all rights (but not the obligation) to remove and/or edit such content. When you post your content, you grant <?= COMPANY_NAME ?> non-exclusive, royalty-free and irrevocable right to use, reproduce, publish, modify such content throughout the world in any media.
+					</p>
+					<strong>License and Site Access</strong>
+					<p>
+					We grant you a limited license to access and make personal use of this website. You are not allowed to download or modify it. This may be done only with written consent from us.
+					</p>
+					<strong>User Account</strong>
+					<p>
+					If you are an owner of an account on this website, you are solely responsible for maintaining the confidentiality of your private user details (username and password). You are responsible for all activities that occur under your account or password.
+					</p>
+					<p>
+					We reserve all rights to terminate accounts, edit or remove content and cancel orders in their sole discretion.
+					</p>
+					</div>
 				</div>
 				<input type="submit" name="register" value="Submit" class='btn btn-primary' />
 				<a href="/admin/login/" class='btn btn-info'>Back to Login</a>

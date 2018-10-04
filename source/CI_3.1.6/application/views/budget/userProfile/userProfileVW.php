@@ -43,7 +43,7 @@
 				</div>
 				<input type="button" value="Submit Changes" name="user_form_submit" />
 			</form>
-			<?
+			<?php
 		}
 
 		public function setUserDM(Budget_DataModel_UserDM $user_dm) {

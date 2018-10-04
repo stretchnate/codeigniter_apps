@@ -65,9 +65,7 @@
 								<span class="icon-bar"></span>
 								<span class="icon-bar"></span>
 							</button>
-							<a class="navbar-brand" href="/" title="Quantum">
-								<img id="logo" class="navbar-brand" src="/images/logo.jpg" alt="<?= COMPANY_NAME; ?>" />
-							</a>
+							<a class="navbar-brand" href="/" title="<?= COMPANY_NAME; ?>"><img id="logo" class="navbar-brand" src="/images/logo.jpg" alt="<?= COMPANY_NAME; ?>" /></a>
 						</div>
 						<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 							<ul class="nav navbar-nav navbar-right">

@@ -1,98 +1,43 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: stret
+ * Date: 7/16/2018
+ * Time: 7:20 PM
+ */
 
 class Report extends N8_Controller {
 
-	function __construct() {
-		parent::__construct();
-		$this->load->helper('html');
-		$this->load->library('utilities');
-	}
+    public function __construct() {
+        parent::__construct();
+        $this->load->helper('html');
+        $this->load->library('utilities');
+        $js = new Jsincludes();
 
-	function index() {
-		$this->auth->restrict();
+        $this->load->view('report');
+        $CI =& get_instance();
+        $this->view = new ReportView($CI, $this->fetchAccountsIterator());
+        $this->view->setScripts($js->reports());
+    }
 
-		$header_data['title'] = "Reports";
-		$header_data['scripts'] = $this->jsincludes->report();
+    public function index() {
+        try {
+            echo $this->view->renderView();
+        } catch(Exception $e) {
 
-		$sidebar = new NavigationUlLIB('report');
-		$header_data['sidebar_links'] = $sidebar->getUl();
-		$header_data['logged_user'] = $this->session->userdata('logged_user');
+        }
+    }
 
-		$this->load->view('header', $header_data);
-		// $this->load->view('sidebar', $sidebar);
-		$this->load->view('footer');
-	}
+    /**
+     * @return array
+     * @throws Exception
+     */
+    private function fetchAccountsIterator() {
+        $account_iterator = new \Budget\AccountIterator($this->session->userdata("user_id"));
+        $account_iterator->load();
 
-	function transactions($run_report = FALSE) {
-		$this->auth->restrict();
+        return $account_iterator;
+    }
 
-		$data = array();
-		$this->load->model('book_info', "BI", TRUE);
-		$this->load->model('accounts', "ACCT", TRUE);
 
-		$header_data['title'] = "Transactions Report";
-		$header_data['scripts'] = $this->jsincludes->report();
-
-		$sidebar = new NavigationUlLIB('report');
-		$header_data['sidebar_links'] = $sidebar->getUl();
-
-		$transactions["transactions"] = null;
-		if( $run_report == 'true' ) {
-			$this->load->model('transactions', 'TRAN', TRUE);
-			$rowsPerPage = 100;
-			$offset = 0;
-			$start_date = $this->input->post('start_date');
-			$end_date   = $this->input->post('end_date');
-			// $data['transactions'] = $this->TRAN->getTransactionsByDate($this->session->userdata('user_id'), $dates, $offset, $rowsPerPage, $this->input->post('account'));
-
-			$t_grid = new TransactionsGrid($this->input->post('account'), "category", true);
-			$t_grid->setStartDate(new DateTime($start_date));
-			$t_grid->setEndDate(new DateTime($end_date));
-			$t_grid->run();
-
-			$transactions["transactions"] = $t_grid->getTransactionsGrid();
-		}
-
-		$data['accounts'] = $this->ACCT->getAccountsAndDistributableCategories($this->session->userdata('user_id'));
-		$data['form_data']['action'] = '/report/transactions/true';
-
-		$this->load->view('header', $header_data);
-		// $this->load->view('sidebar', $sidebar);
-		$this->load->view('reports', $data);
-		$this->load->view('transactions', $transactions);
-		$this->load->view('footer');
-	}
-
-	function deposits($run_report = FALSE) { //@TODO build deposits report
-		$this->auth->restrict();
-
-		$data = array();
-		$this->load->model('book_info');
-		$this->load->model('accounts', "ACCT", TRUE);
-
-		$header_data['title'] = "Deposits Report";
-		$header_data['scripts'] = $this->jsincludes->report();
-
-		$sidebar = new NavigationUlLIB('report');
-		$header_data['sidebar_links'] = $sidebar->getUl();
-
-		if( $run_report ) {
-			$this->load->model('deposits', 'DEP', TRUE);
-			$rowsPerPage = 100;
-			$offset = 0;
-			$data['records'] = $this->DEP->getDeposits($this->session->userdata('user_id'), $this->input->post('account'),$this->input->post('start_date'), $this->input->post('end_date'), $offset, $rowsPerPage);
-		}
-
-		$data['form_data']['action'] = '/report/deposits/true';
-		$data['accounts'] = $this->ACCT->getAccounts($this->session->userdata('user_id'));
-
-		$this->load->view('header', $header_data);
-		// $this->load->view('sidebar', $sidebar);
-		$this->load->view('reports', $data);
-		$this->load->view('transactions/deposits', $data);
-		$this->load->view('footer');
-	}
 }
-
-/* End of file report.php */
-/* Location: ./system/application/controllers/report.php */

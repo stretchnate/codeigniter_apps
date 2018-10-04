@@ -14,7 +14,6 @@ EventColumn/event/images/*.*
 source/CI_2.1.0/application/EventColumn/models/TransactionTestDM.php
 source/CI_2.1.0/application/EventColumn/models/testDM.php
 robots.txt
-.idea
 
 #the config.php files are ignored by the local .git/info/exclude file
 #source/CI_2.1.0/application/config/config.php
@@ -28,7 +27,11 @@ apc
 
 #composer
 composer.phar
+.secure
+lightsail
 source/CI_3.1.6/application/third_party/vendor/
 
+
+.idea
 #vs code
 .vscode/

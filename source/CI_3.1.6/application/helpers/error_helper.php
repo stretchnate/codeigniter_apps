@@ -10,10 +10,10 @@
 
 		$error = var_export($var, true);
 		$error = $str_left . $error . $str_right . "\n";
-		error_log($error, 3 ,APPPATH.'logs/debug.log');
+		error_log($error, 3 ,'/home/stretch/logs/dnate_errors.log');
 	}
 
-	function clean($log = APPPATH."logs/debug.log") {
+	function clean($log = "/home/stretch/logs/dnate_dbo.log") {
 		file_put_contents($log, "");
 	}
 	/**
@@ -27,10 +27,10 @@
 	 */
 	function debugOut($var, $mode = "a", $indent = "\n") {
 		if( is_array($var) || is_object($var) ) {
-			pre($var, $mode, APPPATH."logs/debug.log", $indent);
+			pre($var, $mode, "/tmp/debug.log", $indent);
 		}
 		else {
-			writeToFile($var, $mode, APPPATH.'logs/debug.log', $indent);
+			writeToFile($var, $mode, '/tmp/debug.log', $indent);
 		}
 	}
 
@@ -118,7 +118,7 @@
 	 * @param $indent
 	 * @author dnate
 	 */
-	function pre(&$array, $mode = 'w', $filename = APPPATH."logs/debug.log", $indent = "\r\n") {
+	function pre(&$array, $mode = 'w', $filename = "/tmp/debug.log", $indent = "\r\n") {
 		if(is_array($array) || is_object($array)) {
 			if($mode == 'echo') {
 				preprint_r($array);
@@ -143,11 +143,11 @@
 	function label($label, $file = "dbo", $mode = 'a') {
 		switch($file) {
 			case "dump":
-				$file = APPPATH.'logs/debug.log';
+				$file = '/tmp/debug.log';
 				break;
 
 			case "dbo":
-				$file = APPPATH.'logs/debug.log';
+				$file = '/tmp/debug.log';
 				break;
 		}
 
@@ -162,7 +162,7 @@
 	 * @param $file
 	 * @author dnate
 	 */
-	function errDump($var, $mode = 'w', $file = APPPATH.'logs/debug.log') {
+	function errDump($var, $mode = 'w', $file = '/tmp/debug_arr.log') {
 		ob_start();
 
 		var_dump($var);
@@ -208,10 +208,10 @@
 	 * @param $indent
 	 * @author dnate
 	 */
-	function writeToFile($string, $mode = 'a', $filename = APPPATH.'logs/debug.log', $indent = "\n") {
+	function writeToFile($string, $mode = 'a', $filename = '/tmp/debug.log', $indent = "\n") {
 		if(is_array($string)) {
-			if($filename == APPPATH."logs/debug.log") {
-				$filename = APPPATH."logs/debug.log";
+			if($filename == "/tmp/debug.log") {
+				$filename = "/tmp/debug.log";
 			}
 			pre($string, $mode, $filename, $indent);
 		}
@@ -233,7 +233,7 @@
 	* @param $indent
 	* @author dnate
 	*/
-	function wtf($string, $mode = 'a', $filename = APPPATH.'logs/debug.log', $indent = "\n") {
+	function wtf($string, $mode = 'a', $filename = '/tmp/debug.log', $indent = "\n") {
 		writeToFile($string, $mode, $filename, $indent);
 	}
 
@@ -264,9 +264,17 @@
 			}
 		}
 		if( is_object($array) ) {
-		    ob_start();
-            $txt .= print_r($array, true);
-            ob_end_clean();
+			$version = phpversion();
+			// dbo("php version is $version");
+			if(preg_match("/^5\.3\.[\d]+/", $version) ) {
+				// dbo("using version 5 object parser");
+				$txt .= dbo_obj($array, 'a', false, $indent . "\t\t");
+				// dbo($array);
+			} else {
+				dbo("using version 4 object parser");
+				$array = get_object_vars($array);
+				$txt = str_replace("Array", "Object", $txt);
+			}
 		}
 		if(is_array($array)) {
 			foreach($array as $k => $v) {

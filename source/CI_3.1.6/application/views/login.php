@@ -26,12 +26,17 @@ header("Pragma: no-cache");
 </head>
 <body>
 	<div class="container-fluid">
-		<div id="header" class="border">
-			<h1>
-				<img id="logo" class="navbar-brand" src="/images/logo.jpg" alt="<?= COMPANY_NAME; ?>" />
-			</h1>
-		</div>
-
+		<nav class="navbar navbar-default">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/" title="<?= COMPANY_NAME; ?>"><img id="logo" class="navbar-brand" src="/images/logo.jpg" alt="<?= COMPANY_NAME; ?>" /></a>
+			</div>
+		</nav>
 		<?php
 		if(isset($error)) {
 			echo "<p>$error</p>";
@@ -45,7 +50,7 @@ header("Pragma: no-cache");
 				<input type="password" placeholder="Password" class="form-control required" name="password" value="" id="password" />
 			</div>
 			<input type="submit" class="btn btn-primary" name="submLogin" value="Log In" />
-			<a href="/admin/register/" id="register" class="btn btn-info">Register</a>
+<!--			<a href="/admin/register/" id="register" class="btn btn-info">Register</a>-->
 		</form>
 
 		<div id="footer">

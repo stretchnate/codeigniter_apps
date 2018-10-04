@@ -31,11 +31,13 @@
 		protected function authenticateSource() {
 			$result = false;
 			try {
-				$key = file_get_contents('/var/private/money.stretchnate.com.key');
+				$key = file_get_contents('/opt/bitnami/apache2/htdocs/whyibudget.com/.secure/wib_private.pem');
 				$res_prv = openssl_get_privatekey($key, 'Quantum1');
 
 				if(!openssl_private_decrypt(base64_decode($this->input->post('token')), $decrypted, $res_prv)) {
 					$this->response->status = HTTP_INTERNAL_SERVER_ERROR;
+					$this->response->message = "Unable to verify sender.";
+					$this->response->data = json_encode($this->input->post());
 				} else {
 					$decrypted_parts = explode('.', base64_decode($decrypted));
 
@@ -51,6 +53,8 @@
 				//log error and email
 				log_message(LOG_LEVEL_ERROR, $e->getMessage());
 				$this->response->status = HTTP_INTERNAL_SERVER_ERROR;
+				$this->response->message = $e->getMessage();
+				$this->response->data = json_encode($this->input->post());
 			}
 
 			return $result;
