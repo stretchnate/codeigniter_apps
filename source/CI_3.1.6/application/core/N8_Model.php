@@ -3,6 +3,10 @@
 if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
 
+/**
+ * Class N8_Model
+ * @deprecated
+ */
 class N8_Model extends CI_Model {
 
 	protected $content_db;

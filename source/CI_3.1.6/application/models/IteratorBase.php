@@ -7,6 +7,8 @@ abstract class IteratorBase extends \CI_Model implements \Iterator {
 
     protected $key;
 
+    protected $items;
+
     /**
      * IteratorBase constructor
      */
