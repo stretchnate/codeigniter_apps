@@ -366,6 +366,21 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 		return $this->category_id;
 	}
 
+    /**
+     * @param $id
+     * @return $this
+     * @throws Exception
+     */
+	public function setCategoryId($id) {
+	    if(isset($this->category_id)) {
+	        throw new RuntimeException('Overwriting category id is not allowed.');
+        }
+
+        $this->category_id = $id;
+
+	    return $this;
+    }
+
 	public function getCategoryName() {
 		return $this->category_name;
 	}
