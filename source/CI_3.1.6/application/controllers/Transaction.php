@@ -36,18 +36,16 @@
 		public function edit($id) {
 		    try {
                 $tdm = new Budget_DataModel_TransactionDM($id);
-//need to find owning account
-                if($tdm->getFromAccount()) {
-                    $account_id = $tdm->getFromAccount();
-                } elseif($tdm->getFromCategory()) {
-                    $category = new Budget_DataModel_CategoryDM($tdm->getFromCategory(), $this->session->user_id);
-                    $account_id = $category->getParentAccountId();
-                }
+                switch($tdm->getTransactionType()) {
 
-                $categories = new \Category\Rows();
-                $categories->load(['active' => true, 'account_id' => $account_id]);
+                }
+                $tdm->setTransactionInfo($this->input->post('description'));
+                $tdm->setTransactionDate($this->input->post('date'));
+                $tdm->setTransactionAmount($this->input->post('amount'));
+
             } catch(Exception $e) {
                 log_message('error', $e->getMessage());
             }
         }
+
 	}
