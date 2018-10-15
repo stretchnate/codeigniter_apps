@@ -29,48 +29,48 @@ class N8_Controller extends CI_Controller {
 	 * @param String/Int   $specified_transaction
 	 */
 	protected function transactionDetails($transactions, $specified_transaction) {
-		$transaction_details = new Budget_DataModel_TransactionDM();
+		$transaction_details = new Transaction();
 
 		if (strtolower($specified_transaction) == "last") {
 			$specified_transaction = count($transactions) - 1;
 		}
 
-		$transaction = new Budget_DataModel_TransactionDM($transactions[$specified_transaction]->transaction_id);
+		$transaction = new Transaction($transactions[$specified_transaction]->transaction_id);
 
-		if ($transaction->getToCategory()) {
-			$to_category = new Budget_DataModel_CategoryDM($transaction->getToCategory(), $this->session->userdata('user_id'));
+		if ($transaction->getStructure()->getToCategory()) {
+			$to_category = new Budget_DataModel_CategoryDM($transaction->getStructure()->getToCategory(), $this->session->userdata('user_id'));
 
-			$transaction_details->setToCategory($to_category->getCategoryId());
+			$transaction_details->getStructure()->setToCategory($to_category->getCategoryId());
 			$transaction_details->setToCategoryName($to_category->getCategoryName());
 		}
 
-		if ($transaction->getFromCategory()) {
-			$from_category = new Budget_DataModel_CategoryDM($transaction->getFromCategory(), $this->session->userdata('user_id'));
+		if ($transaction->getStructure()->getFromCategory()) {
+			$from_category = new Budget_DataModel_CategoryDM($transaction->getStructure()->getFromCategory(), $this->session->userdata('user_id'));
 
-			$transaction_details->setFromCategory($from_category->getCategoryId());
+			$transaction_details->getStructure()->setFromCategory($from_category->getCategoryId());
 			$transaction_details->setFromCategoryName($from_category->getCategoryName());
 		}
 
 		if ($transaction->getToAccount()) {
 			$to_account = new Budget_DataModel_AccountDM($transaction->getToAccount(), $this->session->userdata('user_id'));
 
-			$transaction_details->setToAccount($to_account->getAccountId());
+			$transaction_details->getStructure()->setToAccount($to_account->getAccountId());
 			$transaction_details->setToAccountName($to_account->getAccountName());
 		}
 
-		if ($transaction->getFromAccount()) {
-			$from_account = new Budget_DataModel_AccountDM($transaction->getFromAccount(), $this->session->userdata('user_id'));
+		if ($transaction->getStructure()->getFromAccount()) {
+			$from_account = new Budget_DataModel_AccountDM($transaction->getStructure()->getFromAccount(), $this->session->userdata('user_id'));
 
-			$transaction_details->setFromAccount($from_account->getAccountId());
+			$transaction_details->getStructure()->setFromAccount($from_account->getAccountId());
 			$transaction_details->setFromAccountName($from_account->getAccountName());
 		}
 
 
-		$transaction_details->setDepositId($transaction->getDepositId());
-		$transaction_details->setOwnerId($transaction->getOwnerId());
-		$transaction_details->setTransactionAmount($transaction->getTransactionAmount());
-		$transaction_details->setTransactionDate($transaction->getTransactionDate());
-		$transaction_details->setTransactionInfo($transaction->getTransactionInfo());
+		$transaction_details->getStructure()->setDepositId($transaction->getStructure()->getDepositId());
+		$transaction_details->getStructure()->setOwnerId($transaction->getStructure()->getOwnerId());
+		$transaction_details->getStructure()->setTransactionAmount($transaction->getStructure()->getTransactionAmount());
+		$transaction_details->getStructure()->setTransactionDate($transaction->getStructure()->getTransactionDate());
+		$transaction_details->getStructure()->setTransactionInfo($transaction->getStructure()->getTransactionInfo());
 
 		return $transaction_details;
 	}

@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class Maintenance
+ * @deprecated
+ */
 class Maintenance extends N8_Controller {
 
 	private $transaction_map = array();
@@ -17,20 +21,20 @@ class Maintenance extends N8_Controller {
 		foreach($transactions as $transaction) {
 
 			if(!$new_transaction || $transaction->bookTransAmt != $new_transaction->getTransactionAmount()) {
-				$new_transaction = new Budget_DataModel_TransactionDM();
+				$new_transaction = new Transaction();
 			}
 
 			if($transaction->TransType == 'a') {
 				if( preg_match("/B/", $transaction->bookId) ) {
-					$new_transaction->setToAccount($transaction->bookId);
+					$new_transaction->getStructure()->setToAccount($transaction->bookId);
 				} else {
-					$new_transaction->setToCategory($transaction->bookId);
+					$new_transaction->getStructure()->setToCategory($transaction->bookId);
 				}
 			} else {
 				if( preg_match("/B/", $transaction->bookId) ) {
-					$new_transaction->setFromAccount($transaction->bookId);
+					$new_transaction->getStructure()->setFromAccount($transaction->bookId);
 				} else {
-					$new_transaction->setFromCategory($transaction->bookId);
+					$new_transaction->getStructure()->setFromCategory($transaction->bookId);
 				}
 			}
 
@@ -39,15 +43,15 @@ class Maintenance extends N8_Controller {
 				$date = date("Y-m-d H:i:s", strtotime($transaction->bookTransDate));
 			}
 
-			$new_transaction->setOwnerId($transaction->ownerId);
-			$new_transaction->setTransactionAmount($transaction->bookTransAmt);
-			$new_transaction->setTransactionDate($date);
-			$new_transaction->setTransactionInfo($transaction->bookTransPlace);
+			$new_transaction->getStructure()->setOwnerId($transaction->ownerId);
+			$new_transaction->getStructure()->setTransactionAmount($transaction->bookTransAmt);
+			$new_transaction->getStructure()->setTransactionDate($date);
+			$new_transaction->getStructure()->setTransactionInfo($transaction->bookTransPlace);
 
 			$add_transaction = false;
 			if( preg_match("/(Bucket|Transfer)/", $transaction->bookTransPlace) || preg_match("/B/", $transaction->bookId) ) {
-				if($new_transaction->getToCategory()
-					&& ($new_transaction->getFromAccount() || $new_transaction->getFromCategory()) ) {
+				if($new_transaction->getStructure()->getToCategory()
+					&& ($new_transaction->getStructure()->getFromAccount() || $new_transaction->getStructure()->getFromCategory()) ) {
 
 					$add_transaction = true;
 				}
@@ -62,12 +66,12 @@ class Maintenance extends N8_Controller {
 				//if we get an error on the first attempt, try to fix it.
 				if( count($new_transaction->getErrors()) > 0) {
 					echo "first attempt failed, attempting repair<br />";
-					if($new_transaction->getToCategory() == $new_transaction->getFromCategory() && $new_transaction->getFromAccount()) {
-						$new_transaction->setFromCategory("");
+					if($new_transaction->getStructure()->getToCategory() == $new_transaction->getStructure()->getFromCategory() && $new_transaction->getStructure()->getFromAccount()) {
+						$new_transaction->getStructure()->setFromCategory("");
 					}
 
-					if($new_transaction->getToCategory() != $new_transaction->getFromCategory() && $new_transaction->getFromAccount()) {
-						$new_transaction->setFromAccount("");
+					if($new_transaction->getStructure()->getToCategory() != $new_transaction->getStructure()->getFromCategory() && $new_transaction->getStructure()->getFromAccount()) {
+						$new_transaction->getStructure()->setFromAccount("");
 					}
 
 					$new_transaction->setErrors();

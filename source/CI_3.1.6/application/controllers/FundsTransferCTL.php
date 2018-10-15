@@ -51,13 +51,13 @@ class fundsTransferCTL extends N8_Controller {
 			$this->ACCT->saveAccount($to_account);
 
 			//add the transaction
-			$transaction = new Budget_DataModel_TransactionDM();
-			$transaction->setToAccount($to_account->account_id);
-			$transaction->setFromAccount($from_account->account_id);
-			$transaction->setOwnerId($this->session->userdata("user_id"));
-			$transaction->setTransactionAmount($transfer_amount);
-			$transaction->setTransactionDate( date("Y-m-d H:i:s") );
-			$transaction->setTransactionInfo("Transfer from ".$from_account->account_name." to ".$to_account->account_name);
+			$transaction = new Transaction();
+			$transaction->getStructure()->setToAccount($to_account->account_id);
+			$transaction->getStructure()->setFromAccount($from_account->account_id);
+			$transaction->getStructure()->setOwnerId($this->session->userdata("user_id"));
+			$transaction->getStructure()->setTransactionAmount($transfer_amount);
+			$transaction->getStructure()->setTransactionDate( date("Y-m-d H:i:s") );
+			$transaction->getStructure()->setTransactionInfo("Transfer from ".$from_account->account_name." to ".$to_account->account_name);
 			$transaction->saveTransaction();
 
 			$this->ACCT->transactionEnd();//end transaction
@@ -92,13 +92,13 @@ class fundsTransferCTL extends N8_Controller {
 					$to->saveCategory();
 					if( count($to->getErrors()) < 1 ) {
 						//add the transaction
-						$transaction = new Budget_DataModel_TransactionDM();
-						$transaction->setToCategory($to->getCategoryId());
-						$transaction->setFromCategory($from->getCategoryId());
-						$transaction->setOwnerId($this->session->userdata("user_id"));
-						$transaction->setTransactionAmount($amount);
-						$transaction->setTransactionDate( date("Y-m-d H:i:s") );
-						$transaction->setTransactionInfo("Transfer from ".$from->getCategoryName()." to ".$to->getCategoryName());
+						$transaction = new Transaction();
+						$transaction->getStructure()->setToCategory($to->getCategoryId());
+						$transaction->getStructure()->setFromCategory($from->getCategoryId());
+						$transaction->getStructure()->setOwnerId($this->session->userdata("user_id"));
+						$transaction->getStructure()->setTransactionAmount($amount);
+						$transaction->getStructure()->setTransactionDate( date("Y-m-d H:i:s") );
+						$transaction->getStructure()->setTransactionInfo("Transfer from ".$from->getCategoryName()." to ".$to->getCategoryName());
 						$transaction->saveTransaction();
 
 						if( count($transaction->getErrors()) > 0 ) {

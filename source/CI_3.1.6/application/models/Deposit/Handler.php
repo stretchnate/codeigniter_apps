@@ -29,15 +29,15 @@ class Handler {
     public function addDeposit(\Budget_DataModel_AccountDM $account_dm, $amount, $source, $date, $distribute = true) {
         $deposit = $this->deposit($amount, $account_dm->getAccountId(), $source, $date);
 
-        $transaction = new \Budget_DataModel_TransactionDM();
+        $transaction = new \Transaction();
         $transaction->transactionStart();
 
-        $transaction->setToAccount($account_dm->getAccountId());
-        $transaction->setDepositId($deposit->getValues()->getId());
-        $transaction->setOwnerId($this->user_id);
-        $transaction->setTransactionAmount((float)$amount);
-        $transaction->setTransactionDate($date);
-        $transaction->setTransactionInfo("Deposit ".$deposit->getValues()->getId()." into ".$account_dm->getAccountName());
+        $transaction->getStructure()->setToAccount($account_dm->getAccountId());
+        $transaction->getStructure()->setDepositId($deposit->getValues()->getId());
+        $transaction->getStructure()->setOwnerId($this->user_id);
+        $transaction->getStructure()->setTransactionAmount((float)$amount);
+        $transaction->getStructure()->setTransactionDate($date);
+        $transaction->getStructure()->setTransactionInfo("Deposit ".$deposit->getValues()->getId()." into ".$account_dm->getAccountName());
         if($transaction->saveTransaction()) {
             $new_amount = add($account_dm->getAccountAmount(), $amount, 2);
             $account_dm->setAccountAmount($new_amount);

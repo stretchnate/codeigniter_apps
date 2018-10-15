@@ -138,13 +138,13 @@ class Creator {
      * @throws \Exception
      */
     private function createTransaction(TransactionResponse\Transaction $transaction, \Budget_DataModel_CategoryDM $category) {
-        $transaction_dm = new \Budget_DataModel_TransactionDM();
+        $transaction_dm = new \Transaction();
         $transaction_dm->transactionStart();
-        $transaction_dm->setOwnerId($this->user_id);
-        $transaction_dm->setFromCategory($category->getCategoryId());
-        $transaction_dm->setTransactionAmount($transaction->getAmount());
-        $transaction_dm->setTransactionDate($transaction->getDate()->format('Y-m-d H:i:s'));
-        $transaction_dm->setTransactionInfo($transaction->getName());
+        $transaction_dm->getStructure()->setOwnerId($this->user_id);
+        $transaction_dm->getStructure()->setFromCategory($category->getCategoryId());
+        $transaction_dm->getStructure()->setTransactionAmount($transaction->getAmount());
+        $transaction_dm->getStructure()->setTransactionDate($transaction->getDate()->format('Y-m-d H:i:s'));
+        $transaction_dm->getStructure()->setTransactionInfo($transaction->getName());
         if($transaction_dm->saveTransaction()) {
             $new_amount = subtract($category->getCurrentAmount(), $transaction->getAmount(), 2);
             $category->setCurrentAmount($new_amount);

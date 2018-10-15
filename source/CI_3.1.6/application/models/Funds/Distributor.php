@@ -104,14 +104,14 @@ class Distributor extends \CI_Model {
      * @throws \Exception
      */
     private function addTransaction($category, $deposit_amount, $date) {
-        $transaction = new \Budget_DataModel_TransactionDM();
-        $transaction->setToCategory($category->getCategoryId());
-        $transaction->setFromAccount($this->account_dm->getAccountId());
-        $transaction->setDepositId($this->deposit->getValues()->getId());
-        $transaction->setOwnerId($this->user_id);
-        $transaction->setTransactionAmount($deposit_amount);
-        $transaction->setTransactionDate($date);
-        $transaction->setTransactionInfo("Automatically distributed funds from ".$this->account_dm->getAccountName()." account into ".$category->getCategoryName());
+        $transaction = new \Transaction();
+        $transaction->getStructure()->setToCategory($category->getCategoryId());
+        $transaction->getStructure()->setFromAccount($this->account_dm->getAccountId());
+        $transaction->getStructure()->setDepositId($this->deposit->getValues()->getId());
+        $transaction->getStructure()->setOwnerId($this->user_id);
+        $transaction->getStructure()->setTransactionAmount($deposit_amount);
+        $transaction->getStructure()->setTransactionDate($date);
+        $transaction->getStructure()->setTransactionInfo("Automatically distributed funds from ".$this->account_dm->getAccountName()." account into ".$category->getCategoryName());
         $transaction->saveTransaction();
 
         if($transaction->getErrors()) {

@@ -1,5 +1,10 @@
 <?php
 //to be replaced by budget/TransactionDM
+
+/**
+ * Class Transactions
+ * @deprecated
+ */
 class Transactions extends N8_Model {
 		
 	function __construct(){

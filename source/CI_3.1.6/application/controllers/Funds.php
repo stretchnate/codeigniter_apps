@@ -138,13 +138,13 @@ class Funds extends N8_Controller {
 					$category->saveCategory();
 
 					if( $parent_account->isErrors() === false && $category->isErrors() === false ) {
-						$transaction = new Budget_DataModel_TransactionDM();
-						$transaction->setToCategory($category->getCategoryId());
-						$transaction->setFromAccount($parent_account->getAccountId());
-						$transaction->setOwnerId($this->session->userdata("user_id"));
-						$transaction->setTransactionAmount($requested_amount);
-						$transaction->setTransactionDate($date);
-						$transaction->setTransactionInfo("Funds distributed from ".$parent_account->getAccountName()." account to ".$category->getCategoryName());
+						$transaction = new Transaction();
+						$transaction->getStructure()->setToCategory($category->getCategoryId());
+						$transaction->getStructure()->setFromAccount($parent_account->getAccountId());
+						$transaction->getStructure()->setOwnerId($this->session->userdata("user_id"));
+						$transaction->getStructure()->setTransactionAmount($requested_amount);
+						$transaction->getStructure()->setTransactionDate($date);
+						$transaction->getStructure()->setTransactionInfo("Funds distributed from ".$parent_account->getAccountName()." account to ".$category->getCategoryName());
 						$transaction->saveTransaction();
 					}
 
@@ -158,12 +158,12 @@ class Funds extends N8_Controller {
 					$category->saveCategory();
 
 					if( $category->isErrors() === false ) {
-						$transaction = new Budget_DataModel_TransactionDM();
-						$transaction->setToCategory($category->getCategoryId());
-						$transaction->setOwnerId($this->session->userdata("user_id"));
-						$transaction->setTransactionAmount($requested_amount);
-						$transaction->setTransactionDate($date);
-						$transaction->setTransactionInfo($transaction_info);
+						$transaction = new Transaction();
+						$transaction->getStructure()->setToCategory($category->getCategoryId());
+						$transaction->getStructure()->setOwnerId($this->session->userdata("user_id"));
+						$transaction->getStructure()->setTransactionAmount($requested_amount);
+						$transaction->getStructure()->setTransactionDate($date);
+						$transaction->getStructure()->setTransactionInfo($transaction_info);
 						$transaction->saveTransaction();
 					}
 					break;
@@ -177,12 +177,12 @@ class Funds extends N8_Controller {
 					$category->saveCategory();
 
 					if( $category->isErrors() === false ) {
-						$transaction = new Budget_DataModel_TransactionDM();
-						$transaction->setFromCategory($category->getCategoryId());
-						$transaction->setOwnerId($this->session->userdata("user_id"));
-						$transaction->setTransactionAmount($requested_amount);
-						$transaction->setTransactionDate($date);
-						$transaction->setTransactionInfo($transaction_info);
+						$transaction = new Transaction();
+						$transaction->getStructure()->setFromCategory($category->getCategoryId());
+						$transaction->getStructure()->setOwnerId($this->session->userdata("user_id"));
+						$transaction->getStructure()->setTransactionAmount($requested_amount);
+						$transaction->getStructure()->setTransactionDate($date);
+						$transaction->getStructure()->setTransactionInfo($transaction_info);
 						$transaction->saveTransaction();
 					}
 					$category->transactionEnd();
@@ -223,17 +223,17 @@ class Funds extends N8_Controller {
      * @param int $transaction_id
      */
     public function deleteTransaction($transaction_id) {
-        $transaction = new Budget_DataModel_TransactionDM($transaction_id);
+        $transaction = new Transaction($transaction_id);
 
-        if($transaction->getFromAccount()) {
+        if($transaction->getStructure()->getFromAccount()) {
             //undo an account to category deposit
             if($this->removeFundsFromCategory($transaction)) {
                 $result = $this->returnFundsToAccount($transaction);
             }
-        } elseif($transaction->getFromCategory() && !$transaction->getToCategory()) {
+        } elseif($transaction->getStructure()->getFromCategory() && !$transaction->getStructure()->getToCategory()) {
             //undo a category deduction
             $result = $this->returnFundsToCategory($transaction);
-        } elseif($transaction->getFromCategory() && $transaction->getToCategory()) {
+        } elseif($transaction->getStructure()->getFromCategory() && $transaction->getStructure()->getToCategory()) {
             //undo a category to category transfer
             if($this->removeFundsFromCategory($transaction)) {
                 $result = $this->returnFundsToCategory($transaction);
@@ -253,12 +253,12 @@ class Funds extends N8_Controller {
     /**
      * remove funds from a category
      *
-     * @param Budget_DataModel_TransactionDM $transaction
+     * @param Transaction $transaction
      * @return type
      */
-    private function removeFundsFromCategory(Budget_DataModel_TransactionDM $transaction) {
-		$category     = new Budget_DataModel_CategoryDM($transaction->getToCategory(), $this->session->userdata('user_id'));
-		$new_cat_amt  = subtract($category->getCurrentAmount(), $transaction->getTransactionAmount(), 2);
+    private function removeFundsFromCategory(Transaction $transaction) {
+		$category     = new Budget_DataModel_CategoryDM($transaction->getStructure()->getToCategory(), $this->session->userdata('user_id'));
+		$new_cat_amt  = subtract($category->getCurrentAmount(), $transaction->getStructure()->getTransactionAmount(), 2);
 		$category->setCurrentAmount($new_cat_amt);
 
 		return $category->saveCategory();
@@ -267,11 +267,11 @@ class Funds extends N8_Controller {
     /**
      * take funds from a transaction and put them back into the category
      *
-     * @param Budget_DataModel_TransactionDM $transaction
+     * @param Transaction $transaction
      */
-    private function returnFundsToCategory(Budget_DataModel_TransactionDM $transaction) {
-        $category = new Budget_DataModel_CategoryDM($transaction->getFromCategory(), $this->session->userdata('user_id'));
-        $new_amt  = add($category->getCurrentAmount(), $transaction->getTransactionAmount(), 2);
+    private function returnFundsToCategory(Transaction $transaction) {
+        $category = new Budget_DataModel_CategoryDM($transaction->getStructure()->getFromCategory(), $this->session->userdata('user_id'));
+        $new_amt  = add($category->getCurrentAmount(), $transaction->getStructure()->getTransactionAmount(), 2);
         $category->setCurrentAmount($new_amt);
         return $category->saveCategory();
     }
@@ -279,11 +279,11 @@ class Funds extends N8_Controller {
     /**
      * takes funds from a category/transaction and put them back into an account
      *
-     * @param Budget_DataModel_TransactionDM $transaction
+     * @param Transaction $transaction
      */
-    private function returnFundsToAccount(Budget_DataModel_TransactionDM $transaction) {
-        $account      = new Budget_DataModel_AccountDM($transaction->getFromAccount(), $this->session->userdata('user_id'));
-        $new_acct_amt = add($account->getAccountAmount(), $transaction->getTransactionAmount(), 2);
+    private function returnFundsToAccount(Transaction $transaction) {
+        $account      = new Budget_DataModel_AccountDM($transaction->getStructure()->getFromAccount(), $this->session->userdata('user_id'));
+        $new_acct_amt = add($account->getAccountAmount(), $transaction->getStructure()->getTransactionAmount(), 2);
         $account->setAccountAmount($new_acct_amt);
         return $account->saveAccount();
     }
