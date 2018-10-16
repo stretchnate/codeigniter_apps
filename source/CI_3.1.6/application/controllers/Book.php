@@ -193,13 +193,13 @@ class Book extends N8_Controller {
 
 					if($start_amount > 0) {
 						//add the transaction
-						$transaction = new Budget_DataModel_TransactionDM();
-						$transaction->setFromAccount($account_dm->getAccountId());
-						$transaction->setToCategory($category_dm->getCategoryId());
-						$transaction->setOwnerId($this->session->userdata("user_id"));
-						$transaction->setTransactionAmount((float)$start_amount);
-						$transaction->setTransactionDate( date("Y-m-d H:i:s") );
-						$transaction->setTransactionInfo("Initial deposit into new category " . $category_dm->getCategoryName());
+						$transaction = new \Transaction\Row();
+						$transaction->getStructure()->setFromAccount($account_dm->getAccountId());
+						$transaction->getStructure()->setToCategory($category_dm->getCategoryId());
+						$transaction->getStructure()->setOwnerId($this->session->userdata("user_id"));
+						$transaction->getStructure()->setTransactionAmount((float)$start_amount);
+						$transaction->getStructure()->setTransactionDate( date("Y-m-d H:i:s") );
+						$transaction->getStructure()->setTransactionInfo("Initial deposit into new category " . $category_dm->getCategoryName());
 						$transaction->saveTransaction();
 					}
 				}
