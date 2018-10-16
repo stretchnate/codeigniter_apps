@@ -36,30 +36,44 @@
 		public function edit($id) {
 		    try {
                 $tdm = new \Transaction\Row($id);
+                $structure = new \Transaction\Structure();
+                $structure->setTransactionAmount($this->input->post('amount'));
+                $structure->setTransactionDate($this->input->post('date'));
+                $structure->setTransactionInfo($this->input->post('description'));
                 switch($tdm->getTransactionType()) {
                     case "deduction":
                         if($this->input->post('operator') == 'add') {
-                            //no longer a deduction, need to get account dm and see if the amount can be changed
+                            $structure->setToCategory($tdm->getStructure()->getFromCategory());
                         } else {
-
+                            $structure->setFromCategory($tdm->getStructure()->getFromCategory());
                         }
+                        $manager = new \Transaction\Deduction\Manager();
                         break;
                     case "category_to_category_transfer":
                         //need to make sure from category can handle the new amount
+                        $structure->setToCategory($tdm->getStructure()->getToCategory());
+                        $structure->setFromCategory($tdm->getStructure()->getFromCategory());
+                        $manager = new \Transaction\Category\Transfer\Manager();
                         break;
                     case "refund":
                         if($this->input->post('operator') == 'subtract') {
                             //no longer a refund, now it's a deduction
+                            $structure->setFromCategory($tdm->getStructure()->getToCategory());
                         } else {
                             //update refund
+                            $structure->setToCategory($tdm->getStructure()->getToCategory());
                         }
+                        $manager = new \Transaction\Refund\Manager();
                         break;
                     case "account_to_category_deposit":
                         if($this->input->post('operator') == 'subtract') {
                             //no longer a deposit, need to put the amount back in the account as well as deduct it from the category
+                            $structure->setFromCategory($tdm->getStructure()->getToCategory());
                         } else {
                             //need to make sure the account can handle the new amount
+                            $structure->setToCategory($tdm->getStructure()->getToCategory());
                         }
+                        $manager = new \Transaction\Category\Deposit\Manager();
                         break;
                     case "account_to_account_transfer":
                     case "deposit":

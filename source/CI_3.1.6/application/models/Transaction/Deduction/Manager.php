@@ -7,6 +7,7 @@
  */
 
 namespace Transaction\Deduction;
+use Transaction\ManagerInterface;
 use Transaction\Row;
 use Transaction\Structure;
 
@@ -15,7 +16,7 @@ use Transaction\Structure;
  *
  * @package Transaction\Deduction
  */
-class Manger {
+class Manager implements ManagerInterface {
 
     /**
      * @param Row      $transaction
