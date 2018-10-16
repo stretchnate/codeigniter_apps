@@ -138,7 +138,7 @@ class Funds extends N8_Controller {
 					$category->saveCategory();
 
 					if( $parent_account->isErrors() === false && $category->isErrors() === false ) {
-						$transaction = new Transaction();
+						$transaction = new \Transaction\Row();
 						$transaction->getStructure()->setToCategory($category->getCategoryId());
 						$transaction->getStructure()->setFromAccount($parent_account->getAccountId());
 						$transaction->getStructure()->setOwnerId($this->session->userdata("user_id"));
@@ -158,7 +158,7 @@ class Funds extends N8_Controller {
 					$category->saveCategory();
 
 					if( $category->isErrors() === false ) {
-						$transaction = new Transaction();
+						$transaction = new \Transaction\Row();
 						$transaction->getStructure()->setToCategory($category->getCategoryId());
 						$transaction->getStructure()->setOwnerId($this->session->userdata("user_id"));
 						$transaction->getStructure()->setTransactionAmount($requested_amount);
@@ -177,7 +177,7 @@ class Funds extends N8_Controller {
 					$category->saveCategory();
 
 					if( $category->isErrors() === false ) {
-						$transaction = new Transaction();
+						$transaction = new \Transaction\Row();
 						$transaction->getStructure()->setFromCategory($category->getCategoryId());
 						$transaction->getStructure()->setOwnerId($this->session->userdata("user_id"));
 						$transaction->getStructure()->setTransactionAmount($requested_amount);
@@ -223,7 +223,7 @@ class Funds extends N8_Controller {
      * @param int $transaction_id
      */
     public function deleteTransaction($transaction_id) {
-        $transaction = new Transaction($transaction_id);
+        $transaction = new \Transaction\Row($transaction_id);
 
         if($transaction->getStructure()->getFromAccount()) {
             //undo an account to category deposit
@@ -253,10 +253,10 @@ class Funds extends N8_Controller {
     /**
      * remove funds from a category
      *
-     * @param Transaction $transaction
+     * @param Row $transaction
      * @return type
      */
-    private function removeFundsFromCategory(Transaction $transaction) {
+    private function removeFundsFromCategory(\Transaction\Row $transaction) {
 		$category     = new Budget_DataModel_CategoryDM($transaction->getStructure()->getToCategory(), $this->session->userdata('user_id'));
 		$new_cat_amt  = subtract($category->getCurrentAmount(), $transaction->getStructure()->getTransactionAmount(), 2);
 		$category->setCurrentAmount($new_cat_amt);
@@ -267,9 +267,9 @@ class Funds extends N8_Controller {
     /**
      * take funds from a transaction and put them back into the category
      *
-     * @param Transaction $transaction
+     * @param Row $transaction
      */
-    private function returnFundsToCategory(Transaction $transaction) {
+    private function returnFundsToCategory(\Transaction\Row $transaction) {
         $category = new Budget_DataModel_CategoryDM($transaction->getStructure()->getFromCategory(), $this->session->userdata('user_id'));
         $new_amt  = add($category->getCurrentAmount(), $transaction->getStructure()->getTransactionAmount(), 2);
         $category->setCurrentAmount($new_amt);
@@ -279,9 +279,9 @@ class Funds extends N8_Controller {
     /**
      * takes funds from a category/transaction and put them back into an account
      *
-     * @param Transaction $transaction
+     * @param Row $transaction
      */
-    private function returnFundsToAccount(Transaction $transaction) {
+    private function returnFundsToAccount(\Transaction\Row $transaction) {
         $account      = new Budget_DataModel_AccountDM($transaction->getStructure()->getFromAccount(), $this->session->userdata('user_id'));
         $new_acct_amt = add($account->getAccountAmount(), $transaction->getStructure()->getTransactionAmount(), 2);
         $account->setAccountAmount($new_acct_amt);

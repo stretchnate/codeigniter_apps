@@ -64,10 +64,12 @@ class Structure {
     }
 
     /**
-     * @param $transaction_id
+     * @param int $transaction_id
+     * @return Structure
      */
     public function setTransactionId($transaction_id) {
         $this->transaction_id = $transaction_id;
+        return $this;
     }
 
     /**
@@ -78,10 +80,12 @@ class Structure {
     }
 
     /**
-     * @param $to_category
+     * @param int $to_category
+     * @return Structure
      */
     public function setToCategory($to_category) {
         $this->to_category = $to_category;
+        return $this;
     }
 
     /**
@@ -92,10 +96,12 @@ class Structure {
     }
 
     /**
-     * @param $from_category
+     * @param int $from_category
+     * @return Structure
      */
     public function setFromCategory($from_category) {
         $this->from_category = $from_category;
+        return $this;
     }
 
     /**
@@ -106,10 +112,12 @@ class Structure {
     }
 
     /**
-     * @param $to_account
+     * @param int $to_account
+     * @return Structure
      */
     public function setToAccount($to_account) {
         $this->to_account = $to_account;
+        return $this;
     }
 
     /**
@@ -120,10 +128,12 @@ class Structure {
     }
 
     /**
-     * @param $from_account
+     * @param int $from_account
+     * @return Structure
      */
     public function setFromAccount($from_account) {
         $this->from_account = $from_account;
+        return $this;
     }
 
     /**
@@ -134,10 +144,12 @@ class Structure {
     }
 
     /**
-     * @param $deposit_id
+     * @param int $deposit_id
+     * @return Structure
      */
     public function setDepositId($deposit_id) {
         $this->deposit_id = $deposit_id;
+        return $this;
     }
 
     /**
@@ -148,10 +160,12 @@ class Structure {
     }
 
     /**
-     * @param $owner_id
+     * @param int $owner_id
+     * @return Structure
      */
     public function setOwnerId($owner_id) {
         $this->owner_id = $owner_id;
+        return $this;
     }
 
     /**
@@ -162,10 +176,12 @@ class Structure {
     }
 
     /**
-     * @param $transaction_amount
+     * @param float $transaction_amount
+     * @return Structure
      */
     public function setTransactionAmount($transaction_amount) {
         $this->transaction_amount = $transaction_amount;
+        return $this;
     }
 
     /**
@@ -176,16 +192,12 @@ class Structure {
     }
 
     /**
-     * @param $transaction_date
+     * @param string $transaction_date
+     * @return Structure
      */
     public function setTransactionDate($transaction_date) {
-        $pattern = "/[\/.-]/";
-
-        if( preg_match($pattern, $transaction_date) ) {
-            $transaction_date = strtotime($transaction_date);
-        }
-
-        $this->transaction_date = date("Y-m-d H:i:s", $transaction_date);
+        $this->transaction_date = $transaction_date;
+        return $this;
     }
 
     /**
@@ -196,72 +208,11 @@ class Structure {
     }
 
     /**
-     * @param $transaction_info
+     * @param string $transaction_info
+     * @return Structure
      */
     public function setTransactionInfo($transaction_info) {
         $this->transaction_info = $transaction_info;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getInsertId() {
-        return $this->insert_id;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getToCategoryName() {
-        return $this->to_category_name;
-    }
-
-    /**
-     * @param $to_category_name
-     */
-    public function setToCategoryName($to_category_name) {
-        $this->to_category_name = $to_category_name;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getFromCategoryName() {
-        return $this->from_category_name;
-    }
-
-    /**
-     * @param $from_category_name
-     */
-    public function setFromCategoryName($from_category_name) {
-        $this->from_category_name = $from_category_name;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getToAccountName() {
-        return $this->to_account_name;
-    }
-
-    /**
-     * @param $to_account_name
-     */
-    public function setToAccountName($to_account_name) {
-        $this->to_account_name = $to_account_name;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getFromAccountName() {
-        return $this->from_account_name;
-    }
-
-    /**
-     * @param $from_account_name
-     */
-    public function setFromAccountName($from_account_name) {
-        $this->from_account_name = $from_account_name;
+        return $this;
     }
 }

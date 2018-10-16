@@ -9,6 +9,7 @@
 namespace Deposit;
 
 use Funds\Distributor;
+use Transaction\Row;
 
 class Handler {
 
@@ -29,7 +30,7 @@ class Handler {
     public function addDeposit(\Budget_DataModel_AccountDM $account_dm, $amount, $source, $date, $distribute = true) {
         $deposit = $this->deposit($amount, $account_dm->getAccountId(), $source, $date);
 
-        $transaction = new \Transaction();
+        $transaction = new Row();
         $transaction->transactionStart();
 
         $transaction->getStructure()->setToAccount($account_dm->getAccountId());

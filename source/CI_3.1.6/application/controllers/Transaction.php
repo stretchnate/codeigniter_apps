@@ -35,7 +35,7 @@
 
 		public function edit($id) {
 		    try {
-                $tdm = new Transaction($id);
+                $tdm = new \Transaction\Row($id);
                 switch($tdm->getTransactionType()) {
                     case "deduction":
                         if($this->input->post('operator') == 'add') {

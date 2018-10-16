@@ -7,6 +7,7 @@
  */
 
 namespace Transaction\Deduction;
+use Transaction\Row;
 use Transaction\Structure;
 
 /**
@@ -17,11 +18,11 @@ use Transaction\Structure;
 class Manger {
 
     /**
-     * @param \Transaction $transaction
+     * @param Row      $transaction
      * @param Structure $transaction_updates
      * @return bool
      */
-    public function modify(\Transaction $transaction, Structure $transaction_updates) {
+    public function modify(Row $transaction, Structure $transaction_updates) {
         if(!$transaction_updates->getFromCategory()) {
             $transaction->setToCategory($transaction_updates->getToCategory());
             $transaction->setFromCategory(null);

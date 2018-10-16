@@ -9,6 +9,8 @@
 namespace Funds;
 
 
+use Transaction\Row;
+
 class Distributor extends \CI_Model {
 
     /**
@@ -104,7 +106,7 @@ class Distributor extends \CI_Model {
      * @throws \Exception
      */
     private function addTransaction($category, $deposit_amount, $date) {
-        $transaction = new \Transaction();
+        $transaction = new Row();
         $transaction->getStructure()->setToCategory($category->getCategoryId());
         $transaction->getStructure()->setFromAccount($this->account_dm->getAccountId());
         $transaction->getStructure()->setDepositId($this->deposit->getValues()->getId());

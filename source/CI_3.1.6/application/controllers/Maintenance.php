@@ -21,7 +21,7 @@ class Maintenance extends N8_Controller {
 		foreach($transactions as $transaction) {
 
 			if(!$new_transaction || $transaction->bookTransAmt != $new_transaction->getTransactionAmount()) {
-				$new_transaction = new Transaction();
+				$new_transaction = new \Transaction\Row();
 			}
 
 			if($transaction->TransType == 'a') {

@@ -2,7 +2,7 @@
 
 /**
  * Class Budget_DataModel_TransactionDM
- * @deprecated - need to convert to use Transaction\Structure for properties
+ * @deprecated - need to convert to use Row\Structure for properties
  */
 class Budget_DataModel_TransactionDM extends N8_Model {
 

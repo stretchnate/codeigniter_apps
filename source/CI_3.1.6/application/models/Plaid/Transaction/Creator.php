@@ -12,6 +12,7 @@ namespace Plaid\Transaction;
 use Deposit\Handler;
 use Plaid\Connection;
 use Plaid\TransactionResponse;
+use Transaction\Row;
 
 /**
  * Class Creator
@@ -138,7 +139,7 @@ class Creator {
      * @throws \Exception
      */
     private function createTransaction(TransactionResponse\Transaction $transaction, \Budget_DataModel_CategoryDM $category) {
-        $transaction_dm = new \Transaction();
+        $transaction_dm = new Row();
         $transaction_dm->transactionStart();
         $transaction_dm->getStructure()->setOwnerId($this->user_id);
         $transaction_dm->getStructure()->setFromCategory($category->getCategoryId());

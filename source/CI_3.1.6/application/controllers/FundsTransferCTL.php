@@ -51,7 +51,7 @@ class fundsTransferCTL extends N8_Controller {
 			$this->ACCT->saveAccount($to_account);
 
 			//add the transaction
-			$transaction = new Transaction();
+			$transaction = new \Transaction\Row();
 			$transaction->getStructure()->setToAccount($to_account->account_id);
 			$transaction->getStructure()->setFromAccount($from_account->account_id);
 			$transaction->getStructure()->setOwnerId($this->session->userdata("user_id"));
@@ -92,7 +92,7 @@ class fundsTransferCTL extends N8_Controller {
 					$to->saveCategory();
 					if( count($to->getErrors()) < 1 ) {
 						//add the transaction
-						$transaction = new Transaction();
+						$transaction = new \Transaction\Row();
 						$transaction->getStructure()->setToCategory($to->getCategoryId());
 						$transaction->getStructure()->setFromCategory($from->getCategoryId());
 						$transaction->getStructure()->setOwnerId($this->session->userdata("user_id"));

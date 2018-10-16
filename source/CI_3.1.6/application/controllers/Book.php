@@ -193,7 +193,7 @@ class Book extends N8_Controller {
 
 					if($start_amount > 0) {
 						//add the transaction
-						$transaction = new Transaction();
+						$transaction = new \Transaction\Row();
 						$transaction->getStructure()->setFromAccount($account_dm->getAccountId());
 						$transaction->getStructure()->setToCategory($category_dm->getCategoryId());
 						$transaction->getStructure()->setOwnerId($this->session->userdata("user_id"));

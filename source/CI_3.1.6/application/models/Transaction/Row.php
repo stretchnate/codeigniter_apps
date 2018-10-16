@@ -1,9 +1,9 @@
 <?php
-
+namespace Transaction;
 /**
- * Class Transaction
+ * Class Row
  */
-class Transaction extends N8_Model {
+class Row extends \N8_Model {
 
 	private $insert_id;
 
@@ -20,6 +20,7 @@ class Transaction extends N8_Model {
 
 	function __construct($transaction_id = null) {
 		parent::__construct();
+		$this->structure = new Structure();
 
 		if($transaction_id) {
 			$this->loadTransaction($transaction_id);
@@ -31,16 +32,25 @@ class Transaction extends N8_Model {
 	 *
 	 * @param transaction_id Int
 	 * @return void
+     * @throws \Exception
 	 */
 	public function loadTransaction(&$transaction_id) {
 		$query = $this->db->get_where("transactions", array("transaction_id" => $transaction_id));
 
-		foreach($query->row() as $column => $value) {
-			if( property_exists($this, $column) ) {
+		if(!$query) {
+		    throw new \Exception($this->db->error()['message']);
+        }
 
-				$this->$column = trim($value);
-			}
-		}
+        $this->getStructure()->setTransactionId($query->row()->transaction_id)
+            ->setToCategory($query->row()->to_category)
+            ->setFromCategory($query->row()->from_category)
+            ->setTransactionInfo($query->row()->transaction_info)
+            ->setTransactionAmount($query->row()->transaction_amount)
+            ->setTransactionDate($query->row()->transaction_date)
+            ->setOwnerId($query->row()->owner_id)
+            ->setDepositId($query->row()->deposit_id)
+            ->setFromAccount($query->row()->from_account)
+            ->setToAccount($query->row()->to_account);
 	}
 
 	/**
