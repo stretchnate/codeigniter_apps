@@ -50,7 +50,6 @@
                         $manager = new \Transaction\Deduction\Manager();
                         break;
                     case "category_to_category_transfer":
-                        //need to make sure from category can handle the new amount
                         $structure->setToCategory($tdm->getStructure()->getToCategory());
                         $structure->setFromCategory($tdm->getStructure()->getFromCategory());
                         $manager = new \Transaction\Category\Transfer\Manager();
