@@ -10,5 +10,5 @@ namespace Transaction;
 
 Interface ManagerInterface {
 
-    public function modify(Row $transaction, Structure $transaction_updates);
+    public function modify(Row $transaction, Structure $transaction_updates, $user_id);
 }

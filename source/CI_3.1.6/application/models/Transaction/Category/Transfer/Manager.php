@@ -25,10 +25,10 @@ class Manager implements ManagerInterface {
      * @param Row       $transaction
      * @param Structure $transaction_updates
      */
-    public function modify(Row $transaction, Structure $transaction_updates) {
+    public function modify(Row $transaction, Structure $transaction_updates, $user_id) {
         //need to make sure from category can handle the new amount
-        $from_category = new \Budget_DataModel_CategoryDM($transaction->getStructure()->getFromCategory());
-        $to_category = new \Budget_DataModel_CategoryDM($transaction->getStructure()->getToCategory());
+        $from_category = new \Budget_DataModel_CategoryDM($transaction->getStructure()->getFromCategory(), $user_id);
+        $to_category = new \Budget_DataModel_CategoryDM($transaction->getStructure()->getToCategory(), $user_id);
         if($transaction->getStructure()->getTransactionAmount() < $transaction_updates->getTransactionAmount()) {
             $diff = subtract($transaction_updates->getTransactionAmount(), $transaction->getStructure()->getTransactionAmount());
             if($from_category->getCurrentAmount() < $diff) {

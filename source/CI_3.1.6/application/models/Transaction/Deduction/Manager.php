@@ -23,14 +23,26 @@ class Manager implements ManagerInterface {
      * @param Structure $transaction_updates
      * @return bool
      */
-    public function modify(Row $transaction, Structure $transaction_updates) {
-        if(!$transaction_updates->getFromCategory()) {
-            $transaction->setToCategory($transaction_updates->getToCategory());
-            $transaction->setFromCategory(null);
-        }
-        $transaction->setTransactionAmount($transaction_updates->getTransactionAmount());
-        $transaction->setTransactionInfo($transaction_updates->getTransactionInfo());
+    public function modify(Row $transaction, Structure $transaction_updates, $user_id) {
+        $category = new \Budget_DataModel_CategoryDM($transaction->getStructure()->getFromCategory(), $user_id);
+        $diff = ($transaction->getStructure()->getTransactionAmount() > $transaction_updates->getTransactionAmount()) ?
 
-        return $transaction->saveTransaction();
+        $transaction->getStructure()->setTransactionAmount($transaction_updates->getTransactionAmount());
+        $transaction->getStructure()->setTransactionInfo($transaction_updates->getTransactionInfo());
+        $transaction->getStructure()->setTransactionDate($transaction_updates->getTransactionDate());
+
+        $amount = add($category->getCurrentAmount(), $diff);
+        if(!$transaction_updates->getFromCategory()) {
+            $transaction->getStructure()->setToCategory($transaction_updates->getToCategory());
+            $transaction->getStructure()->setFromCategory(null);
+            $amount = subtract($category->getCurrentAmount(), $diff);
+        }
+
+        $category->transactionStart();
+        $transaction->saveTransaction();
+        $category->saveCategory();
+        $category->transactionEnd();
+
+        $transaction->saveTransaction();
     }
 }

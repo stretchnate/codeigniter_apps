@@ -78,9 +78,9 @@
                     case "deposit":
                     default:
                 }
-                $tdm->setTransactionInfo($this->input->post('description'));
-                $tdm->setTransactionDate($this->input->post('date'));
-                $tdm->setTransactionAmount($this->input->post('amount'));
+                $structure->setTransactionInfo($this->input->post('description'));
+                $structure->setTransactionDate($this->input->post('date'));
+                $structure->setTransactionAmount($this->input->post('amount'));
 
             } catch(Exception $e) {
                 log_message('error', $e->getMessage());
