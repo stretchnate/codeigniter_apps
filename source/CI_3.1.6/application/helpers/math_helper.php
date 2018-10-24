@@ -80,3 +80,11 @@ function divide($dividend, $divisor, $scale = 0, $mode = null) {
 
 	return $quotient;
 }
+
+/**
+ * @param $value
+ * @return string
+ */
+function dbNumberFormat($value) {
+    return number_format($value, 2, '.', '');
+}

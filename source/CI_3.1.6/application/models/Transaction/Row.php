@@ -3,7 +3,7 @@ namespace Transaction;
 /**
  * Class Row
  */
-class Row extends \N8_Model {
+class Row extends \CI_Model {
 
 	private $insert_id;
 
@@ -35,22 +35,24 @@ class Row extends \N8_Model {
      * @throws \Exception
 	 */
 	public function loadTransaction(&$transaction_id) {
-		$query = $this->db->get_where("transactions", array("transaction_id" => $transaction_id));
+		$query = $this->db->get_where("transactions", ["transaction_id" => $transaction_id]);
 
 		if(!$query) {
 		    throw new \Exception($this->db->error()['message']);
         }
 
-        $this->getStructure()->setTransactionId($query->row()->transaction_id)
-            ->setToCategory($query->row()->to_category)
-            ->setFromCategory($query->row()->from_category)
-            ->setTransactionInfo($query->row()->transaction_info)
-            ->setTransactionAmount($query->row()->transaction_amount)
-            ->setTransactionDate($query->row()->transaction_date)
-            ->setOwnerId($query->row()->owner_id)
-            ->setDepositId($query->row()->deposit_id)
-            ->setFromAccount($query->row()->from_account)
-            ->setToAccount($query->row()->to_account);
+        if($query->num_rows() == 1) {
+            $this->getStructure()->setTransactionId($query->row()->transaction_id)
+                ->setToCategory($query->row()->to_category)
+                ->setFromCategory($query->row()->from_category)
+                ->setTransactionInfo($query->row()->transaction_info)
+                ->setTransactionAmount($query->row()->transaction_amount)
+                ->setTransactionDate($query->row()->transaction_date)
+                ->setOwnerId($query->row()->owner_id)
+                ->setDepositId($query->row()->deposit_id)
+                ->setFromAccount($query->row()->from_account)
+                ->setToAccount($query->row()->to_account);
+        }
 	}
 
 	/**
@@ -101,7 +103,7 @@ class Row extends \N8_Model {
 			$sets["deposit_id"]     = $this->getStructure()->getDepositId();
 		}
 
-		$sets["transaction_amount"] = $this->dbNumberFormat($this->getStructure()->getTransactionAmount());
+		$sets["transaction_amount"] = dbNumberFormat($this->getStructure()->getTransactionAmount());
 		$sets["transaction_date"]   = $this->getStructure()->getTransactionDate();
 		$sets["transaction_info"]   = $this->getStructure()->getTransactionInfo();
 
@@ -140,7 +142,7 @@ class Row extends \N8_Model {
 		}
 
 		$values["owner_id"]           = $this->getStructure()->getOwnerId();
-		$values["transaction_amount"] = $this->dbNumberFormat($this->getStructure()->getTransactionAmount());
+		$values["transaction_amount"] = dbNumberFormat($this->getStructure()->getTransactionAmount());
 		$values["transaction_date"]   = $this->getStructure()->getTransactionDate();
 		$values["transaction_info"]   = $this->getStructure()->getTransactionInfo();
 

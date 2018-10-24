@@ -33,7 +33,11 @@
 			echo json_encode($response);
 		}
 
-		public function edit($id) {
+        /**
+         * @param $id
+         */
+		public function edit() {
+		    $id = $this->input->post('transaction_id');
 		    try {
                 $tdm = new \Transaction\Row($id);
                 $structure = new \Transaction\Structure();
@@ -77,13 +81,16 @@
                     case "account_to_account_transfer":
                     case "deposit":
                     default:
+                        $message = 'transaction type ['.$tdm->getTransactionType().'] cannot be modified.';
+                        log_message('error', $message);
+                        exit(json_encode(['success' => false, 'message' => $message]));
                 }
-                $structure->setTransactionInfo($this->input->post('description'));
-                $structure->setTransactionDate($this->input->post('date'));
-                $structure->setTransactionAmount($this->input->post('amount'));
 
+                $manager->modify($tdm, $structure, $this->session->user_id);
+                exit(json_encode(['success' => true]));
             } catch(Exception $e) {
                 log_message('error', $e->getMessage());
+                exit(json_encode(['success' => false]));
             }
         }
 

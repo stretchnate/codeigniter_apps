@@ -172,7 +172,7 @@ class TransactionsGrid extends N8_Error {
 				
 				$('.modal-footer').on('click', '#save_changes', function() {
 				    var amount = $('#transaction_modal form input[name=amount]');
-				    var description = $('#transaction_modal form input[name=description]');
+				    var description = $('#transaction_modal form textarea[name=description]');
 				    var date = $('#transaction_modal form input[name=date]');
 				    var send = true;
 				    if(!amount.val() || isNaN(parseFloat(amount.val()))) {
@@ -189,8 +189,13 @@ class TransactionsGrid extends N8_Error {
 				    }
 				    if(send) {
 				        $.post('/transaction/edit/', $('#transaction_modal form').serialize(), function(response) {
-				        
-				        });
+				            if(response.success) {
+				                alert('Transaction updated.');
+				            } else {
+				                var message = (response.message) ? response.message : 'Unable to update transaction.';
+				                alert(message);
+				            }
+				        }, 'json');
 				    }
 				});
 			});
