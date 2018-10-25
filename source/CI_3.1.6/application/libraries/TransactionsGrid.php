@@ -162,12 +162,6 @@ class TransactionsGrid extends N8_Error {
                     modal.find('textarea[name=description]').val(description);
                     modal.find('input[name=amount]').val(amount);
                     modal.find('input[name=date]').val(year+'-'+month+'-'+day);
-                    modal.find('input[name=operator]').each(function() {
-                        if($(this).val() == checked) {
-                            $(this).prop('checked', true);
-                            return;
-                        }
-                    });
 				});
 				
 				$('.modal-footer').on('click', '#save_changes', function() {
@@ -190,11 +184,21 @@ class TransactionsGrid extends N8_Error {
 				    if(send) {
 				        $.post('/transaction/edit/', $('#transaction_modal form').serialize(), function(response) {
 				            if(response.success) {
-				                alert('Transaction updated.');
+				                $('#transaction_update_alert span.text').text('Transaction updated.');
+				                $('#transaction_update_alert').removeClass('alert-danger').addClass('alert-info').show();
 				            } else {
 				                var message = (response.message) ? response.message : 'Unable to update transaction.';
-				                alert(message);
+                                $('#transaction_update_alert span.text').text(message);
+                                $('#transaction_update_alert').addClass('alert-danger').removeClass('alert-info').show();
 				            }
+				            amount.val('');
+				            description.val('');
+				            date.val('');
+				            $('#transaction_modal input[name=transaction_id]').val('');
+				            $('#transaction_modal').modal('hide');
+				            setTimeout(function() {
+				                $('#transaction_update_alert').fadeOut(1000);
+				            }, 3000);
 				        }, 'json');
 				    }
 				});
@@ -222,7 +226,13 @@ class TransactionsGrid extends N8_Error {
 	 * @return string
 	 */
 	private function generateBootstrapGrid() {
-		$html = "<table id='transactions_table'><thead><tr>";
+	    $html = '<div class="alert alert-danger alert-dismissible fade in" id="transaction_update_alert" style="display:none">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <span class="text">Unable to update transaction.</span>
+                </div>';
+		$html .= "<table id='transactions_table'><thead><tr>";
 					foreach($this->theads as $property => $thead) {
 						switch($property) {
 							case "transaction_id":
@@ -264,14 +274,6 @@ class TransactionsGrid extends N8_Error {
                                     </div>
                                     <div>
                                         <input type="text" value="" name="amount" class="form-control" placeholder="Amount">
-                                    </div>
-                                    <div>
-                                        <div class="radio">
-                                            <label><input type="radio" value="add" name="operator"> Add</label>
-                                        </div>
-                                        <div class="radio">
-                                            <label><input type="radio" value="subtract" name="operator"> Subtract</label>
-                                        </div>
                                     </div>
                                 </form>
                             </div>

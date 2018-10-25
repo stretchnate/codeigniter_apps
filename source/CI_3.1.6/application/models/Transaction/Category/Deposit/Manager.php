@@ -23,17 +23,11 @@ class Manager implements ManagerInterface {
     public function modify(Row $transaction, Structure $transaction_updates, $user_id) {
         $category = new \Budget_DataModel_CategoryDM($transaction->getStructure()->getToCategory(), $user_id);
         $account = new \Budget_DataModel_AccountDM($category->getParentAccountId(), $user_id);
-        $category->setCurrentAmount($this->updateAmounts($category, $account, $transaction, $transaction_updates));
+        $this->updateAmounts($category, $account, $transaction, $transaction_updates);
 
         $transaction->getStructure()->setTransactionAmount($transaction_updates->getTransactionAmount());
         $transaction->getStructure()->setTransactionInfo($transaction_updates->getTransactionInfo());
         $transaction->getStructure()->setTransactionDate($transaction_updates->getTransactionDate());
-
-        //if there is no to category in the update change this to a deduction
-        if(!$transaction_updates->getToCategory()) {
-            $transaction->getStructure()->setFromCategory($transaction_updates->getFromCategory());
-            $transaction->getStructure()->setToCategory(null);
-        }
 
         $category->transactionStart();
         $transaction->saveTransaction();

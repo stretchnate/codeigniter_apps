@@ -27,17 +27,19 @@ class Manager implements ManagerInterface {
      */
     public function modify(Row $transaction, Structure $transaction_updates, $user_id) {
         $category = new \Budget_DataModel_CategoryDM($transaction->getStructure()->getFromCategory(), $user_id);
+        $category_amount = $category->getCurrentAmount();
 
-        $transaction->getStructure()->setTransactionAmount($transaction_updates->getTransactionAmount());
+        if($transaction->getStructure()->getTransactionAmount() > $transaction_updates->getTransactionAmount()) {
+            $diff = subtract($transaction->getStructure()->getTransactionAmount(), $transaction_updates->getTransactionAmount());
+            $category_amount = subtract($category->getCurrentAmount(), $diff);
+        } elseif($transaction->getStructure()->getTransactionAmount() < $transaction_updates->getTransactionAmount()) {
+            $diff = subtract($transaction_updates->getTransactionAmount(), $transaction->getStructure()->getTransactionAmount());
+            $category_amount = add($category->getCurrentAmount(), $diff);
+        }
+        $transaction->getStructure()->setTransactionDate($transaction_updates->getTransactionDate());
         $transaction->getStructure()->setTransactionInfo($transaction_updates->getTransactionInfo());
         $transaction->getStructure()->setTransactionAmount($transaction_updates->getTransactionAmount());
-        if($transaction_updates->getFromCategory()) {
-            $transaction->getStructure()->setFromCategory($transaction_updates->getFromCategory());
-            $transaction->getStructure()->setToCategory(null);
-            $category->setCurrentAmount(subtract($category->getCurrentAmount(), $transaction->getStructure()->getTransactionAmount()));
-        } else {
-            $category->setCurrentAmount(add($category->getCurrentAmount(), $transaction->getStructure()->getTransactionAmount()));
-        }
+        $category->setCurrentAmount($category_amount);
 
         $category->transactionStart();
         $transaction->saveTransaction();
