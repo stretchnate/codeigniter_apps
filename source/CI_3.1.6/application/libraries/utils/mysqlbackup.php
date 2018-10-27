@@ -46,7 +46,7 @@ class MySQLBackup {
 				$command_success;
 
 				$filename = date("Ymd") . "_" . time() . "_" . $parms['database'] . "_mysql_dump.sql";
-				$dmp_file = self::MYSQL_BACKUP_PATH . $filename;
+				$dmp_file = self::UBUNTU_ONE . $filename;
 
 				$command  = self::MYSQL_PATH . " --opt";
 				$command .= " --host="         . $parms['hostname'];
@@ -62,7 +62,8 @@ class MySQLBackup {
 
 //					echo "Attempting to gzip ".$dmp_file."\n";
 					log_message('debug', "mysqlbackup: Attempting to gzip ".$dmp_file);
-					exec("gzip ".$dmp_file, $gzip_array = array(), $gzip_result);
+					$gzip_array = array();
+					exec("gzip ".$dmp_file, $gzip_array);
 
 					if(!file_exists($dmp_file.".gz")) {
 						log_message('debug', "mysqlbackup: Warning - could not gzip ".$dmp_file);
