@@ -128,9 +128,9 @@ class Funds extends N8_Controller {
 					}
 
 					$parent_account->transactionStart();
-					$parent_account->setAccountAmount($parent_account->getAccountAmount() - $requested_amount);
+					$parent_account->setAccountAmount(subtract($parent_account->getAccountAmount(), $requested_amount, 2));
 
-					$category->setCurrentAmount($category->getCurrentAmount() + $requested_amount);
+					$category->setCurrentAmount(add($category->getCurrentAmount(), $requested_amount, 2));
 
 					$parent_account->saveAccount();
 					$category->saveCategory();
@@ -151,7 +151,7 @@ class Funds extends N8_Controller {
 
 				case 'refund':
 					$transaction_info = ($this->input->post('refundId')) ? "Refund on transaction id: ".$this->input->post('refundId') : "Refund";
-					$category->setCurrentAmount($category->getCurrentAmount() + $requested_amount);
+					$category->setCurrentAmount(add($category->getCurrentAmount(), $requested_amount, 2));
 
 					$category->saveCategory();
 
@@ -170,7 +170,7 @@ class Funds extends N8_Controller {
 				default:
 					$category->transactionStart();
 					$transaction_info = ($this->input->post("description")) ? $this->input->post("description") : "Deduction";
-					$category->setCurrentAmount($category->getCurrentAmount() - $requested_amount);
+					$category->setCurrentAmount(subtract($category->getCurrentAmount(), $requested_amount, 2));
 
 					$category->saveCategory();
 

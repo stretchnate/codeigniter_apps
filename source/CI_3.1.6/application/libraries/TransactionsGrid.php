@@ -186,16 +186,21 @@ class TransactionsGrid extends N8_Error {
 				            if(response.success) {
 				                $('#transaction_update_alert span.text').text('Transaction updated.');
 				                $('#transaction_update_alert').removeClass('alert-danger').addClass('alert-info').show();
+				                amount.val('');
+                                description.val('');
+                                date.val('');
+                                $('#transaction_modal input[name=transaction_id]').val('');
+                                $('#transaction_modal').modal('hide');
+				                setTimeout(function() {
+//                                  table.ajax.reload();//this is the right way to reload the table but I need to update the amounts above the form when present.
+                                    location.reload();
+                                }, 3000);
 				            } else {
 				                var message = (response.message) ? response.message : 'Unable to update transaction.';
                                 $('#transaction_update_alert span.text').text(message);
                                 $('#transaction_update_alert').addClass('alert-danger').removeClass('alert-info').show();
 				            }
-				            amount.val('');
-				            description.val('');
-				            date.val('');
-				            $('#transaction_modal input[name=transaction_id]').val('');
-				            $('#transaction_modal').modal('hide');
+				            
 				            setTimeout(function() {
 				                $('#transaction_update_alert').fadeOut(1000);
 				            }, 3000);
