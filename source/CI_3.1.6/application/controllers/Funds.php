@@ -120,9 +120,7 @@ class Funds extends N8_Controller {
 
 			switch($_POST['operation']) {
 				case 'addFromBucket':
-					$type = 'a';
 					$from = null;
-					$to = $this->input->post('id');
 					$refund = null;
 
 					if($parent_account->getAccountAmount() < $requested_amount) {

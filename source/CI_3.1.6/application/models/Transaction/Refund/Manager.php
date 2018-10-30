@@ -30,11 +30,11 @@ class Manager implements ManagerInterface {
         $category_amount = $category->getCurrentAmount();
 
         if($transaction->getStructure()->getTransactionAmount() > $transaction_updates->getTransactionAmount()) {
-            $diff = subtract($transaction->getStructure()->getTransactionAmount(), $transaction_updates->getTransactionAmount());
-            $category_amount = subtract($category->getCurrentAmount(), $diff);
+            $diff = subtract($transaction->getStructure()->getTransactionAmount(), $transaction_updates->getTransactionAmount(), 2);
+            $category_amount = subtract($category->getCurrentAmount(), $diff, 2);
         } elseif($transaction->getStructure()->getTransactionAmount() < $transaction_updates->getTransactionAmount()) {
-            $diff = subtract($transaction_updates->getTransactionAmount(), $transaction->getStructure()->getTransactionAmount());
-            $category_amount = add($category->getCurrentAmount(), $diff);
+            $diff = subtract($transaction_updates->getTransactionAmount(), $transaction->getStructure()->getTransactionAmount(), 2);
+            $category_amount = add($category->getCurrentAmount(), $diff, 2);
         }
         $transaction->getStructure()->setTransactionDate($transaction_updates->getTransactionDate());
         $transaction->getStructure()->setTransactionInfo($transaction_updates->getTransactionInfo());

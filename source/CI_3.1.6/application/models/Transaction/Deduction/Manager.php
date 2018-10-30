@@ -50,12 +50,12 @@ class Manager implements ManagerInterface {
 
         if($transaction->getStructure()->getTransactionAmount() > $transaction_updates->getTransactionAmount()) {
             //if the original transaction amount is greater than the update we need to add the difference into the category amount
-            $diff = subtract($transaction->getStructure()->getTransactionAmount(), $transaction_updates->getTransactionAmount());
-            $cat_amount = add($category->getCurrentAmount(), $diff);
+            $diff = subtract($transaction->getStructure()->getTransactionAmount(), $transaction_updates->getTransactionAmount(), 2);
+            $cat_amount = add($category->getCurrentAmount(), $diff, 2);
         } elseif($transaction->getStructure()->getTransactionAmount() < $transaction_updates->getTransactionAmount()) {
             //if original transaction amount is less than the update we need to subtract the difference from the category amount
-            $diff = subtract($transaction_updates->getTransactionAmount(), $transaction->getStructure()->getTransactionAmount());
-            $cat_amount = subtract($category->getCurrentAmount(), $diff);
+            $diff = subtract($transaction_updates->getTransactionAmount(), $transaction->getStructure()->getTransactionAmount(), 2);
+            $cat_amount = subtract($category->getCurrentAmount(), $diff, 2);
         }
 
         $category->setCurrentAmount($cat_amount);

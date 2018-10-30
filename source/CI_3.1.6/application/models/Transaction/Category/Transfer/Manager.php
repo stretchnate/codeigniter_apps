@@ -30,23 +30,23 @@ class Manager implements ManagerInterface {
         $from_category = new \Budget_DataModel_CategoryDM($transaction->getStructure()->getFromCategory(), $user_id);
         $to_category = new \Budget_DataModel_CategoryDM($transaction->getStructure()->getToCategory(), $user_id);
         if($transaction->getStructure()->getTransactionAmount() < $transaction_updates->getTransactionAmount()) {
-            $diff = subtract($transaction_updates->getTransactionAmount(), $transaction->getStructure()->getTransactionAmount());
+            $diff = subtract($transaction_updates->getTransactionAmount(), $transaction->getStructure()->getTransactionAmount(), 2);
             if($from_category->getCurrentAmount() < $diff) {
                 $diff = $from_category->getCurrentAmount();
-                $transaction_updates->setTransactionAmount(add($transaction->getStructure()->getTransactionAmount(), $diff));
+                $transaction_updates->setTransactionAmount(add($transaction->getStructure()->getTransactionAmount(), $diff, 2));
             }
 
-            $to_category_amount = add($to_category->getCurrentAmount(), $diff);
-            $from_category_amount = subtract($from_category->getCurrentAmount(), $diff);
+            $to_category_amount = add($to_category->getCurrentAmount(), $diff, 2);
+            $from_category_amount = subtract($from_category->getCurrentAmount(), $diff, 2);
         } else {
-            $diff = subtract($transaction->getStructure()->getTransactionAmount(), $transaction_updates->getTransactionAmount());
+            $diff = subtract($transaction->getStructure()->getTransactionAmount(), $transaction_updates->getTransactionAmount(), 2);
             if($to_category->getCurrentAmount() < $diff) {
                 $diff = $to_category->getCurrentAmount();
-                $transaction_updates->setTransactionAmount(add($transaction->getStructure()->getTransactionAmount(), $diff));
+                $transaction_updates->setTransactionAmount(add($transaction->getStructure()->getTransactionAmount(), $diff, 2));
             }
 
-            $to_category_amount = subtract($to_category->getCurrentAmount(), $diff);
-            $from_category_amount = add($from_category->getCurrentAmount(), $diff);
+            $to_category_amount = subtract($to_category->getCurrentAmount(), $diff, 2);
+            $from_category_amount = add($from_category->getCurrentAmount(), $diff, 2);
         }
 
         $to_category->setCurrentAmount($to_category_amount);
