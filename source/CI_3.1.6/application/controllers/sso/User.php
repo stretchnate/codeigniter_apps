@@ -15,7 +15,7 @@
 
 		public function __construct() {
 			parent::__construct();
-			$this->load->driver('cache', array('adapter' => 'memcached', 'backup' => 'dummy'));
+			$this->load->driver('cache', array('adapter' => 'disk', 'backup' => 'dummy'));
 		}
 
 		/**
@@ -65,8 +65,8 @@
                     header("Access-Control-Allow-Origin: https://courses.whyibudget.com");
 					header("Access-Control-Allow-Headers: Content-Type, *");
 
-					setcookie('token', base64_encode($cookie_val), (time()+60), '/', 'whyibudget.quantumfunds.net', false, true);
-					setcookie('useremail', $this->input->post('email'), (time()+60), '/', 'whyibudget.quantumfunds.net', false, true);
+					setcookie('token', base64_encode($cookie_val), (time()+60), '/', 'budget.whyibudget.com', false, true);
+					setcookie('useremail', $this->input->post('email'), (time()+60), '/', 'budget.whyibudget.com', false, true);
 
 					$this->response->status = HTTP_OK;
 

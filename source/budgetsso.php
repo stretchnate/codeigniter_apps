@@ -26,7 +26,7 @@ get_header(); ?>
 <?php get_footer();
 
 	class QuantumConnect {
-		const BUDGET_URL = 'https://whyibudget.quantumfunds.net/sso/User/';
+		const BUDGET_URL = 'https://budget.whyibudget.com/sso/User/';
 //		const BUDGET_URL = 'http://money.stretchnate.com/sso/user/';
 
 		/**
@@ -112,7 +112,7 @@ get_header(); ?>
 			$auth_token = 'Success20171209!';
 			$plaintext = "whyibudget.".$auth_token;//domain . auth_token
 
-			$key = file_get_contents('/home2/whyibudg/public_html/wp-content/themes/oceanwp/templates/wib_public.pem');
+			$key = file_get_contents('/home2/whyibudg/public_html/courses/wp-content/themes/boss-child/templates/wib_public.pem');
 			$pubkey = openssl_get_publickey($key);
 
 			openssl_public_encrypt(base64_encode($plaintext), $crypted, $pubkey);

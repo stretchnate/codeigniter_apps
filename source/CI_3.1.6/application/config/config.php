@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'https://whyibudget.quantumfunds.net';
+$config['base_url'] = 'https://budget.whyibudget.com';
 
 /*
 |--------------------------------------------------------------------------
@@ -401,7 +401,7 @@ $config['sess_regenerate_destroy'] = FALSE;
 |
 */
 $config['cookie_prefix']	= '';
-$config['cookie_domain']	= '.quantumfunds.net';
+$config['cookie_domain']	= 'budget.whyibudget.com';
 $config['cookie_path']		= '/';
 $config['cookie_secure']	= TRUE;
 $config['cookie_httponly'] 	= FALSE;
@@ -521,3 +521,10 @@ $config['rewrite_short_tags'] = FALSE;
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
 $config['proxy_ips'] = '';
+
+/*
+ * Quantum
+ *
+ * set this value to override the default disk cache path of APPPATH.'logs/cache/'
+ */
+$config['cache_disk_path'] = null;

@@ -31,7 +31,7 @@
 		protected function authenticateSource() {
 			$result = false;
 			try {
-				$key = file_get_contents('/opt/bitnami/apache2/htdocs/whyibudget.com/.secure/wib_private.pem');
+				$key = file_get_contents(APPPATH.'config/keys/wib_private.pem');
 				$res_prv = openssl_get_privatekey($key, 'Quantum1');
 
 				if(!openssl_private_decrypt(base64_decode($this->input->post('token')), $decrypted, $res_prv)) {
