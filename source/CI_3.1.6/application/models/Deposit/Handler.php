@@ -11,7 +11,7 @@ namespace Deposit;
 use Funds\Distributor;
 use Transaction\Row;
 
-class Handler {
+class Handler extends \CI_Model {
 
     private $user_id;
 
@@ -31,7 +31,7 @@ class Handler {
         $deposit = $this->deposit($amount, $account_dm->getAccountId(), $source, $date);
 
         $transaction = new Row();
-        $transaction->transactionStart();
+        $this->db->trans_begin();
 
         $transaction->getStructure()->setToAccount($account_dm->getAccountId());
         $transaction->getStructure()->setDepositId($deposit->getValues()->getId());
@@ -50,11 +50,13 @@ class Handler {
             $distributor->run();
         }
 
-        if(!$transaction->transactionEnd()) {
+        if(!$this->db->trans_status()) {
+            $this->db->trans_rollback();
             $db =& get_instance()->db;
             $error = $db->error();
             throw new \Exception($error['message'], EXCEPTION_CODE_ERROR);
         }
+        $this->db->trans_commit();
     }
 
     /**

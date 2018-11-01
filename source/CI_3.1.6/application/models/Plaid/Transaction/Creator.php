@@ -140,24 +140,22 @@ class Creator {
      */
     private function createTransaction(TransactionResponse\Transaction $transaction, \Budget_DataModel_CategoryDM $category) {
         $transaction_dm = new Row();
-        $transaction_dm->transactionStart();
         $transaction_dm->getStructure()->setOwnerId($this->user_id);
         $transaction_dm->getStructure()->setFromCategory($category->getCategoryId());
         $transaction_dm->getStructure()->setTransactionAmount($transaction->getAmount());
         $transaction_dm->getStructure()->setTransactionDate($transaction->getDate()->format('Y-m-d H:i:s'));
         $transaction_dm->getStructure()->setTransactionInfo($transaction->getName());
-        if($transaction_dm->saveTransaction()) {
-            $new_amount = subtract($category->getCurrentAmount(), $transaction->getAmount(), 2);
-            $category->setCurrentAmount($new_amount);
-            $category->saveCategory();
-        }
 
-        if(!$transaction_dm->transactionEnd()) {
+        if(!$transaction_dm->saveTransaction()) {
             $db =& get_instance()->db;
             $error = $db->error();
             log_message('error', $error['message']);
             throw new \Exception("There was a problem processing your request.", EXCEPTION_CODE_VALIDATION);
         }
+
+        $new_amount = subtract($category->getCurrentAmount(), $transaction->getAmount(), 2);
+        $category->setCurrentAmount($new_amount);
+        $category->saveCategory();
     }
 
     /**
