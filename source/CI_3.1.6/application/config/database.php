@@ -107,8 +107,27 @@ $db['content']['dbcollat'] = 'utf8_general_ci';
 $db['content']['swap_pre'] = '';
 $db['content']['autoinit'] = TRUE;
 $db['content']['stricton'] = FALSE;
-$db['default']['failover'] = array();
-$db['default']['save_queries'] = TRUE;
+$db['content']['failover'] = array();
+$db['content']['save_queries'] = TRUE;
+
+$db['dev']['dsn']      = '';
+$db['dev']['hostname'] = 'localhost';
+$db['dev']['username'] = 'Gom3rP4le';
+$db['dev']['password'] = 'T4l3RF10renC3';
+$db['dev']['database'] = 'money';
+$db['dev']['dbdriver'] = 'mysqli';
+$db['dev']['dbprefix'] = '';
+$db['dev']['pconnect'] = TRUE;
+$db['dev']['db_debug'] = (ENVIRONMENT !== 'production');
+$db['dev']['cache_on'] = FALSE;
+$db['dev']['cachedir'] = '';
+$db['dev']['char_set'] = 'utf8';
+$db['dev']['dbcollat'] = 'utf8_general_ci';
+$db['dev']['swap_pre'] = '';
+$db['dev']['autoinit'] = TRUE;
+$db['dev']['stricton'] = FALSE;
+$db['dev']['failover'] = array();
+$db['dev']['save_queries'] = TRUE;
 
 //$db['default'] = array(
 //	'dsn'	=> '',
