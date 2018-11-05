@@ -96,8 +96,8 @@ class Helper extends \CI_Model {
 			$new_row->transaction_actions = '';
 
 			if($transaction->to_category || $transaction->from_category) {
-                $new_row->transaction_actions = '<span class="glyphicon glyphicon-remove delete_transaction" aria-hidden="true"></span>';
-                $new_row->transaction_actions .= ' <span class="glyphicon glyphicon-pencil edit_row" aria-hidden="true"></span>';
+                $new_row->transaction_actions = '<span class="glyphicon glyphicon-remove delete_transaction" aria-hidden="true" title="Delete Transaction"></span>';
+                $new_row->transaction_actions .= ' <span class="glyphicon glyphicon-edit edit_row" aria-hidden="true" title="Edit Transaction"></span>';
             }
 
 			$filtered_results[] = $new_row;

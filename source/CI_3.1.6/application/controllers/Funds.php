@@ -58,14 +58,14 @@ class Funds extends N8_Controller {
 	 *
 	 */
 	public function automaticallyDistributeFunds() {
-		$this->auth->restrict();
 
 		try {
             $account_dm = new \Budget_DataModel_AccountDM($this->input->post("account"), $this->session->userdata('user_id'));
             $amount = $this->input->post('net') ? $this->input->post('net') : $this->input->post('gross');
+            $date = $this->input->post('date') ? $this->input->post('date', true) : date('Y-m-d');
 
             $handler = new \Deposit\Handler($this->session->userdata('user_id'));
-            $handler->addDeposit($account_dm, $amount, $this->input->post('source', true), $this->input->post('date', true));
+            $handler->addDeposit($account_dm, $amount, $this->input->post('source', true), $date);
 
             header("Location: /");
         } catch(\Exception $e) {

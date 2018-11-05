@@ -32,9 +32,10 @@
 				</select>
 			</div>
 			<div class='form-check'>
-				<label class='form-check-label'>
+                <label class='form-check-label'>
 					<input type="checkbox" name="manual" id="manual" class='form-check-input'> Manually distribute to Categories
 				</label>
+                <a href="javascript:void(0)" class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="popover" data-placement="right" data-trigger="focus" data-content='If selected, you will have to manually distribute your funds to your categories, it is typically best to leave this unchecked and let the system distribute the money for you.'></a>
 			</div>
 			<input type="submit" value="Submit" class="btn btn-primary" />
 		</form>

@@ -1,24 +1,39 @@
 <?php
 
+/**
+ * Class UserCTL
+ */
 class UserCTL extends N8_Controller {
 
-	protected $user_dm;
+    /**
+     * @var Budget_DataModel_UserDM
+     */
+    protected $user_dm;
 
-	function __construct() {
+    /**
+     * UserCTL constructor.
+     */
+    function __construct() {
 		parent::__construct();
 		$this->load->helper('form');
 
 		$this->user_dm = new Budget_DataModel_UserDM(['ID' => $this->session->userdata('user_id')]);
 	}
 
-	function index() {
+    /**
+     *
+     */
+    function index() {
 		$this->auth->restrict();
 
 		$user_profile_vw = $this->buildUserProfileView();
 		$user_profile_vw->renderView();
 	}
 
-	function update() {
+    /**
+     * update a user
+     */
+    function update() {
 		$this->auth->restrict();
 		$rules        = array();
 		$show_success = false;
@@ -56,7 +71,10 @@ class UserCTL extends N8_Controller {
 		$user_profile_vw->generateView();
 	}
 
-	private function buildUserProfileView() {
+    /**
+     * @return Budget_UserProfile_UserProfileVW
+     */
+    private function buildUserProfileView() {
 		$props['title'] = "User Profile";
 		$props['scripts'] = Jsincludes::getUserProfileJS();
 		$props['links'] = $this->utilities->createLinks('main_nav');

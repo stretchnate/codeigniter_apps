@@ -91,24 +91,27 @@ class Budget_HomeVW extends Budget_BaseVW {
 							<div class="account-container" id="<?php echo $acct_id;?>"<?php echo $style;?>>
 								<div class='well'>
 									<div class="category-container">
-										<label>Amount to distribute:</label>
+                                        <a href="javascript:void(0)" class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="popover" data-placement="right" data-trigger="focus" data-content='This is the amount you have in your account that has not been distributed to a category yet. To get an accurate Account Balance distribute this money into a category.'></a>
+                                        <label>Amount to distribute:</label>
 										<div class="inline-block align-right" id="distribute_<?php echo $account_dm->getAccountId();?>">
 											$<?php echo number_format($account_dm->getAccountAmount(),2, '.', ',') ?>
 											<?php
 												if($account_dm->getAccountAmount() > 0) { ?>
 											<sup><a href="javascript:void(0)" onclick="clearAccount(<?php echo $account_dm->getAccountId();?>)">Clear</a></sup>
-											<?php
+                                            <?php
 												} ?>
 										</div>
 									</div>
 									<div class="category-container">
-										<label>Account Balance:</label>
+                                        <a href="javascript:void(0)" class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="popover" data-placement="right" data-trigger="focus" data-content='This is the sum of all of your category totals added together. This number plus your Account Amount should equal your actual bank account balance.'></a>
+                                        <label>Account Balance:</label>
 										<div id="<?php echo $acct_id;?>-total" class="inline-block align-right">
 											$ <?php echo number_format($total->getTotal(),2,'.',','); ?>
 										</div>
 									</div>
 									<div class="category-container">
-										<label>Monthly Need:</label>
+                                        <a href="javascript:void(0)" class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="popover" data-placement="right" data-trigger="focus" data-content='This is an estimation of how much money you need to make each month based on your category needs. If this money is greater than your current take home pay you should consider adjusting your budget wherever possible.'></a>
+                                        <label>Monthly Need:</label>
 										<div id="<?php echo $acct_id;?>-total-necessary" class="inline-block align-right">
 											$ <?php echo number_format($total->getTotalNecessary(),2,'.',','); ?>
 										</div>
@@ -157,15 +160,18 @@ class Budget_HomeVW extends Budget_BaseVW {
 												?>
 												</div>
 												<div class="category-container">
-													<label>Goal:</label>
+                                                    <a href="javascript:void(0)" class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="popover" data-placement="right" data-trigger="focus" data-content='This is the amount amount of money you need in this category each cycle (a cycle being whenever a payment is due, usually monthly but can be quarterly, semi-annual or annually or even every paycheck).'></a>
+                                                    <label>Goal:</label>
 													<div class='align-right inline-block'>$<?php echo number_format($category_dm->getAmountNecessary(), 2, '.', ',') ?></div>
 												</div>
 												<div class="category-container">
-													<label>Amount Saved:</label>
+                                                    <a href="javascript:void(0)" class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="popover" data-placement="right" data-trigger="focus" data-content='This is the amount of money you currently have saved for this category.'></a>
+                                                    <label>Amount Saved:</label>
 													<div class='align-right inline-block'>$<?php echo number_format($category_dm->getCurrentAmount(), 2, '.', ',') ?></div>
 												</div>
 												<div class="category-container">
-													<label>Difference:</label>
+                                                    <a href="javascript:void(0)" class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="popover" data-placement="right" data-trigger="focus" data-content='This is the difference between amount of money you need and the amount you actually have in this category.'></a>
+                                                    <label>Difference:</label>
 													<?php
 														$dif = subtract($category_dm->getAmountNecessary(), $category_dm->getCurrentAmount(), 2);
 														if($category_dm->getAmountNecessary() > $category_dm->getCurrentAmount()){

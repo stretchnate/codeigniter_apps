@@ -102,10 +102,6 @@ input.danger {
     background-color: #f2dede;
 }
 
-#transactions_grid span.glyphicon-pencil:hover, #transactions_grid span.glyphicon-remove:hover {
-    cursor: pointer;
-}
-
 #footer {
     /*background-color: #9ED3FC;*/
     margin-top: 10px;
