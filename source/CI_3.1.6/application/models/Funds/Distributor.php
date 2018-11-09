@@ -14,7 +14,7 @@ use Transaction\Row;
 class Distributor extends \CI_Model {
 
     /**
-     * @var \Deposit
+     * @var \Deposit\Row
      */
     private $deposit;
 
@@ -25,7 +25,7 @@ class Distributor extends \CI_Model {
      */
     private $account_dm;
 
-    public function __construct(\Deposit $deposit, $user_id) {
+    public function __construct(\Deposit\Row $deposit, $user_id) {
         $this->deposit = $deposit;
         $this->user_id = $user_id;
     }
@@ -34,10 +34,10 @@ class Distributor extends \CI_Model {
      * @throws \Exception
      */
     public function run() {
-        $account_dm = new \Budget_DataModel_AccountDM($this->deposit->getValues()->getAccountId(), $this->user_id);
+        $account_dm = new \Budget_DataModel_AccountDM($this->deposit->getFields()->getAccountId(), $this->user_id);
         $account_dm->loadCategories();
 //        while($account_dm->getAccountAmount() > 0) {
-            $this->distribute($account_dm, $this->deposit->getValues()->getDate()->format('Y-m-d H:i:s'));
+            $this->distribute($account_dm, $this->deposit->getFields()->getDate()->format('Y-m-d H:i:s'));
 //        }
     }
 
@@ -60,9 +60,11 @@ class Distributor extends \CI_Model {
 
                 if ($category->getCurrentAmount() < $category->getAmountNecessary()) {
                     $deposit_amount = $this->calculateDepositAmount($category, $divider, $date);
+                    $this->db->trans_start();
                     $this->updateCategoryAmount($category, $deposit_amount);
                     $this->updateAccountAmount($deposit_amount);
                     $this->addTransaction($category, $deposit_amount, $date);
+                    $this->db->trans_complete();
                 }
             }
             $divider++;
@@ -109,7 +111,7 @@ class Distributor extends \CI_Model {
         $transaction = new Row();
         $transaction->getStructure()->setToCategory($category->getCategoryId());
         $transaction->getStructure()->setFromAccount($this->account_dm->getAccountId());
-        $transaction->getStructure()->setDepositId($this->deposit->getValues()->getId());
+        $transaction->getStructure()->setDepositId($this->deposit->getFields()->getId());
         $transaction->getStructure()->setOwnerId($this->user_id);
         $transaction->getStructure()->setTransactionAmount($deposit_amount);
         $transaction->getStructure()->setTransactionDate($date);

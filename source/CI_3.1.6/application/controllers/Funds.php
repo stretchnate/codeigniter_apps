@@ -43,7 +43,7 @@ class Funds extends N8_Controller {
             $amount = $this->input->post('net') ? $this->input->post('net') : $this->input->post('gross');
 
             $handler = new \Deposit\Handler($this->session->userdata('user_id'));
-            $handler->addDeposit($account_dm, $amount, $this->input->post('source', true), $this->input->post('date', true), false);
+            $handler->addDeposit($account_dm, $amount, $this->input->post('source', true), new \DateTime($this->input->post('date', true)), false);
 
             header("Location: /");
         } catch(\Exception $e) {
@@ -58,11 +58,10 @@ class Funds extends N8_Controller {
 	 *
 	 */
 	public function automaticallyDistributeFunds() {
-
 		try {
             $account_dm = new \Budget_DataModel_AccountDM($this->input->post("account"), $this->session->userdata('user_id'));
             $amount = $this->input->post('net') ? $this->input->post('net') : $this->input->post('gross');
-            $date = $this->input->post('date') ? $this->input->post('date', true) : date('Y-m-d');
+            $date = $this->input->post('date') ? new \DateTime($this->input->post('date', true)) : new DateTime();
 
             $handler = new \Deposit\Handler($this->session->userdata('user_id'));
             $handler->addDeposit($account_dm, $amount, $this->input->post('source', true), $date);

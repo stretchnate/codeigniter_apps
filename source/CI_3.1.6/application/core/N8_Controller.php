@@ -103,7 +103,7 @@ class N8_Controller extends CI_Controller {
 
 			//deposits
 			case "deposit":
-				$return = "Deposit (deposit id: {$transaction->getStructure()->getDepositId()}) into {$transaction->getStructure()->getToAccount()} for $" . number_format($transaction->getStructure()->getTransactionAmount(), 2, '.', ',');
+				$return = "Deposit (deposit id: {$transaction->getStructure()->getDepositId()}) into {$transaction->getToAccountName()} for $" . number_format($transaction->getStructure()->getTransactionAmount(), 2, '.', ',');
 				break;
 
 			//deductions

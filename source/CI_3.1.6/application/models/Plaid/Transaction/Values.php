@@ -2,7 +2,7 @@
 
 namespace Plaid\Transaction;
 
-class Values extends \Validation implements \ValueInterface {
+class Values extends \Validation implements \FieldsInterface {
 
     /**
      * @var int

@@ -3,7 +3,7 @@
 /**
  * parent class for iterators
  */
-abstract class IteratorBase extends \CI_Model implements \Iterator {
+abstract class IteratorBase extends \CI_Model implements \Iterator, \Countable {
 
     protected $key;
 
