@@ -83,32 +83,33 @@
 		/**
 		 * log user in
 		 */
-		public function ssoLogin() {
-			try {
-			    $token = base64_decode($this->input->cookie('token'));
-				$email = $this->cache->get($token);
+        public function ssoLogin() {
+            try {
+                $token = base64_decode($this->input->cookie('token'));
+                $email = $this->cache->get($token);
                 $this->cache->delete($token);
-				if($email && $email == $this->input->cookie('useremail')) {
-					//load user data
-					$user = new Budget_DataModel_UserDM(['Email' => $email]);
-					if(!$user->getId()) {
-						redirect(COMPANY_LOGOUT_REDIRECT);
-					}
-					$login_array = [$user->getUsername(), $user->getPassword()];
+                if($email && $email == $this->input->cookie('useremail')) {
+                    //load user data
+                    $user = new Budget_DataModel_UserDM(['Email' => $email]);
+                    if(!$user->getId()) {
+                        redirect(COMPANY_LOGOUT_REDIRECT);
+                    }
+                    $login_array = [$user->getUsername(), $user->getPassword()];
 
-					$this->auth->process_login($login_array, true);
-					$this->auth->redirect();
-				} else {
-					redirect(COMPANY_LOGOUT_REDIRECT);
-				}
-			} catch (Exception $e) {
-				$this->response->status = HTTP_INTERNAL_SERVER_ERROR;
-				$this->response->message = 'There was a problem authorizing you with the budget.';
-				log_message(LOG_LEVEL_ERROR, $e->getMessage());
-			}
+                    $this->auth->process_login($login_array, true);
+                } else {
+                    log_message(LOG_LEVEL_ERROR, "Email doesn't match");
+                    redirect(COMPANY_LOGOUT_REDIRECT);
+                }
+            } catch (Exception $e) {
+                $this->response->status = HTTP_INTERNAL_SERVER_ERROR;
+                $this->response->message = 'There was a problem authorizing you with the budget.';
+                log_message(LOG_LEVEL_ERROR, $e->getMessage());
+                exit(json_encode($this->response));
+            }
 
-			echo json_encode($this->response);
-		}
+            $this->auth->redirect();
+        }
 
 		/**
 		 * register a user via SSO

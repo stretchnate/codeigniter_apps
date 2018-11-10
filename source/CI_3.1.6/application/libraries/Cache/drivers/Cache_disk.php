@@ -30,6 +30,7 @@ class Cache_disk extends CI_Driver {
      * @return bool|string
      */
     public function get($id) {
+        $this->sanitizeId($id);
         if(file_exists($this->cache_path . $id)) {
             $file_data = json_decode(file_get_contents($this->cache_path . $id));
             $file_data->data = unserialize($file_data->data);
@@ -47,6 +48,7 @@ class Cache_disk extends CI_Driver {
     public function save($id, $data, $ttl = 60, $raw = false) {
         $data = ['data' => serialize($data), 'expire' => (time() + $ttl)];
 
+        $this->sanitizeId($id);
         if($this->is_supported()) {
             file_put_contents($this->cache_path . $id, json_encode($data));
         }
@@ -56,6 +58,7 @@ class Cache_disk extends CI_Driver {
      * @param $id
      */
     public function delete($id) {
+        $this->sanitizeId($id);
         if(file_exists($this->cache_path . $id)) {
             unlink($this->cache_path . $id);
         }
@@ -81,5 +84,12 @@ class Cache_disk extends CI_Driver {
      */
     public function is_supported() {
         return is_writable($this->cache_path);
+    }
+
+    /**
+     * @param $id
+     */
+    private function sanitizeId(&$id) {
+        $id = str_replace(DIRECTORY_SEPARATOR, '_', $id);
     }
 }
