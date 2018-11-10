@@ -85,7 +85,9 @@
 		 */
 		public function ssoLogin() {
 			try {
-				$email = $this->cache->get(base64_decode($this->input->cookie('token')));
+			    $token = base64_decode($this->input->cookie('token'));
+				$email = $this->cache->get($token);
+                $this->cache->delete($token);
 				if($email && $email == $this->input->cookie('useremail')) {
 					//load user data
 					$user = new Budget_DataModel_UserDM(['Email' => $email]);
