@@ -51,6 +51,11 @@ class Fields extends \Validation implements \FieldsInterface {
      */
     private $net;
 
+    /**
+     * @var float
+     */
+    private $remaining;
+
     private $operators;
 
     public function __construct() {
@@ -82,6 +87,9 @@ class Fields extends \Validation implements \FieldsInterface {
         }
         if($this->net) {
             $result['net'] = $this->net;
+        }
+        if($this->remaining) {
+            $result['remaining'] = $this->remaining;
         }
 
         return $result;
@@ -227,6 +235,23 @@ class Fields extends \Validation implements \FieldsInterface {
      */
     public function setNet($net) {
         $this->net = $this->simple_validation->isNumeric($net);
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getRemaining() {
+        return $this->remaining;
+    }
+
+    /**
+     * @param float $remaining
+     * @return Fields
+     */
+    public function setRemaining($remaining) {
+        $this->remaining = $this->simple_validation->isNumeric($remaining);
 
         return $this;
     }

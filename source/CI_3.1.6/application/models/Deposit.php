@@ -43,7 +43,8 @@ class Deposit extends IteratorBase {
                 ->setDate(new \DateTime($result->date))
                 ->setGross($result->gross)
                 ->setNet($result->net)
-                ->setSource($result->source);
+                ->setSource($result->source)
+                ->setRemaining($result->remaining);
 
             $this->items[] = $row;
         }

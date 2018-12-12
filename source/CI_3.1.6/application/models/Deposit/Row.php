@@ -53,7 +53,8 @@ class Row extends \CI_Model {
                 ->setDate($query->row()->date)
                 ->setGross($query->row()->gross)
                 ->setSource($query->row()->source)
-                ->setNet($query->row()->net);
+                ->setNet($query->row()->net)
+                ->setRemaining($query->row()->remaining);
         }
     }
 

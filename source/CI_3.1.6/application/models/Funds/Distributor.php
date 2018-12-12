@@ -34,27 +34,25 @@ class Distributor extends \CI_Model {
      * @throws \Exception
      */
     public function run() {
-        $account_dm = new \Budget_DataModel_AccountDM($this->deposit->getFields()->getAccountId(), $this->user_id);
-        $account_dm->loadCategories();
+        $this->account_dm = new \Budget_DataModel_AccountDM($this->deposit->getFields()->getAccountId(), $this->user_id);
+        $this->account_dm->loadCategories();
 //        while($account_dm->getAccountAmount() > 0) {
-            $this->distribute($account_dm, $this->deposit->getFields()->getDate()->format('Y-m-d H:i:s'));
+            $this->distribute($this->deposit->getFields()->getDate()->format('Y-m-d H:i:s'));
 //        }
     }
 
     /**
-     * @param $account_dm
      * @param $date
      * @throws \Exception
      */
-    private function distribute($account_dm, $date) {
+    private function distribute($date) {
         $divider = 1;
-        $this->account_dm = $account_dm;
 
         //loop through each category and update the current amount
         $categories = $this->account_dm->orderCategoriesByDueFirst($date);
         foreach ($categories as $category_dms) {
             foreach ($category_dms as $category) {
-                if ($this->account_dm->getAccountAmount() <= 0) {
+                if ($this->deposit->getFields()->getRemaining() <= 0) {
                     break 2;
                 }
 
@@ -62,7 +60,7 @@ class Distributor extends \CI_Model {
                     $deposit_amount = $this->calculateDepositAmount($category, $divider, $date);
                     $this->db->trans_start();
                     $this->updateCategoryAmount($category, $deposit_amount);
-                    $this->updateAccountAmount($deposit_amount);
+                    $this->updateRemainingAmount($deposit_amount);
                     $this->addTransaction($category, $deposit_amount, $date);
                     $this->db->trans_complete();
                 }
@@ -76,11 +74,11 @@ class Distributor extends \CI_Model {
      * @return bool
      * @throws \Exception
      */
-    private function updateAccountAmount($deposit_amount) {
-        $total = subtract($this->account_dm->getAccountAmount(), $deposit_amount,2);
-        $this->account_dm->setAccountAmount($total);
+    private function updateRemainingAmount($deposit_amount) {
+        $total = subtract($this->deposit->getFields()->getRemaining(), $deposit_amount,2);
+        $this->deposit->getFields()->setRemaining($total);
 
-        return $this->account_dm->saveAccount();
+        return $this->deposit->save();
     }
 
     /**
@@ -143,8 +141,8 @@ class Distributor extends \CI_Model {
             $amount = divide($category->getAmountNecessary(), $divider,2);
         }
 
-        if($amount > $this->account_dm->getAccountAmount()) {
-            $amount = $this->account_dm->getAccountAmount();
+        if($amount > $this->deposit->getFields()->getRemaining()) {
+            $amount = $this->deposit->getFields()->getRemaining();
         }
 
         return $amount;

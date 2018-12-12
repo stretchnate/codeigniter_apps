@@ -39,11 +39,7 @@ class Handler extends \CI_Model {
         $transaction->getStructure()->setTransactionAmount((float)$amount);
         $transaction->getStructure()->setTransactionDate($date->format('Y-m-d H:i:s'));
         $transaction->getStructure()->setTransactionInfo("Deposit ".$deposit->getFields()->getId()." into ".$account_dm->getAccountName());
-        if($transaction->saveTransaction()) {
-            $new_amount = add($account_dm->getAccountAmount(), $amount, 2);
-            $account_dm->setAccountAmount($new_amount);
-            $account_dm->saveAccount();
-        }
+        $transaction->saveTransaction();
 
         if(!$this->db->trans_status()) {
             $this->db->trans_rollback();
@@ -74,7 +70,8 @@ class Handler extends \CI_Model {
             ->setSource($source)
             ->setGross($amount)
             ->setDate($date)
-            ->setNet($amount);
+            ->setNet($amount)
+            ->setRemaining($amount);
         $deposit->save();
 
         return $deposit;
