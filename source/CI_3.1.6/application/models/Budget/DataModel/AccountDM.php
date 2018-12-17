@@ -229,7 +229,8 @@ class Budget_DataModel_AccountDM extends N8_Model {
 			}
 		}
 
-		return $pay_frequency_array;
+		$this->categories = $pay_frequency_array;
+		return $this->categories;
 	}
 
 	/**

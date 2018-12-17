@@ -43,7 +43,7 @@ class Funds extends N8_Controller {
             $amount = $this->input->post('net') ? $this->input->post('net') : $this->input->post('gross');
 
             $handler = new \Deposit\Handler($this->session->userdata('user_id'));
-            $handler->addDeposit($account_dm, $amount, $this->input->post('source', true), new \DateTime($this->input->post('date', true)), false);
+            $handler->addDeposit($account_dm, $amount, $this->input->post('source', true), new \DateTime($this->input->post('date', true)));
 
             header("Location: /");
         } catch(\Exception $e) {
@@ -60,11 +60,14 @@ class Funds extends N8_Controller {
 	public function automaticallyDistributeFunds() {
 		try {
             $account_dm = new \Budget_DataModel_AccountDM($this->input->post("account"), $this->session->userdata('user_id'));
+            $account_dm->orderCategoriesByDueFirst($this->input->post('date'));
             $amount = $this->input->post('net') ? $this->input->post('net') : $this->input->post('gross');
             $date = $this->input->post('date') ? new \DateTime($this->input->post('date', true)) : new DateTime();
 
             $handler = new \Deposit\Handler($this->session->userdata('user_id'));
             $handler->addDeposit($account_dm, $amount, $this->input->post('source', true), $date);
+
+            $this->distribute($account_dm);
 
             header("Location: /");
         } catch(\Exception $e) {
@@ -73,7 +76,7 @@ class Funds extends N8_Controller {
         }
 	}
 
-    /**
+	/**
      * adds a deposit to an account
      *
      * @param int $account
@@ -245,6 +248,25 @@ class Funds extends N8_Controller {
         }
 
         redirect('/'.$this->input->post('return_uri'));
+    }
+
+    /**
+     * @param $account_dm
+     * @throws Exception
+     */
+    private function distribute($account_dm) {
+        $fields = new \Deposit\Row\Fields();
+        $fields->setOwnerId($this->session->user_id);
+        $fields->setRemaining(0);
+        $fields->setOperator('remaining', '>');
+        $deposit = new \Deposit($fields, 'id DESC');
+
+        $distributor = new \Funds\Distributor($account_dm);
+        while($deposit->valid()) {
+            $distributor->setDeposit($deposit->current());
+            $distributor->run();
+            $deposit->next();
+        }
     }
 
     /**

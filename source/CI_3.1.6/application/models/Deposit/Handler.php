@@ -24,10 +24,10 @@ class Handler extends \CI_Model {
      * @param mixed $amount
      * @param string $source
      * @param \DateTime $date
-     * @param bool $distribute
+     * @return \Deposit\Row
      * @throws \Exception
      */
-    public function addDeposit(\Budget_DataModel_AccountDM $account_dm, $amount, $source, \DateTime $date, $distribute = true) {
+    public function addDeposit(\Budget_DataModel_AccountDM $account_dm, $amount, $source, \DateTime $date) {
         $this->db->trans_begin();
 
         $deposit = $this->deposit($amount, $account_dm->getAccountId(), $source, $date);
@@ -43,16 +43,11 @@ class Handler extends \CI_Model {
 
         if(!$this->db->trans_status()) {
             $this->db->trans_rollback();
-            $db =& get_instance()->db;
-            $error = $db->error();
-            throw new \Exception($error['message'], EXCEPTION_CODE_ERROR);
+            throw new \Exception($this->db->error()['message'], EXCEPTION_CODE_ERROR);
         }
         $this->db->trans_commit();
 
-        if($distribute === true) {
-            $distributor = new Distributor($deposit, $this->user_id);
-            $distributor->run();
-        }
+        return $deposit;
     }
 
     /**

@@ -24,9 +24,13 @@ class Deposit extends IteratorBase {
      * @param \Deposit\Row\Fields $fields
      * @throws Exception
      */
-    public function load(\Deposit\Row\Fields $fields) {
+    public function load(\Deposit\Row\Fields $fields, $order_by = null) {
         if($fields) {
             $this->db->where($fields->whereString());
+        }
+
+        if($order_by) {
+            $this->db->order_by($order_by);
         }
 
         $query = $this->db->get(self::TABLE);

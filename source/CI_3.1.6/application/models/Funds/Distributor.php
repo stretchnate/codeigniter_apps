@@ -18,39 +18,33 @@ class Distributor extends \CI_Model {
      */
     private $deposit;
 
-    private $user_id;
-
     /**
      * @var \Budget_DataModel_AccountDM
      */
     private $account_dm;
 
-    public function __construct(\Deposit\Row $deposit, $user_id) {
-        $this->deposit = $deposit;
-        $this->user_id = $user_id;
+    /**
+     * Distributor constructor.
+     *
+     * @param \Budget_DataModel_AccountDM $account_dm
+     * @param null $deposit
+     */
+    public function __construct($account_dm, $deposit = null) {
+        $this->account_dm = $account_dm;
+        if($deposit) {
+            $this->setDeposit($deposit);
+        }
     }
 
     /**
      * @throws \Exception
      */
     public function run() {
-        $this->account_dm = new \Budget_DataModel_AccountDM($this->deposit->getFields()->getAccountId(), $this->user_id);
-        $this->account_dm->loadCategories();
-//        while($account_dm->getAccountAmount() > 0) {
-            $this->distribute($this->deposit->getFields()->getDate()->format('Y-m-d H:i:s'));
-//        }
-    }
-
-    /**
-     * @param $date
-     * @throws \Exception
-     */
-    private function distribute($date) {
+        $date = $this->deposit->getFields()->getDate()->format('Y-m-d H:i:s');
         $divider = 1;
 
         //loop through each category and update the current amount
-        $categories = $this->account_dm->orderCategoriesByDueFirst($date);
-        foreach ($categories as $category_dms) {
+        foreach ($this->account_dm->getCategories() as $category_dms) {
             foreach ($category_dms as $category) {
                 if ($this->deposit->getFields()->getRemaining() <= 0) {
                     break 2;
@@ -110,7 +104,7 @@ class Distributor extends \CI_Model {
         $transaction->getStructure()->setToCategory($category->getCategoryId());
         $transaction->getStructure()->setFromAccount($this->account_dm->getAccountId());
         $transaction->getStructure()->setDepositId($this->deposit->getFields()->getId());
-        $transaction->getStructure()->setOwnerId($this->user_id);
+        $transaction->getStructure()->setOwnerId($this->account_dm->getOwnerId());
         $transaction->getStructure()->setTransactionAmount($deposit_amount);
         $transaction->getStructure()->setTransactionDate($date);
         $transaction->getStructure()->setTransactionInfo("Automatically distributed funds from ".$this->account_dm->getAccountName()." account into ".$category->getCategoryName());
@@ -146,5 +140,15 @@ class Distributor extends \CI_Model {
         }
 
         return $amount;
+    }
+
+    /**
+     * @param \Deposit\Row $deposit
+     * @return $this
+     */
+    public function setDeposit(\Deposit\Row $deposit) {
+        $this->deposit = $deposit;
+
+        return $this;
     }
 }
