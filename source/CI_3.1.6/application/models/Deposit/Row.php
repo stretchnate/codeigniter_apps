@@ -54,7 +54,8 @@ class Row extends \CI_Model {
                 ->setGross($query->row()->gross)
                 ->setSource($query->row()->source)
                 ->setNet($query->row()->net)
-                ->setRemaining($query->row()->remaining);
+                ->setRemaining($query->row()->remaining)
+                ->setManualDistribution($query->row()->manual_distribution);
         }
     }
 

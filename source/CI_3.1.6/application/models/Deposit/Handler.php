@@ -8,7 +8,6 @@
 
 namespace Deposit;
 
-use Funds\Distributor;
 use Transaction\Row;
 
 class Handler extends \CI_Model {
@@ -27,10 +26,10 @@ class Handler extends \CI_Model {
      * @return \Deposit\Row
      * @throws \Exception
      */
-    public function addDeposit(\Budget_DataModel_AccountDM $account_dm, $amount, $source, \DateTime $date) {
+    public function addDeposit(\Budget_DataModel_AccountDM $account_dm, $amount, $source, \DateTime $date, $manual_distribution) {
         $this->db->trans_begin();
 
-        $deposit = $this->deposit($amount, $account_dm->getAccountId(), $source, $date);
+        $deposit = $this->deposit($amount, $account_dm->getAccountId(), $source, $date, $manual_distribution);
         $transaction = new Row();
 
         $transaction->getStructure()->setToAccount($account_dm->getAccountId());
@@ -55,10 +54,11 @@ class Handler extends \CI_Model {
      * @param $account_id
      * @param $source
      * @param \DateTime $date
+     * @param bool $manual_distribution
      * @return \Deposit\Row
      * @throws \Exception
      */
-    private function deposit($amount, $account_id, $source, \DateTime $date) {
+    private function deposit($amount, $account_id, $source, \DateTime $date, $manual_distribution = false) {
         $deposit = new \Deposit\Row();
         $deposit->getFields()->setOwnerId((int)$this->user_id)
             ->setAccountId($account_id)
@@ -66,7 +66,8 @@ class Handler extends \CI_Model {
             ->setGross($amount)
             ->setDate($date)
             ->setNet($amount)
-            ->setRemaining($amount);
+            ->setRemaining($amount)
+            ->setManualDistribution($manual_distribution);
         $deposit->save();
 
         return $deposit;

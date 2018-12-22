@@ -43,7 +43,7 @@ class Funds extends N8_Controller {
             $amount = $this->input->post('net') ? $this->input->post('net') : $this->input->post('gross');
 
             $handler = new \Deposit\Handler($this->session->userdata('user_id'));
-            $handler->addDeposit($account_dm, $amount, $this->input->post('source', true), new \DateTime($this->input->post('date', true)));
+            $handler->addDeposit($account_dm, $amount, $this->input->post('source', true), new \DateTime($this->input->post('date', true)), true);
 
             header("Location: /");
         } catch(\Exception $e) {
@@ -65,7 +65,7 @@ class Funds extends N8_Controller {
             $date = $this->input->post('date') ? new \DateTime($this->input->post('date', true)) : new DateTime();
 
             $handler = new \Deposit\Handler($this->session->userdata('user_id'));
-            $handler->addDeposit($account_dm, $amount, $this->input->post('source', true), $date);
+            $handler->addDeposit($account_dm, $amount, $this->input->post('source', true), $date, false);
 
             $this->distribute($account_dm);
 
@@ -258,6 +258,7 @@ class Funds extends N8_Controller {
         $fields = new \Deposit\Row\Fields();
         $fields->setOwnerId($this->session->user_id);
         $fields->setRemaining(0);
+        $fields->setManualDistribution(false);
         $fields->setOperator('remaining', '>');
         $deposit = new \Deposit($fields, 'id DESC');
 

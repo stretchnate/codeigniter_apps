@@ -41,7 +41,8 @@ class Distributor extends \CI_Model {
      */
     public function run() {
         $date = $this->deposit->getFields()->getDate()->format('Y-m-d H:i:s');
-        $divider = 1;
+        $deposit_amounts = [];
+        $this->fetchDepositAmounts($date, $deposit_amounts);
 
         //loop through each category and update the current amount
         foreach ($this->account_dm->getCategories() as $category_dms) {
@@ -50,8 +51,8 @@ class Distributor extends \CI_Model {
                     break 2;
                 }
 
-                if ($category->getCurrentAmount() < $category->getAmountNecessary()) {
-                    $deposit_amount = $this->calculateDepositAmount($category, $divider, $date);
+                if (isset($deposit_amounts[$category->getCategoryId()])) {
+                    $deposit_amount = $deposit_amounts[$category->getCategoryId()];
                     $this->db->trans_start();
                     $this->updateCategoryAmount($category, $deposit_amount);
                     $this->updateRemainingAmount($deposit_amount);
@@ -59,7 +60,33 @@ class Distributor extends \CI_Model {
                     $this->db->trans_complete();
                 }
             }
+        }
+    }
+
+    /**
+     * create deposit amount array
+     *
+     * @param       $date
+     * @param int   $total_need
+     * @param array $deposit_amounts
+     */
+    private function fetchDepositAmounts($date, &$deposit_amounts = [], $total_need = 0) {
+        $divider = 1;
+        $tn_start = $total_need;
+        foreach($this->account_dm->getCategories() as $categories) {
+            foreach($categories as $category) {
+                $dep_amount = $this->calculateDepositAmount($category, $divider, $date);
+                $total_need += $dep_amount;
+                if(isset($deposit_amounts[$category->getCategoryId()])) {
+                   $dep_amount = add($deposit_amounts[$category->getCategoryId()], $dep_amount);
+                }
+                $deposit_amounts[$category->getCategoryId()] = $dep_amount;
+            }
             $divider++;
+        }
+
+        if($total_need < $this->deposit->getFields()->getRemaining() && $tn_start < $total_need) {
+            $this->fetchDepositAmounts($date, $deposit_amounts, $total_need);
         }
     }
 
@@ -124,15 +151,14 @@ class Distributor extends \CI_Model {
     private function calculateDepositAmount(\Budget_DataModel_CategoryDM $category, $divider, $date) {
         if( ($category->getDaysUntilDue($date) <= $this->account_dm->getPayFrequency())
             || (
-                (
-                    (round($category->getAmountNecessary() / $divider, 2)) + $category->getCurrentAmount()
-                ) > $category->getAmountNecessary()
+                ((round($category->getAmountNecessary() / $divider, 2)) + $category->getCurrentAmount()) > $category->getAmountNecessary()
             )
         ) {
 
             $amount = subtract($category->getAmountNecessary(), $category->getCurrentAmount(),2);
         } else {
-            $amount = divide($category->getAmountNecessary(), $divider,2);
+            $diff = subtract($category->getAmountNecessary(), $category->getCurrentAmount(), 2);
+            $amount = divide($diff, $divider,2);
         }
 
         if($amount > $this->deposit->getFields()->getRemaining()) {

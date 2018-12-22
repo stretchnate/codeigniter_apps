@@ -48,7 +48,8 @@ class Deposit extends IteratorBase {
                 ->setGross($result->gross)
                 ->setNet($result->net)
                 ->setSource($result->source)
-                ->setRemaining($result->remaining);
+                ->setRemaining($result->remaining)
+                ->setManualDistribution($result->manual_distribution);
 
             $this->items[] = $row;
         }

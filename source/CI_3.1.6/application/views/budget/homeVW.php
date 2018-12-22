@@ -31,6 +31,11 @@ class Budget_HomeVW extends Budget_BaseVW {
     private $linked_accounts;
 
     /**
+     * @var array
+     */
+    private $account_amounts;
+
+    /**
      * Budget_HomeVW constructor.
      *
      * @param $CI
@@ -94,12 +99,7 @@ class Budget_HomeVW extends Budget_BaseVW {
                                         <a href="javascript:void(0)" class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="popover" data-placement="right" data-trigger="focus" data-content='This is the amount you have in your account that has not been distributed to a category yet. To get an accurate Account Balance distribute this money into a category.'></a>
                                         <label>Amount to distribute:</label>
 										<div class="inline-block align-right" id="distribute_<?php echo $account_dm->getAccountId();?>">
-											$<?php echo number_format($account_dm->getAccountAmount(),2, '.', ',') ?>
-											<?php
-												if($account_dm->getAccountAmount() > 0) { ?>
-											<sup><a href="javascript:void(0)" onclick="clearAccount(<?php echo $account_dm->getAccountId();?>)">Clear</a></sup>
-                                            <?php
-												} ?>
+											$<?php echo isset($this->account_amounts[$account_dm->getAccountId()]) ? number_format($this->account_amounts[$account_dm->getAccountId()],2, '.', ',') : '0.00'; ?>
 										</div>
 									</div>
 									<div class="category-container">
@@ -278,6 +278,15 @@ class Budget_HomeVW extends Budget_BaseVW {
     public function setLinkedAccounts(array $account_ids) {
         $this->linked_accounts = $account_ids;
 
+        return $this;
+    }
+
+    /**
+     * @param array $account_amounts
+     * @return Budget_HomeVW
+     */
+    public function setAccountAmounts($account_amounts) {
+        $this->account_amounts = $account_amounts;
         return $this;
     }
 }
