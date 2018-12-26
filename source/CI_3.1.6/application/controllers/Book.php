@@ -5,7 +5,7 @@ class Book extends N8_Controller {
 		parent::__construct();
 	}
 
-	function getBookInfo($id){
+	function getCategory($id){
 		$this->auth->restrict();//make sure user is logged in.
 		try {
 			$category_dm = new Budget_DataModel_CategoryDM($id, $this->session->userdata('user_id'));
@@ -294,8 +294,8 @@ class Book extends N8_Controller {
 			);
 
 			if($category_dm->saveCategory() !== false) {
-				header('Location:/book/getBookInfo/'.$id.'/');
-				// $this->getBookInfo($id);
+				header('Location:/book/getCategory/'.$id.'/');
+				// $this->getCategory($id);
 			} else {
 				//@todo  once a cache module is added need to update this method to use cash for $message
 				$message = '';

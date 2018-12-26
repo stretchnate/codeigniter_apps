@@ -41,7 +41,7 @@ $(document).ready(function() {
 
 
     $("select[name=accounts_select]").change(function() {
-        window.location = "/book/getBookInfo/"+$(this).val()+"/";
+        window.location = "/book/getCategory/"+$(this).val()+"/";
     });
 
     $("tr.transaction input[type=checkbox]").change(function() {

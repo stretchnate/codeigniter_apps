@@ -88,12 +88,12 @@ class N8_Controller extends CI_Controller {
 		switch ($transaction->getTransactionType()) {
 			//account to category deposits
 			case "account_to_category_deposit":
-				$return = "Deposit from {$transaction->getFromAccountName()} to <a href='/book/getBookInfo/{$transaction->getStructure()->getToCategory()}'>{$transaction->getToCategoryName()}</a> for $" . number_format($transaction->getStructure()->getTransactionAmount(), 2, '.', ',');
+				$return = "Deposit from {$transaction->getFromAccountName()} to <a href='/book/getCategory/{$transaction->getStructure()->getToCategory()}'>{$transaction->getToCategoryName()}</a> for $" . number_format($transaction->getStructure()->getTransactionAmount(), 2, '.', ',');
 				break;
 
 			//category to category transfers
 			case "category_to_category_transfer":
-				$return = "Transfer from <a href='/book/getBookInfo/{$transaction->getStructure()->getFromCategory()}'>{$transaction->getFromCategoryName()}</a> to <a href='/book/getBookInfo/{$transaction->getStructure()->getToCategory()}'>{$transaction->getToCategoryName()}</a> for $" . number_format($transaction->getStructure()->getTransactionAmount(), 2, '.', ',');
+				$return = "Transfer from <a href='/book/getCategory/{$transaction->getStructure()->getFromCategory()}'>{$transaction->getFromCategoryName()}</a> to <a href='/book/getCategory/{$transaction->getStructure()->getToCategory()}'>{$transaction->getToCategoryName()}</a> for $" . number_format($transaction->getStructure()->getTransactionAmount(), 2, '.', ',');
 				break;
 
 			//account to account transfers
@@ -108,12 +108,12 @@ class N8_Controller extends CI_Controller {
 
 			//deductions
 			case "deduction":
-				$return = "Deduction from <a href='/book/getBookInfo/{$transaction->getStructure()->getFromCategory()}'>{$transaction->getFromCategoryName()}</a> for $" . number_format($transaction->getStructure()->getTransactionAmount(), 2, '.', ',');
+				$return = "Deduction from <a href='/book/getCategory/{$transaction->getStructure()->getFromCategory()}'>{$transaction->getFromCategoryName()}</a> for $" . number_format($transaction->getStructure()->getTransactionAmount(), 2, '.', ',');
 				break;
 
 			//refunds
 			case "refund":
-				$return = "Refund to <a href='/book/getBookInfo/{$transaction->getStructure()->getToCategory()}'>{$transaction->getToCategoryName()}</a> for $" . number_format($transaction->getStructure()->getTransactionAmount(), 2, '.', ',');
+				$return = "Refund to <a href='/book/getCategory/{$transaction->getStructure()->getToCategory()}'>{$transaction->getToCategoryName()}</a> for $" . number_format($transaction->getStructure()->getTransactionAmount(), 2, '.', ',');
 				break;
 
 			default:

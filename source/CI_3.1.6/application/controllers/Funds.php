@@ -189,7 +189,7 @@ class Funds extends N8_Controller {
 					break;
 			}
 
-			redirect("/book/getBookInfo/".$this->input->post('id'));
+			redirect("/book/getCategory/".$this->input->post('id'));
 		} catch(Exception $e) {
 			show_error("There was a problem saving the change.", 500);
 			log_error('error', $e->getMessage());
