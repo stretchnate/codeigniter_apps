@@ -108,7 +108,7 @@
 					</select>
 				</div>
 				<div class="form-group">
-					<input id="refund" type="text" class="numeric" name="refundId" value="Refund Transaction ID" />
+					<input id="refund" type="text" class="numeric" name="refundId" placeholder="Refund Transaction ID" />
 				</div>
                 <div class="form-group" id="deposits">
                     <?php

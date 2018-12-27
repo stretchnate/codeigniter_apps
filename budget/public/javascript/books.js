@@ -16,24 +16,6 @@ $(document).ready(function() {
         }
     });
 
-    /**
-     * toggle refund value
-     */
-    $("#refund").focus(function() {
-        if($(this).val() === 'Refund Transaction ID') {
-            $(this).val('');
-        }
-    });
-
-    /**
-     * toggle refund value
-     */
-    $("#refund").blur(function() {
-        if(!$(this).val()) {
-            $(this).val('Refund Transaction ID');
-        }
-    });
-
     $("form[name=bookEditForm]").submit(function() {
         //remove any comma's in the amount
         $("input[name=amount]").val($("input[name=amount]").val().replace(/,/g, ''));
