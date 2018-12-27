@@ -148,7 +148,7 @@ class Budget_HomeVW extends Budget_BaseVW {
 									?>
                                         <div class="well">
 											<h3 class="border">
-												<a class='text' href="/book/getBookInfo/<?php echo $category_dm->getCategoryId(); ?>/"><?php echo $category_dm->getCategoryName(); ?></a>
+												<a class='text' href="/book/getCategory/<?php echo $category_dm->getCategoryId(); ?>/"><?php echo $category_dm->getCategoryName(); ?></a>
 											</h3>
 											<div class="content">
 												<div class="category-container">

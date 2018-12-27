@@ -120,35 +120,20 @@ class Funds extends N8_Controller {
 				$date = date("Y-m-d H:i:s", strtotime($date));
 			}
 
-			switch($_POST['operation']) {
-				case 'addFromBucket':
+			switch($this->input->post('operation')) {
+				case 'distribution':
 					$from = null;
 					$refund = null;
+					$deposit_fields = new \Deposit\Row\Fields();
+					$deposit_fields->setId($this->input->post('deposit_id'));
+					$deposit = new \Deposit\Row($deposit_fields);
 
-					if($parent_account->getAccountAmount() < $requested_amount) {
-						$requested_amount = $parent_account->getAccountAmount();
+					if($deposit->getFields()->getRemaining() < $requested_amount) {
+						$requested_amount = $deposit->getFields()->getRemaining();
 					}
 
-					$parent_account->transactionStart();
-					$parent_account->setAccountAmount(subtract($parent_account->getAccountAmount(), $requested_amount, 2));
-
-					$category->setCurrentAmount(add($category->getCurrentAmount(), $requested_amount, 2));
-
-					$parent_account->saveAccount();
-					$category->saveCategory();
-
-					if( $parent_account->isErrors() === false && $category->isErrors() === false ) {
-						$transaction = new \Transaction\Row();
-						$transaction->getStructure()->setToCategory($category->getCategoryId());
-						$transaction->getStructure()->setFromAccount($parent_account->getAccountId());
-						$transaction->getStructure()->setOwnerId($this->session->userdata("user_id"));
-						$transaction->getStructure()->setTransactionAmount($requested_amount);
-						$transaction->getStructure()->setTransactionDate($date);
-						$transaction->getStructure()->setTransactionInfo("Funds distributed from ".$parent_account->getAccountName()." account to ".$category->getCategoryName());
-						$transaction->saveTransaction();
-					}
-
-					$parent_account->transactionEnd();
+					$handler = new \Deposit\Handler($this->session->user_id);
+					$handler->distributeFunds($parent_account, $category, $deposit, $requested_amount, $date);
 					break;
 
 				case 'refund':
@@ -228,7 +213,7 @@ class Funds extends N8_Controller {
         if($transaction->getStructure()->getFromAccount()) {
             //undo an account to category deposit
             if($this->removeFundsFromCategory($transaction)) {
-                $result = $this->returnFundsToAccount($transaction);
+                $result = $this->returnFundsToDeposit($transaction);
             }
         } elseif($transaction->getStructure()->getFromCategory() && !$transaction->getStructure()->getToCategory()) {
             //undo a category deduction
@@ -288,6 +273,7 @@ class Funds extends N8_Controller {
      * take funds from a transaction and put them back into the category
      *
      * @param Row $transaction
+     * @return bool
      */
     private function returnFundsToCategory(\Transaction\Row $transaction) {
         $category = new Budget_DataModel_CategoryDM($transaction->getStructure()->getFromCategory(), $this->session->userdata('user_id'));
@@ -297,14 +283,17 @@ class Funds extends N8_Controller {
     }
 
     /**
-     * takes funds from a category/transaction and put them back into an account
+     * takes funds from a category/transaction and put them back into a deposit
      *
      * @param Row $transaction
+     * @return bool
      */
-    private function returnFundsToAccount(\Transaction\Row $transaction) {
-        $account      = new Budget_DataModel_AccountDM($transaction->getStructure()->getFromAccount(), $this->session->userdata('user_id'));
-        $new_acct_amt = add($account->getAccountAmount(), $transaction->getStructure()->getTransactionAmount(), 2);
-        $account->setAccountAmount($new_acct_amt);
-        return $account->saveAccount();
+    private function returnFundsToDeposit(\Transaction\Row $transaction) {
+        $fields = new \Deposit\Row\Fields();
+        $fields->setId($transaction->getStructure()->getDepositId());
+        $deposit = new \Deposit\Row($fields);
+        $deposit->getFields()->setRemaining(add($deposit->getFields()->getRemaining(), $transaction->getStructure()->getTransactionAmount(), 2));
+
+        return $deposit->save();
     }
 }

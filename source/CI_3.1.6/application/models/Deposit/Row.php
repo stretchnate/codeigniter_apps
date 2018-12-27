@@ -50,7 +50,7 @@ class Row extends \CI_Model {
             $this->fields->setId((int)$query->row()->id)
                 ->setOwnerId((int)$query->row()->ownerId)
                 ->setAccountId((int)$query->row()->account_id)
-                ->setDate($query->row()->date)
+                ->setDate(new \DateTime($query->row()->date))
                 ->setGross($query->row()->gross)
                 ->setSource($query->row()->source)
                 ->setNet($query->row()->net)

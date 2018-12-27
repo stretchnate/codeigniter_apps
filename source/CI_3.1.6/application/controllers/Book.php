@@ -6,6 +6,7 @@ class Book extends N8_Controller {
 	}
 
 	function getCategory($id){
+        $this->load->helper('deposit');
 		$this->auth->restrict();//make sure user is logged in.
 		try {
 			$category_dm = new Budget_DataModel_CategoryDM($id, $this->session->userdata('user_id'));
@@ -33,6 +34,7 @@ class Book extends N8_Controller {
 			$props['title'] = $data->bookName;
 			$props['links'] = $this->utilities->createLinks('main_nav');
 			$props['logged_user'] = $this->session->userdata('logged_user');
+			$props['deposit'] = getActiveDeposits($this->session->user_id, $data->account_id);
 
 			$notes['notes'] = $this->NM->getAllNotes($this->session->userdata('user_id'), $id);
 			$notes['bookId'] = $id;

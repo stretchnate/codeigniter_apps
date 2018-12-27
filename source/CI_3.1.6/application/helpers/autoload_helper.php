@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Copyright © Quantum Budgeting Systems, LLC.
+ * All Rights Reserved.
+ */
+
 function __autoload($classname) {
     $dirs = array(
         APPPATH."models/",

@@ -1,14 +1,18 @@
 $(document).ready(function() {
     $("#refund").hide();
+    $("#deposits").hide();
+
 
     /**
      * show/hide refund transaction id field
      */
     $("select[name=operation]").change(function() {
+        $("#refund").hide();
+        $("#deposits").hide();
         if($(this).val() == 'refund') {
             $("#refund").show();
-        } else {
-            $("#refund").hide();
+        } else if($(this).val() == 'distribution') {
+            $('#deposits').show();
         }
     });
 

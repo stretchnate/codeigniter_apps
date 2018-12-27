@@ -3,6 +3,10 @@
     Author     : stretch
 */
 
+.bold {
+    font-weight:bold;
+}
+
 .align-right {
     text-align:right;
 }
@@ -13,6 +17,10 @@
 
 .float-left {
     float:left;
+}
+
+.float-right {
+    float:right;
 }
 
 .form-group-label {

@@ -49,6 +49,30 @@ class Handler extends \CI_Model {
         return $deposit;
     }
 
+    public function distributeFunds(\Budget_DataModel_AccountDM $parent_account, \Budget_DataModel_CategoryDM $category, \Deposit\Row $deposit, $requested_amount, $date) {
+        $this->db->trans_start();
+        $deposit->getFields()->setRemaining(subtract($deposit->getFields()->getRemaining(), $requested_amount, 2));
+
+        $category->setCurrentAmount(add($category->getCurrentAmount(), $requested_amount, 2));
+
+        $deposit->save();
+        $category->saveCategory();
+
+        if( $category->isErrors() === false ) {
+            $transaction = new \Transaction\Row();
+            $transaction->getStructure()->setToCategory($category->getCategoryId());
+            $transaction->getStructure()->setFromAccount($parent_account->getAccountId());
+            $transaction->getStructure()->setDepositId($deposit->getFields()->getId());
+            $transaction->getStructure()->setOwnerId($this->session->userdata("user_id"));
+            $transaction->getStructure()->setTransactionAmount($requested_amount);
+            $transaction->getStructure()->setTransactionDate($date);
+            $transaction->getStructure()->setTransactionInfo("Funds distributed from ".$parent_account->getAccountName()." account to ".$category->getCategoryName());
+            $transaction->saveTransaction();
+        }
+
+        $this->db->trans_complete();
+    }
+
     /**
      * @param $amount
      * @param $account_id
