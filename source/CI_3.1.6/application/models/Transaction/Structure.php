@@ -55,6 +55,63 @@ class Structure {
      * @var string
      */
     private $transaction_info;
+    /**
+     * @var array
+     */
+    private $operators = [];
+
+    public function toArray() {
+        $result = [];
+        if($this->transaction_id) {
+            $result['transaction_id'] = $this->transaction_id;
+        }
+        if($this->owner_id) {
+            $result['owner_id'] = $this->owner_id;
+        }
+        if($this->to_category) {
+            $result['to_category'] = $this->to_category;
+        }
+        if($this->from_category) {
+            $result['from_category'] = $this->from_category;
+        }
+        if($this->to_account) {
+            $result['to_account'] = $this->to_account;
+        }
+        if(isset($this->from_account)) {
+            $result['from_account'] = $this->from_account;
+        }
+        if(isset($this->deposit_id)) {
+            $result['deposit_id'] = $this->deposit_id;
+        }
+        if(isset($this->transaction_amount)) {
+            $result['transaction_amount'] = $this->transaction_amount;
+        }
+        if(isset($this->transaction_date)) {
+            $result['transaction_date'] = $this->transaction_date;
+        }
+        if($this->transaction_info) {
+            $result['transaction_info'] = $this->transaction_info;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return string
+     */
+    public function whereString() {
+        $where = [];
+
+        foreach($this->toArray() as $field => $value) {
+            if(array_key_exists($field, $this->operators)) {
+                $where[] = operator($this->operators[$field], $field, $value);
+            } else {
+                $where[] = operator('=', $field, $value);
+            }
+        }
+
+        return '(' . implode(') AND (', $where) . ')';
+    }
 
     /**
      * @return int
@@ -214,5 +271,14 @@ class Structure {
     public function setTransactionInfo($transaction_info) {
         $this->transaction_info = $transaction_info;
         return $this;
+    }
+
+    /**
+     * set operator for where string
+     * @param $field
+     * @param $operator
+     */
+    public function setOperator($field, $operator) {
+        $this->operators[$field] = $operator;
     }
 }

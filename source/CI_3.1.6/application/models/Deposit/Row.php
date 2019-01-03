@@ -79,6 +79,19 @@ class Row extends \CI_Model {
     }
 
     /**
+     * delete a deposit
+     *
+     * @throws \Exception
+     */
+    public function delete() {
+        $this->db->where('id', $this->getFields()->getId());
+
+        if(!$this->db->delete(\Deposit::TABLE)) {
+            throw new \Exception($this->db->error()['message']);
+        }
+    }
+
+    /**
      * @return mixed
      * @throws \Exception
      */

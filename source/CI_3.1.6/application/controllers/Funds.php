@@ -202,14 +202,34 @@ class Funds extends N8_Controller {
     /**
      * deletes a transaction returning the value of the transaction to the parent account of the category
      * in which the transaction lived.
-     * @todo - look into making this transactional so if we fail to delete the transaction we don't go out of balance on the
-     * accounts and categories.
      *
      * @param int $transaction_id
      */
     public function deleteTransaction($transaction_id) {
-        $transaction = new \Transaction\Row($transaction_id);
+        try {
+            $transaction = new \Transaction\Row($transaction_id);
 
+            if($this->undoTransaction($transaction) === true) {
+                $transaction->deleteTransaction();
+            }
+
+            redirect('/' . $this->input->post('return_uri'));
+        } catch(Exception $e) {
+            $result = new stdClass();
+            $result->success = true;
+            log_error($e->getMessage());
+
+            echo json_encode($result);
+        }
+    }
+
+    /**
+     * @param \Transaction\Row $transaction
+     * @return bool|type
+     * @throws Exception
+     */
+    private function undoTransaction(\Transaction\Row $transaction) {
+        $result = false;
         if($transaction->getStructure()->getFromAccount()) {
             //undo an account to category deposit
             if($this->removeFundsFromCategory($transaction)) {
@@ -223,16 +243,16 @@ class Funds extends N8_Controller {
             if($this->removeFundsFromCategory($transaction)) {
                 $result = $this->returnFundsToCategory($transaction);
             }
+        } elseif($transaction->getStructure()->getToAccount()) {
+            //undo a deposit
+            $this->undoDeposit($transaction);
+            $result = true;
         } else {
             //undo a category refund/deposit
             $result = $this->removeFundsFromCategory($transaction);
         }
 
-        if($result === true) {
-            $transaction->deleteTransaction();
-        }
-
-        redirect('/'.$this->input->post('return_uri'));
+        return $result;
     }
 
     /**
@@ -253,6 +273,30 @@ class Funds extends N8_Controller {
             $distributor->run();
             $deposit->next();
         }
+    }
+
+    /**
+     * undo a deposit and all of it's distributions
+     *
+     * @param \Transaction\Row $deposit_transaction
+     * @throws Exception
+     */
+    private function undoDeposit(\Transaction\Row $deposit_transaction) {
+        $trans_fields = new \Transaction\Structure();
+        $trans_fields->setDepositId($deposit_transaction->getStructure()->getDepositId());
+        $trans_fields->setFromAccount($deposit_transaction->getStructure()->getToAccount());
+        $transactions = new TransactionIterator($trans_fields);
+        while($transactions->valid()) {
+            if($this->undoTransaction($transactions->current())) {
+                $transactions->current()->deleteTransaction();
+            }
+            $transactions->next();
+        }
+
+        $fields = new \Deposit\Row\Fields();
+        $fields->setId($deposit_transaction->getStructure()->getDepositId());
+        $deposit = new \Deposit\Row($fields);
+        $deposit->delete();
     }
 
     /**
