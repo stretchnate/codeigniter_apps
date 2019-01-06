@@ -18,9 +18,11 @@ $(document).ready(function() {
 
     $("form[name=bookEditForm]").submit(function() {
         //remove any comma's in the amount
+        $('body').overlay();
         $("input[name=amount]").val($("input[name=amount]").val().replace(/,/g, ''));
         $("form[name=bookEditForm]").validate();
         if( !$("form[name=bookEditForm]").valid()) {
+            $('body').overlay('remove');
             return false;
         }
     });

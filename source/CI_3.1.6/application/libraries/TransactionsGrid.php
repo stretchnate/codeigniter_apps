@@ -115,7 +115,9 @@ class TransactionsGrid extends N8_Error {
 				
 				$(document).on('click', 'span.delete_transaction', function() {
 				    var id = $(this).parents('tr').children('td:first-child').text();
+				    $('body').overlay('message', 'Deleting transaction id ' + id);
                     $.get('/funds/deleteTransaction/'+id, function(result) {
+                        $('body').overlay('remove');
                         if(result) {
 //                            table.ajax.reload();//this is the right way to reload the table but I need to update the amounts above the form when present.
                             location.reload();
