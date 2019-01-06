@@ -50,10 +50,12 @@ class Row extends \CI_Model {
             $this->fields->setId((int)$query->row()->id)
                 ->setOwnerId((int)$query->row()->ownerId)
                 ->setAccountId((int)$query->row()->account_id)
-                ->setDate($query->row()->date)
+                ->setDate(new \DateTime($query->row()->date))
                 ->setGross($query->row()->gross)
                 ->setSource($query->row()->source)
-                ->setNet($query->row()->net);
+                ->setNet($query->row()->net)
+                ->setRemaining($query->row()->remaining)
+                ->setManualDistribution($query->row()->manual_distribution);
         }
     }
 
@@ -74,6 +76,19 @@ class Row extends \CI_Model {
         }
 
         return true;
+    }
+
+    /**
+     * delete a deposit
+     *
+     * @throws \Exception
+     */
+    public function delete() {
+        $this->db->where('id', $this->getFields()->getId());
+
+        if(!$this->db->delete(\Deposit::TABLE)) {
+            throw new \Exception($this->db->error()['message']);
+        }
     }
 
     /**

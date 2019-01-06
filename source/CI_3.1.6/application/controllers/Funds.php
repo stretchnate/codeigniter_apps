@@ -43,7 +43,7 @@ class Funds extends N8_Controller {
             $amount = $this->input->post('net') ? $this->input->post('net') : $this->input->post('gross');
 
             $handler = new \Deposit\Handler($this->session->userdata('user_id'));
-            $handler->addDeposit($account_dm, $amount, $this->input->post('source', true), new \DateTime($this->input->post('date', true)), false);
+            $handler->addDeposit($account_dm, $amount, $this->input->post('source', true), new \DateTime($this->input->post('date', true)), true);
 
             header("Location: /");
         } catch(\Exception $e) {
@@ -60,11 +60,14 @@ class Funds extends N8_Controller {
 	public function automaticallyDistributeFunds() {
 		try {
             $account_dm = new \Budget_DataModel_AccountDM($this->input->post("account"), $this->session->userdata('user_id'));
+            $account_dm->orderCategoriesByDueFirst($this->input->post('date'));
             $amount = $this->input->post('net') ? $this->input->post('net') : $this->input->post('gross');
             $date = $this->input->post('date') ? new \DateTime($this->input->post('date', true)) : new DateTime();
 
             $handler = new \Deposit\Handler($this->session->userdata('user_id'));
-            $handler->addDeposit($account_dm, $amount, $this->input->post('source', true), $date);
+            $handler->addDeposit($account_dm, $amount, $this->input->post('source', true), $date, false);
+
+            $this->distribute($account_dm);
 
             header("Location: /");
         } catch(\Exception $e) {
@@ -73,7 +76,7 @@ class Funds extends N8_Controller {
         }
 	}
 
-    /**
+	/**
      * adds a deposit to an account
      *
      * @param int $account
@@ -117,35 +120,20 @@ class Funds extends N8_Controller {
 				$date = date("Y-m-d H:i:s", strtotime($date));
 			}
 
-			switch($_POST['operation']) {
-				case 'addFromBucket':
+			switch($this->input->post('operation')) {
+				case 'distribution':
 					$from = null;
 					$refund = null;
+					$deposit_fields = new \Deposit\Row\Fields();
+					$deposit_fields->setId($this->input->post('deposit_id'));
+					$deposit = new \Deposit\Row($deposit_fields);
 
-					if($parent_account->getAccountAmount() < $requested_amount) {
-						$requested_amount = $parent_account->getAccountAmount();
+					if($deposit->getFields()->getRemaining() < $requested_amount) {
+						$requested_amount = $deposit->getFields()->getRemaining();
 					}
 
-					$parent_account->transactionStart();
-					$parent_account->setAccountAmount(subtract($parent_account->getAccountAmount(), $requested_amount, 2));
-
-					$category->setCurrentAmount(add($category->getCurrentAmount(), $requested_amount, 2));
-
-					$parent_account->saveAccount();
-					$category->saveCategory();
-
-					if( $parent_account->isErrors() === false && $category->isErrors() === false ) {
-						$transaction = new \Transaction\Row();
-						$transaction->getStructure()->setToCategory($category->getCategoryId());
-						$transaction->getStructure()->setFromAccount($parent_account->getAccountId());
-						$transaction->getStructure()->setOwnerId($this->session->userdata("user_id"));
-						$transaction->getStructure()->setTransactionAmount($requested_amount);
-						$transaction->getStructure()->setTransactionDate($date);
-						$transaction->getStructure()->setTransactionInfo("Funds distributed from ".$parent_account->getAccountName()." account to ".$category->getCategoryName());
-						$transaction->saveTransaction();
-					}
-
-					$parent_account->transactionEnd();
+					$handler = new \Deposit\Handler($this->session->user_id);
+					$handler->distributeFunds($parent_account, $category, $deposit, $requested_amount, $date);
 					break;
 
 				case 'refund':
@@ -186,7 +174,7 @@ class Funds extends N8_Controller {
 					break;
 			}
 
-			redirect("/book/getBookInfo/".$this->input->post('id'));
+			redirect("/book/getCategory/".$this->input->post('id'));
 		} catch(Exception $e) {
 			show_error("There was a problem saving the change.", 500);
 			log_error('error', $e->getMessage());
@@ -214,18 +202,38 @@ class Funds extends N8_Controller {
     /**
      * deletes a transaction returning the value of the transaction to the parent account of the category
      * in which the transaction lived.
-     * @todo - look into making this transactional so if we fail to delete the transaction we don't go out of balance on the
-     * accounts and categories.
      *
      * @param int $transaction_id
      */
     public function deleteTransaction($transaction_id) {
-        $transaction = new \Transaction\Row($transaction_id);
+        try {
+            $transaction = new \Transaction\Row($transaction_id);
 
+            if($this->undoTransaction($transaction) === true) {
+                $transaction->deleteTransaction();
+            }
+
+            redirect('/' . $this->input->post('return_uri'));
+        } catch(Exception $e) {
+            $result = new stdClass();
+            $result->success = true;
+            log_error($e->getMessage());
+
+            echo json_encode($result);
+        }
+    }
+
+    /**
+     * @param \Transaction\Row $transaction
+     * @return bool|type
+     * @throws Exception
+     */
+    private function undoTransaction(\Transaction\Row $transaction) {
+        $result = false;
         if($transaction->getStructure()->getFromAccount()) {
             //undo an account to category deposit
             if($this->removeFundsFromCategory($transaction)) {
-                $result = $this->returnFundsToAccount($transaction);
+                $result = $this->returnFundsToDeposit($transaction);
             }
         } elseif($transaction->getStructure()->getFromCategory() && !$transaction->getStructure()->getToCategory()) {
             //undo a category deduction
@@ -235,16 +243,60 @@ class Funds extends N8_Controller {
             if($this->removeFundsFromCategory($transaction)) {
                 $result = $this->returnFundsToCategory($transaction);
             }
+        } elseif($transaction->getStructure()->getToAccount()) {
+            //undo a deposit
+            $this->undoDeposit($transaction);
+            $result = true;
         } else {
             //undo a category refund/deposit
             $result = $this->removeFundsFromCategory($transaction);
         }
 
-        if($result === true) {
-            $transaction->deleteTransaction();
+        return $result;
+    }
+
+    /**
+     * @param $account_dm
+     * @throws Exception
+     */
+    private function distribute($account_dm) {
+        $fields = new \Deposit\Row\Fields();
+        $fields->setOwnerId($this->session->user_id);
+        $fields->setRemaining(0);
+        $fields->setManualDistribution(false);
+        $fields->setOperator('remaining', '>');
+        $deposit = new \Deposit($fields, 'id DESC');
+
+        $distributor = new \Funds\Distributor($account_dm);
+        while($deposit->valid()) {
+            $distributor->setDeposit($deposit->current());
+            $distributor->run();
+            $deposit->next();
+        }
+    }
+
+    /**
+     * undo a deposit and all of it's distributions
+     *
+     * @param \Transaction\Row $deposit_transaction
+     * @throws Exception
+     */
+    private function undoDeposit(\Transaction\Row $deposit_transaction) {
+        $trans_fields = new \Transaction\Structure();
+        $trans_fields->setDepositId($deposit_transaction->getStructure()->getDepositId());
+        $trans_fields->setFromAccount($deposit_transaction->getStructure()->getToAccount());
+        $transactions = new TransactionIterator($trans_fields);
+        while($transactions->valid()) {
+            if($this->undoTransaction($transactions->current())) {
+                $transactions->current()->deleteTransaction();
+            }
+            $transactions->next();
         }
 
-        redirect('/'.$this->input->post('return_uri'));
+        $fields = new \Deposit\Row\Fields();
+        $fields->setId($deposit_transaction->getStructure()->getDepositId());
+        $deposit = new \Deposit\Row($fields);
+        $deposit->delete();
     }
 
     /**
@@ -265,6 +317,7 @@ class Funds extends N8_Controller {
      * take funds from a transaction and put them back into the category
      *
      * @param Row $transaction
+     * @return bool
      */
     private function returnFundsToCategory(\Transaction\Row $transaction) {
         $category = new Budget_DataModel_CategoryDM($transaction->getStructure()->getFromCategory(), $this->session->userdata('user_id'));
@@ -274,14 +327,17 @@ class Funds extends N8_Controller {
     }
 
     /**
-     * takes funds from a category/transaction and put them back into an account
+     * takes funds from a category/transaction and put them back into a deposit
      *
      * @param Row $transaction
+     * @return bool
      */
-    private function returnFundsToAccount(\Transaction\Row $transaction) {
-        $account      = new Budget_DataModel_AccountDM($transaction->getStructure()->getFromAccount(), $this->session->userdata('user_id'));
-        $new_acct_amt = add($account->getAccountAmount(), $transaction->getStructure()->getTransactionAmount(), 2);
-        $account->setAccountAmount($new_acct_amt);
-        return $account->saveAccount();
+    private function returnFundsToDeposit(\Transaction\Row $transaction) {
+        $fields = new \Deposit\Row\Fields();
+        $fields->setId($transaction->getStructure()->getDepositId());
+        $deposit = new \Deposit\Row($fields);
+        $deposit->getFields()->setRemaining(add($deposit->getFields()->getRemaining(), $transaction->getStructure()->getTransactionAmount(), 2));
+
+        return $deposit->save();
     }
 }

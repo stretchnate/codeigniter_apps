@@ -1,11 +1,4 @@
-    <div>
-		<?php
-		if($parentAccount->account_amount > 0) {?>
-		<div class="bold">
-			<?php echo $parentAccount->account_name; ?> Amount: $<?php echo number_format($parentAccount->account_amount,2,'.',','); ?>
-		</div>
-		<?php
-		} ?>
+    <div class="inline-block">
 		<form action='' method='post' class='form-inline'>
 			<div id="account-general-info" class="accounts-dropdown form-group">
 				<label>Go To:</label>
@@ -29,8 +22,16 @@
 			</div>
 		</form>
 	</div>
+    <?php
+    if($deposit->count()) {?>
+        <div class="bold float-right" style="margin:10px 0 10px 0">
+            <?= $parentAccount->account_name; ?> Amount: $<?= number_format(getTotalDistributableAmount($deposit),2,'.',','); ?>
+        </div>
+        <?php
+    } ?>
 
-	<?php
+
+    <?php
 		$due_date = sprintf(" <small class='text-muted'>(%s)</small>", $due_date->format('m/d/Y'));
 	?>
 
@@ -102,16 +103,54 @@
 					<select class="required form-control" name="operation">
 						<option value="0">-- Select Operation --</option>
 						<option value="deduction" selected="selected">Debit (-)</option>
-						<option value="addFromBucket">Credit (+)</option>
+						<option value="distribution">Credit (+)</option>
 						<option value="refund">Refund (+)</option>
 					</select>
 				</div>
 				<div class="form-group">
-					<input id="refund" type="text" class="numeric" name="refundId" value="Refund Transaction ID" />
+					<input id="refund" type="text" class="numeric" name="refundId" placeholder="Refund Transaction ID" />
 				</div>
+                <div class="form-group" id="deposits">
+                    <?php
+                    $deposit->rewind();
+                    if($deposit->count() == 1) {
+                        ?>
+                        <input type="hidden" name="deposit_id" value="<?= $deposit->current()->getFields()->getId(); ?>"/>
+                        <?php
+
+                    } elseif($deposit->count() > 1) {
+                        echo "<label>From: </label><br>";
+                        $deposit->rewind();
+                        while($deposit->valid()) {
+                            ?>
+                            <div class="input-group">
+                                <label>
+                                    <input class="required" type="radio" name="deposit_id" value="<?= $deposit->current()->getFields()->getId(); ?>">
+                                    Deposit <?= $deposit->current()->getFields()->getDate()->format('m/d/Y');?>: $<?= $deposit->current()->getFields()->getRemaining(); ?>
+                                </label>
+                            </div>
+                            <?php
+                            $deposit->next();
+                        }
+                    }
+                    ?>
+                </div>
 				<input type="submit" value="Submit" class="btn btn-primary" />
             </form>
         </div>
 
 		<?= isset($transactions) ? $transactions : null; ?>
 	</div>
+
+
+    <?php
+    function getTotalDistributableAmount(Deposit $deposit) {
+        $deposit->rewind();
+        $total = 0;
+        while($deposit->valid()) {
+            $total += $deposit->current()->getFields()->getRemaining();
+            $deposit->next();
+        }
+
+        return $total;
+    }

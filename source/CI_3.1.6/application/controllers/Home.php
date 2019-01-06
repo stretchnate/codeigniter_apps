@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Copyright © Quantum Budgeting Systems, LLC.
+ * All Rights Reserved.
+ */
 class Home extends N8_Controller {
 
 	function __construct() {
@@ -34,6 +37,7 @@ class Home extends N8_Controller {
      * @throws Exception
      */
 	private function homeView($link = null) {
+	    $this->load->helper('deposit');
 		$this->load->model('notes_model', 'NM', TRUE);
 		$this->load->view('budget/homeVW');
 
@@ -63,6 +67,7 @@ class Home extends N8_Controller {
 			$last_transaction = $this->UserFriendlyTransactionDetails($this->transactionDetails($transactions, 0));
 		}
 
+		$home_vw->setAccountAmounts(getDistributableAmounts($this->session->user_id));
 		$home_vw->setLastTransaction($last_transaction);
 		$home_vw->setNotes($this->NM->getAllNotes($this->session->userdata('user_id'), $this->session->userdata('user_id')));
 		$home_vw->setLastUpdate(date('l F d, Y h:i:s a', strtotime($this->session->userdata('last_update'))));

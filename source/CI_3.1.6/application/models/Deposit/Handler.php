@@ -8,7 +8,6 @@
 
 namespace Deposit;
 
-use Funds\Distributor;
 use Transaction\Row;
 
 class Handler extends \CI_Model {
@@ -24,13 +23,13 @@ class Handler extends \CI_Model {
      * @param mixed $amount
      * @param string $source
      * @param \DateTime $date
-     * @param bool $distribute
+     * @return \Deposit\Row
      * @throws \Exception
      */
-    public function addDeposit(\Budget_DataModel_AccountDM $account_dm, $amount, $source, \DateTime $date, $distribute = true) {
+    public function addDeposit(\Budget_DataModel_AccountDM $account_dm, $amount, $source, \DateTime $date, $manual_distribution) {
         $this->db->trans_begin();
 
-        $deposit = $this->deposit($amount, $account_dm->getAccountId(), $source, $date);
+        $deposit = $this->deposit($amount, $account_dm->getAccountId(), $source, $date, $manual_distribution);
         $transaction = new Row();
 
         $transaction->getStructure()->setToAccount($account_dm->getAccountId());
@@ -39,24 +38,39 @@ class Handler extends \CI_Model {
         $transaction->getStructure()->setTransactionAmount((float)$amount);
         $transaction->getStructure()->setTransactionDate($date->format('Y-m-d H:i:s'));
         $transaction->getStructure()->setTransactionInfo("Deposit ".$deposit->getFields()->getId()." into ".$account_dm->getAccountName());
-        if($transaction->saveTransaction()) {
-            $new_amount = add($account_dm->getAccountAmount(), $amount, 2);
-            $account_dm->setAccountAmount($new_amount);
-            $account_dm->saveAccount();
-        }
+        $transaction->saveTransaction();
 
         if(!$this->db->trans_status()) {
             $this->db->trans_rollback();
-            $db =& get_instance()->db;
-            $error = $db->error();
-            throw new \Exception($error['message'], EXCEPTION_CODE_ERROR);
+            throw new \Exception($this->db->error()['message'], EXCEPTION_CODE_ERROR);
         }
         $this->db->trans_commit();
 
-        if($distribute === true) {
-            $distributor = new Distributor($deposit, $this->user_id);
-            $distributor->run();
+        return $deposit;
+    }
+
+    public function distributeFunds(\Budget_DataModel_AccountDM $parent_account, \Budget_DataModel_CategoryDM $category, \Deposit\Row $deposit, $requested_amount, $date) {
+        $this->db->trans_start();
+        $deposit->getFields()->setRemaining(subtract($deposit->getFields()->getRemaining(), $requested_amount, 2));
+
+        $category->setCurrentAmount(add($category->getCurrentAmount(), $requested_amount, 2));
+
+        $deposit->save();
+        $category->saveCategory();
+
+        if( $category->isErrors() === false ) {
+            $transaction = new \Transaction\Row();
+            $transaction->getStructure()->setToCategory($category->getCategoryId());
+            $transaction->getStructure()->setFromAccount($parent_account->getAccountId());
+            $transaction->getStructure()->setDepositId($deposit->getFields()->getId());
+            $transaction->getStructure()->setOwnerId($this->session->userdata("user_id"));
+            $transaction->getStructure()->setTransactionAmount($requested_amount);
+            $transaction->getStructure()->setTransactionDate($date);
+            $transaction->getStructure()->setTransactionInfo("Funds distributed from ".$parent_account->getAccountName()." account to ".$category->getCategoryName());
+            $transaction->saveTransaction();
         }
+
+        $this->db->trans_complete();
     }
 
     /**
@@ -64,17 +78,20 @@ class Handler extends \CI_Model {
      * @param $account_id
      * @param $source
      * @param \DateTime $date
+     * @param bool $manual_distribution
      * @return \Deposit\Row
      * @throws \Exception
      */
-    private function deposit($amount, $account_id, $source, \DateTime $date) {
+    private function deposit($amount, $account_id, $source, \DateTime $date, $manual_distribution = false) {
         $deposit = new \Deposit\Row();
         $deposit->getFields()->setOwnerId((int)$this->user_id)
             ->setAccountId($account_id)
             ->setSource($source)
             ->setGross($amount)
             ->setDate($date)
-            ->setNet($amount);
+            ->setNet($amount)
+            ->setRemaining($amount)
+            ->setManualDistribution($manual_distribution);
         $deposit->save();
 
         return $deposit;
