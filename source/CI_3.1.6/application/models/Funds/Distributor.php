@@ -47,15 +47,10 @@ class Distributor extends \CI_Model {
         //loop through each category and update the current amount
         foreach ($this->account_dm->getCategories() as $category_dms) {
             foreach ($category_dms as $category) {
-                if ($this->deposit->getFields()->getRemaining() <= 0) {
-                    break 2;
-                }
-
                 if (isset($deposit_amounts[$category->getCategoryId()])) {
                     $deposit_amount = $deposit_amounts[$category->getCategoryId()];
                     $this->db->trans_start();
                     $this->updateCategoryAmount($category, $deposit_amount);
-                    $this->updateRemainingAmount($deposit_amount);
                     $this->addTransaction($category, $deposit_amount, $date);
                     $this->db->trans_complete();
                 }
@@ -75,17 +70,26 @@ class Distributor extends \CI_Model {
         $tn_start = $total_need;
         foreach($this->account_dm->getCategories() as $categories) {
             foreach($categories as $category) {
+                if ($this->deposit->getFields()->getRemaining() <= 0) {
+                    break 2;
+                }
+
                 $dep_amount = $this->calculateDepositAmount($category, $divider, $date);
+                if($dep_amount > subtract($category->getAmountNecessary(), add($category->getCurrentAmount(), $deposit_amounts[$category->getCategoryId()], 2), 2)) {
+                    $dep_amount = subtract($category->getAmountNecessary(), add($category->getCurrentAmount(), $deposit_amounts[$category->getCategoryId()], 2),2);
+                }
+
+                $this->updateRemainingAmount($dep_amount);
                 $total_need += $dep_amount;
                 if(isset($deposit_amounts[$category->getCategoryId()])) {
-                   $dep_amount = add($deposit_amounts[$category->getCategoryId()], $dep_amount);
+                   $dep_amount = add($deposit_amounts[$category->getCategoryId()], $dep_amount, 2);
                 }
                 $deposit_amounts[$category->getCategoryId()] = $dep_amount;
             }
             $divider++;
         }
 
-        if($total_need < $this->deposit->getFields()->getRemaining() && $tn_start < $total_need) {
+        if($total_need < $this->deposit->getFields()->getNet() && $tn_start < $total_need) {
             $this->fetchDepositAmounts($date, $deposit_amounts, $total_need);
         }
     }
