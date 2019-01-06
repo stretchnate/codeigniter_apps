@@ -51,6 +51,16 @@ class Fields extends \Validation implements \FieldsInterface {
      */
     private $net;
 
+    /**
+     * @var float
+     */
+    private $remaining;
+
+    /**
+     * @var bool
+     */
+    private $manual_distribution;
+
     private $operators;
 
     public function __construct() {
@@ -77,11 +87,17 @@ class Fields extends \Validation implements \FieldsInterface {
         if($this->source) {
             $result['source'] = $this->source;
         }
-        if($this->gross) {
+        if(isset($this->gross)) {
             $result['gross'] = $this->gross;
         }
-        if($this->net) {
+        if(isset($this->net)) {
             $result['net'] = $this->net;
+        }
+        if(isset($this->remaining)) {
+            $result['remaining'] = $this->remaining;
+        }
+        if(isset($this->manual_distribution)) {
+            $result['manual_distribution'] = $this->manual_distribution;
         }
 
         return $result;
@@ -228,6 +244,39 @@ class Fields extends \Validation implements \FieldsInterface {
     public function setNet($net) {
         $this->net = $this->simple_validation->isNumeric($net);
 
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getRemaining() {
+        return $this->remaining;
+    }
+
+    /**
+     * @param float $remaining
+     * @return Fields
+     */
+    public function setRemaining($remaining) {
+        $this->remaining = $this->simple_validation->isNumeric($remaining);
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isManualDistribution() {
+        return $this->manual_distribution;
+    }
+
+    /**
+     * @param bool $manual_distribution
+     * @return Fields
+     */
+    public function setManualDistribution($manual_distribution) {
+        $this->manual_distribution = (bool) $manual_distribution;
         return $this;
     }
 

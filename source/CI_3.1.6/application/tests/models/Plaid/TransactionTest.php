@@ -35,7 +35,7 @@ class TransactionTest extends \CITest {
     }
 
     /**
-     * @covers Transaction::load
+     * @covers TransactionIterator::load
      * @return Transaction
      * @throws \Exception
      */

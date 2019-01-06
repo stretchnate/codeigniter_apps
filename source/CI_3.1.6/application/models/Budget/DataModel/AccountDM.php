@@ -229,7 +229,8 @@ class Budget_DataModel_AccountDM extends N8_Model {
 			}
 		}
 
-		return $pay_frequency_array;
+		$this->categories = $pay_frequency_array;
+		return $this->categories;
 	}
 
 	/**
@@ -242,7 +243,6 @@ class Budget_DataModel_AccountDM extends N8_Model {
 	private function buildPayFrequencyArray($pay_frequency) {
 		$i             = $pay_frequency;
 		$result        = array();
-		$num_paychecks = (52 / $pay_frequency);
 
 		while($i < 365) { //do one years worth of paychecks
 			$result[$i] = array();
