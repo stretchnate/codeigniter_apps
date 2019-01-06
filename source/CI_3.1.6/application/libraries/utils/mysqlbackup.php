@@ -42,6 +42,7 @@ class MySQLBackup {
 	public function backupMySQL() {
 		if( is_array($this->db_parms) ) {
 			foreach($this->db_parms as $db => $parms) {
+				if($parms['database'] == 'SITE_CONTENT') continue;
 				$system_output = array();
 				$command_success;
 
