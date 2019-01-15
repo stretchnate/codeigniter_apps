@@ -163,20 +163,7 @@ class Budget_HomeVW extends Budget_BaseVW {
 													<label>Amount Saved:</label>
 													<div class='align-right inline-block'>$<?php echo number_format($category_dm->getCurrentAmount(), 2, '.', ',') ?></div>
 												</div>
-												<div class="category-container">
-													<label>Difference:</label>
-													<?php
-														$dif = subtract($category_dm->getAmountNecessary(), $category_dm->getCurrentAmount(), 2);
-														if($category_dm->getAmountNecessary() > $category_dm->getCurrentAmount()){
-															echo '<div class="red inline-block align-right">-$'.number_format($dif, 2, '.', ',').'</div>';
-														} else if ($category_dm->getAmountNecessary() < $category_dm->getCurrentAmount()){
-															$dif = subtract($category_dm->getCurrentAmount(), $category_dm->getAmountNecessary(), 2);
-															echo '<div class="bold inline-block align-right">+$'.number_format($dif, 2, '.', ',').'</div>';
-														} else {
-															echo '<div class="align-right inline-block">$'.number_format($dif, 2, '.', ',').'</div>';
-														}
-													?>
-												</div>
+
 											</div>
 										</div>
 								<?php

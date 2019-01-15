@@ -63,10 +63,6 @@
 			<div class="col-xs-6">Saved:</div>
 			<div class="col-xs-6 text-right"><?php echo number_format($bookAmtCurrent,2,'.',','); ?></div>
 		</div>
-		<div class="row">
-			<div class="col-xs-6">Difference:</div>
-			<div class="col-xs-6 text-right"><?php echo $symbol.number_format($dif,2,'.',','); ?></div>
-		</div>
 	</div>
 
     <div id="book-summary">
