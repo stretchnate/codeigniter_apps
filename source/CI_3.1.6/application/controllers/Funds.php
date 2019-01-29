@@ -1,5 +1,9 @@
 <?php
+require_once APPPATH.'libraries/Traits/Distribute.php';
+
 class Funds extends N8_Controller {
+
+    use \Traits\Distribute;
 
     /**
      * constructor
@@ -253,26 +257,6 @@ class Funds extends N8_Controller {
         }
 
         return $result;
-    }
-
-    /**
-     * @param $account_dm
-     * @throws Exception
-     */
-    private function distribute($account_dm) {
-        $fields = new \Deposit\Row\Fields();
-        $fields->setOwnerId($this->session->user_id);
-        $fields->setRemaining(0);
-        $fields->setManualDistribution(false);
-        $fields->setOperator('remaining', '>');
-        $deposit = new \Deposit($fields, 'id DESC');
-
-        $distributor = new \Funds\Distributor($account_dm);
-        while($deposit->valid()) {
-            $distributor->setDeposit($deposit->current());
-            $distributor->run();
-            $deposit->next();
-        }
     }
 
     /**

@@ -10,6 +10,12 @@ namespace Deposit;
 
 use Transaction\Row;
 
+/**
+ * Class Handler
+ *
+ * @package Deposit
+ * @author  stret
+ */
 class Handler extends \CI_Model {
 
     private $user_id;
@@ -49,6 +55,14 @@ class Handler extends \CI_Model {
         return $deposit;
     }
 
+    /**
+     * @param \Budget_DataModel_AccountDM  $parent_account
+     * @param \Budget_DataModel_CategoryDM $category
+     * @param \Deposit\Row                 $deposit
+     * @param                              $requested_amount
+     * @param                              $date
+     * @throws \Exception
+     */
     public function distributeFunds(\Budget_DataModel_AccountDM $parent_account, \Budget_DataModel_CategoryDM $category, \Deposit\Row $deposit, $requested_amount, $date) {
         $this->db->trans_start();
         $deposit->getFields()->setRemaining(subtract($deposit->getFields()->getRemaining(), $requested_amount, 2));

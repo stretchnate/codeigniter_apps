@@ -79,6 +79,10 @@ class Distributor extends \CI_Model {
                     $dep_amount = subtract($category->getAmountNecessary(), add($category->getCurrentAmount(), $deposit_amounts[$category->getCategoryId()], 2),2);
                 }
 
+                if(!$dep_amount) {
+                    continue;
+                }
+
                 $this->updateRemainingAmount($dep_amount);
                 $total_need += $dep_amount;
                 if(isset($deposit_amounts[$category->getCategoryId()])) {

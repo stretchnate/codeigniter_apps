@@ -12,6 +12,7 @@ namespace Plaid\Transaction;
 use Deposit\Handler;
 use Plaid\Connection;
 use Plaid\TransactionResponse;
+use Traits\Distribute;
 use Transaction\Row;
 
 /**
@@ -20,6 +21,8 @@ use Transaction\Row;
  * @package Plaid\Transaction
  */
 class Creator {
+
+    use Distribute;
 
     /**
      * @var int
@@ -40,8 +43,8 @@ class Creator {
      * @throws \Exception
      */
     public function convertTransactionsToCategories(TransactionResponse $transactions) {
+        $account = $this->fetchAccount($transactions->getTransactions()[0]);
         foreach($transactions->getTransactions() as $transaction) {
-            $account = $this->fetchAccount($transaction);
             $category = $this->fetchCategory($transaction, $account);
             if (!$category instanceof \Budget_DataModel_CategoryDM) {
                 $category_name = $transaction->getCategory()[0];
@@ -130,7 +133,9 @@ class Creator {
         $amount = abs($transaction->getAmount());
 
         $handler = new Handler($this->user_id);
-        $handler->addDeposit($account, $amount, $transaction->getName(), $transaction->getDate()->format('Y-m-d H:i:s'));
+        $handler->addDeposit($account, $amount, $transaction->getName(), $transaction->getDate(), false);
+
+        $this->distribute($account);
     }
 
     /**
