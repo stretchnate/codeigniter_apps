@@ -166,13 +166,12 @@ class Budget_DataModel_AccountDM extends N8_Model {
 	 * load categories in account
 	 */
 	public function loadCategories() {
-	    if(empty($this->categories)) {
-            $category_ids = $this->getCategoryIds();
+	    $this->categories = [];
+        $category_ids = $this->getCategoryIds();
 
-            if (is_array($category_ids)) {
-                foreach ($category_ids as $category_id) {
-                    $this->categories[] = new Budget_DataModel_CategoryDM($category_id->bookId, $this->owner_id);
-                }
+        if (is_array($category_ids)) {
+            foreach ($category_ids as $category_id) {
+                $this->categories[] = new Budget_DataModel_CategoryDM($category_id->bookId, $this->owner_id);
             }
         }
 	}
@@ -210,9 +209,7 @@ class Budget_DataModel_AccountDM extends N8_Model {
 	 * @since 05.01.2013
 	 */
 	public function orderCategoriesByDueFirst($from_date) {
-		if(empty($this->categories)) {
-			$this->loadCategories();
-		}
+        $this->loadCategories();
 
 		$pay_frequency_array      = $this->buildPayFrequencyArray($this->getPayFrequency());
 		$pay_frequency_array_keys = array_keys($pay_frequency_array);
@@ -229,7 +226,8 @@ class Budget_DataModel_AccountDM extends N8_Model {
 			}
 		}
 
-		return $pay_frequency_array;
+		$this->categories = $pay_frequency_array;
+		return $this->categories;
 	}
 
 	/**
@@ -242,7 +240,6 @@ class Budget_DataModel_AccountDM extends N8_Model {
 	private function buildPayFrequencyArray($pay_frequency) {
 		$i             = $pay_frequency;
 		$result        = array();
-		$num_paychecks = (52 / $pay_frequency);
 
 		while($i < 365) { //do one years worth of paychecks
 			$result[$i] = array();

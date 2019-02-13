@@ -3,6 +3,10 @@
     Author     : stretch
 */
 
+.bold {
+    font-weight:bold;
+}
+
 .align-right {
     text-align:right;
 }
@@ -13,6 +17,10 @@
 
 .float-left {
     float:left;
+}
+
+.float-right {
+    float:right;
 }
 
 .form-group-label {
@@ -98,6 +106,7 @@
     position: absolute;
     top: 0;
     bottom: 0;
+    z-index: 1001;
 }
 
 .overlay #loader {
@@ -108,4 +117,13 @@
 .overlay #message {
     padding: 5px 10px;
     text-align: center;
+}
+
+#transactions_grid span.glyphicon-edit:hover, #transactions_grid span.glyphicon-remove:hover {
+    cursor: pointer;
+}
+
+.with-info {
+    width:97%;
+    display:inline-block;
 }

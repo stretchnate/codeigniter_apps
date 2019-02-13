@@ -5,7 +5,8 @@ class Book extends N8_Controller {
 		parent::__construct();
 	}
 
-	function getBookInfo($id){
+	function getCategory($id){
+        $this->load->helper('deposit');
 		$this->auth->restrict();//make sure user is logged in.
 		try {
 			$category_dm = new Budget_DataModel_CategoryDM($id, $this->session->userdata('user_id'));
@@ -33,6 +34,7 @@ class Book extends N8_Controller {
 			$props['title'] = $data->bookName;
 			$props['links'] = $this->utilities->createLinks('main_nav');
 			$props['logged_user'] = $this->session->userdata('logged_user');
+			$props['deposit'] = getActiveDeposits($this->session->user_id, $data->account_id);
 
 			$notes['notes'] = $this->NM->getAllNotes($this->session->userdata('user_id'), $id);
 			$notes['bookId'] = $id;
@@ -193,13 +195,13 @@ class Book extends N8_Controller {
 
 					if($start_amount > 0) {
 						//add the transaction
-						$transaction = new Budget_DataModel_TransactionDM();
-						$transaction->setFromAccount($account_dm->getAccountId());
-						$transaction->setToCategory($category_dm->getCategoryId());
-						$transaction->setOwnerId($this->session->userdata("user_id"));
-						$transaction->setTransactionAmount((float)$start_amount);
-						$transaction->setTransactionDate( date("Y-m-d H:i:s") );
-						$transaction->setTransactionInfo("Initial deposit into new category " . $category_dm->getCategoryName());
+						$transaction = new \Transaction\Row();
+						$transaction->getStructure()->setFromAccount($account_dm->getAccountId());
+						$transaction->getStructure()->setToCategory($category_dm->getCategoryId());
+						$transaction->getStructure()->setOwnerId($this->session->userdata("user_id"));
+						$transaction->getStructure()->setTransactionAmount((float)$start_amount);
+						$transaction->getStructure()->setTransactionDate( date("Y-m-d H:i:s") );
+						$transaction->getStructure()->setTransactionInfo("Initial deposit into new category " . $category_dm->getCategoryName());
 						$transaction->saveTransaction();
 					}
 				}
@@ -294,8 +296,8 @@ class Book extends N8_Controller {
 			);
 
 			if($category_dm->saveCategory() !== false) {
-				header('Location:/book/getBookInfo/'.$id.'/');
-				// $this->getBookInfo($id);
+				header('Location:/book/getCategory/'.$id.'/');
+				// $this->getCategory($id);
 			} else {
 				//@todo  once a cache module is added need to update this method to use cash for $message
 				$message = '';

@@ -12,6 +12,8 @@ namespace Plaid\Transaction;
 use Deposit\Handler;
 use Plaid\Connection;
 use Plaid\TransactionResponse;
+use Traits\Distribute;
+use Transaction\Row;
 
 /**
  * Class Creator
@@ -19,6 +21,8 @@ use Plaid\TransactionResponse;
  * @package Plaid\Transaction
  */
 class Creator {
+
+    use Distribute;
 
     /**
      * @var int
@@ -39,8 +43,8 @@ class Creator {
      * @throws \Exception
      */
     public function convertTransactionsToCategories(TransactionResponse $transactions) {
+        $account = $this->fetchAccount($transactions->getTransactions()[0]);
         foreach($transactions->getTransactions() as $transaction) {
-            $account = $this->fetchAccount($transaction);
             $category = $this->fetchCategory($transaction, $account);
             if (!$category instanceof \Budget_DataModel_CategoryDM) {
                 $category_name = $transaction->getCategory()[0];
@@ -129,7 +133,9 @@ class Creator {
         $amount = abs($transaction->getAmount());
 
         $handler = new Handler($this->user_id);
-        $handler->addDeposit($account, $amount, $transaction->getName(), $transaction->getDate()->format('Y-m-d H:i:s'));
+        $handler->addDeposit($account, $amount, $transaction->getName(), $transaction->getDate(), false);
+
+        $this->distribute($account);
     }
 
     /**
@@ -138,25 +144,23 @@ class Creator {
      * @throws \Exception
      */
     private function createTransaction(TransactionResponse\Transaction $transaction, \Budget_DataModel_CategoryDM $category) {
-        $transaction_dm = new \Budget_DataModel_TransactionDM();
-        $transaction_dm->transactionStart();
-        $transaction_dm->setOwnerId($this->user_id);
-        $transaction_dm->setFromCategory($category->getCategoryId());
-        $transaction_dm->setTransactionAmount($transaction->getAmount());
-        $transaction_dm->setTransactionDate($transaction->getDate()->format('Y-m-d H:i:s'));
-        $transaction_dm->setTransactionInfo($transaction->getName());
-        if($transaction_dm->saveTransaction()) {
-            $new_amount = subtract($category->getCurrentAmount(), $transaction->getAmount(), 2);
-            $category->setCurrentAmount($new_amount);
-            $category->saveCategory();
-        }
+        $transaction_dm = new Row();
+        $transaction_dm->getStructure()->setOwnerId($this->user_id);
+        $transaction_dm->getStructure()->setFromCategory($category->getCategoryId());
+        $transaction_dm->getStructure()->setTransactionAmount($transaction->getAmount());
+        $transaction_dm->getStructure()->setTransactionDate($transaction->getDate()->format('Y-m-d H:i:s'));
+        $transaction_dm->getStructure()->setTransactionInfo($transaction->getName());
 
-        if(!$transaction_dm->transactionEnd()) {
+        if(!$transaction_dm->saveTransaction()) {
             $db =& get_instance()->db;
             $error = $db->error();
             log_message('error', $error['message']);
             throw new \Exception("There was a problem processing your request.", EXCEPTION_CODE_VALIDATION);
         }
+
+        $new_amount = subtract($category->getCurrentAmount(), $transaction->getAmount(), 2);
+        $category->setCurrentAmount($new_amount);
+        $category->saveCategory();
     }
 
     /**

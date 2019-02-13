@@ -9,61 +9,92 @@
 namespace Funds;
 
 
+use Transaction\Row;
+
 class Distributor extends \CI_Model {
 
     /**
-     * @var \Deposit
+     * @var \Deposit\Row
      */
     private $deposit;
-
-    private $user_id;
 
     /**
      * @var \Budget_DataModel_AccountDM
      */
     private $account_dm;
 
-    public function __construct(\Deposit $deposit, $user_id) {
-        $this->deposit = $deposit;
-        $this->user_id = $user_id;
+    /**
+     * Distributor constructor.
+     *
+     * @param \Budget_DataModel_AccountDM $account_dm
+     * @param null $deposit
+     */
+    public function __construct($account_dm, $deposit = null) {
+        $this->account_dm = $account_dm;
+        if($deposit) {
+            $this->setDeposit($deposit);
+        }
     }
 
     /**
      * @throws \Exception
      */
     public function run() {
-        $account_dm = new \Budget_DataModel_AccountDM($this->deposit->getValues()->getAccountId(), $this->user_id);
-        $account_dm->loadCategories();
-//        while($account_dm->getAccountAmount() > 0) {
-            $this->distribute($account_dm, $this->deposit->getValues()->getDate()->format('Y-m-d H:i:s'));
-//        }
+        $date = $this->deposit->getFields()->getDate()->format('Y-m-d H:i:s');
+        $deposit_amounts = [];
+        $this->fetchDepositAmounts($date, $deposit_amounts);
+
+        //loop through each category and update the current amount
+        foreach ($this->account_dm->getCategories() as $category_dms) {
+            foreach ($category_dms as $category) {
+                if (isset($deposit_amounts[$category->getCategoryId()])) {
+                    $deposit_amount = $deposit_amounts[$category->getCategoryId()];
+                    $this->db->trans_start();
+                    $this->updateCategoryAmount($category, $deposit_amount);
+                    $this->addTransaction($category, $deposit_amount, $date);
+                    $this->db->trans_complete();
+                }
+            }
+        }
     }
 
     /**
-     * @param $account_dm
-     * @param $date
-     * @throws \Exception
+     * create deposit amount array
+     *
+     * @param       $date
+     * @param int   $total_need
+     * @param array $deposit_amounts
      */
-    private function distribute($account_dm, $date) {
+    private function fetchDepositAmounts($date, &$deposit_amounts = [], $total_need = 0) {
         $divider = 1;
-        $this->account_dm = $account_dm;
-
-        //loop through each category and update the current amount
-        $categories = $this->account_dm->orderCategoriesByDueFirst($date);
-        foreach ($categories as $category_dms) {
-            foreach ($category_dms as $category) {
-                if ($this->account_dm->getAccountAmount() <= 0) {
+        $tn_start = $total_need;
+        foreach($this->account_dm->getCategories() as $categories) {
+            foreach($categories as $category) {
+                if ($this->deposit->getFields()->getRemaining() <= 0) {
                     break 2;
                 }
 
-                if ($category->getCurrentAmount() < $category->getAmountNecessary()) {
-                    $deposit_amount = $this->calculateDepositAmount($category, $divider, $date);
-                    $this->updateCategoryAmount($category, $deposit_amount);
-                    $this->updateAccountAmount($deposit_amount);
-                    $this->addTransaction($category, $deposit_amount, $date);
+                $dep_amount = $this->calculateDepositAmount($category, $divider, $date);
+                if(isset($deposit_amounts[$category->getCategoryId()]) && $dep_amount > subtract($category->getAmountNecessary(), add($category->getCurrentAmount(), $deposit_amounts[$category->getCategoryId()], 2), 2)) {
+                    $dep_amount = subtract($category->getAmountNecessary(), add($category->getCurrentAmount(), $deposit_amounts[$category->getCategoryId()], 2),2);
                 }
+
+                if(!$dep_amount) {
+                    continue;
+                }
+
+                $this->updateRemainingAmount($dep_amount);
+                $total_need += $dep_amount;
+                if(isset($deposit_amounts[$category->getCategoryId()])) {
+                   $dep_amount = add($deposit_amounts[$category->getCategoryId()], $dep_amount, 2);
+                }
+                $deposit_amounts[$category->getCategoryId()] = $dep_amount;
             }
             $divider++;
+        }
+
+        if($total_need < $this->deposit->getFields()->getNet() && $tn_start < $total_need) {
+            $this->fetchDepositAmounts($date, $deposit_amounts, $total_need);
         }
     }
 
@@ -72,11 +103,11 @@ class Distributor extends \CI_Model {
      * @return bool
      * @throws \Exception
      */
-    private function updateAccountAmount($deposit_amount) {
-        $total = subtract($this->account_dm->getAccountAmount(), $deposit_amount,2);
-        $this->account_dm->setAccountAmount($total);
+    private function updateRemainingAmount($deposit_amount) {
+        $total = subtract($this->deposit->getFields()->getRemaining(), $deposit_amount,2);
+        $this->deposit->getFields()->setRemaining($total);
 
-        return $this->account_dm->saveAccount();
+        return $this->deposit->save();
     }
 
     /**
@@ -104,14 +135,14 @@ class Distributor extends \CI_Model {
      * @throws \Exception
      */
     private function addTransaction($category, $deposit_amount, $date) {
-        $transaction = new \Budget_DataModel_TransactionDM();
-        $transaction->setToCategory($category->getCategoryId());
-        $transaction->setFromAccount($this->account_dm->getAccountId());
-        $transaction->setDepositId($this->deposit->getValues()->getId());
-        $transaction->setOwnerId($this->user_id);
-        $transaction->setTransactionAmount($deposit_amount);
-        $transaction->setTransactionDate($date);
-        $transaction->setTransactionInfo("Automatically distributed funds from ".$this->account_dm->getAccountName()." account into ".$category->getCategoryName());
+        $transaction = new Row();
+        $transaction->getStructure()->setToCategory($category->getCategoryId());
+        $transaction->getStructure()->setFromAccount($this->account_dm->getAccountId());
+        $transaction->getStructure()->setDepositId($this->deposit->getFields()->getId());
+        $transaction->getStructure()->setOwnerId($this->account_dm->getOwnerId());
+        $transaction->getStructure()->setTransactionAmount($deposit_amount);
+        $transaction->getStructure()->setTransactionDate($date);
+        $transaction->getStructure()->setTransactionInfo("Automatically distributed funds from ".$this->account_dm->getAccountName()." account into ".$category->getCategoryName());
         $transaction->saveTransaction();
 
         if($transaction->getErrors()) {
@@ -128,21 +159,30 @@ class Distributor extends \CI_Model {
     private function calculateDepositAmount(\Budget_DataModel_CategoryDM $category, $divider, $date) {
         if( ($category->getDaysUntilDue($date) <= $this->account_dm->getPayFrequency())
             || (
-                (
-                    (round($category->getAmountNecessary() / $divider, 2)) + $category->getCurrentAmount()
-                ) > $category->getAmountNecessary()
+                ((round($category->getAmountNecessary() / $divider, 2)) + $category->getCurrentAmount()) > $category->getAmountNecessary()
             )
         ) {
 
             $amount = subtract($category->getAmountNecessary(), $category->getCurrentAmount(),2);
         } else {
-            $amount = divide($category->getAmountNecessary(), $divider,2);
+            $diff = subtract($category->getAmountNecessary(), $category->getCurrentAmount(), 2);
+            $amount = divide($diff, $divider,2);
         }
 
-        if($amount > $this->account_dm->getAccountAmount()) {
-            $amount = $this->account_dm->getAccountAmount();
+        if($amount > $this->deposit->getFields()->getRemaining()) {
+            $amount = $this->deposit->getFields()->getRemaining();
         }
 
         return $amount;
+    }
+
+    /**
+     * @param \Deposit\Row $deposit
+     * @return $this
+     */
+    public function setDeposit(\Deposit\Row $deposit) {
+        $this->deposit = $deposit;
+
+        return $this;
     }
 }

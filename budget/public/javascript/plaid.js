@@ -43,8 +43,8 @@ plaid.transactionsProbe = function(account_id) {
  */
 plaid.handleTransactions = function(account_id) {
     var date = new Date();
-    var month = date.getMonth() == 0 ? 12 : date.getMonth();
-    var start_date = date.getFullYear()+'-'+month+'-'+date.getDate();
+    date.setDate(date.getDate()-31);
+    var start_date = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
 
     $('body .overlay #message').text('Creating Categories');
     $.post('/ajax/plaid/handleTransactions', {plaid_account_id:account_id, start_date:start_date}, function(response) {

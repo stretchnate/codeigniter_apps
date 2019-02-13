@@ -25,6 +25,8 @@ $(function() {
     $('input[type=submit]').click(function() {
         //$(this).attr('disabled', 'disabled');
     });
+
+    $('[data-toggle="popover"]').popover();
 });
 
 function clearDefaults(form_selector) {

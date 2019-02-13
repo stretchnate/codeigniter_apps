@@ -38,6 +38,7 @@ Class Jsincludes {
     }
 
     public function home() {
+        $scripts[] = self::UTILITIES;
         $scripts[] = "<script type='text/javascript' src='".self::JS."home.js'></script>";
         $scripts[] = "<script type='text/javascript' src='".self::JS."plaid.js'></script>";
         return $scripts;

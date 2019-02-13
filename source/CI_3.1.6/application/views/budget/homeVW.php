@@ -31,6 +31,11 @@ class Budget_HomeVW extends Budget_BaseVW {
     private $linked_accounts;
 
     /**
+     * @var array
+     */
+    private $account_amounts;
+
+    /**
      * Budget_HomeVW constructor.
      *
      * @param $CI
@@ -90,24 +95,22 @@ class Budget_HomeVW extends Budget_BaseVW {
 							<div class="account-container" id="<?php echo $acct_id;?>"<?php echo $style;?>>
 								<div class='well'>
 									<div class="category-container">
-										<label>Amount to distribute:</label>
+                                        <a href="javascript:void(0)" class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="popover" data-placement="right" data-trigger="focus" data-content='This is the amount you have in your account that has not been distributed to a category yet. To get an accurate Account Balance distribute this money into a category.'></a>
+                                        <label>Amount to distribute:</label>
 										<div class="inline-block align-right" id="distribute_<?php echo $account_dm->getAccountId();?>">
-											$<?php echo number_format($account_dm->getAccountAmount(),2, '.', ',') ?>
-											<?php
-												if($account_dm->getAccountAmount() > 0) { ?>
-											<sup><a href="javascript:void(0)" onclick="clearAccount(<?php echo $account_dm->getAccountId();?>)">Clear</a></sup>
-											<?php
-												} ?>
+											$<?php echo isset($this->account_amounts[$account_dm->getAccountId()]) ? number_format($this->account_amounts[$account_dm->getAccountId()],2, '.', ',') : '0.00'; ?>
 										</div>
 									</div>
 									<div class="category-container">
-										<label>Account Balance:</label>
+                                        <a href="javascript:void(0)" class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="popover" data-placement="right" data-trigger="focus" data-content='This is the sum of all of your category totals added together. This number plus your Account Amount should equal your actual bank account balance.'></a>
+                                        <label>Account Balance:</label>
 										<div id="<?php echo $acct_id;?>-total" class="inline-block align-right">
 											$ <?php echo number_format($total->getTotal(),2,'.',','); ?>
 										</div>
 									</div>
 									<div class="category-container">
-										<label>Monthly Need:</label>
+                                        <a href="javascript:void(0)" class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="popover" data-placement="right" data-trigger="focus" data-content='This is an estimation of how much money you need to make each month based on your category needs. If this money is greater than your current take home pay you should consider adjusting your budget wherever possible.'></a>
+                                        <label>Monthly Need:</label>
 										<div id="<?php echo $acct_id;?>-total-necessary" class="inline-block align-right">
 											$ <?php echo number_format($total->getTotalNecessary(),2,'.',','); ?>
 										</div>
@@ -144,7 +147,7 @@ class Budget_HomeVW extends Budget_BaseVW {
 									?>
                                         <div class="well">
 											<h3 class="border">
-												<a class='text' href="/book/getBookInfo/<?php echo $category_dm->getCategoryId(); ?>/"><?php echo $category_dm->getCategoryName(); ?></a>
+												<a class='text' href="/book/getCategory/<?php echo $category_dm->getCategoryId(); ?>/"><?php echo $category_dm->getCategoryName(); ?></a>
 											</h3>
 											<div class="content">
 												<div class="category-container">
@@ -156,11 +159,13 @@ class Budget_HomeVW extends Budget_BaseVW {
 												?>
 												</div>
 												<div class="category-container">
-													<label>Goal:</label>
+                                                    <a href="javascript:void(0)" class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="popover" data-placement="right" data-trigger="focus" data-content='This is the amount amount of money you need in this category each cycle (a cycle being whenever a payment is due, usually monthly but can be quarterly, semi-annual or annually or even every paycheck).'></a>
+                                                    <label>Goal:</label>
 													<div class='align-right inline-block'>$<?php echo number_format($category_dm->getAmountNecessary(), 2, '.', ',') ?></div>
 												</div>
 												<div class="category-container">
-													<label>Amount Saved:</label>
+                                                    <a href="javascript:void(0)" class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="popover" data-placement="right" data-trigger="focus" data-content='This is the amount of money you currently have saved for this category.'></a>
+                                                    <label>Amount Saved:</label>
 													<div class='align-right inline-block'>$<?php echo number_format($category_dm->getCurrentAmount(), 2, '.', ',') ?></div>
 												</div>
 
@@ -258,6 +263,15 @@ class Budget_HomeVW extends Budget_BaseVW {
     public function setLinkedAccounts(array $account_ids) {
         $this->linked_accounts = $account_ids;
 
+        return $this;
+    }
+
+    /**
+     * @param array $account_amounts
+     * @return Budget_HomeVW
+     */
+    public function setAccountAmounts($account_amounts) {
+        $this->account_amounts = $account_amounts;
         return $this;
     }
 }

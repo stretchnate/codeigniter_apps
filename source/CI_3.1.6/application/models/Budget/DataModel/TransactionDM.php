@@ -1,17 +1,11 @@
 <?php
 
+/**
+ * Class Budget_DataModel_TransactionDM
+ * @deprecated - need to convert to use Row\Structure for properties
+ */
 class Budget_DataModel_TransactionDM extends N8_Model {
 
-	private $transaction_id;
-	private $to_category        = '';
-	private $from_category      = '';
-	private $to_account         = '';
-	private $from_account       = '';
-	private $deposit_id         = '';
-	private $owner_id           = '';
-	private $transaction_amount = '';
-	private $transaction_date   = '';
-	private $transaction_info   = '';
 	private $insert_id;
 
 	//these are not stored in the db on transactions.
@@ -19,6 +13,11 @@ class Budget_DataModel_TransactionDM extends N8_Model {
 	private $from_category_name;
 	private $to_account_name;
 	private $from_account_name;
+
+    /**
+     * @var \Transaction\Structure
+     */
+	private $structure;
 
 	function __construct($transaction_id = null) {
 		parent::__construct();
@@ -54,7 +53,7 @@ class Budget_DataModel_TransactionDM extends N8_Model {
 
 		if($this->validateTransaction()) {
 
-			if($this->transaction_id > 0) {
+			if($this->getStructure()->getTransactionId() > 0) {
 				$result = $this->updateTransaction();
 			} else {
                 $result = $this->insertTransaction();
@@ -73,31 +72,31 @@ class Budget_DataModel_TransactionDM extends N8_Model {
 	 */
 	private function updateTransaction() {
 		$sets = array();
-		if($this->to_category) {
-			$sets["to_category"]    = $this->to_category;
+		if($this->getStructure()->getToCategory()) {
+			$sets["to_category"]    = $this->getStructure()->getToCategory();
 		}
 
-		if($this->from_category) {
-			$sets["from_category"]  = $this->from_category;
+		if($this->getStructure()->getFromCategory()) {
+			$sets["from_category"]  = $this->getStructure()->getFromCategory();
 		}
 
-		if($this->to_account) {
-			$sets["to_account"]     = $this->to_account;
+		if($this->getStructure()->getToAccount()) {
+			$sets["to_account"]     = $this->getStructure()->getToAccount();
 		}
 
-		if($this->from_account) {
-			$sets["from_account"]   = $this->from_account;
+		if($this->getStructure()->getFromAccount()) {
+			$sets["from_account"]   = $this->getStructure()->getFromAccount();
 		}
 
-		if($this->deposit_id) {
-			$sets["deposit_id"]     = $this->deposit_id;
+		if($this->getStructure()->getDepositId()) {
+			$sets["deposit_id"]     = $this->getStructure()->getDepositId();
 		}
 
-		$sets["transaction_amount"] = $this->dbNumberFormat($this->transaction_amount);
-		$sets["transaction_date"]   = $this->transaction_date;
-		$sets["transaction_info"]   = $this->transaction_info;
+		$sets["transaction_amount"] = $this->dbNumberFormat($this->getStructure()->getTransactionAmount());
+		$sets["transaction_date"]   = $this->getStructure()->getTransactionDate();
+		$sets["transaction_info"]   = $this->getStructure()->getTransactionInfo();
 
-		if($this->db->where("transaction_id", $this->transaction_id)->update("transactions", $sets)) {
+		if($this->db->where("transaction_id", $this->getStructure()->getTransactionId())->update("transactions", $sets)) {
 			return true;
 		}
 		return false;
@@ -111,30 +110,30 @@ class Budget_DataModel_TransactionDM extends N8_Model {
 	private function insertTransaction() {
 		$values = array();
 
-		if($this->to_category) {
-			$values["to_category"]    = $this->to_category;
+		if($this->getStructure()->getToCategory()) {
+			$values["to_category"]    = $this->getStructure()->getToCategory();
 		}
 
-		if($this->from_category) {
-			$values["from_category"]  = $this->from_category;
+		if($this->getStructure()->getFromCategory()) {
+			$values["from_category"]  = $this->getStructure()->getFromCategory();
 		}
 
-		if($this->to_account) {
-			$values["to_account"]     = $this->to_account;
+		if($this->getStructure()->getToAccount()) {
+			$values["to_account"]     = $this->getStructure()->getToAccount();
 		}
 
-		if($this->from_account) {
-			$values["from_account"]   = $this->from_account;
+		if($this->getStructure()->getFromAccount()) {
+			$values["from_account"]   = $this->getStructure()->getFromAccount();
 		}
 
-		if($this->deposit_id) {
-			$values["deposit_id"]     = $this->deposit_id;
+		if($this->getStructure()->getDepositId()) {
+			$values["deposit_id"]     = $this->getStructure()->getDepositId();
 		}
 
-		$values["owner_id"]           = $this->owner_id;
-		$values["transaction_amount"] = $this->dbNumberFormat($this->transaction_amount);
-		$values["transaction_date"]   = $this->transaction_date;
-		$values["transaction_info"]   = $this->transaction_info;
+		$values["owner_id"]           = $this->getStructure()->getOwnerId();
+		$values["transaction_amount"] = $this->dbNumberFormat($this->getStructure()->getTransactionAmount());
+		$values["transaction_date"]   = $this->getStructure()->getTransactionDate();
+		$values["transaction_info"]   = $this->getStructure()->getTransactionInfo();
 
 		return $this->db->insert("transactions", $values);
 	}
@@ -145,8 +144,8 @@ class Budget_DataModel_TransactionDM extends N8_Model {
      * @return type
      */
     public function deleteTransaction() {
-        if(!empty($this->transaction_id)) {
-            return $this->db->delete('transactions', array('transaction_id' => $this->transaction_id));
+        if(!empty($this->getStructure()->getTransactionId())) {
+            return $this->db->delete('transactions', array('transaction_id' => $this->getStructure()->getTransactionId()));
         }
     }
 
@@ -163,17 +162,17 @@ class Budget_DataModel_TransactionDM extends N8_Model {
 	private function validateTransaction() {
 		$return = false;
 		//there must be an owner for every transaction
-		if( !$this->owner_id ) {
+		if( !$this->getStructure()->getOwnerId() ) {
 			$this->setError("No Owner ID for transaction");
 		}
 
 		$return = $this->getTransactionType();
 
 		if($return === false) {
-			$this->setError("Invalid Combination for transaction\nfrom account = ".$this->from_account . "to account = ".$this->to_account .
-							"from category = ".$this->from_category .
-							"to category = ".$this->to_category .
-							"deposit id = ".$this->deposit_id);
+			$this->setError("Invalid Combination for transaction\nfrom account = ".$this->getStructure()->getFromAccount() . "to account = ".$this->getStructure()->getToAccount() .
+							"from category = ".$this->getStructure()->getFromCategory() .
+							"to category = ".$this->getStructure()->getToCategory() .
+							"deposit id = ".$this->getStructure()->getDepositId());
 		}
 		return $return;
 	}
@@ -215,8 +214,8 @@ class Budget_DataModel_TransactionDM extends N8_Model {
 
 	//account to category deposits
 	protected function isAccountToCategoryDeposit() {
-		if($this->getFromAccount() && $this->getToCategory()) {
-			if(!$this->getToAccount() && !$this->getFromCategory()) {
+		if($this->getStructure()->getFromAccount() && $this->getStructure()->getToCategory()) {
+			if(!$this->getStructure()->getToAccount() && !$this->getStructure()->getFromCategory()) {
 				return true;
 			}
 		}
@@ -225,8 +224,8 @@ class Budget_DataModel_TransactionDM extends N8_Model {
 
 	//category to category transfers
 	protected function isCategoryToCategoryTransfer() {
-		if($this->getFromCategory() && $this->getToCategory()) {
-			if( !$this->getToAccount() && !$this->getFromAccount() && !$this->getDepositId() ) {
+		if($this->getStructure()->getFromCategory() && $this->getStructure()->getToCategory()) {
+			if( !$this->getStructure()->getToAccount() && !$this->getStructure()->getFromAccount() && !$this->getStructure()->getDepositId() ) {
 				return true;
 			}
 		}
@@ -235,8 +234,8 @@ class Budget_DataModel_TransactionDM extends N8_Model {
 
 	//account to account transfers
 	protected function isAccountToAccountTransfer() {
-		if($this->getFromAccount() && $this->getToAccount()) {
-			if( !$this->getToCategory() && !$this->getFromCategory() && !$this->getDepositId() ) {
+		if($this->getStructure()->getFromAccount() && $this->getStructure()->getToAccount()) {
+			if( !$this->getStructure()->getToCategory() && !$this->getStructure()->getFromCategory() && !$this->getStructure()->getDepositId() ) {
 				return true;
 			}
 		}
@@ -245,8 +244,8 @@ class Budget_DataModel_TransactionDM extends N8_Model {
 
 	//deposits
 	protected function isDeposit() {
-		if($this->getDepositId() && $this->getToAccount()) {
-			if( !$this->getToCategory() && !$this->getFromCategory() && !$this->getFromAccount() ) {
+		if($this->getStructure()->getDepositId() && $this->getStructure()->getToAccount()) {
+			if( !$this->getStructure()->getToCategory() && !$this->getStructure()->getFromCategory() && !$this->getStructure()->getFromAccount() ) {
 				return true;
 			}
 		}
@@ -255,8 +254,8 @@ class Budget_DataModel_TransactionDM extends N8_Model {
 
 	//deductions
 	protected function isDeduction() {
-		if($this->getFromCategory()) {
-			if( !$this->getToCategory() && !$this->getToAccount() && !$this->getDepositId() && !$this->getFromAccount() ) {
+		if($this->getStructure()->getFromCategory()) {
+			if( !$this->getStructure()->getToCategory() && !$this->getStructure()->getToAccount() && !$this->getStructure()->getDepositId() && !$this->getStructure()->getFromAccount() ) {
 				return true;
 			}
 		}
@@ -265,8 +264,8 @@ class Budget_DataModel_TransactionDM extends N8_Model {
 
 	//refunds
 	protected function isRefund() {
-		if($this->getToCategory()) {
-			if( !$this->getFromCategory() && !$this->getToAccount() && !$this->getDepositId() && !$this->getFromAccount() ) {
+		if($this->getStructure()->getToCategory()) {
+			if( !$this->getStructure()->getFromCategory() && !$this->getStructure()->getToAccount() && !$this->getStructure()->getDepositId() && !$this->getStructure()->getFromAccount() ) {
 				return true;
 			}
 		}
@@ -276,92 +275,6 @@ class Budget_DataModel_TransactionDM extends N8_Model {
 	/** *********************************************
 	 * Getters and Setters
 	 ************************************************/
-	public function getTransactionId() {
-		return $this->transaction_id;
-	}
-
-	public function setTransactionId($transaction_id) {
-		$this->transaction_id = $transaction_id;
-	}
-
-	public function getToCategory() {
-		return $this->to_category;
-	}
-
-	public function setToCategory($to_category) {
-		$this->to_category = $to_category;
-	}
-
-	public function getFromCategory() {
-		return $this->from_category;
-	}
-
-	public function setFromCategory($from_category) {
-		$this->from_category = $from_category;
-	}
-
-	public function getToAccount() {
-		return $this->to_account;
-	}
-
-	public function setToAccount($to_account) {
-		$this->to_account = $to_account;
-	}
-
-	public function getFromAccount() {
-		return $this->from_account;
-	}
-
-	public function setFromAccount($from_account) {
-		$this->from_account = $from_account;
-	}
-
-	public function getDepositId() {
-		return $this->deposit_id;
-	}
-
-	public function setDepositId($deposit_id) {
-		$this->deposit_id = $deposit_id;
-	}
-
-	public function getOwnerId() {
-		return $this->owner_id;
-	}
-
-	public function setOwnerId($owner_id) {
-		$this->owner_id = $owner_id;
-	}
-
-	public function getTransactionAmount() {
-		return $this->transaction_amount;
-	}
-
-	public function setTransactionAmount($transaction_amount) {
-		$this->transaction_amount = $transaction_amount;
-	}
-
-	public function getTransactionDate() {
-		return $this->transaction_date;
-	}
-
-	public function setTransactionDate($transaction_date) {
-		$pattern = "/[\/.-]/";
-
-		if( preg_match($pattern, $transaction_date) ) {
-			$transaction_date = strtotime($transaction_date);
-		}
-
-		$this->transaction_date = date("Y-m-d H:i:s", $transaction_date);
-	}
-
-	public function getTransactionInfo() {
-		return $this->transaction_info;
-	}
-
-	public function setTransactionInfo($transaction_info) {
-		$this->transaction_info = $transaction_info;
-	}
-
 	public function getInsertId() {
 		return $this->insert_id;
 	}
@@ -397,5 +310,12 @@ class Budget_DataModel_TransactionDM extends N8_Model {
 	public function setFromAccountName($from_account_name) {
 		$this->from_account_name = $from_account_name;
 	}
+
+    /**
+     * @return \Transaction\Structure
+     */
+    public function getStructure() {
+	    return $this->structure;
+    }
 }
 

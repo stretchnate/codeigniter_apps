@@ -1,136 +1,64 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: stretch
- * Date: 4/14/18
- * Time: 8:42 PM
- */
 
 /**
- * Class Deposit - adapter to new_funds table
+ * Class Deposit
  */
-class Deposit extends CI_Model {
+class Deposit extends IteratorBase {
 
     const TABLE = 'new_funds';
 
     /**
-     * @var \Deposit\Values
-     */
-    private $values;
-
-    /**
      * Deposit constructor.
      *
-     * @param $values
+     * @param null $fields
      * @throws Exception
      */
-    public function __construct($values = null) {
+    public function __construct($fields = null) {
         parent::__construct();
-
-        $this->values = new \Deposit\Values();
-
-        if($values) {
-            $this->load($values);
+        if($fields) {
+            $this->load($fields);
         }
     }
 
     /**
-     * @param \Deposit\Values $values
+     * @param \Deposit\Row\Fields $fields
      * @throws Exception
      */
-    public function load(\Deposit\Values $values) {
-        $query = $this->db->get_where(self::TABLE, $values->toArray());
+    public function load(\Deposit\Row\Fields $fields, $order_by = null) {
+        if($fields) {
+            $this->db->where($fields->whereString());
+        }
+
+        if($order_by) {
+            $this->db->order_by($order_by);
+        }
+
+        $query = $this->db->get(self::TABLE);
 
         if(!$query) {
-            $error = $this->db->error();
-            throw new Exception($error['message'], EXCEPTION_CODE_ERROR);
+            throw new Exception($this->db->error()['message'], EXCEPTION_CODE_ERROR);
         }
 
-        if($query->num_rows() > 0) {
-            $this->values->setId((int)$query->row()->id)
-                ->setOwnerId((int)$query->row()->ownerId)
-                ->setAccountId((int)$query->row()->account_id)
-                ->setDate($query->row()->date)
-                ->setGross($query->row()->gross)
-                ->setSource($query->row()->source)
-                ->setNet($query->row()->net);
+        foreach($query->result() as $result) {
+            $row = new \Deposit\Row();
+            $row->getFields()->setId($result->id)
+                ->setAccountId($result->account_id)
+                ->setOwnerId($result->ownerId)
+                ->setDate(new \DateTime($result->date))
+                ->setGross($result->gross)
+                ->setNet($result->net)
+                ->setSource($result->source)
+                ->setRemaining($result->remaining)
+                ->setManualDistribution($result->manual_distribution);
+
+            $this->items[] = $row;
         }
     }
 
     /**
-     * @return bool
-     * @throws Exception
+     * @return \Deposit\Row|null
      */
-    public function save() {
-        if($this->rowExists()) {
-            $result = $this->update();
-        } else {
-            $result = $this->insert();
-        }
-
-        if(!$result) {
-            $error = $this->db->error();
-            throw new Exception($error['message'], EXCEPTION_CODE_ERROR);
-        }
-
-        return true;
+	public function current() {
+        return $this->valid() ? $this->items[$this->key] : null;
     }
-
-    /**
-     * @return mixed
-     * @throws Exception
-     */
-    private function insert() {
-        $set = $this->values->toArray();
-
-        $result = $this->db->insert(self::TABLE, $set);
-
-        if($result === true) {
-            $this->values->setId($this->db->insert_id());
-        }
-
-        return $result;
-    }
-
-    /**
-     * @return mixed
-     */
-    private function update() {
-        $set = $this->values->toArray();
-        unset($set['id']);
-
-        $this->db->where(['id' => $this->values->getId()]);
-
-        return $this->db->update(self::TABLE, $set);
-    }
-
-    /**
-     * @return bool
-     * @throws Exception
-     */
-    private function rowExists() {
-        $result = false;
-        if($this->values->getId()) {
-            $query = $this->db->get_where(self::TABLE, ['id' => $this->values->getId()]);
-
-            if(!$query) {
-                $error = $this->db->error();
-                throw new Exception($error['message'], EXCEPTION_CODE_ERROR);
-            }
-
-            if($query->num_rows() > 0) {
-                $result = true;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * @return \Deposit\Values
-     */
-    public function getValues() {
-        return $this->values;
-    }
-
 }

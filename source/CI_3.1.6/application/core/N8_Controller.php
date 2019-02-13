@@ -27,50 +27,52 @@ class N8_Controller extends CI_Controller {
 	 *
 	 * @param Array        $transactions
 	 * @param String/Int   $specified_transaction
+     * @return \Transaction\Row
+     * @throws Exception
 	 */
 	protected function transactionDetails($transactions, $specified_transaction) {
-		$transaction_details = new Budget_DataModel_TransactionDM();
+		$transaction_details = new \Transaction\Row();
 
 		if (strtolower($specified_transaction) == "last") {
 			$specified_transaction = count($transactions) - 1;
 		}
 
-		$transaction = new Budget_DataModel_TransactionDM($transactions[$specified_transaction]->transaction_id);
+		$transaction = new \Transaction\Row($transactions[$specified_transaction]->transaction_id);
 
-		if ($transaction->getToCategory()) {
-			$to_category = new Budget_DataModel_CategoryDM($transaction->getToCategory(), $this->session->userdata('user_id'));
+		if ($transaction->getStructure()->getToCategory()) {
+			$to_category = new Budget_DataModel_CategoryDM($transaction->getStructure()->getToCategory(), $this->session->userdata('user_id'));
 
-			$transaction_details->setToCategory($to_category->getCategoryId());
+			$transaction_details->getStructure()->setToCategory($to_category->getCategoryId());
 			$transaction_details->setToCategoryName($to_category->getCategoryName());
 		}
 
-		if ($transaction->getFromCategory()) {
-			$from_category = new Budget_DataModel_CategoryDM($transaction->getFromCategory(), $this->session->userdata('user_id'));
+		if ($transaction->getStructure()->getFromCategory()) {
+			$from_category = new Budget_DataModel_CategoryDM($transaction->getStructure()->getFromCategory(), $this->session->userdata('user_id'));
 
-			$transaction_details->setFromCategory($from_category->getCategoryId());
+			$transaction_details->getStructure()->setFromCategory($from_category->getCategoryId());
 			$transaction_details->setFromCategoryName($from_category->getCategoryName());
 		}
 
-		if ($transaction->getToAccount()) {
-			$to_account = new Budget_DataModel_AccountDM($transaction->getToAccount(), $this->session->userdata('user_id'));
+		if ($transaction->getStructure()->getToAccount()) {
+			$to_account = new Budget_DataModel_AccountDM($transaction->getStructure()->getToAccount(), $this->session->userdata('user_id'));
 
-			$transaction_details->setToAccount($to_account->getAccountId());
+			$transaction_details->getStructure()->setToAccount($to_account->getAccountId());
 			$transaction_details->setToAccountName($to_account->getAccountName());
 		}
 
-		if ($transaction->getFromAccount()) {
-			$from_account = new Budget_DataModel_AccountDM($transaction->getFromAccount(), $this->session->userdata('user_id'));
+		if ($transaction->getStructure()->getFromAccount()) {
+			$from_account = new Budget_DataModel_AccountDM($transaction->getStructure()->getFromAccount(), $this->session->userdata('user_id'));
 
-			$transaction_details->setFromAccount($from_account->getAccountId());
+			$transaction_details->getStructure()->setFromAccount($from_account->getAccountId());
 			$transaction_details->setFromAccountName($from_account->getAccountName());
 		}
 
 
-		$transaction_details->setDepositId($transaction->getDepositId());
-		$transaction_details->setOwnerId($transaction->getOwnerId());
-		$transaction_details->setTransactionAmount($transaction->getTransactionAmount());
-		$transaction_details->setTransactionDate($transaction->getTransactionDate());
-		$transaction_details->setTransactionInfo($transaction->getTransactionInfo());
+		$transaction_details->getStructure()->setDepositId($transaction->getStructure()->getDepositId());
+		$transaction_details->getStructure()->setOwnerId($transaction->getStructure()->getOwnerId());
+		$transaction_details->getStructure()->setTransactionAmount($transaction->getStructure()->getTransactionAmount());
+		$transaction_details->getStructure()->setTransactionDate($transaction->getStructure()->getTransactionDate());
+		$transaction_details->getStructure()->setTransactionInfo($transaction->getStructure()->getTransactionInfo());
 
 		return $transaction_details;
 	}
@@ -86,32 +88,32 @@ class N8_Controller extends CI_Controller {
 		switch ($transaction->getTransactionType()) {
 			//account to category deposits
 			case "account_to_category_deposit":
-				$return = "Deposit from {$transaction->getFromAccountName()} to <a href='/book/getBookInfo/{$transaction->getToCategory()}'>{$transaction->getToCategoryName()}</a> for $" . number_format($transaction->getTransactionAmount(), 2, '.', ',');
+				$return = "Deposit from {$transaction->getFromAccountName()} to <a href='/book/getCategory/{$transaction->getStructure()->getToCategory()}'>{$transaction->getToCategoryName()}</a> for $" . number_format($transaction->getStructure()->getTransactionAmount(), 2, '.', ',');
 				break;
 
 			//category to category transfers
 			case "category_to_category_transfer":
-				$return = "Transfer from <a href='/book/getBookInfo/{$transaction->getFromCategory()}'>{$transaction->getFromCategoryName()}</a> to <a href='/book/getBookInfo/{$transaction->getToCategory()}'>{$transaction->getToCategoryName()}</a> for $" . number_format($transaction->getTransactionAmount(), 2, '.', ',');
+				$return = "Transfer from <a href='/book/getCategory/{$transaction->getStructure()->getFromCategory()}'>{$transaction->getFromCategoryName()}</a> to <a href='/book/getCategory/{$transaction->getStructure()->getToCategory()}'>{$transaction->getToCategoryName()}</a> for $" . number_format($transaction->getStructure()->getTransactionAmount(), 2, '.', ',');
 				break;
 
 			//account to account transfers
 			case "account_to_account_transfer":
-				$return = "Transfer from {$transaction->getFromAccountName()} to {$transaction->getToAccountName()} for $" . number_format($transaction->getTransactionAmount(), 2, '.', ',');
+				$return = "Transfer from {$transaction->getFromAccountName()} to {$transaction->getToAccountName()} for $" . number_format($transaction->getStructure()->getTransactionAmount(), 2, '.', ',');
 				break;
 
 			//deposits
 			case "deposit":
-				$return = "Deposit (deposit id: {$transaction->getDepositId()}) into {$transaction->getToAccount()} for $" . number_format($transaction->getTransactionAmount(), 2, '.', ',');
+				$return = "Deposit (deposit id: {$transaction->getStructure()->getDepositId()}) into {$transaction->getToAccountName()} for $" . number_format($transaction->getStructure()->getTransactionAmount(), 2, '.', ',');
 				break;
 
 			//deductions
 			case "deduction":
-				$return = "Deduction from <a href='/book/getBookInfo/{$transaction->getFromCategory()}'>{$transaction->getFromCategoryName()}</a> for $" . number_format($transaction->getTransactionAmount(), 2, '.', ',');
+				$return = "Deduction from <a href='/book/getCategory/{$transaction->getStructure()->getFromCategory()}'>{$transaction->getFromCategoryName()}</a> for $" . number_format($transaction->getStructure()->getTransactionAmount(), 2, '.', ',');
 				break;
 
 			//refunds
 			case "refund":
-				$return = "Refund to <a href='/book/getBookInfo/{$transaction->getToCategory()}'>{$transaction->getToCategoryName()}</a> for $" . number_format($transaction->getTransactionAmount(), 2, '.', ',');
+				$return = "Refund to <a href='/book/getCategory/{$transaction->getStructure()->getToCategory()}'>{$transaction->getToCategoryName()}</a> for $" . number_format($transaction->getStructure()->getTransactionAmount(), 2, '.', ',');
 				break;
 
 			default:
@@ -121,5 +123,4 @@ class N8_Controller extends CI_Controller {
 
 		return $return;
 	}
-
 }

@@ -51,19 +51,20 @@
         }
 
         /**
-         * fetches the deposit dates from the database
-         *
-         * @return void
+         * @throws \Exception
          */
         private function fetchDepositDates() {
-            $deposits_model = new Deposits();
-            $deposits = $deposits_model->getDeposits(
-                    $this->ci->session->userdata('user_id'),
-                    $this->account_dm->getAccountId(),
-                    date('Y/m/d', strtotime('-3 months')));
+            $fields = new \Deposit\Row\Fields();
+            $fields->setAccountId($this->account_dm->getAccountId());
+            $date = new DateTime();
+            $date->setTimestamp(strtotime('-3 months'));
+            $fields->setDate($date);
+            $fields->setOperator('date', 'BETWEEN');
+            $deposit = new \Deposit($fields);
 
-            foreach($deposits as $deposit) {
-                $this->deposit_dates[] = $this->trimDate($deposit->date);
+            while($deposit->valid()) {
+                $this->deposit_dates[] = $deposit->current()->getFields()->getDate()->format('Y-m-d');
+                $deposit->next();
             }
         }
 
@@ -95,17 +96,6 @@
             }
 
             return $pay_dates;
-        }
-
-        /**
-         * trims the timestamp off of a date
-         *
-         * @param string $date
-         * @return string
-         */
-        private function trimDate($date) {
-            $pattern = '/ \d{2}:\d{2}:\d{2}$/';
-            return preg_replace($pattern, '', $date);
         }
 
         /**

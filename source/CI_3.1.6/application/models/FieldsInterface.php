@@ -1,6 +1,6 @@
 <?php
 
-interface ValueInterface {
+interface FieldsInterface {
 
     public function toArray();
 }

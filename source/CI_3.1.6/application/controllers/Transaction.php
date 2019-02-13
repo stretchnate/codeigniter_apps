@@ -32,4 +32,50 @@
 
 			echo json_encode($response);
 		}
+
+        /**
+         * @param $id
+         */
+		public function edit() {
+		    $id = $this->input->post('transaction_id');
+		    try {
+                $tdm = new \Transaction\Row($id);
+                $structure = new \Transaction\Structure();
+                $structure->setTransactionAmount($this->input->post('amount'));
+                $structure->setTransactionDate($this->input->post('date'));
+                $structure->setTransactionInfo($this->input->post('description'));
+                switch($tdm->getTransactionType()) {
+                    case "deduction":
+                        $structure->setFromCategory($tdm->getStructure()->getFromCategory());
+                        $manager = new \Transaction\Deduction\Manager();
+                        break;
+                    case "category_to_category_transfer":
+                        $structure->setToCategory($tdm->getStructure()->getToCategory());
+                        $structure->setFromCategory($tdm->getStructure()->getFromCategory());
+                        $manager = new \Transaction\Category\Transfer\Manager();
+                        break;
+                    case "refund":
+                        $structure->setToCategory($tdm->getStructure()->getToCategory());
+                        $manager = new \Transaction\Refund\Manager();
+                        break;
+                    case "account_to_category_deposit":
+                        $structure->setToCategory($tdm->getStructure()->getToCategory());
+                        $manager = new \Transaction\Category\Deposit\Manager();
+                        break;
+                    case "account_to_account_transfer":
+                    case "deposit":
+                    default:
+                        $message = 'transaction type ['.$tdm->getTransactionType().'] cannot be modified.';
+                        log_message('error', $message);
+                        exit(json_encode(['success' => false, 'message' => $message]));
+                }
+
+                $manager->modify($tdm, $structure, $this->session->user_id);
+                exit(json_encode(['success' => true]));
+            } catch(Exception $e) {
+                log_message('error', $e->getMessage());
+                exit(json_encode(['success' => false]));
+            }
+        }
+
 	}

@@ -95,6 +95,19 @@
     border-color: #7BC6E6;
 }
 
+.glyphicon {
+    color:#23527c;
+}
+
+.glyphicon-remove {
+    color:#fd0207;
+}
+
+input.danger {
+    border-color: #fd0207;
+    background-color: #f2dede;
+}
+
 #footer {
     background-color: #9ED3FC;
     margin-top: 10px;
