@@ -74,6 +74,10 @@ class Distributor extends \CI_Model {
                     break 2;
                 }
 
+				if($category->getAmountNecessary() <= $category->getCurrentAmount()) {
+					continue;
+				}
+
                 $dep_amount = $this->calculateDepositAmount($category, $divider, $date);
                 if(isset($deposit_amounts[$category->getCategoryId()]) && $dep_amount > subtract($category->getAmountNecessary(), add($category->getCurrentAmount(), $deposit_amounts[$category->getCategoryId()], 2), 2)) {
                     $dep_amount = subtract($category->getAmountNecessary(), add($category->getCurrentAmount(), $deposit_amounts[$category->getCategoryId()], 2),2);
