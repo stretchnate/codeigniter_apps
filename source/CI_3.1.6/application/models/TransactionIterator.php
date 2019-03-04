@@ -11,7 +11,7 @@ class TransactionIterator extends IteratorBase {
 
     const TABLE = 'transactions';
 
-    public function __construct(\Transaction\Structure $fields) {
+    public function __construct(\Transaction\Fields $fields) {
         parent::__construct();
         if($fields) {
             $this->load($fields);
@@ -19,17 +19,20 @@ class TransactionIterator extends IteratorBase {
     }
 
     /**
-     * @param \Transaction\Structure $fields
-     * @param null $order_by
+     * @param \Transaction\Fields $fields
      * @throws Exception
      */
-    public function load(\Transaction\Structure $fields, $order_by = null) {
+    public function load(\Transaction\Fields $fields) {
         if($fields) {
             $this->db->where($fields->whereString());
         }
 
-        if($order_by) {
-            $this->db->order_by($order_by);
+        if($fields->getOrderBy()) {
+            $this->db->order_by($fields->getOrderBy());
+        }
+
+        if($fields->getLimit()) {
+            $this->db->limit($fields->getLimit());
         }
 
         $query = $this->db->get(self::TABLE);

@@ -149,6 +149,7 @@ class Budget_HomeVW extends Budget_BaseVW {
                                         <div class="well">
 											<h3 class="border">
 												<a class='text' href="/book/getCategory/<?php echo $category_dm->getCategoryId(); ?>/"><?php echo $category_dm->getCategoryName(); ?></a>
+                                                <input type="hidden" value="<?=$category_dm->getcategoryid();?>" class="category_id"/>
 											</h3>
 											<div class="content">
 												<div class="category-container">
@@ -184,6 +185,11 @@ class Budget_HomeVW extends Budget_BaseVW {
 														}
 													?>
 												</div>
+                                                <div id="category_<?=$category_dm->getCategoryId()?>">
+                                                    <a href="javascript:void(0)" class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="popover" data-placement="right" data-trigger="focus" data-content='This is the date when you last made a payment to this category.'></a>
+                                                    <label>Last Paid:</label>
+                                                    <div class="align-right inline-block last_paid"></div>
+                                                </div>
 											</div>
 										</div>
 								<?php

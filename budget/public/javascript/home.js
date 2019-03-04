@@ -18,6 +18,22 @@ $(document).ready(function() {
         $(".account-container").hide();
         $("#"+account_to_show).show();
     });
+
+    /**
+     * add last payment info for each category
+     */
+    $(".category_id").each(function() {
+        $.get('/ajax/category/getLastPaid/'+$(this).val(), function(result) {
+            let category_div = 'category_'+$(this).val();
+            if(result.success) {
+                let date = new Date(result.data.date);
+                let data = date.toLocaleDateString() + ' - $' + result.data.amount;
+                $('#'+category_div+' div.last_paid').text(data).removeClass('error');
+            } else {
+                $('#'+category_div+' div.last_paid').text('unable to load last payment info for this category.').addClass('error');
+            }
+        }, 'json');
+    });
 });
 
 /**
