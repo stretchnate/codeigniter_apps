@@ -349,12 +349,8 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 		$today         = new DateTime($from_date);
 		$next_due_date = $this->getNextDueDate();
 
-		//unfortunatley until I'm updated to 5.3.2 or higher this won't work so we have to use the below rudimentary code :(
-		// $date_interval = $today->diff($next_due_date);
-		// $days = $date_interval->format('%a');//total number of days as a result of DateTime::diff();
-
-		$total_seconds = $next_due_date->getTimeStamp() - $today->getTimeStamp();
-		$days          = ($total_seconds / 86400);
+        $date_interval = $today->diff($next_due_date);
+        $days = $date_interval->format('%a');//total number of days as a result of DateTime::diff();
 
 		$this->days_until_due = $days;
 	}
@@ -485,7 +481,7 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 	}
 
 	public function getDaysUntilDue($from_date = null) {
-		if(is_null($this->days_until_due)) {
+		if(!$this->days_until_due) {
 			$this->calculateDaysUntilDue($from_date);
 		}
 

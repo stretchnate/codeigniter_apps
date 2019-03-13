@@ -22,9 +22,9 @@ trait Distribute {
         $fields->setOperator('remaining', '>');
         $deposit = new \Deposit($fields, 'id DESC');
 
-        $account_dm->orderCategoriesByDueFirst(date('Y-m-d'));
-        $distributor = new \Funds\Distributor($account_dm);
         while($deposit->valid()) {
+            $account_dm->orderCategoriesByDueFirst($deposit->current()->getFields()->getDate()->format('Y-m-d'));
+            $distributor = new \Funds\Distributor($account_dm);
             $distributor->setDeposit($deposit->current());
             $distributor->run();
             $deposit->next();
