@@ -17,7 +17,7 @@ class Category extends CI_Controller {
     /**
      * @param $category_id
      */
-    public function getLastPaidInfo($category_id) {
+    public function getLastPaid($category_id) {
         try {
             $category = new Budget_DataModel_CategoryDM($category_id, $this->session->user_id);
             $structure = new \Transaction\Fields();
