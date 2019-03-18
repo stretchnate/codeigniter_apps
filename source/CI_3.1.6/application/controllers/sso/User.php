@@ -59,12 +59,7 @@
 				if($this->input->post('email') == $data) {
 					$cookie_val = crypt(microtime(), $this->vendor);
 					$this->cache->save($cookie_val, $this->input->post('email'), 180);//cache token for 3 min.
-					header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-					header("Access-Control-Allow-Credentials: true");
-					header("Access-Control-Allow-Origin: https://whyibudget.com");
-                    header("Access-Control-Allow-Origin: https://courses.whyibudget.com");
-					header("Access-Control-Allow-Headers: Content-Type, *");
-
+					
 					setcookie('token', base64_encode($cookie_val), (time()+60), '/', 'budget.whyibudget.com', false, true);
 					setcookie('useremail', $this->input->post('email'), (time()+60), '/', 'budget.whyibudget.com', false, true);
 
@@ -76,6 +71,12 @@
 				$this->response->status = HTTP_INTERNAL_SERVER_ERROR;
 				log_message(LOG_LEVEL_ERROR, $e->getMessage());
 			}
+
+			header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+			header("Access-Control-Allow-Credentials: true");
+			header("Access-Control-Allow-Origin: https://whyibudget.com");
+			header("Access-Control-Allow-Origin: https://courses.whyibudget.com");
+			header("Access-Control-Allow-Headers: Content-Type, *");
 
 			echo json_encode($this->response);
 		}
