@@ -53,6 +53,12 @@
 		 * @param string $access_token
 		 */
 		public function getCookie() {
+			header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+			header("Access-Control-Allow-Credentials: true");
+			header("Access-Control-Allow-Origin: https://whyibudget.com");
+			header("Access-Control-Allow-Origin: https://courses.whyibudget.com");
+			header("Access-Control-Allow-Headers: Content-Type, *");
+			
 			try {
 				$access_token = $this->input->post('access_token');
 				$data = $this->cache->get($access_token);
@@ -71,12 +77,6 @@
 				$this->response->status = HTTP_INTERNAL_SERVER_ERROR;
 				log_message(LOG_LEVEL_ERROR, $e->getMessage());
 			}
-
-			header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-			header("Access-Control-Allow-Credentials: true");
-			header("Access-Control-Allow-Origin: https://whyibudget.com");
-			header("Access-Control-Allow-Origin: https://courses.whyibudget.com");
-			header("Access-Control-Allow-Headers: Content-Type, *");
 
 			echo json_encode($this->response);
 		}
