@@ -70,9 +70,10 @@
 					setcookie('useremail', $this->input->post('email'), (time()+60), '/', 'budget.whyibudget.com', false, true);
 
 					$this->response->status = HTTP_OK;
-
-					$this->cache->delete($access_token);
+				} else {
+				    $this->response->message = "Unable to login to budget using email ".$this->input->post('email');
 				}
+				$this->cache->delete($access_token);
 			} catch (Exception $e) {
 				$this->response->status = HTTP_INTERNAL_SERVER_ERROR;
 				log_message(LOG_LEVEL_ERROR, $e->getMessage());
