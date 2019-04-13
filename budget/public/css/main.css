@@ -127,3 +127,19 @@
     width:97%;
     display:inline-block;
 }
+
+.well.border-paid {
+    border: 1px solid #5cb85c;
+}
+
+.well.border-unpaid {
+    border: 1px solid #ff6666;
+}
+
+.paid {
+    color: #5cb85c;
+}
+
+.unpaid {
+    color: #ff6666;
+}

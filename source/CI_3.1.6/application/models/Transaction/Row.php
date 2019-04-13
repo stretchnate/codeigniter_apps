@@ -14,13 +14,13 @@ class Row extends \CI_Model {
 	private $from_account_name;
 
     /**
-     * @var \Transaction\Structure
+     * @var \Transaction\Fields
      */
 	private $structure;
 
 	function __construct($transaction_id = null) {
 		parent::__construct();
-		$this->structure = new Structure();
+		$this->structure = new Fields();
 
 		if($transaction_id) {
 			$this->loadTransaction($transaction_id);
@@ -323,7 +323,7 @@ class Row extends \CI_Model {
 	}
 
     /**
-     * @return \Transaction\Structure
+     * @return \Transaction\Fields
      */
     public function getStructure() {
 	    return $this->structure;

@@ -15,7 +15,7 @@ class Budget_DataModel_TransactionDM extends N8_Model {
 	private $from_account_name;
 
     /**
-     * @var \Transaction\Structure
+     * @var \Transaction\Fields
      */
 	private $structure;
 
@@ -312,7 +312,7 @@ class Budget_DataModel_TransactionDM extends N8_Model {
 	}
 
     /**
-     * @return \Transaction\Structure
+     * @return \Transaction\Fields
      */
     public function getStructure() {
 	    return $this->structure;
