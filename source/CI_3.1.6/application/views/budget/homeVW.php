@@ -156,7 +156,7 @@ class Budget_HomeVW extends Budget_BaseVW {
 												<?php
 													if($category_dm->getDueDay() > 0) {
 														$due_date = $category_dm->getNextDueDate()->format("F d, Y");
-														echo "Due: ".$due_date;
+														echo "Due: <label class='due-date'>".$due_date."</label>";
 													}
 												?>
 												</div>
@@ -185,11 +185,21 @@ class Budget_HomeVW extends Budget_BaseVW {
 														}
 													?>
 												</div>
-                                                <div id="category_<?=$category_dm->getCategoryId()?>">
-                                                    <a href="javascript:void(0)" class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="popover" data-placement="right" data-trigger="focus" data-content='This is the date when you last made a payment to this category.'></a>
-                                                    <label>Last Paid:</label>
-                                                    <div class="align-right inline-block last_paid"></div>
-                                                </div>
+                                                <?php
+                                                if($category_dm->getDueDay()) {
+                                                    ?>
+                                                    <div id="category_<?= $category_dm->getCategoryId() ?>">
+                                                        <a href="javascript:void(0)"
+                                                           class="glyphicon glyphicon-info-sign" aria-hidden="true"
+                                                           data-toggle="popover" data-placement="right"
+                                                           data-trigger="focus"
+                                                           data-content='This is the date when you last made a payment to this category.'></a>
+                                                        <label>Last Paid:</label>
+                                                        <div class="align-right inline-block last_paid"></div>
+                                                    </div>
+                                                <?php
+                                                }
+                                                ?>
 											</div>
 										</div>
 								<?php

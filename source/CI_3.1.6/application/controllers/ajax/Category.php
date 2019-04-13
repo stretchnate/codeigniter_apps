@@ -18,13 +18,18 @@ class Category extends CI_Controller {
      * @param $category_id
      */
     public function getLastPaid($category_id) {
+         // explicitly requiring the models speeds up the process
+        require_once(APPPATH.'models/Budget/DataModel/CategoryDM.php');
+        require_once(APPPATH.'models/TransactionIterator.php');
         try {
             $category = new Budget_DataModel_CategoryDM($category_id, $this->session->user_id);
             $structure = new \Transaction\Fields();
             $structure->setFromCategory($category->getCategoryId());
-            $structure->setLimit(100);
-            $structure->setOrderBy('bookId DESC');
+            $structure->setLimit(50);
+            $structure->setOrderBy('transaction_id DESC');
+
             $transactions = new TransactionIterator();
+
             $transactions->load($structure);
 
             while($transactions->valid()) {

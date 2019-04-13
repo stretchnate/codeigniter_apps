@@ -11,7 +11,7 @@ class TransactionIterator extends IteratorBase {
 
     const TABLE = 'transactions';
 
-    public function __construct(\Transaction\Fields $fields) {
+    public function __construct(\Transaction\Fields $fields = null) {
         parent::__construct();
         if($fields) {
             $this->load($fields);
