@@ -37,7 +37,7 @@
 							$user->save();
 						}
 					} else {
-						$this->registerUser();
+						$this->registerUser($this->input->post(null, true));
 					}
 				} catch(Exception $e) {
 					$this->response->status = HTTP_INTERNAL_SERVER_ERROR;
@@ -53,24 +53,27 @@
 		 * @param string $access_token
 		 */
 		public function getCookie() {
+			header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+			header("Access-Control-Allow-Credentials: true");
+			header("Access-Control-Allow-Origin: https://whyibudget.com");
+			header("Access-Control-Allow-Origin: https://courses.whyibudget.com");
+			header("Access-Control-Allow-Headers: Content-Type, *");
+			
 			try {
 				$access_token = $this->input->post('access_token');
 				$data = $this->cache->get($access_token);
 				if($this->input->post('email') == $data) {
 					$cookie_val = crypt(microtime(), $this->vendor);
 					$this->cache->save($cookie_val, $this->input->post('email'), 180);//cache token for 3 min.
-					header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-					header("Access-Control-Allow-Credentials: true");
-					header("Access-Control-Allow-Origin: http://ciguide.local");
-					header("Access-Control-Allow-Headers: Content-Type, *");
-
+					
 					setcookie('token', base64_encode($cookie_val), (time()+60), '/', 'money.stretchnate.com', false, true);
 					setcookie('useremail', $this->input->post('email'), (time()+60), '/', 'money.stretchnate.com', false, true);
 
 					$this->response->status = HTTP_OK;
-
-					$this->cache->delete($access_token);
+				} else {
+				    $this->response->message = "Unable to login to budget using email ".$this->input->post('email');
 				}
+				$this->cache->delete($access_token);
 			} catch (Exception $e) {
 				$this->response->status = HTTP_INTERNAL_SERVER_ERROR;
 				log_message(LOG_LEVEL_ERROR, $e->getMessage());
@@ -82,37 +85,40 @@
 		/**
 		 * log user in
 		 */
-		public function ssoLogin() {
-			try {
-				$email = $this->cache->get(base64_decode($this->input->cookie('token')));
-				if($email && $email == $this->input->cookie('useremail')) {
-					//load user data
-					$user = new Budget_DataModel_UserDM(['Email' => $email]);
-					if(!$user->getId()) {
-						redirect(COMPANY_LOGOUT_REDIRECT);
-					}
-					$login_array = [$user->getUsername(), $user->getPassword()];
+        public function ssoLogin() {
+            try {
+                $token = base64_decode($this->input->cookie('token'));
+                $email = $this->cache->get($token);
+                $this->cache->delete($token);
+                if($email && $email == $this->input->cookie('useremail')) {
+                    //load user data
+                    $user = new Budget_DataModel_UserDM(['Email' => $email]);
+                    if(!$user->getId()) {
+                        redirect(COMPANY_LOGOUT_REDIRECT);
+                    }
+                    $login_array = [$user->getUsername(), $user->getPassword()];
 
-					$this->auth->process_login($login_array, true);
-					$this->auth->redirect();
-				} else {
-					redirect(COMPANY_LOGOUT_REDIRECT);
-				}
-			} catch (Exception $e) {
-				$this->response->status = HTTP_INTERNAL_SERVER_ERROR;
-				$this->response->message = 'There was a problem authorizing you with the budget.';
-				log_message(LOG_LEVEL_ERROR, $e->getMessage());
-			}
+                    $this->auth->process_login($login_array, true);
+                } else {
+                    log_message(LOG_LEVEL_ERROR, "Email doesn't match");
+                    redirect(COMPANY_LOGOUT_REDIRECT);
+                }
+            } catch (Exception $e) {
+                $this->response->status = HTTP_INTERNAL_SERVER_ERROR;
+                $this->response->message = 'There was a problem authorizing you with the budget.';
+                log_message(LOG_LEVEL_ERROR, $e->getMessage());
+                exit(json_encode($this->response));
+            }
 
-			echo json_encode($this->response);
-		}
+            $this->auth->redirect();
+        }
 
 		/**
 		 * register a user via SSO
 		 */
-		private function registerUser() {
+		private function registerUser($post) {
 			try {
-				$post = $this->input->post(null, true);
+				$post['username'] = $this->input->post('email');
 				$post['password'] = microtime();
 				$this->load->model('Admin_model','Admin',TRUE);
 				$create_user = $this->Admin->createUser($post);
@@ -121,7 +127,8 @@
 					$this->response->status = HTTP_OK;
 					$access_token = crypt(microtime(), $this->vendor);
 					$this->cache->save($access_token, $this->input->post('email', true), 300);//cache token for 5 min.
-					$this->response->iframe_url = base_url('/sso/User/getCookie/'.$access_token);
+					$this->response->url = base_url('/sso/User/getCookie/');
+					$this->response->access_token = $access_token;
 				}
 			} catch(Exception $e) {
 				if($e->getCode() == EXCEPTION_CODE_VALIDATION) {
