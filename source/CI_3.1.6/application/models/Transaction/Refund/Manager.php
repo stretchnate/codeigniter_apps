@@ -10,7 +10,7 @@ namespace Transaction\Refund;
 
 use Transaction\ManagerInterface;
 use Transaction\Row;
-use Transaction\Structure;
+use Transaction\Fields;
 
 /**
  * Class Manager
@@ -21,11 +21,11 @@ class Manager implements ManagerInterface {
 
     /**
      * @param Row       $transaction
-     * @param Structure $transaction_updates
+     * @param Fields    $transaction_updates
      * @param           $user_id
      * @throws \Exception
      */
-    public function modify(Row $transaction, Structure $transaction_updates, $user_id) {
+    public function modify(Row $transaction, Fields $transaction_updates, $user_id) {
         $category = new \Budget_DataModel_CategoryDM($transaction->getStructure()->getFromCategory(), $user_id);
         $category_amount = $category->getCurrentAmount();
 

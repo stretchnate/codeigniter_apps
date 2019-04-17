@@ -266,7 +266,7 @@ class Funds extends N8_Controller {
      * @throws Exception
      */
     private function undoDeposit(\Transaction\Row $deposit_transaction) {
-        $trans_fields = new \Transaction\Structure();
+        $trans_fields = new \Transaction\Fields();
         $trans_fields->setDepositId($deposit_transaction->getStructure()->getDepositId());
         $trans_fields->setFromAccount($deposit_transaction->getStructure()->getToAccount());
         $transactions = new TransactionIterator($trans_fields);

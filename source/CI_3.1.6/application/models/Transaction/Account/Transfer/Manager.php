@@ -10,11 +10,11 @@ namespace Transaction\Account\Transfer;
 
 use Transaction\ManagerInterface;
 use Transaction\Row;
-use Transaction\Structure;
+use Transaction\Fields;
 
 class Manager implements ManagerInterface {
 
-    public function modify(Row $transaction, Structure $transaction_updates, $user_id) {
+    public function modify(Row $transaction, Fields $transaction_updates, $user_id) {
         // TODO: Implement modify() method.
     }
 }

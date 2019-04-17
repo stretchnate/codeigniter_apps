@@ -13,7 +13,7 @@ namespace Transaction;
  *
  * @package Transaction
  */
-class Structure {
+class Fields extends \Structure {
 
     /**
      * @var int
@@ -55,10 +55,6 @@ class Structure {
      * @var string
      */
     private $transaction_info;
-    /**
-     * @var array
-     */
-    private $operators = [];
 
     public function toArray() {
         $result = [];
@@ -122,7 +118,7 @@ class Structure {
 
     /**
      * @param int $transaction_id
-     * @return Structure
+     * @return Fields
      */
     public function setTransactionId($transaction_id) {
         $this->transaction_id = $transaction_id;
@@ -138,7 +134,7 @@ class Structure {
 
     /**
      * @param int $to_category
-     * @return Structure
+     * @return Fields
      */
     public function setToCategory($to_category) {
         $this->to_category = $to_category;
@@ -154,7 +150,7 @@ class Structure {
 
     /**
      * @param int $from_category
-     * @return Structure
+     * @return Fields
      */
     public function setFromCategory($from_category) {
         $this->from_category = $from_category;
@@ -170,7 +166,7 @@ class Structure {
 
     /**
      * @param int $to_account
-     * @return Structure
+     * @return Fields
      */
     public function setToAccount($to_account) {
         $this->to_account = $to_account;
@@ -186,7 +182,7 @@ class Structure {
 
     /**
      * @param int $from_account
-     * @return Structure
+     * @return Fields
      */
     public function setFromAccount($from_account) {
         $this->from_account = $from_account;
@@ -202,7 +198,7 @@ class Structure {
 
     /**
      * @param int $deposit_id
-     * @return Structure
+     * @return Fields
      */
     public function setDepositId($deposit_id) {
         $this->deposit_id = $deposit_id;
@@ -218,7 +214,7 @@ class Structure {
 
     /**
      * @param int $owner_id
-     * @return Structure
+     * @return Fields
      */
     public function setOwnerId($owner_id) {
         $this->owner_id = $owner_id;
@@ -234,7 +230,7 @@ class Structure {
 
     /**
      * @param float $transaction_amount
-     * @return Structure
+     * @return Fields
      */
     public function setTransactionAmount($transaction_amount) {
         $this->transaction_amount = $transaction_amount;
@@ -250,7 +246,7 @@ class Structure {
 
     /**
      * @param string $transaction_date
-     * @return Structure
+     * @return Fields
      */
     public function setTransactionDate($transaction_date) {
         $this->transaction_date = $transaction_date;
@@ -266,7 +262,7 @@ class Structure {
 
     /**
      * @param string $transaction_info
-     * @return Structure
+     * @return Fields
      */
     public function setTransactionInfo($transaction_info) {
         $this->transaction_info = $transaction_info;

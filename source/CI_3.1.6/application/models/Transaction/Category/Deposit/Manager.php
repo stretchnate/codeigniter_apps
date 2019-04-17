@@ -10,17 +10,17 @@ namespace Transaction\Category\Deposit;
 
 use Transaction\ManagerInterface;
 use Transaction\Row;
-use Transaction\Structure;
+use Transaction\Fields;
 
 class Manager implements ManagerInterface {
 
     /**
      * @param Row       $transaction
-     * @param Structure $transaction_updates
+     * @param Fields    $transaction_updates
      * @param           $user_id
      * @throws \Exception
      */
-    public function modify(Row $transaction, Structure $transaction_updates, $user_id) {
+    public function modify(Row $transaction, Fields $transaction_updates, $user_id) {
         $category = new \Budget_DataModel_CategoryDM($transaction->getStructure()->getToCategory(), $user_id);
         $account = new \Budget_DataModel_AccountDM($category->getParentAccountId(), $user_id);
         $this->updateAmounts($category, $account, $transaction, $transaction_updates);
@@ -41,10 +41,10 @@ class Manager implements ManagerInterface {
     /**
      * @param \Budget_DataModel_CategoryDM $category
      * @param Row                          $transaction
-     * @param Structure                    $transaction_updates
+     * @param Fields                       $transaction_updates
      * @return float
      */
-    private function updateAmounts(\Budget_DataModel_CategoryDM $category, \Budget_DataModel_AccountDM $account, Row $transaction, Structure $transaction_updates) {
+    private function updateAmounts(\Budget_DataModel_CategoryDM $category, \Budget_DataModel_AccountDM $account, Row $transaction, Fields $transaction_updates) {
         $cat_amount = $category->getCurrentAmount();
         $account_amount = $account->getAccountAmount();
 

@@ -40,7 +40,7 @@
 		    $id = $this->input->post('transaction_id');
 		    try {
                 $tdm = new \Transaction\Row($id);
-                $structure = new \Transaction\Structure();
+                $structure = new \Transaction\Fields();
                 $structure->setTransactionAmount($this->input->post('amount'));
                 $structure->setTransactionDate($this->input->post('date'));
                 $structure->setTransactionInfo($this->input->post('description'));

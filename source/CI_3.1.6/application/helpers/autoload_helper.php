@@ -33,20 +33,20 @@ function __autoload($classname) {
  * @param string $classname
  * @param array  $directories
  * @since 07.01.2013
+ * @return bool
  */
 function underscoreLoadMethod($classname, $directories) {
-    $result = false;
     $path = str_replace(['\\', '_'], '/', $classname);
 
     foreach ($directories as $dir) {
         $filepath = $dir . $path . '.php';
         if (file_exists($filepath)) {
             require_once($filepath);
-            $result = true;
+            return true;
         }
     }
 
-    return $result;
+    return false;
 }
 
 /**
