@@ -3,12 +3,19 @@
  * Copyright © Quantum Budgeting Systems, LLC.
  * All Rights Reserved.
  */
+
+/**
+ * Class Home
+ *
+ * @author stretch
+ */
 class Home extends N8_Controller {
 
 	function __construct() {
 		parent::__construct();
 		$this->load->library('utilities');
 		$this->load->helper('html');
+		$this->load->helper('home');
 	}
 
     /**
@@ -64,7 +71,7 @@ class Home extends N8_Controller {
 
 		//because we fetched the transactions in descending order we want the first one
 		if( is_array($transactions) && count($transactions) > 0 ) {
-			$last_transaction = $this->UserFriendlyTransactionDetails($this->transactionDetails($transactions, 0));
+			$last_transaction = UserFriendlyTransactionDetails(transactionDetails($transactions, 0, $this->session->user_id));
 		}
 
 		$home_vw->setAccountAmounts(getDistributableAmounts($this->session->user_id));
