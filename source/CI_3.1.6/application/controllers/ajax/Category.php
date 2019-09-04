@@ -12,7 +12,66 @@
  *
  * @author stretch
  */
-class Category extends CI_Controller {
+class Category extends N8_Controller {
+
+    public function fetchAll($account_id) {
+        try {
+            $dm = new Budget_DataModel_AccountDM($account_id, $this->session->user_id);
+            $dm->loadCategories();
+            $response = new stdClass();
+            $categories = [];
+            foreach($dm->getCategories() as $category_dm) {
+                $c = new stdClass();
+                $c->id = $category_dm->getCategoryId();
+                $c->name = $category_dm->getCategoryName();
+                $c->amount = $category_dm->getCurrentAmount();
+                $c->amount_necessary = $category_dm->getAmountNecessary();
+                $c->due_date = $category_dm->getNextDueDate()->getTimestamp();
+                $c->parent_account_id = $category_dm->getParentAccountId();
+                $c->active = $category_dm->getActive();
+                $c->due_months = $category_dm->getDueMonths();
+                $c->priority = $category_dm->getPriority();
+                $c->plaid_category_id = $category_dm->getPlaidCategory();
+
+                $categories[] = $c;
+            }
+
+            $response->categories = $categories;
+
+            $this->JSONResponse($response);
+        } catch(Exception $e) {
+            log_message('error', $e);
+            $this->JSONResponse(null, 500);
+        }
+    }
+
+    /**
+     * Fetch a single category - echo's a JSON response
+     *
+     * @param $id
+     */
+    public function get($id) {
+        try {
+            $dm = new Budget_DataModel_CategoryDM($id, $this->session->user_id);
+            $category = new stdClass();
+            $category->id = $dm->getCategoryId();
+            $category->name = $dm->getCategoryName();
+            $category->amount = $dm->getCurrentAmount();
+            $category->amount_necessary = $dm->getAmountNecessary();
+            $category->due_date = $dm->getNextDueDate()->getTimestamp();
+            $category->parent_account_id = $dm->getParentAccountId();
+            $category->active = $dm->getActive();
+            $category->due_months = $dm->getDueMonths();
+            $category->priority = $dm->getPriority();
+            $category->plaid_category_id = $dm->getPlaidCategory();
+
+            $this->JSONResponse($category);
+        } catch(Exception $e) {
+            log_message('error', $e);
+
+            $this->JSONResponse(null, 500);
+        }
+    }
 
     /**
      * @param $category_id

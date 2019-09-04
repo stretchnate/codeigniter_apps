@@ -21,4 +21,25 @@ class N8_Controller extends CI_Controller {
 
 		return $this->form_validation->run();
 	}
+
+    /**
+     * send a JSON response to an api request
+     *
+     * @param     $data
+     * @param int $http_code
+     */
+	protected function JSONResponse($data, $http_code = 200) {
+	    http_response_code($http_code);
+
+	    echo json_encode($data);
+    }
+
+    /**
+     * Pretty print json/array data
+     *
+     * @param $data
+     */
+    protected function prettyPrint($data) {
+        echo "<pre>".print_r($data, true)."</pre>";
+    }
 }

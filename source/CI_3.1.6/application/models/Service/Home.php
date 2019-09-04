@@ -32,6 +32,7 @@ class Home {
 
             $account = new \stdClass();
             $account->id = $account_dm->getAccountId();
+            $account->name = $account_dm->getAccountName();
             $account->distributable_amount = $account_dm->getAccountAmount();
             $account->last_update = date('l F d, Y h:i:s a', strtotime($last_update));
             $account->last_transaction = $this->getLastTransaction();

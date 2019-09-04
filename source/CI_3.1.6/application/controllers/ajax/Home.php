@@ -30,7 +30,7 @@ class Home extends N8_Controller {
         $service_model = new \Service\Home($this->session->user_id);
         $accounts = $service_model->fetchAccountDisplay($this->session->last_update);
 
-//        echo json_encode($accounts);
-        echo "<pre>".print_r($accounts, true)."</pre>";
+        $this->JSONResponse($accounts);
+//        $this->prettyPrint($accounts);
     }
 }
