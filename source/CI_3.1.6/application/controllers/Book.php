@@ -13,7 +13,6 @@ class Book extends N8_Controller {
 
 			$this->load->model("accounts", "ACCT", TRUE);
 			$this->load->model('funds_operations','Fops',TRUE);
-			$this->load->model('notes_model', 'NM', TRUE);
 
 			$data = $this->ACCT->getAccountData($id);
 
@@ -36,7 +35,6 @@ class Book extends N8_Controller {
 			$props['logged_user'] = $this->session->userdata('logged_user');
 			$props['deposit'] = getActiveDeposits($this->session->user_id, $data->account_id);
 
-			$notes['notes'] = $this->NM->getAllNotes($this->session->userdata('user_id'), $id);
 			$notes['bookId'] = $id;
 
 			$data->due_date = $category_dm->getNextDueDate();

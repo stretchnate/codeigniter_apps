@@ -45,7 +45,6 @@ class Home extends N8_Controller {
      */
 	private function homeView($link = null) {
 	    $this->load->helper('deposit');
-		$this->load->model('notes_model', 'NM', TRUE);
 		$this->load->view('budget/homeVW');
 
 		$CI      =& get_instance();
@@ -76,7 +75,6 @@ class Home extends N8_Controller {
 
 		$home_vw->setAccountAmounts(getDistributableAmounts($this->session->user_id));
 		$home_vw->setLastTransaction($last_transaction);
-		$home_vw->setNotes($this->NM->getAllNotes($this->session->userdata('user_id'), $this->session->userdata('user_id')));
 		$home_vw->setLastUpdate(date('l F d, Y h:i:s a', strtotime($this->session->userdata('last_update'))));
 
 		$home_vw->renderView();
