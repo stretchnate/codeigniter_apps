@@ -377,7 +377,7 @@ class Budget_DataModel_AccountDM extends N8_Model {
 	}
 
     /**
-     * @return array
+     * @return Budget_DataModel_CategoryDM[]
      */
     public function getCategories() {
 		return $this->categories;

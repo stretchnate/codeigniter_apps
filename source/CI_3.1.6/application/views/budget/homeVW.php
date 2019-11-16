@@ -18,7 +18,7 @@ class Budget_HomeVW extends Budget_BaseVW {
     /**
      * @var array
      */
-    private   $totals_array = array();
+    private $totals_array = array();
 
     /**
      * @var \Plaid\Link

@@ -166,6 +166,10 @@
 			$this->errors = $errors;
 		}
 
+        /**
+         * @deprecated - since 3.5.1
+         * @param $notes
+         */
 		public function setNotes($notes) {
 			$this->notes = $notes;
 		}
