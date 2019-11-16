@@ -288,47 +288,47 @@ class Budget_DataModel_CategoryDM extends N8_Model {
 		return $due_date;
 	}
 
-	/**
-	 * @return \DateTime
-	 */
+    /**
+     * @return DateTime
+     * @throws Exception
+     */
 	private function calculateQuarterlyDueDate() {
-		$today = new \DateTime();
-		$due_date = new \DateTime($this->due_day);
-        $due_date->setDate($today->format('Y'), $due_date->format('m'), $due_date->format('j'));
-		if($today == $due_date) {
-		    return $due_date;
-        }
+		$today = new DateTime();
+        $dd = new DateTime($this->due_day);
+		$this_month = $today->format('m');
+        $i = 0;
 
-		$diff = $today->diff($due_date);
-		$remainder = $diff->m % 3;
-		if($diff->d) {
-		    $remainder += 1;
-        }
+        foreach($this->getDueMonths() as $due_month) {
+		    if($due_month <= $this_month) {
+		        $diff = $this_month - $due_month;
+		        switch($diff) {
+                    case 0:
+                        if($today->format('d') > $dd->format('d')) {
+                            $i = 3;
+                        }
+                        break;
+                    case 1:
+                        $i = 2;
+                        break;
+                    case 2:
+                        $i = 1;
+                        break;
+                    default:
+                        continue 2;
+                }
 
-        if($today->format('m') > $due_date->format('m')) {
-            switch($remainder) {
-                case 3:
-                    $i = $diff->m;
-                    break;
-                case 2:
-                    $i = $diff->m + 1;
-                    break;
-                case 1:
-                    $i = $diff->m + 2;
-                    break;
-                case 0:
-                default:
-                $i = $diff->m + 3;
+                $due_date = clone $today;
+                $due_date->setDate($due_date->format('Y'), $due_date->format('m'), $dd->format('d'));
+                $due_date->add(new DateInterval("P{$i}M"));
+
+                return $due_date;
+            } else {
+		        $due_date = new DateTime();
+		        $due_date->setDate($today->format('Y'), $due_month, $dd->format('d'));
+
+		        return $due_date;
             }
-			if($diff->d) $i++;
-			$due_date->add(new DateInterval("P{$i}M"));
-		} elseif($today->format('m') < $due_date->format('m')) {
-            $due_date->setDate($today->format('Y'), $today->format('m')+$remainder, $due_date->format('j'));
-		} elseif($today->format('j') > $due_date->format('j')) {
-			$due_date->add(new \DateInterval("P3M"));
-		}
-
-		return $due_date;
+        }
 	}
 
 	/**
