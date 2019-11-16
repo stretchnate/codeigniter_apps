@@ -1,7 +1,16 @@
 <?php
+
+/**
+ * Class fundsTransferCTL
+ *
+ * @author stret
+ */
 class fundsTransferCTL extends N8_Controller {
 
-	function __construct() {
+    /**
+     * fundsTransferCTL constructor.
+     */
+    function __construct() {
 		parent::__construct();
 		$this->load->library('account');
 	}
@@ -66,7 +75,10 @@ class fundsTransferCTL extends N8_Controller {
 		$this->transferFundsView($errors);
 	}
 
-	function transferCategories() {
+    /**
+     *
+     */
+    function transferCategories() {
 		$this->auth->restrict();
 
 		try {
@@ -119,12 +131,15 @@ class fundsTransferCTL extends N8_Controller {
 		}
 	}
 
-	function transferFundsView($errors = array()) {
+    /**
+     * @param array $errors
+     */
+    function transferFundsView($errors = array()) {
 		$this->auth->restrict();
 
-		$this->load->model("accounts", "ACCT", TRUE);
+		$accounts_model = new Accounts();
 
-		$data['accounts'] = $this->ACCT->getAccountsAndDistributableCategories($this->session->userdata('user_id'));
+		$data['accounts'] = $accounts_model->getAccountsAndDistributableCategories($this->session->userdata('user_id'));
 
 		// $transactions['transactions'] = $this->ACCT->getUserTransactions(null, $this->session->userdata('user_id'));
 		$t_grid = new TransactionsGrid();
@@ -145,5 +160,3 @@ class fundsTransferCTL extends N8_Controller {
 		$this->load->view('footer');
 	}
 }
-
-?>

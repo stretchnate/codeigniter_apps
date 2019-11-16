@@ -26,9 +26,9 @@ class Funds extends N8_Controller {
 		$data['title'] = "Add New Funds";
 		$data['logged_user'] = $this->session->userdata('logged_user');
 
-		$this->load->model('accounts', 'ACCT', TRUE);
+		$accounts_model = new Accounts();
 
-		$funds_data['accounts'] = $this->ACCT->getAccounts($this->session->userdata("user_id"));
+		$funds_data['accounts'] = $accounts_model->getAccounts($this->session->userdata("user_id"));
 
 		$this->load->view('header',$data);
 		$this->load->view('newFunds', $funds_data);

@@ -1,27 +1,39 @@
 <?php
+
+/**
+ * Class Book
+ *
+ * @author stret
+ */
 class Book extends N8_Controller {
 
-	function __construct() {
+    /**
+     * Book constructor.
+     */
+    function __construct() {
 		parent::__construct();
 	}
 
-	function getCategory($id){
+    /**
+     * @param $id
+     */
+    function getCategory($id){
         $this->load->helper('deposit');
 		$this->auth->restrict();//make sure user is logged in.
 		try {
 			$category_dm = new Budget_DataModel_CategoryDM($id, $this->session->userdata('user_id'));
 
-			$this->load->model("accounts", "ACCT", TRUE);
+			$accounts_model = new Accounts();
 			$this->load->model('funds_operations','Fops',TRUE);
 
-			$data = $this->ACCT->getAccountData($id);
+			$data = $accounts_model->getAccountData($id);
 
-			$data->parentAccount = $this->ACCT->getAccount($data->account_id);
+			$data->parentAccount = $accounts_model->getAccount($data->account_id);
 
 			$home = new Budget_BusinessModel_Home();
 			$home->loadAccounts($this->session->userdata('user_id'));
 			$props['accounts'] = $home->getAccounts();
-			$data->accounts = $this->ACCT->getAccountsAndDistributableCategories($this->session->userdata('user_id'));
+			$data->accounts = $accounts_model->getAccountsAndDistributableCategories($this->session->userdata('user_id'));
 
 			$t_grid = new TransactionsGrid($id, "category");
 			$t_grid->run();
@@ -49,16 +61,18 @@ class Book extends N8_Controller {
 
 	/*
 	 * creates the category add form
-	 * @todo  once a cache module is added need to update this method to use cash for $message
 	 * @return void
 	 * @access public
 	 */
-	public function newBookForm(){
+    /**
+     *
+     */
+    public function newBookForm(){
 		$this->auth->restrict();
-		$this->load->model("accounts", "ACCT", TRUE);
-		$this->load->view('budget/category/newCategoryVW');
+        $this->load->view('budget/category/newCategoryVW');
+        $accounts_model = new Accounts();
 
-		$CI          =& get_instance();
+        $CI =& get_instance();
 		try {
 			$helper = new \Plaid\Categories\Helper();
 			$category_api = new \API\REST\Plaid\Categories();
@@ -71,7 +85,7 @@ class Book extends N8_Controller {
 		$category_vw->setTitle("Add New Category");
 		$category_vw->setAction("/book/createCategory/");
 
-		$accounts = $this->ACCT->getAccounts($this->session->userdata("user_id"));
+		$accounts = $accounts_model->getAccounts($this->session->userdata("user_id"));
 		$category_vw->setAccounts($accounts);
 		// $category_vw->setErrors($message);
 		// $category_vw->setCategoryDM($category_dm);
@@ -80,16 +94,19 @@ class Book extends N8_Controller {
 
 	/*
 	 * creates the category edit form
-	 * @todo  once a cache module is added need to update this method to use cash for $message
 	 * @param int $id
 	 * @param string $message (optional)
 	 * @return void
 	 * @access public
 	 */
-	public function editBook($id, $message = null) {
+    /**
+     * @param      $id
+     * @param null $message
+     */
+    public function editBook($id, $message = null) {
 		$this->auth->restrict();
 		try {
-			$this->load->model("accounts", "ACCT", TRUE);
+			$accounts_model = new Accounts();
 
 			$category_dm = new Budget_DataModel_CategoryDM($id, $this->session->userdata('user_id'));
 
@@ -110,7 +127,7 @@ class Book extends N8_Controller {
 			$category_vw->setAction("/book/saveChange/{$category_dm->getCategoryId()}/");
 			$category_vw->setErrors($message);
 			$category_vw->setCategoryDM($category_dm);
-			$category_vw->setAccounts($this->ACCT->getAccounts($this->session->userdata("user_id")));
+			$category_vw->setAccounts($accounts_model->getAccounts($this->session->userdata("user_id")));
 
 			$category_vw->renderView();
 		} catch(Exception $e) {
@@ -119,7 +136,10 @@ class Book extends N8_Controller {
 		}
 	}
 
-	function checkName() {
+    /**
+     * check account name
+     */
+    function checkName() {
 		$response['success'] = false;
 		$response['message'] = "";
 		$this->load->model('Book_info', 'BI',TRUE);
@@ -128,7 +148,6 @@ class Book extends N8_Controller {
 			$response['message'] = "this account already exists, please try another name.";
 		} else {
 			$response['success'] = true;
-			//$response['message'] = "this account is available";
 		}
 		unset($_POST['name']);
 		echo json_encode($response);
@@ -259,7 +278,10 @@ class Book extends N8_Controller {
 		return $result;
 	}
 
-	function enableBook($id){
+    /**
+     * @param $id
+     */
+    function enableBook($id){
 		$this->auth->restrict();
 		$this->load->model('Book_edit', 'BE',TRUE);
 		$data = $this->BE->bookOffOn($id);
@@ -271,7 +293,10 @@ class Book extends N8_Controller {
 		}
 	}
 
-	function saveChange($id) {
+    /**
+     * @param $id
+     */
+    function saveChange($id) {
 		$this->auth->restrict();
 
 		$due_date = null;
@@ -314,7 +339,10 @@ class Book extends N8_Controller {
 		}
 	}
 
-	function transactionCleared() {
+    /**
+     *
+     */
+    function transactionCleared() {
 		$this->auth->restrict();
 		$this->load->model('Transactions', 'TR', TRUE);
 		$response['success'] = $this->TR->transactionClearedBank($this->input->post('transaction_id'));

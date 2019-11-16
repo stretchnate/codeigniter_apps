@@ -1,4 +1,10 @@
 <?php
+
+/**
+ * Class Notes_model
+ * @deprecated
+ * @author stretch
+ */
 class Notes_model extends N8_Model {
 		
 	function __construct(){
