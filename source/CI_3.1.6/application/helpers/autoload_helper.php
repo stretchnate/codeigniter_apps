@@ -5,7 +5,7 @@
  * All Rights Reserved.
  */
 
-function __autoload($classname) {
+function quantumAutoload($classname) {
     $dirs = array(
         APPPATH."models/",
         APPPATH."libraries/",
@@ -79,4 +79,4 @@ function iterate($directory, array $files) {
     return $result;
 }
 
-spl_autoload_register('__autoload', true);
+spl_autoload_register('quantumAutoload', true);
