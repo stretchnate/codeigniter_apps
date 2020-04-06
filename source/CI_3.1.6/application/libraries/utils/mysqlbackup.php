@@ -11,7 +11,8 @@
 class MySQLBackup {
 
 	const UBUNTU_ONE_LIFETIME   = 3;//months
-	const UBUNTU_ONE            = '/home/stretch/Public/';
+//	const UBUNTU_ONE            = '/home/stretch/Public/';
+	const UBUNTU_ONE            = '/usr/backup/mysql/';
 	const MYSQL_BACKUP_LIFETIME = 6;//months
 	const MYSQL_BACKUP_PATH     = '/usr/backup/mysql/';
 	const MYSQL_PATH            = '/usr/bin/mysqldump';
