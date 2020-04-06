@@ -70,7 +70,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | The $query_builder variables lets you determine whether or not to load
 | the query builder class.
 */
-$host = 'localohst';
+$host = 'localhost';
 //$host = 'ubuntu_db_1';
 $active_group = 'default';
 $query_builder = TRUE;
