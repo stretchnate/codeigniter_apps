@@ -26,7 +26,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $url = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
 
 //$config['base_url'] = 'http://stretchnate.ddns.net';
-$config['base_url'] = $url;
+$config['base_url'] = 'http://'.$url;
 
 /*
 |--------------------------------------------------------------------------
