@@ -103,4 +103,4 @@ defined('EXCEPTION_CODE_ERROR') OR define('EXCEPTION_CODE_ERROR', 500);
 
 defined('COMPANY_NAME')            OR define('COMPANY_NAME', 'Quantum'); //Quantum
 $url = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
-defined('COMPANY_LOGOUT_REDIRECT') OR define('COMPANY_LOGOUT_REDIRECT', $url.'/admin/login');
+defined('COMPANY_LOGOUT_REDIRECT') OR define('COMPANY_LOGOUT_REDIRECT', "http://$url/admin/login");
