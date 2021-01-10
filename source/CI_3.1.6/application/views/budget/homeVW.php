@@ -146,7 +146,7 @@ class Budget_HomeVW extends Budget_BaseVW {
 								if(is_array($account_dm->getCategories()) && count($account_dm->getCategories()) > 0) {
 									foreach($account_dm->getCategories() as $category_dm){
 									?>
-                                        <div class="well">
+                                        <div class="well category-well">
 											<h3 class="border">
 												<a class='text' href="/book/getCategory/<?php echo $category_dm->getCategoryId(); ?>/"><?php echo $category_dm->getCategoryName(); ?></a>
                                                 <input type="hidden" value="<?=$category_dm->getcategoryid();?>" class="category_id"/>

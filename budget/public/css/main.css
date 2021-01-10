@@ -143,3 +143,9 @@
 .unpaid {
     color: #ff6666;
 }
+
+.category-well {
+    display: inline-grid;
+    width:33%;
+    min-height: 256px;
+}

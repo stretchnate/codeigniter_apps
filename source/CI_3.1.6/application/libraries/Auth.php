@@ -70,8 +70,11 @@ class Auth {
 	}
 
 	/**
-	* Returns last update date
-	*/
+	 * Returns last update date
+	 *
+	 * @param $id
+	 * @return array
+	 */
 	public function getLastUpdate($id) {
 		$this->CI->db->select("*");
 		$this->CI->db->from('login_history');
@@ -80,7 +83,8 @@ class Auth {
 		$this->CI->db->order_by('DateLoggedIn', 'desc');
 		$this->CI->db->limit(1);
 		$query = $this->CI->db->get();
-		return $query->row();
+
+		return $query->row_array();
 	}
 
 	/**
