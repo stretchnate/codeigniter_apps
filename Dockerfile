@@ -4,7 +4,12 @@ USER gitpod
 
 RUN sudo apt update && sudo apt upgrade -y && sudo apt clean
 
-RUN sudo apt install -y apache2 ca-certificates apt-transport-https software-properties-common lsb-release && sudo apt clean
+RUN sudo apt install -y apache2 
+RUN sudo apt install -y ca-certificates
+RUN sudo apt install -y apt-transport-https
+RUN sudo apt install -y software-properties-common
+RUN sudo apt install -y lsb-release
+
 RUN sudo add-apt-repository ppa:ondrej/php -y
 RUN sudo apt update && sudo apt upgrade -y && sudo apt clean
 
