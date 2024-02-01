@@ -4,7 +4,7 @@ USER gitpod
 
 RUN sudo apt update && sudo apt upgrade -y && sudo apt clean
 
-RUN sudo apt install -y apache2 
+#RUN sudo apt install -y apache2 
 RUN sudo apt install -y ca-certificates
 RUN sudo apt install -y apt-transport-https
 RUN sudo apt install -y software-properties-common
