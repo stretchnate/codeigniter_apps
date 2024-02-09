@@ -8,7 +8,7 @@ tasks:
       openMode: split-left
       before: echo "gitpod repo root = $GITPOD_REPO_ROOT" && echo "apache docroot in repo = $APACHE_DOCROOT_IN_REPO"
       # init: apt install apache2 ca-certificates apt-transport-https software-properties-common lsb-release
-      command: /usr/sbin/httpd -D FOREGROUND
+      command: /usr/sbin/apache2 -D FOREGROUND
     - name: Start Mysql
       openMode: split-right
       command: mysqld
