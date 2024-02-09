@@ -6,12 +6,9 @@ image: gitpod/workspace-mysql
 tasks:
     - name: Start Apache
       openMode: split-left
-      before: source /etc/apache2/envvars
+      before: source /etc/apache2/envvars && echo $APACHE_SERVER_NAME
       # init: apt install apache2 ca-certificates apt-transport-https software-properties-common lsb-release
       command: /usr/sbin/apache2 -D FOREGROUND
-    - name: Start Mysql
-      openMode: split-right
-      command: mysqld
 
 # Ports to expose on workspace startup
 ports:
