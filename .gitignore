@@ -20,6 +20,8 @@ robots.txt
 #source/CI_2.1.0/application/config/config.php
 #source/CI_2.1.0/application/EventColumn/config/config.php
 
+logs/
+
 #wordpress ignore
 wordpress/*
 
