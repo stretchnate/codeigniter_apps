@@ -5,8 +5,13 @@ image: gitpod/workspace-mysql
 # Commands that will run on workspace start
 tasks:
     - name: Start Apache
+      openMode: split-left
+      before: echo "gitpod repo root = $GITPOD_REPO_ROOT"
       # init: apt install apache2 ca-certificates apt-transport-https software-properties-common lsb-release
       command: /usr/sbin/httpd -D FOREGROUND
+    - name: Start Mysql
+      openMode: split-right
+      command: mysqld
 
 # Ports to expose on workspace startup
 ports:
@@ -14,3 +19,6 @@ ports:
       onOpen: open-browser
       name: Website
       description: Website
+    - port: 3306
+      name: Database
+      description: Database
