@@ -5,7 +5,7 @@
  * Date: 3/19/18
  * Time: 9:39 PM
  */
-
+#[AllowDynamicProperties]
 class DisplayHook {
     public function captureOutput() {
         if (ENVIRONMENT != 'testing') {

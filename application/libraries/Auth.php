@@ -1,7 +1,7 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 // add $this->auth->restrict() to any methods inside controllers.
 
-class CI_Auth {
+class Auth {
 	var $CI 			= NULL;
 	var $index_redirect	= '/';
 	var $login_redirect	= '/admin/login';

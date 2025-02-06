@@ -70,12 +70,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | The $query_builder variables lets you determine whether or not to load
 | the query builder class.
 */
-$host = 'localhost';
+// $host = 'localhost';
+$host = 'quantumbs.ddns.net';
+$port = 43306;
 //$host = 'ubuntu_db_1';
 $active_group = 'default';
 $query_builder = TRUE;
 
 $db['default']['dsn']      = '';
+$db['default']['port']     = $port;
 $db['default']['hostname'] = $host;
 $db['default']['username'] = 'Gom3rP4le';
 $db['default']['password'] = 'T4l3RF10renC3';
@@ -94,6 +97,7 @@ $db['default']['stricton'] = FALSE;
 $db['default']['failover'] = array();
 $db['default']['save_queries'] = TRUE;
 
+$db['content']['port']     = $port;
 $db['content']['hostname'] = $host;
 $db['content']['username'] = 'Gom3rP4le';
 $db['content']['password'] = 'T4l3RF10renC3';
