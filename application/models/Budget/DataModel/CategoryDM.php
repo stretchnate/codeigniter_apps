@@ -78,7 +78,7 @@ class Budget_DataModel_CategoryDM extends N8_Model {
      */
 	private function load($category) {
         foreach($category as $column => $value) {
-            $value = trim($value);
+            $value = is_string($value) ? trim($value) : $value;
             switch($column) {
                 case "bookId":          $this->category_id             = $value; break;
                 case "bookName":        $this->category_name           = $value; break;
