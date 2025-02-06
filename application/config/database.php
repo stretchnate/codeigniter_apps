@@ -71,6 +71,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | the query builder class.
 */
 // $host = 'localhost';
+// reset host to 'localhost' and $port to 3306 once finished updating to php8.3
 $host = 'quantumbs.ddns.net';
 $port = 43306;
 //$host = 'ubuntu_db_1';
