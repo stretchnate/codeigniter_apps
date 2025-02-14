@@ -24,9 +24,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 $url = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
+$protocol = 'http://';
+if (isset($_SERVER['HTTPS']) &&
+    ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1) ||
+    isset($_SERVER['HTTP_X_FORWARDED_PROTO']) &&
+    $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
+  $protocol = 'https://';
+}
 
 //$config['base_url'] = 'http://stretchnate.ddns.net';
-$config['base_url'] = 'http://'.$url;
+$config['base_url'] = $protocol . $url;
 
 /*
 |--------------------------------------------------------------------------

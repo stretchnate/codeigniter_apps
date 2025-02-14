@@ -47,7 +47,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/libraries/config.html
  */
-class CI_Model {
+class CI_Model extends N8_Error {
 
 	/**
 	 * Class constructor
